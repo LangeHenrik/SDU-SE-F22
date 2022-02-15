@@ -17,6 +17,20 @@ public class Stemmer {
         }
     }*/
 
+    // Tænker dette vil give measure fra et givet ord
+    public int getMeasureOfWord(String word){
+        char[] characters = word.toLowerCase().toCharArray();
+        int mCounter = 0;
+        for (int i = 0; i < characters.length; i++) {
+            if (i > 0) {
+                if (isCons(word, i) && isVowel(word, i-1)){
+                    mCounter++;
+                }
+            }
+        }
+        return mCounter;
+    }
+
     private boolean isVowel(String word, int idx) {
         // If the character isn't a consonant, it's a vowel.
         return !isCons(word, idx);
@@ -31,5 +45,11 @@ public class Stemmer {
             case 'y': return !isCons(word, idx - 1);
             default: return true;
         }
+    }
+
+    public static void main(String[] args) {
+        Stemmer stemmer = new Stemmer();
+        int m = stemmer.getMeasureOfWord("trees");
+        System.out.println(m);
     }
 }

@@ -40,7 +40,7 @@ public class Stemmer {
         char character = word.toCharArray()[idx];
         switch (character) {
             // If the character is a normal vowel, it obviously isn't a consonant.
-            case 'a', 'e', 'i', 'o', 'u': return false;
+            case 'a', 'e', 'i', 'o', 'u', 'æ', 'ø', 'å': return false;
             // If the character is a y, we need to check for the character's index minus one and return the reverse.
             case 'y': return !isCons(word, idx - 1);
             default: return true;

@@ -145,3 +145,4 @@ buildNumber.properties
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,maven,java
 
 AppSettings.json
+AppSettings.json.example

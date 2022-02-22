@@ -34,7 +34,6 @@ public class ProductInfIndexImpl implements  ProductInfIndex{
                  if(token.contains(ignoredChar)){
                      token = token.replaceAll(ignoredChar, "");
                  }
-
              }
         }
         return tokens;

@@ -11,7 +11,12 @@ import java.util.List;
 public class ProductInfIndexImpl implements  ProductInfIndex{
     @Override
     public void indexProducts(List<Product> products) {
-        // Blank
+        for (Product product : products) {
+            List<String> tokenizedProduct = tokenize(product);
+            List<String> filteredTokens = tokenFilter(tokenizedProduct);
+
+            //PIM3.indexProducts(filteredTokens, product)
+        }
     }
 
     private List<String> tokenFilter(List<String> tokens){

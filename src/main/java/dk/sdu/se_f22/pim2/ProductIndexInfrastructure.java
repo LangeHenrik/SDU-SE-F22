@@ -14,8 +14,7 @@ public class ProductIndexInfrastructure {
         return new ProductInfIndexImpl();
     }
 
-    public static ProductIndexInfrastructure getInstance()
-    {
+    public static ProductIndexInfrastructure getInstance() {
         return INSTANCE;
     }
 }

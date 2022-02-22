@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.Bim.src.models;
+package models;
 
 import java.util.ArrayList;
 

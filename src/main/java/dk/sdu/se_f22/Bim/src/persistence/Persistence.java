@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.Bim.src.persistence;
 
-import dk.sdu.se_f22.Bim.src.models.Brand;
+import models.Brand;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

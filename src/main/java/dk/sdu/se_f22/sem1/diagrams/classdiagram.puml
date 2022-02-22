@@ -1,0 +1,93 @@
+@startuml
+
+interface Filterable {
+    + filter(tokens): String[]
+}
+
+interface SearchModule {
+    + search(query: String): SearchResult
+    + getDelimiters(): String[]
+    + getIgnoredCharacters(): Character[]
+    + addDelimiter(delimiter: String)
+    + addIgnoredCharacter(c: Character)
+    + removeDelimiter(delimiter: String)
+    + removeIgnoredCharacter(c: Character)
+}
+
+class DatabaseConnection {
+    - url: String
+    - username: String
+    - password: String
+    - hasSSL: boolean
+    - connection: Connection
+
+    + isConnected(): boolean
+    + connect(): boolean
+    + disconnect()
+    + makeQuery(statement: PreparedStatement): ResultSet
+    ' see https://stackoverflow.com/a/36710057
+    + getLogger(moduleName): Logger
+}
+
+class Exception {
+    // From JDK //
+}
+
+class DatabaseConnectionException extends Exception {
+    // Throws when the database connection failed //
+}
+
+class SearchModuleImpl implements SearchModule {
+    - delimiters: String[]
+    - ignoredCharacters: Character[]
+    - databaseConnection: DatabaseConnection
+    - logger: Logger
+    - tokenize(mystring): String[]
+    - saveSettingsToDB()
+    - readSettingsFromDB()
+}
+
+class SearchResult {
+    - contentPageIds: UUID[]
+    - productPageIds: UUID[]
+    - brandPageIds: UUID[]
+    + getContentPageIds(): UUID[]
+    + getProductPageIds(): UUID[]
+    + getBrandPageIds(): UUID[]
+}
+
+class Connection {
+    // from postgresql jdbc //
+}
+
+class PreparedStatement {
+    // from postgresql jdbc //
+}
+
+class ResultSet {
+    // from postgresql jdbc //
+}
+
+class Logger {
+    // from log4j //
+}
+
+SearchResult <- SearchModule
+Filterable <- SearchModuleImpl
+SearchModuleImpl -> DatabaseConnection
+DatabaseConnectionException <-- DatabaseConnection: //<<throws>>//
+DatabaseConnectionException <-- SearchModuleImpl: //<<throws>>//
+
+SearchModuleImpl --> Logger
+DatabaseConnection -> Logger
+
+DatabaseConnection -> ResultSet
+DatabaseConnection -> PreparedStatement
+DatabaseConnection -> Connection
+
+ResultSet --[hidden]> PreparedStatement
+PreparedStatement -[hidden]> Connection
+
+
+
+@enduml

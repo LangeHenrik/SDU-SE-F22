@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.som1.domain;
+package dk.sdu.se_f22.SortingModule.Infrastructure;
 
 import java.util.Collection;
 

@@ -1,5 +1,12 @@
 package dk.sdu.se_f22.pim2.data;
 
-public class TokenParameterStore {
-    
+class TokenParameterStore {
+
+	public static void saveTokenParameter(TokenParameter tp) {
+
+	}
+
+	public static TokenParameter loadTokenParameter() {
+		return new TokenParameter(" ", "('./?!')");
+	}
 }

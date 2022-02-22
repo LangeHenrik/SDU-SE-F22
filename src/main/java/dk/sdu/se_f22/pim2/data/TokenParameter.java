@@ -8,21 +8,46 @@ public class TokenParameter {
     private List<String> ignoredChars;
 
     public TokenParameter(String delimiter, List<String> ignoredChars){
-        this.delimiter = delimiter;
-        this.ignoredChars = ignoredChars;
+        this(delimiter);
+        this.setIgnoredChars(ignoredChars);
     }
 
-    public void save() {};
+    public TokenParameter(String delimiter, String ignoredChars) {
+        this(delimiter);
+        this.setIgnoredChars(ignoredChars);
+    }
 
-    public TokenParameter load() {
-        return new TokenParameter(" ", Arrays.asList("('./?!')".split("")));
+    private TokenParameter(String delimiter) {
+        this.delimiter = delimiter;
+    }
+
+
+    public List<String> getIgnoredChars() {
+        return ignoredChars;
     }
 
     public void setIgnoredChars(List<String> ignoredChars) {
         this.ignoredChars = ignoredChars;
     }
 
-    public List<String> getIgnoredChars() {
-        return ignoredChars;
+    public void setIgnoredChars(String ignoredChars) {
+        this.ignoredChars = Arrays.asList(ignoredChars.split(""));
     }
+
+    public void setDelimiter(String delimiter) {
+        this.delimiter = delimiter;
+    }
+
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    public void save() {
+
+    }
+
+    public TokenParameter load() {
+        return TokenParameterStore.loadTokenParameter();
+    }
+
 }

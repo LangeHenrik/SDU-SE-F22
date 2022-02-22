@@ -46,7 +46,7 @@ public class TokenParameter {
 
     }
 
-    public TokenParameter load() {
+    public static TokenParameter load() {
         return TokenParameterStore.loadTokenParameter();
     }
 

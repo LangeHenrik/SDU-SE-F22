@@ -1,6 +1,5 @@
-package dk.sdu.se_f22.pim2.Data;
+package dk.sdu.se_f22.pim2.data;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 

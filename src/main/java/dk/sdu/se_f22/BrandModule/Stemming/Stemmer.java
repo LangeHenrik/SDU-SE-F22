@@ -1,8 +1,8 @@
-package dk.sdu.se_f22.bim4;
+package dk.sdu.se_f22.BrandModule.Stemming;
 
 import java.util.Locale;
 
-public class Stemmer {
+public class Stemmer implements IStemmer {
 
 //    public String[] stem(String[] words) {
 //        for (String word : words) {

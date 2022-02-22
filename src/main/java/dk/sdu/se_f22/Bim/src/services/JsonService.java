@@ -1,5 +1,5 @@
 package dk.sdu.se_f22.Bim.src.services;
-import dk.sdu.se_f22.Bim.src.models.Brand;
+import models.Brand;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

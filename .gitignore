@@ -146,3 +146,4 @@ buildNumber.properties
 
 .env
 .properties
+.properties.example

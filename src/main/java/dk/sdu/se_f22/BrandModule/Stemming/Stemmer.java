@@ -1,18 +1,21 @@
 package dk.sdu.se_f22.BrandModule.Stemming;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Stemmer implements IStemmer {
 
-//    public String[] stem(String[] words) {
-//        for (String word : words) {
-//            stem(word);
-//        }
-//    }
-//
-//    public String stem(String word) {
-//
-//    }
+   public String[] stem(String[] words) {
+       ArrayList<String> stemmedList = new ArrayList<>();
+       for (String word : words) {
+           stem(word);
+       }
+       return stemmedList.toArray(new String[0]);
+   }
+
+   public String stem(String word) {
+        return "";
+   }
 
     private Word step1a(Word word) {
         if (word.endsWith("sses")) return word.subWord(0, word.length() - 2);

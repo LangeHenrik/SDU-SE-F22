@@ -111,12 +111,57 @@ class SearchHitsTest {
     @Test
     void addContentsGet() {
         SearchHits hits = SearchHits.getInstance();
-        Collection contentsHits = hits.getProducts();
+        Collection contentsHits = hits.getContents();
 
         contentsHits.add("Page 1");
         contentsHits.add("Page 2");
         contentsHits.add("Page 3");
 
-        assertEquals(contentsHits, SearchHits.getInstance().getProducts());
+        assertEquals(contentsHits, SearchHits.getInstance().getContents());
+    }
+
+    @DisplayName("Add products through setProducts")
+    @Test
+    void addProductsSet() {
+        SearchHits hits = SearchHits.getInstance();
+        Collection productsHits = new ArrayList<>();
+
+        productsHits.add("Product 1");
+        productsHits.add("Product 2");
+        productsHits.add("Product 3");
+
+        hits.setProducts(productsHits);
+
+        assertEquals(productsHits, SearchHits.getInstance().getProducts());
+    }
+
+    @DisplayName("Add brands through setBrands")
+    @Test
+    void addBrandsSet() {
+        SearchHits hits = SearchHits.getInstance();
+        Collection brandHits = new ArrayList<>();
+
+        brandHits.add("Brand 1");
+        brandHits.add("Brand 2");
+        brandHits.add("Brand 3");
+
+        hits.setBrands(brandHits);
+
+        assertEquals(brandHits, SearchHits.getInstance().getBrands());
+    }
+
+    @DisplayName("Add contents through setContents")
+    @Test
+    void addContentsSet() {
+        SearchHits hits = SearchHits.getInstance();
+        Collection contentsHits = new ArrayList<>();
+
+        contentsHits.add("Page 1");
+        contentsHits.add("Page 2");
+        contentsHits.add("Page 3");
+
+        hits.setContents(contentsHits);
+
+        assertEquals(contentsHits, SearchHits.getInstance().getContents());
     }
 }

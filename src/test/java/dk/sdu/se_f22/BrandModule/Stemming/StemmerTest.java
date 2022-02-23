@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.bim4;
+package dk.sdu.se_f22.BrandModule.Stemming;
 
 import org.junit.jupiter.api.BeforeEach;
 

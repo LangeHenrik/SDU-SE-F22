@@ -1,6 +1,4 @@
-package dk.sdu.se_f22.bim4;
-
-import java.util.Locale;
+package dk.sdu.se_f22.BrandModule.Stemming;
 
 public class Word {
     String word;
@@ -10,18 +8,18 @@ public class Word {
     }
 
     // Get the measure of the word
-    public int getMeasure() {
-        char[] characters = word.toLowerCase().toCharArray();
-        int mCounter = 0;
-        for (int i = 0; i < characters.length; i++) {
-            if (i > 0) {
-                if (isCons(word, i) && isVowel(word, i-1)){
-                    mCounter++;
-                }
-            }
-        }
-        return mCounter;
-    }
+//    public int getMeasure() {
+//        char[] characters = word.toLowerCase().toCharArray();
+//        int mCounter = 0;
+//        for (int i = 0; i < characters.length; i++) {
+//            if (i > 0) {
+//                if (isCons(word, i) && isVowel(word, i-1)){
+//                    mCounter++;
+//                }
+//            }
+//        }
+//        return mCounter;
+//    }
 
     public boolean isVowel(int idx) {
         // If the character isn't a consonant, it's a vowel.
@@ -40,7 +38,8 @@ public class Word {
     }
 
     public String replaceIfEnds(String match, String replace) {
-        if (word.endsWith(match)) return word.replace(match, replace);
+        if (word.endsWith(match)) word.replace(match, replace);
+        return word;
     }
 
     public boolean endsWith(String string) {

@@ -1,13 +1,39 @@
 package dk.sdu.se_f22.SortingModule.Range;
 
-import java.util.List;
+import dk.sdu.se_f22.SortingModule.Range.Exceptions.InvalidFilterException;
 
-public class RangeFilterCreator implements CreateRangeFilterInterface{
-    List<DBRangeFilter> DBfilters;
+class RangeFilterCreator {
+    private DBRangeFilterCreator dbRangeFilterCreator;
 
-    @Override
-    public int createRangeFilter(int id, String description, String name, String productAttribute, double min, double max) {
-        DBfilters.add(new DBRangeFilter(id, description, name, productAttribute, min, max));
-        return id;
+    public RangeFilterCreator() {
+        dbRangeFilterCreator = new DBRangeFilterCreator();
+        try{
+            dbRangeFilterCreator.createRangeFilter(0, "hello object", "uno", "price", 0, 2000);
+            dbRangeFilterCreator.createRangeFilter(1, "hello fella", "dos", "height", 0, 4000);
+        }catch (InvalidFilterException e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    private DBRangeFilter getDBRangeFilter(int id) {
+        return this.dbRangeFilterCreator.getRangeFilterFromDB(id);
+    }
+
+    private static boolean validateFilter() {
+        return true;
+    }
+
+    public InternalFilter createInternalFilter(RangeFilter filterCheck) {
+        //check if the filter exists in the database
+        //if it doesn't, or min, max is invalid
+//        return null;
+        //if it does and everything is valid:
+        DBRangeFilter dbfilter = getDBRangeFilter(filterCheck.getId());
+        if (validateFilter()) {
+            return new InternalFilter(filterCheck.getMin(), filterCheck.getMax(), dbfilter.getProductAttribute());
+        } else {
+            return null;
+        }
     }
 }

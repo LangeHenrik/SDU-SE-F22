@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.SortingModule.Range;
 
-public class DBRangeFilter implements RangeFilterInterface {
-    private int currentId = 0;
+public class DBRangeFilter{
 
     private int id;
     private String description;
@@ -11,7 +10,7 @@ public class DBRangeFilter implements RangeFilterInterface {
     private double max;
 
     public DBRangeFilter(int id, String description, String name, String productAttribute, double min, double max) {
-        this.id = currentId++;
+        this.id = id;
         this.description = description;
         this.name = name;
         this.productAttribute = productAttribute;
@@ -23,9 +22,7 @@ public class DBRangeFilter implements RangeFilterInterface {
         return this.id;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
+    public String getDescription() { return this.description; }
 
     public String getName() {
         return this.name;
@@ -41,14 +38,6 @@ public class DBRangeFilter implements RangeFilterInterface {
 
     public double getMax() {
         return this.max;
-    }
-
-    @Override
-    public boolean validate(double v) {
-        if ((this.min < v) && (v < this.max)) {
-            return true;
-        }
-        return false;
     }
 
 }

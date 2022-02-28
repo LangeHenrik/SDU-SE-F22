@@ -7,15 +7,21 @@ package dk.sdu.se_f22.SortingModule.Range;
  * 3. Internal filter bruges til at validere på
 **/
 
-public class RangeMain {
+public class RangeMain implements RangeFilterInterface{
+    private RangeFilterCreator rangeFilterCreator;
+
+    public RangeMain() {
+        this.rangeFilterCreator = new RangeFilterCreator();
+    }
+
     public static void main(String[] args) {
 
     }
 
-    public Object[] filterResults(Object[] results, RangeFilter[] rangeFilters){
+    public RangeSearchResultMock[] filterResults(RangeSearchResultMock[] results, RangeFilter[] rangeFilters){
         for (RangeFilter rangeFilter : rangeFilters) {
-            InternalFilter iFilter = RangeFilterChecker.check(rangeFilter);
-            if (iFilter == null ) {
+            InternalFilter iFilter = rangeFilterCreator.createInternalFilter(rangeFilter);
+            if (iFilter == null) {
                 continue;
             }
 

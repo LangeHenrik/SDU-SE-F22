@@ -1,6 +1,8 @@
 package dk.sdu.se_f22.SortingModule.Range;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 class InternalFilter {
     private final double min;
@@ -19,13 +21,30 @@ class InternalFilter {
         for (Object object : inputs) {
             //assumes that object.getAttributes returns a hashmap of attributes where the keys are the names of the attributes
             //assumes that hashmaps return null when key is not found
-            //if it returns an Exception instead, then simply add tha product to toReturn
-            // double attributeValue = object.getAttributes().get(this.productAttribute)
-//            if ( attributeValue == null || (attributeValue > this.min && attributeValue < this.max)) {
-//                toReturn.add(object);
-//            }
+            //if it returns an Exception instead, then simply add the product to filteredResults
+            try {
+                double attributeValue = searchResultMock.getAttributes().get(this.productAttribute);
+                if ((attributeValue < this.min || attributeValue > this.max)) {
+                    continue;
+                }//guard clause
+            } catch (NullPointerException e) {
+                //if the product attribute does not exist, simply add the result to the list below.
+                // if this behaviour is desired to change uncomment the line below:
+                //continue;
+            }
+
+            filteredResults.add(searchResultMock);
         }
 
-        return toReturn.toArray();
+        return convertListToArray(filteredResults);
+    }
+
+    private RangeSearchResultMock[] convertListToArray(List<RangeSearchResultMock> input){
+        RangeSearchResultMock[] out = new RangeSearchResultMock[input.size()];
+
+        for (int i =0; i< input.size(); i++) {
+            out[i] = input.get(i);
+        }
+        return out;
     }
 }

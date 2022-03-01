@@ -48,12 +48,12 @@ class SearchModuleImpl implements SearchModule {
 }
 
 class SearchResult {
-    - contentPageIds: UUID[]
-    - productPageIds: UUID[]
-    - brandPageIds: UUID[]
-    + getContentPageIds(): UUID[]
-    + getProductPageIds(): UUID[]
-    + getBrandPageIds(): UUID[]
+    - contentPageIds: ArrayList<Content>
+    - productPageIds: ArrayList<Product>
+    - brandPageIds: ArrayList<Brand>
+    + getContentPageIds(): ArrayList<Content>
+    + getProductPageIds(): ArrayList<Product>
+    + getBrandPageIds(): ArrayList<Brand>
 }
 
 class Connection {

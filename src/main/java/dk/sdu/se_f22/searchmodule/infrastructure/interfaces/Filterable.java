@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sem1.Interfaces;
+package dk.sdu.se_f22.searchmodule.infrastructure.interfaces;
 
 import java.util.ArrayList;
 

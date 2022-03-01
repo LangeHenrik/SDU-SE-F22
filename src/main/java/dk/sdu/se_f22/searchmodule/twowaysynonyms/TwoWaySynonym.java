@@ -46,13 +46,24 @@ public class TwoWaySynonym implements DatabaseOperator {
     }
 
     /**
-     * Update a synonym (mainly spelling correction)
+     * Update a synonyms group ID
      * @param synonym           Word to update
-     * @param correctedSynonym  Corrected form of Synonym
+     * @param relatedSynonym    Related Synonym
      * @return                  UUID of updated Synonym
      */
     @Override
-    public UUID update(String synonym, String correctedSynonym) {
+    public UUID updateGroupID(String synonym, String relatedSynonym) {
+        return null;
+    }
+
+    /**
+     * Update spelling of a synonym
+     * @param synonym           Word to update
+     * @param correctedSpelling Corrected spelling of Synonym
+     * @return                  UUID of updated Synonym
+     */
+    @Override
+    public UUID updateSpelling(String synonym, String correctedSpelling) {
         return null;
     }
 

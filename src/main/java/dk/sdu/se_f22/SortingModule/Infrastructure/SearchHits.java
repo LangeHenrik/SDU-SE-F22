@@ -66,8 +66,12 @@ public final class SearchHits {
      * Set new product collection
      * 
      * @param products
+     * @throws NullPointerException
      */
-    public void setProducts(Collection products) {
+    public void setProducts(Collection products) throws NullPointerException {
+        if (products == null) {
+            throw new NullPointerException();
+        }
         this.products = products;
     }
 
@@ -75,17 +79,25 @@ public final class SearchHits {
      * Set new brands collection
      * 
      * @param brands
+     * @throws NullPointerException
      */
-    public void setBrands(Collection brands) {
+    public void setBrands(Collection brands) throws NullPointerException {
+        if (brands == null) {
+            throw new NullPointerException();
+        }
         this.brands = brands;
     }
 
     /**
      * Set new content collection
      * 
-     * @param brands
+     * @param contents
+     * @throws NullPointerException
      */
-    public void setContents(Collection contents) {
+    public void setContents(Collection contents) throws NullPointerException {
+        if (contents == null) {
+            throw new NullPointerException();
+        }
         this.contents = contents;
     }
 }

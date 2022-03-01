@@ -56,14 +56,14 @@ class SearchHitsTest {
         @DisplayName("Set empty brands test")
         @Test
         void setEmptyBrands() {
-            SearchHits.getInstance().setBrands(brands);
+            SearchHits.getInstance().setBrands(new ArrayList<>());
             assertEquals(new ArrayList<>(), SearchHits.getInstance().getBrands());
         }
 
         @DisplayName("Set empty content test")
         @Test
         void setEmptyContents() {
-            SearchHits.getInstance().setContents(contents);
+            SearchHits.getInstance().setContents(new ArrayList<>());
             assertEquals(new ArrayList<>(), SearchHits.getInstance().getContents());
         }
     }
@@ -179,6 +179,28 @@ class SearchHitsTest {
             hits.setContents(contentsHits);
 
             assertEquals(contentsHits, SearchHits.getInstance().getContents());
+        }
+    }
+
+    @DisplayName("Null set prohibiting")
+    @Nested
+    public class NullSetSearchHitsTest {
+        @Test
+        void NullProductsSet() {
+            SearchHits hits = SearchHits.getInstance();
+            assertThrows(NullPointerException.class, () -> hits.setProducts(null));
+        }
+
+        @Test
+        void NullBrandsSet() {
+            SearchHits hits = SearchHits.getInstance();
+            assertThrows(NullPointerException.class, () -> hits.setBrands(null));
+        }
+
+        @Test
+        void NullContentsSet() {
+            SearchHits hits = SearchHits.getInstance();
+            assertThrows(NullPointerException.class, () -> hits.setContents(null));
         }
     }
 }

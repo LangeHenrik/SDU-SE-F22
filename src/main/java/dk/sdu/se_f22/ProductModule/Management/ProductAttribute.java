@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.pim1;
+package dk.sdu.se_f22.ProductModule.Management;
 
 public enum ProductAttribute {
 

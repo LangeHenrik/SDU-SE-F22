@@ -19,8 +19,8 @@ class BrandInfrastructureTest {
         brandInfrastructure.setTokenizationParameters(",",".");
         brandInfrastructure = new BrandInfrastructure();
         TokenizationParameters tokenizationParameters = brandInfrastructure.getTokenizationParameters();
-        assertEquals(",",tokenizationParameters.delimiterRegex);
-        assertEquals(".",tokenizationParameters.ignoreRegex);
+        assertEquals(",", tokenizationParameters.delimiterRegex);
+        assertEquals(".", tokenizationParameters.ignoreRegex);
     }
 
     @Test

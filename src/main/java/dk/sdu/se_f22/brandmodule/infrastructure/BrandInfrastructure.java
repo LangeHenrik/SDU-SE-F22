@@ -1,9 +1,12 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
+import com.google.gson.GsonBuilder;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
@@ -17,8 +20,12 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     private File file;
 
     public BrandInfrastructure() {
-        gson = new Gson();
-        file = new File("dk/sdu/se_f22/brandmodule/infrastructure/TokenizationParameters.json");
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(TokenizationParameters.class, new TokenizationParametersAdapter());
+        builder.setPrettyPrinting();
+        gson = builder.create();
+        file = new File("src/main/resources/dk/sdu/se_f22/brandmodule/infrastructure/TokenizationParameters.json");
+        loadTokenizationParameters();
     }
 
     public void loadTokenizationParameters(){
@@ -57,7 +64,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
         saveTokenizationParameters();
     }
 
-    public TokenizationParameters getTokenizationParameters(){
-        return tokenizationParameters;
+    public TokenizationParameters getTokenizationParameters() {
+        return this.tokenizationParameters;
     }
 }

@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.productmodule.management;
 
+import dk.sdu.se_f22.sharedlibrary.models.Product;
+
 import java.util.ArrayList;
 
 public interface IProductManager {

@@ -17,7 +17,7 @@ public enum ProductAttribute {
     SIZE("size"),
     CLOCKSPEED("clockSpeed");
 
-    String alias;
+    public String alias;
 
 
     ProductAttribute(String alias){

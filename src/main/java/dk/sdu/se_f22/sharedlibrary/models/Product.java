@@ -1,4 +1,6 @@
-package dk.sdu.se_f22.productmodule.management;
+package dk.sdu.se_f22.sharedlibrary.models;
+
+import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +14,6 @@ public class Product { //initialize class
         productAttributes = new HashMap<>(); //initialize hashmap
         availableAt = new ArrayList<>(); //initialize string array
     }
-
 
     public String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
         productAttributes.putIfAbsent(pA, "unavailable"); //replace nulls with string "unavailable" >function may be removed?

@@ -8,4 +8,7 @@ public class TokenizationParameters {
         this.delimiterRegex = delimiterRegex;
         this.ignoreRegex = ignoreRegex;
     }
+
+    public TokenizationParameters() {
+    }
 }

@@ -6,13 +6,21 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BrandInfrastructureTest {
-    @Test
-    void loadTokenizationParameters() {
-    
+    BrandInfrastructure brandInfrastructure;
+
+    @BeforeEach
+    void setup(){
+        brandInfrastructure = new BrandInfrastructure();
+
     }
 
     @Test
-    void saveTokenizationParameters() {
+    void testTokenizationParameters() {
+        brandInfrastructure.setTokenizationParameters(",",".");
+        brandInfrastructure = new BrandInfrastructure();
+        TokenizationParameters tokenizationParameters = brandInfrastructure.getTokenizationParameters();
+        assertEquals(",",tokenizationParameters.delimiterRegex);
+        assertEquals(".",tokenizationParameters.ignoreRegex);
     }
 
     @Test

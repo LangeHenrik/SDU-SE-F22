@@ -56,4 +56,8 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
         this.tokenizationParameters = new TokenizationParameters(delimiterRegex, ignoreRegex);
         saveTokenizationParameters();
     }
+
+    public TokenizationParameters getTokenizationParameters(){
+        return tokenizationParameters;
+    }
 }

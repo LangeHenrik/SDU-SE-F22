@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.SortingModule.Infrastructure;
+package dk.sdu.se_f22.sortingmodule.infrastructure;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -6,6 +6,8 @@ module dk.sdu.se_f22 {
 	requires org.controlsfx.controls;
 	requires com.dlsc.formsfx;
 	requires validatorfx;
+	requires json.simple;
+	requires java.sql;
 
 	opens dk.sdu.se_f22 to javafx.fxml;
 	exports dk.sdu.se_f22;

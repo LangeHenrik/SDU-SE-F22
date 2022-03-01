@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.ProductModule.Management;
+package dk.sdu.se_f22.productmodule.management;
 
 public enum ProductAttribute {
 

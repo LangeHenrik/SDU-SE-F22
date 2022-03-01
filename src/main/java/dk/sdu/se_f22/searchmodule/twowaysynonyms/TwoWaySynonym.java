@@ -5,6 +5,15 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class TwoWaySynonym implements DatabaseOperator {
+    private TwoWaySynonym(){};
+    public static TwoWaySynonym getInstance() {
+        return TwoWaySynonymHolder.INSTANCE;
+    }
+
+    private static class TwoWaySynonymHolder {
+        private static final TwoWaySynonym INSTANCE = new TwoWaySynonym();
+    }
+
     /**
      * Add a new synonym and create a new synonym group.
      * @param synonym           Word to add

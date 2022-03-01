@@ -22,10 +22,6 @@ sem --- misspellings
 sem --- onewaysynonyms
 sem --- twowaysynonyms
 
-javase --- sharedlibrary
-sharedlibrary --- db
-sharedlibrary --- models
-
 javase --- cms[contentmodule]
 cms --- cms_ind[index]
 cms --- cms_man[management]
@@ -43,4 +39,8 @@ prm --- prm_ind[index]
 prm --- irregularwords
 prm --- prm_inf[infrastructure]
 prm --- prm_man[management]
+
+javase --- sharedlibrary
+sharedlibrary --- db
+sharedlibrary --- models
 ```

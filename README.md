@@ -23,8 +23,8 @@ sem --- onewaysynonyms
 sem --- twowaysynonyms
 
 javase --- sharedlibrary
-SharedLibrary --- db
-SharedLibrary --- models
+sharedlibrary --- db
+sharedlibrary --- models
 
 javase --- cms[contentmodule]
 cms --- cms_ind[index]

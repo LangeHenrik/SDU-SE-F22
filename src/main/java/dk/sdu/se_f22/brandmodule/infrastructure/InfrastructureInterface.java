@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.brandmodule.Infrastructure;
+package dk.sdu.se_f22.brandmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import java.util.List;

@@ -8,7 +8,8 @@ public interface DatabaseOperator extends Filterable {
     UUID create(String synonym);
     UUID create(String synonym, String groupMember);
     ResultSet read(String synonym);
-    UUID update(String synonym, String correctedSynonym);
+    UUID updateGroupID(String synonym, String relatedSynonym);
+    UUID updateSpelling(String synonym, String correctedSpelling);
     boolean delete(String synonym);
 }
 

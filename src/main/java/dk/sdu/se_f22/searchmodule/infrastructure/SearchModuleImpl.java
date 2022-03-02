@@ -11,18 +11,18 @@ import java.util.regex.Pattern;
 
 
 public class SearchModuleImpl implements SearchModule {
-    private final Set<Indexable<?>> indexes;
+    private final Set<Indexable<?>> indexingModules;
 
     public SearchModuleImpl() {
-        this.indexes = new HashSet<>();
+        this.indexingModules = new HashSet<>();
     }
 
-    public <T extends Indexable<?>> void addIndex(T index) {
-        indexes.add(index);
+    public <T extends Indexable<?>> void addIndexingModule(T index) {
+        indexingModules.add(index);
     }
 
-    public <T extends Indexable<?>> void removeIndex(T index) {
-        indexes.remove(index);
+    public <T extends Indexable<?>> void removeIndexingModule(T index) {
+        indexingModules.remove(index);
     }
 
     @SuppressWarnings("unchecked")
@@ -33,7 +33,7 @@ public class SearchModuleImpl implements SearchModule {
             return matcher.find() && Objects.equals(matcher.group(1), target);
         };
 
-        for (var index : indexes)
+        for (var index : indexingModules)
             for (Type genericInterface : index.getClass().getGenericInterfaces())
                 if (interfaceGenericEquals.apply(genericInterface, clazz.getTypeName()))
                     return (List<T>) index.queryIndex(tokens);

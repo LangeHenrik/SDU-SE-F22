@@ -23,7 +23,7 @@ public class TestSearchModule {
 
 
         SearchModuleImpl searchModule = new SearchModuleImpl();
-        searchModule.addIndex(indexingModule);
+        searchModule.addIndexingModule(indexingModule);
 
         // Query the indexing module
         var helloQuery = searchModule.queryIndexOfType(MockIndexingData.class, List.of("Hello"));
@@ -47,7 +47,7 @@ public class TestSearchModule {
         );
 
         // Test removal
-        searchModule.removeIndex(indexingModule);
+        searchModule.removeIndexingModule(indexingModule);
         assertThrows(
                 NoSuchElementException.class,
                 () -> searchModule.queryIndexOfType(MockIndexingData.class, List.of(""))

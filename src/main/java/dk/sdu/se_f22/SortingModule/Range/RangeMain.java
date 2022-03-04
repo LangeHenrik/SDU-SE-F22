@@ -21,6 +21,7 @@ public class RangeMain implements RangeFilterInterface{
     public RangeSearchResultMock[] filterResults(RangeSearchResultMock[] results, RangeFilter[] rangeFilters){
         for (RangeFilter rangeFilter : rangeFilters) {
             InternalFilter iFilter = rangeFilterCreator.createInternalFilter(rangeFilter);
+
             if (iFilter == null) {
                 continue;
             }

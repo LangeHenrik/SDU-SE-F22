@@ -40,7 +40,7 @@ class InternalFilter {
         return convertListToArray(filteredResults);
     }
 
-    private RangeSearchResultMock[] convertListToArray(List<RangeSearchResultMock> input){
+    public static RangeSearchResultMock[] convertListToArray(List<RangeSearchResultMock> input){
         RangeSearchResultMock[] out = new RangeSearchResultMock[input.size()];
 
         for (int i =0; i< input.size(); i++) {

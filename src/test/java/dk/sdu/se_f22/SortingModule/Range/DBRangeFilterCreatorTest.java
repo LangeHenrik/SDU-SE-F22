@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.SortingModule.Range;
 
 import dk.sdu.se_f22.SortingModule.Range.Exceptions.InvalidFilterException;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -44,7 +43,7 @@ class DBRangeFilterCreatorTest {
 
                 DBRangeFilter createdFilter = dbRangeFilterCreator.getRangeFilterFromDB(returnId.get());
 
-                Assertions.assertAll("Testing the values created match the values supplied",
+                Assertions.assertAll("Testing that the values created match the values supplied",
                         () -> Assertions.assertEquals(id, createdFilter.getId()),
                         () -> Assertions.assertEquals(description, createdFilter.getDescription()),
                         () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
@@ -67,7 +66,8 @@ class DBRangeFilterCreatorTest {
 
                 Assertions.assertThrows(InvalidFilterException.class,
                         () -> dbRangeFilterCreator
-                                .createRangeFilter(0,input, "sample name", "Sample attribute",0,400));
+                                .createRangeFilter(0,input, "sample name", "Sample attribute",0,400)
+                );
             }
 
 
@@ -78,7 +78,8 @@ class DBRangeFilterCreatorTest {
             void emptyProductAttribute(String input) {
                 Assertions.assertThrows(InvalidFilterException.class,
                         () -> dbRangeFilterCreator
-                        .createRangeFilter(0,"Testing empty product attribute", "sample name", input,0,400));
+                        .createRangeFilter(0,"Testing empty product attribute", "sample name", input,0,400)
+                );
             }
 
 

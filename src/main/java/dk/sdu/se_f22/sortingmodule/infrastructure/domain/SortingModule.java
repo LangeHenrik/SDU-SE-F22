@@ -35,7 +35,7 @@ public interface SortingModule {
     /**
      * Remove all range filters from the search
      */
-    public void cleanRange();
+    public void clearRange();
 
     /**
      * Set the paginations for the search result

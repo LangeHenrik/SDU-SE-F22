@@ -3,12 +3,13 @@ package dk.sdu.se_f22.SortingModule.Range;
 import dk.sdu.se_f22.SortingModule.Range.Exceptions.InvalidFilterException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DBRangeFilterCreatorTest {
     private DBRangeFilterCreator dbRangeFilterCreator;
@@ -39,28 +40,17 @@ class DBRangeFilterCreatorTest {
                 Assertions.assertDoesNotThrow(
                         () -> returnId.set(dbRangeFilterCreator.createRangeFilter(id, description, name, productAttribute, min, max))
                 );
-
-
-                DBRangeFilter createdFilter = dbRangeFilterCreator.getRangeFilterFromDB(returnId.get());
-
-                Assertions.assertAll("Testing that the values created match the values supplied",
-                        () -> Assertions.assertEquals(id, createdFilter.getId()),
-                        () -> Assertions.assertEquals(description, createdFilter.getDescription()),
-                        () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
-                        () -> Assertions.assertEquals(name, createdFilter.getName()),
-                        () -> Assertions.assertEquals(min, createdFilter.getMin()),
-                        () -> Assertions.assertEquals(max, createdFilter.getMax())
-                );
             }
         }
 
         @Nested
         @DisplayName("Invalid filters that should not be created")
         class invalidFiltersThatShouldNotBeCreated {
+
             @ParameterizedTest(name = "filter description {0}")
             @DisplayName("Empty description")
             @ValueSource(strings = {"", " "})
-            @CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
+            //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
             void emptyDescription(String input) {
                 dbRangeFilterCreator = new DBRangeFilterCreator();
 
@@ -74,7 +64,7 @@ class DBRangeFilterCreatorTest {
             @ParameterizedTest(name = "filter attribute {0}")
             @DisplayName("Empty product attribute")
             @ValueSource(strings = {"", " "})
-            @CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
+            //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
             void emptyProductAttribute(String input) {
                 Assertions.assertThrows(InvalidFilterException.class,
                         () -> dbRangeFilterCreator
@@ -86,20 +76,77 @@ class DBRangeFilterCreatorTest {
             @ParameterizedTest(name = "filter name {0}")
             @DisplayName("Empty filter name")
             @ValueSource(strings = {"", " "})
-            @CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
+            //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
             void emptyFilterNameV2(String input) {
                 Assertions.assertThrows(InvalidFilterException.class,
                         () -> dbRangeFilterCreator.createRangeFilter(0,"unit testing", input, "price", 0, 400)
                 );
             }
+
+            @ParameterizedTest(name = "filter min negative {0}")
+            @DisplayName("Negative min")
+            @ValueSource(doubles = {-1.0,-3.67})
+            void negativeMin(double doubles){
+                Assertions.assertThrows(InvalidFilterException.class,
+                        () -> dbRangeFilterCreator.createRangeFilter(0,"negative min", "name","price",doubles,500)
+                );
+            }
+
+            @ParameterizedTest(name = "filter max negative {0}")
+            @DisplayName("Negative max")
+            @ValueSource(doubles = {-1.0,-3.67})
+            void negativeMax(double doubles){
+                Assertions.assertThrows(InvalidFilterException.class,
+                        () -> dbRangeFilterCreator.createRangeFilter(0,"negative min", "name","price", 0,doubles)
+                );
+            }
+
+
+            @ParameterizedTest(name = "filter max less than min {0}")
+            @DisplayName("Max less than min")
+            @MethodSource("doublesProvider") // References the stream of doubles below
+            void testMaxLessThanMin(double min, double max){
+                Assertions.assertThrows(InvalidFilterException.class,
+                        () -> dbRangeFilterCreator.createRangeFilter(0,"negative min", "name","price",min,max)
+                );
+            }
+
+            // Provides multiple parameters for the max less than min test
+            static Stream<Arguments> doublesProvider() {
+                return Stream.of(
+                        arguments(1.0, 0.5),
+                        arguments(15.7,15.6)
+                );
+            }
+
         }
     }
 
-
-
     @Test
     void getRangeFilterFromDB() {
-        fail("not yet implemented");
+        int id = 0;
+        String description = "This filter checks a lot of attributes bla bla";
+        String name = "Sample filter";
+        String productAttribute = "price";
+        double min = 0;
+        double max = 800;
+
+        AtomicInteger returnId = new AtomicInteger(); // Refactoring needed
+        Assertions.assertDoesNotThrow(
+                () -> returnId.set(dbRangeFilterCreator.createRangeFilter(id, description, name, productAttribute, min, max))
+        );
+
+
+        DBRangeFilter createdFilter = dbRangeFilterCreator.getRangeFilterFromDB(returnId.get());
+
+        Assertions.assertAll("Testing that the values created match the values supplied",
+                () -> Assertions.assertEquals(id, createdFilter.getId()),
+                () -> Assertions.assertEquals(description, createdFilter.getDescription()),
+                () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
+                () -> Assertions.assertEquals(name, createdFilter.getName()),
+                () -> Assertions.assertEquals(min, createdFilter.getMin()),
+                () -> Assertions.assertEquals(max, createdFilter.getMax())
+        );
     }
 
 }

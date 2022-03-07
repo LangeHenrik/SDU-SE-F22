@@ -1,10 +1,10 @@
-package dk.sdu.se_f22.ProductModule.Infrastructure;
+package dk.sdu.se_f22.productmodule.infrastructure;
 
-import dk.sdu.se_f22.ProductModule.Infrastructure.data.TokenParameter;
-import dk.sdu.se_f22.ProductModule.Infrastructure.domain.ProductInfIndex;
-import dk.sdu.se_f22.ProductModule.Infrastructure.domain.ProductInfIndexImpl;
-import dk.sdu.se_f22.ProductModule.Infrastructure.domain.ProductInfSearch;
-import dk.sdu.se_f22.ProductModule.Infrastructure.domain.ProductInfSearchImpl;
+import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
+import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfIndex;
+import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfIndexImpl;
+import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearch;
+import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearchImpl;
 
 public class ProductIndexInfrastructure {
     private static final ProductIndexInfrastructure INSTANCE = new ProductIndexInfrastructure();

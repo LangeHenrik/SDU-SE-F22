@@ -10,8 +10,8 @@ public interface SortingModule {
      *
      * @param searchString A text string from user
      */
-    public void seearchString(String searchString);
-    
+    public void searchString(String searchString);
+
     /**
      * Set the categories for the search filter
      * 

@@ -14,7 +14,7 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void seearchString(String searchString) {
+    public void searchString(String searchString) {
         this.searchString = searchString;
     }
 

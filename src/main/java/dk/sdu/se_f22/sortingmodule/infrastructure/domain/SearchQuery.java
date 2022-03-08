@@ -25,8 +25,7 @@ public class SearchQuery {
     }
 
     public void addRange(int rangeId, String startRange, String endRange) {
-        // TODO Auto-generated method stub
-        
+        range.put(rangeId, new String[]{startRange, endRange});
     }
 
     public void clearRange() {

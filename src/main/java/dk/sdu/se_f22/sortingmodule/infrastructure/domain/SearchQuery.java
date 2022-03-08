@@ -5,9 +5,15 @@ import java.util.HashMap;
 
 public class SearchQuery {
     String query;
-    int[] pagination = new int[2];
-    ArrayList<Object> range = new ArrayList<>();
-    ArrayList<Integer> category = new ArrayList<>();
+    int[] pagination;
+    ArrayList<Object> range;
+    ArrayList<Integer> category;
+
+    public SearchQuery() {
+        this.pagination = new int[2];
+        this.range = new ArrayList<>();
+        this.category = new ArrayList<>();
+    }
 
     public void setCategory(ArrayList<Integer> categories) {
         // TODO Auto-generated method stub
@@ -24,9 +30,12 @@ public class SearchQuery {
         
     }
 
+    /*
+    * TODO Range object not available, so the used one is a placeholder. Change 'range' attribute and the
+    *  object instantiation in the method.
+    */
     public void addRange(int rangeId, String startRange, String endRange) {
         //range.add(Range(rangeId, new String[]{startRange, endRange}));
-        // CODE DOESN'T WORK, CHANGE RANGE ATTRIBUTE AND OBJECT NAME WHEN AVAILABLE
     }
 
     public void clearRange() {

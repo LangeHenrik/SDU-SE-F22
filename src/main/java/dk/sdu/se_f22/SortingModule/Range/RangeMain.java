@@ -1,5 +1,8 @@
 package dk.sdu.se_f22.SortingModule.Range;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 1. Filter(id, min, max) bliver sendt fra SOM-1
  * 2. Vi bruger InternalFilter til at matche Filter og DBRangeFilter
@@ -15,7 +18,6 @@ public class RangeMain implements RangeFilterInterface{
     }
 
     public static void main(String[] args) {
-
     }
 
     public RangeSearchResultMock[] filterResults(RangeSearchResultMock[] results, RangeFilter[] rangeFilters){

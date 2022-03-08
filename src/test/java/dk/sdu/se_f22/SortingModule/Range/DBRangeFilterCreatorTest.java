@@ -29,7 +29,6 @@ class DBRangeFilterCreatorTest {
             @DisplayName("ValidFilters with regular attributes")
             // Maybe later create csv file for testing valid attributes
             void validFiltersWithRegularAttributes() {
-                int id = 0;
                 String description = "This filter checks a lot of attributes bla bla";
                 String name = "Sample filter";
                 String productAttribute = "price";
@@ -38,7 +37,7 @@ class DBRangeFilterCreatorTest {
 
                 AtomicInteger returnId = new AtomicInteger(); // Refactoring needed
                 Assertions.assertDoesNotThrow(
-                        () -> returnId.set(dbRangeFilterCreator.createRangeFilter(id, description, name, productAttribute, min, max))
+                        () -> returnId.set(dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max))
                 );
             }
         }
@@ -56,7 +55,7 @@ class DBRangeFilterCreatorTest {
 
                 Assertions.assertThrows(InvalidFilterException.class,
                         () -> dbRangeFilterCreator
-                                .createRangeFilter(0,input, "sample name", "Sample attribute",0,400)
+                                .createRangeFilter(input, "sample name", "Sample attribute",0,400)
                 );
             }
 
@@ -68,7 +67,7 @@ class DBRangeFilterCreatorTest {
             void emptyProductAttribute(String input) {
                 Assertions.assertThrows(InvalidFilterException.class,
                         () -> dbRangeFilterCreator
-                        .createRangeFilter(0,"Testing empty product attribute", "sample name", input,0,400)
+                        .createRangeFilter("Testing empty product attribute", "sample name", input,0,400)
                 );
             }
 
@@ -79,7 +78,7 @@ class DBRangeFilterCreatorTest {
             //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
             void emptyFilterNameV2(String input) {
                 Assertions.assertThrows(InvalidFilterException.class,
-                        () -> dbRangeFilterCreator.createRangeFilter(0,"unit testing", input, "price", 0, 400)
+                        () -> dbRangeFilterCreator.createRangeFilter("unit testing", input, "price", 0, 400)
                 );
             }
 
@@ -88,7 +87,7 @@ class DBRangeFilterCreatorTest {
             @ValueSource(doubles = {-1.0,-3.67})
             void negativeMin(double doubles){
                 Assertions.assertThrows(InvalidFilterException.class,
-                        () -> dbRangeFilterCreator.createRangeFilter(0,"negative min", "name","price",doubles,500)
+                        () -> dbRangeFilterCreator.createRangeFilter("negative min", "name","price",doubles,500)
                 );
             }
 
@@ -97,7 +96,7 @@ class DBRangeFilterCreatorTest {
             @ValueSource(doubles = {-1.0,-3.67})
             void negativeMax(double doubles){
                 Assertions.assertThrows(InvalidFilterException.class,
-                        () -> dbRangeFilterCreator.createRangeFilter(0,"negative min", "name","price", 0,doubles)
+                        () -> dbRangeFilterCreator.createRangeFilter("negative min", "name","price", 0,doubles)
                 );
             }
 
@@ -107,7 +106,7 @@ class DBRangeFilterCreatorTest {
             @MethodSource("doublesProvider") // References the stream of doubles below
             void testMaxLessThanMin(double min, double max){
                 Assertions.assertThrows(InvalidFilterException.class,
-                        () -> dbRangeFilterCreator.createRangeFilter(0,"negative min", "name","price",min,max)
+                        () -> dbRangeFilterCreator.createRangeFilter("negative min", "name","price",min,max)
                 );
             }
 
@@ -133,7 +132,7 @@ class DBRangeFilterCreatorTest {
 
         AtomicInteger returnId = new AtomicInteger(); // Refactoring needed
         Assertions.assertDoesNotThrow(
-                () -> returnId.set(dbRangeFilterCreator.createRangeFilter(id, description, name, productAttribute, min, max))
+                () -> returnId.set(dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max))
         );
 
 

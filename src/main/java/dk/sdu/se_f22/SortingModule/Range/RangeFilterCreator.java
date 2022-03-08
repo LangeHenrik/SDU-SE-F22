@@ -12,8 +12,8 @@ class RangeFilterCreator {
     public RangeFilterCreator(DBRangeFilterCreator dbRangeFilterCreator){
         this.dbRangeFilterCreator = dbRangeFilterCreator;
         try{
-            dbRangeFilterCreator.createRangeFilter(0, "hello object", "uno", "price", 0, 2000);
-            dbRangeFilterCreator.createRangeFilter(1, "hello fella", "dos", "height", 0, 4000);
+            dbRangeFilterCreator.createRangeFilter( "hello object", "uno", "price", 0, 2000);
+            dbRangeFilterCreator.createRangeFilter("hello fella", "dos", "height", 0, 4000);
         }catch (InvalidFilterException e){
             System.out.println(e.getMessage());
         }

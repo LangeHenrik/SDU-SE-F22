@@ -8,31 +8,30 @@ import java.util.Map;
 
 public class DBRangeFilterCreator implements CreateRangeFilterInterface{
     Map<Integer, DBRangeFilter> DBfilters;
+    DatabaseInterface database;
 
     public DBRangeFilterCreator() {
         this.DBfilters = new HashMap<>();
+        this.database = MockDatabase.getInstance();
     }
 
     @Override
-    public int createRangeFilter(int id, String description, String name, String productAttribute, double min, double max) throws InvalidFilterException {
+    public int createRangeFilter(String description, String name, String productAttribute, double min, double max) throws InvalidFilterException {
+        Validator.NoNegativeValue(min);
+        Validator.NoNegativeValue(max);
 
-        Validator validator = new Validator();
+        Validator.NoSpecialCharacters(description);
+        Validator.NoSpecialCharacters(name);
+        Validator.NoSpecialCharacters(productAttribute);
 
-        validator.NoNegativeValue(min);
-        validator.NoNegativeValue(max);
+        Validator.MaxLessThanMin(min,max);
 
-        validator.NoSpecialCharacters(description);
-        validator.NoSpecialCharacters(name);
-        validator.NoSpecialCharacters(productAttribute);
 
-        validator.MaxLessThanMin(min,max);
-
-        DBfilters.put(id, new DBRangeFilter(id, description, name, productAttribute, min, max));
-        return id;
+        DBRangeFilter createdFilter = database.create(new DBRangeFilter(description, name, productAttribute, min, max));
+        return createdFilter.getId();
     }
 
     public DBRangeFilter getRangeFilterFromDB(int id){
-        return DBfilters.get(id);
+        return database.read(id);
     }
-
 }

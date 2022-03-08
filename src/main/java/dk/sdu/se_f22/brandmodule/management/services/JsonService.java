@@ -30,14 +30,6 @@ public class JsonService implements IJsonService {
                 var name = keys.next();
                 JSONObject properties =  (JSONObject) jo.get(name);
 
-                Brand brand = new Brand();
-
-                // Set single valued properties
-                brand.setName(name.toString());
-                brand.setDescription(properties.get("description").toString());
-                brand.setFounded(properties.get("founded").toString());
-                brand.setHeadquarters(properties.get("headquarters").toString());
-
                 // Build product array
                 JSONArray objs = (JSONArray) properties.get("products");
                 Iterator<String> iterator = objs.iterator();
@@ -45,8 +37,15 @@ public class JsonService implements IJsonService {
                 ArrayList<String> products = new ArrayList<>();
                 iterator.forEachRemaining(p -> products.add(p.toString()));
 
-                // Set brand property
-                brand.setProducts(products);
+                Brand brand = new Brand(
+                        null,
+                        name.toString(),
+                        properties.get("description").toString(),
+                        properties.get("founded").toString(),
+                        properties.get("headquarters").toString(),
+                        products
+                );
+
 
                 // Add brand to list of brands
                 brands.add(brand);

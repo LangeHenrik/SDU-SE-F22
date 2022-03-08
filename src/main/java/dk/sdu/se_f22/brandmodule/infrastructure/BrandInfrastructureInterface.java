@@ -3,7 +3,7 @@ package dk.sdu.se_f22.brandmodule.infrastructure;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import java.util.List;
 
-public interface InfrastructureInterface {
+public interface BrandInfrastructureInterface {
     List<Brand> getBrandsFromSearchTokens(List<String> tokens);
 
     void indexBrands(List<Brand> brands);

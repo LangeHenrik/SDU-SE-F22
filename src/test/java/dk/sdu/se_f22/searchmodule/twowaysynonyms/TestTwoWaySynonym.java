@@ -19,7 +19,6 @@ public class TestTwoWaySynonym {
     @DisplayName("Update group id from an existing synonym")
     public void testUpdateGroupID(){
     }
-
     @Test
     public void testFilter(){
         ArrayList<String> tokends = new ArrayList<>();

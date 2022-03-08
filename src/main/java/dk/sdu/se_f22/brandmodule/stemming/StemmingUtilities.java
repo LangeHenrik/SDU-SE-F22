@@ -22,7 +22,7 @@ public class StemmingUtilities {
         return word;
     }
 
-    private static Word finish1b(Word word) {
+    public static Word finish1b(Word word) {
         switch (word.getWordString().substring(word.getWordString().length() - 2)) {
             case "at", "bl", "iz": { word.append("e"); return word; }
         }
@@ -41,7 +41,7 @@ public class StemmingUtilities {
     public static Word step1c(Word word) {
         String stem = word.getWordString().substring(0, word.getWordString().length() - 1);
         if (word.containsVowel(0, word.length() - 1) && word.endsWith("y")) {
-            return word.subWord(0, word.length() - 1);
+            return word.subWord(0, word.length() - 1).append("i");
         }
         return word;
     }

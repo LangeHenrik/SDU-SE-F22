@@ -52,8 +52,8 @@ public class Word {
         return this.word;
     }
 
-    public void append(String appendString) {
-        word = word + appendString;
+    public Word append(String appendString) {
+        return new Word(getWordString() + appendString);
     }
 
     public int length() {

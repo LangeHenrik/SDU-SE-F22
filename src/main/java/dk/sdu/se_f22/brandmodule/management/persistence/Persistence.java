@@ -57,8 +57,8 @@ public class Persistence implements IPersistence {
 
             // Delete from both Brand and Junction table
             // Products may be used by another brand, so it won't be deleted
-            stmt.addBatch(String.format("DELETE FROM Brand where id = '%s'", brand.id));
-            stmt.addBatch(String.format("DELETE FROM BrandProductTypeJunction where id = '%s'", brand.id));
+            stmt.addBatch(String.format("DELETE FROM Brand where id = '%s'", brand.getId()));
+            stmt.addBatch(String.format("DELETE FROM BrandProductTypeJunction where id = '%s'", brand.getId()));
 
             stmt.executeBatch();
             stmt.close();
@@ -76,7 +76,7 @@ public class Persistence implements IPersistence {
             // Keep no duplicate products
             Set<String> products = new HashSet<>();
             for (var brand : brands) {
-                products.addAll(brand.products);
+                products.addAll(brand.getProducts());
             }
 
             // Insert products into database
@@ -87,10 +87,10 @@ public class Persistence implements IPersistence {
             /* ------ Insert all brands ------ */
             for (var brand : brands) {
                 insertStmt.addBatch(String.format("INSERT INTO Brand (name, description, founded, headquarters) VALUES ('%s','%s','%s','%s') ON CONFLICT DO NOTHING;",
-                        brand.name,
-                        brand.description.replaceAll("'", "''"),
-                        brand.founded,
-                        brand.headquarters));
+                        brand.getName(),
+                        brand.getDescription().replaceAll("'", "''"),
+                        brand.getFounded(),
+                        brand.getHeadquarters()));
             }
 
             // Run all insert statements
@@ -102,7 +102,7 @@ public class Persistence implements IPersistence {
             Integer brandId = null;
             Integer productId = null;
             for (var brand : brands) {
-                ResultSet brandResult = fetchStmt.executeQuery(String.format("SELECT id FROM Brand WHERE name = '%s';", brand.name));
+                ResultSet brandResult = fetchStmt.executeQuery(String.format("SELECT id FROM Brand WHERE name = '%s';", brand.getName()));
 
                 // Get brand id, for junction table
                 if (brandResult.next()) {

@@ -1,9 +1,10 @@
 package dk.sdu.se_f22.BrandModule.Stemming;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Stemmer implements IStemmer {
-    public String[] stem(List<String> words) {
+    public ArrayList<String> stem(List<String> words) {
        throw new UnsupportedOperationException("Not yet implemented");
     }
 

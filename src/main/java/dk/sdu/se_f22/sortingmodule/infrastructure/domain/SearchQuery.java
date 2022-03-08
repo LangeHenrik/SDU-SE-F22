@@ -18,12 +18,12 @@ public class SearchQuery {
     }
 
     public void setCategory(ArrayList<Integer> categories) {
-        // TODO Auto-generated method stub
+        this.category = categories;
         
     }
 
     public void addCategory(int category) {
-        // TODO Auto-generated method stub
+        this.category.add(category);
         
     }
 

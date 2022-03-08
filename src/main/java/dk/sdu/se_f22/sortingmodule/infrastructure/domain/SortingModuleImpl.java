@@ -14,13 +14,13 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public void setCategory(ArrayList<Integer> categories) {
-        // TODO Auto-generated method stub
+        this.query.setCategory(categories);
         
     }
 
     @Override
     public void addCategory(int category) {
-        // TODO Auto-generated method stub
+        this.query.addCategory(category);
         
     }
 

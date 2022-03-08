@@ -46,8 +46,8 @@ public class SearchQuery {
     }
 
     public void setPagination(int page, int pageSize) {
-        // TODO Auto-generated method stub
-        
+        this.pagination[0] = page;
+        this.pagination[1] = pageSize;
     }
 
     public void setScoring(int scoring) {

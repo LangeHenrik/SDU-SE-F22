@@ -32,8 +32,8 @@ public class SearchQuery {
         
     }
 
-    public void addRange(int rangeId, String startRange, String endRange) {
-        //range.add(Range(rangeId, new String[]{startRange, endRange}));
+    public void addRange(int rangeId, double startRange, double endRange) {
+        //range.add(Range(rangeId, new double[]{startRange, endRange}));
         /*
          * TODO Range object not available, so the used one is a placeholder. Change 'range' attribute and the
          *  object instantiation in the method.

@@ -6,6 +6,13 @@ import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
 public interface SortingModule {
     /**
+     * Set the search string the users enters, when searching
+     *
+     * @param searchString A text string from user
+     */
+    public void searchString(String searchString);
+
+    /**
      * Set the categories for the search filter
      * 
      * @param categories List of all categories to filter by, as a ArrayList

@@ -7,9 +7,15 @@ import dk.sdu.se_f22.sharedlibrary.SearchHits;
 public class SortingModuleImpl implements SortingModule {
 
     private SearchQuery query;
+    private String searchString;
 
     public SortingModuleImpl() {
 
+    }
+
+    @Override
+    public void searchString(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override

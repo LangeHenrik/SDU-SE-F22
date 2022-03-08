@@ -1,7 +1,8 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
-import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Indexable;
-import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
+import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.sharedlibrary.models.*;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -11,17 +12,17 @@ import java.util.regex.Pattern;
 
 
 public class SearchModuleImpl implements SearchModule {
-    private final Set<Indexable<?>> indexingModules;
+    private final Set<IndexingModule<?>> indexingModules;
 
     public SearchModuleImpl() {
         this.indexingModules = new HashSet<>();
     }
 
-    public <T extends Indexable<?>> void addIndexingModule(T index) {
+    public <T extends IndexingModule<?>> void addIndexingModule(T index) {
         indexingModules.add(index);
     }
 
-    public <T extends Indexable<?>> void removeIndexingModule(T index) {
+    public <T extends IndexingModule<?>> void removeIndexingModule(T index) {
         indexingModules.remove(index);
     }
 
@@ -43,7 +44,11 @@ public class SearchModuleImpl implements SearchModule {
 
     @Override
     public SearchResult search(String query) {
-        SearchResult searchResult = new SearchResult(/*new ArrayList<Content>(), new ArrayList<Product>(),*/ new ArrayList<Brand>());
+        List<String> tokens = List.of();
+
+        SearchResult searchResult = new SearchResult(/*new ArrayList<Content>(), */
+                queryIndexOfType(Product.class, tokens),
+                queryIndexOfType(Brand.class, tokens));
         return searchResult;
     }
 

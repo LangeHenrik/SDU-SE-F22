@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.SharedLibrary.models;
+package dk.sdu.se_f22.sharedlibrary.models;
 
 public class Product {
 }

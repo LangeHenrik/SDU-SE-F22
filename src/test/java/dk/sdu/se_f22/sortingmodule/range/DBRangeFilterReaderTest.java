@@ -40,6 +40,16 @@ public class DBRangeFilterReaderTest {
         DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
         List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
 
+        void test(){
+            DatabaseInterface db = MockDatabase.getInstance();
+            DBRangeFilterCreator dbrangeFilterCreator = new DBRangeFilterCreator();
+            for(DBRangeFilter filter: dbFilters){
+//                dbrangeFilterCreator.createRangeFilter(filter);
+                db.create(filter);
+            }
+        }
+
+
 //        @Test
 //        @DisplayName("Test getRangeFilter with valid id")
 //        void testGetRangeFilterWithValidId() {

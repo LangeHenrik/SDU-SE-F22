@@ -56,7 +56,7 @@ public class StemmingUtilitiesTest {
         assertEquals("condition", StemmingUtilities.step2(new Word("conditional")).getWordString());
         assertEquals("rational", StemmingUtilities.step2(new Word("rational")).getWordString());
         assertEquals("valence", StemmingUtilities.step2(new Word("valenci")).getWordString());
-        assertEquals("hesitance", StemmingUtilities.step2(new Word("hesistanci")).getWordString());
+        assertEquals("hesitance", StemmingUtilities.step2(new Word("hesitanci")).getWordString());
         assertEquals("digitize", StemmingUtilities.step2(new Word("digitizer")).getWordString());
         assertEquals("conformable", StemmingUtilities.step2(new Word("conformabli")).getWordString());
         assertEquals("radical", StemmingUtilities.step2(new Word("radicalli")).getWordString());
@@ -71,7 +71,7 @@ public class StemmingUtilitiesTest {
         assertEquals("hopeful", StemmingUtilities.step2(new Word("hopefulness")).getWordString());
         assertEquals("callous", StemmingUtilities.step2(new Word("callousness")).getWordString());
         assertEquals("formal", StemmingUtilities.step2(new Word("formaliti")).getWordString());
-        assertEquals("sensitiev", StemmingUtilities.step2(new Word("sensitiviti")).getWordString());
+        assertEquals("sensitive", StemmingUtilities.step2(new Word("sensitiviti")).getWordString());
         assertEquals("sensible", StemmingUtilities.step2(new Word("sensibiliti")).getWordString());
     }
 
@@ -91,7 +91,7 @@ public class StemmingUtilitiesTest {
     @DisplayName("Step 4 Tests")
     public void testStep4() {
         assertEquals("reviv", StemmingUtilities.step4(new Word("revival")).getWordString());
-        assertEquals("allow", StemmingUtilities.step4(new Word("alowance")).getWordString());
+        assertEquals("allow", StemmingUtilities.step4(new Word("allowance")).getWordString());
         assertEquals("infer", StemmingUtilities.step4(new Word("inference")).getWordString());
         assertEquals("airlin", StemmingUtilities.step4(new Word("airliner")).getWordString());
         assertEquals("gyroscop", StemmingUtilities.step4(new Word("gyroscopic")).getWordString());
@@ -114,9 +114,9 @@ public class StemmingUtilitiesTest {
     @Test
     @DisplayName("Step 5a Tests")
     public void testStep5a() {
-        assertEquals("probat", StemmingUtilities.step1c(new Word("problate")).getWordString());
-        assertEquals("rate", StemmingUtilities.step1c(new Word("rate")).getWordString());
-        assertEquals("ceas", StemmingUtilities.step1c(new Word("cease")).getWordString());
+        assertEquals("probat", StemmingUtilities.step5a(new Word("probate")).getWordString());
+        assertEquals("rate", StemmingUtilities.step5a(new Word("rate")).getWordString());
+        assertEquals("ceas", StemmingUtilities.step5a(new Word("cease")).getWordString());
     }
 
     @Test

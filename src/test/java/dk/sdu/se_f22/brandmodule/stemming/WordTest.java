@@ -1,6 +1,5 @@
-package dk.sdu.se_f22.BrandModule.Stemming;
+package dk.sdu.se_f22.brandmodule.stemming;
 
-import dk.sdu.se_f22.BrandModule.Stemming.Word;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

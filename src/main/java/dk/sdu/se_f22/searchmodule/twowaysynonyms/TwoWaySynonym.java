@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -21,7 +21,18 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public UUID create(String synonym) {
-        return null;
+        PreparedStatement statement;
+        ArrayList<Object> statementList = new ArrayList<>(){{
+            add(UUID.randomUUID());
+            add(synonym);
+        }};
+
+
+        statement = Foo.prepareStatement("INSERT INTO BAR(uuid, name) VALUES (?, ?)");
+        prepareStatement(statement, statementList);
+        executeStatement(statement);
+
+        return getUUID(read(synonym));
     }
 
     /**
@@ -86,5 +97,35 @@ public class TwoWaySynonym implements DatabaseOperator {
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) {
         return null;
+    }
+
+    private void prepareStatement (PreparedStatement statement, ArrayList<Object> parameters){
+        try {
+            for (int i = 1; i < parameters.size(); i++) {
+                statement.setObject(i, parameters.get(i-1));
+            }
+        } catch (SQLException throwables) {
+            System.out.println("Preparing statement failed");
+            throwables.printStackTrace();
+        }
+    }
+
+    private void executeStatement (PreparedStatement statement) {
+        try{
+            statement.execute();
+        } catch (SQLException throwables){
+            System.out.println("Couldn't execute statement");
+            throwables.printStackTrace();
+        }
+    }
+
+    private UUID getUUID (ResultSet resultSet){
+        try{
+            return (UUID)resultSet.getObject("UUID");
+        } catch (SQLException throwables) {
+            System.out.println("No UUID found");
+            throwables.printStackTrace();
+            return null;
+        }
     }
 }

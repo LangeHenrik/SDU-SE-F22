@@ -13,7 +13,21 @@ public class TestTwoWaySynonym {
     @Test
     @DisplayName("Add new synonym to DB")
     public void testCreateSynonym() {
-        assertNull(operator.create("Blah"));
+        //Creates synonym
+        operator.create("pants");
+
+        //Creates arraylists
+        ArrayList<String> tokens = new ArrayList<>();
+        ArrayList<String> expectedOutput = new ArrayList<>();
+        ArrayList<String> methodOutput;
+
+        //Adds synonyms to arraylists
+        tokens.add("pants");
+        expectedOutput.add("pants");
+        methodOutput = operator.filter(tokens);
+
+        //Runs test
+        assertEquals(expectedOutput, methodOutput);
     }
 
     @Test
@@ -23,14 +37,14 @@ public class TestTwoWaySynonym {
     @Test
     public void testFilter(){
         //Creates two new synonyms and synonym groups
-        TwoWaySynonym.getInstance().create("anger");
-        TwoWaySynonym.getInstance().create("sad");
+        operator.create("anger");
+        operator.create("sad");
 
         //adds all the other synosyms based on the two synonyms above
-        TwoWaySynonym.getInstance().create("acrimony","anger");
-        TwoWaySynonym.getInstance().create("annoyance","anger");
-        TwoWaySynonym.getInstance().create("bitter","sad");
-        TwoWaySynonym.getInstance().create("heartbroken","sad");
+        operator.create("acrimony","anger");
+        operator.create("annoyance","anger");
+        operator.create("bitter","sad");
+        operator.create("heartbroken","sad");
 
         ArrayList<String> tokens = new ArrayList<>();
         ArrayList<String> expectedOutput = new ArrayList<>();
@@ -46,14 +60,14 @@ public class TestTwoWaySynonym {
         expectedOutput.add("bitter");
         expectedOutput.add("heartbroken");
 
-        methodOutput = TwoWaySynonym.getInstance().filter(tokens);
+        methodOutput = operator.filter(tokens);
 
         assertEquals(expectedOutput,methodOutput);
     }
 
     @Test
     public void testSynonymGroup(){
-        UUID methodOutput = TwoWaySynonym.getInstance().create("pants");
+        UUID methodOutput = operator.create("pants");
 
         assertNotNull(methodOutput);
     }
@@ -61,11 +75,12 @@ public class TestTwoWaySynonym {
     @AfterClass
     public void deleteAllData(){
         //delete all data added from testFilter
-        TwoWaySynonym.getInstance().delete("anger");
-        TwoWaySynonym.getInstance().delete("acrimony");
-        TwoWaySynonym.getInstance().delete("annoyance");
-        TwoWaySynonym.getInstance().delete("sad");
-        TwoWaySynonym.getInstance().delete("bitter");
-        TwoWaySynonym.getInstance().delete("heartbroken");
+        operator.delete("anger");
+        operator.delete("acrimony");
+        operator.delete("annoyance");
+        operator.delete("sad");
+        operator.delete("bitter");
+        operator.delete("heartbroken");
+        operator.delete("pants");
     }
 }

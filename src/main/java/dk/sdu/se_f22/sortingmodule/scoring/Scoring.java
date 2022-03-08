@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.scoring;
+/*package dk.sdu.se_f22.sortingmodule.scoring;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class Scoring implements IScoring{
 
             for (int j = 0; j < db.size(); j++) {
                 if (stock < db(j).get(Stock.bracket)) {
-                    o.setScore(o.getScore() + db(j).getStock.weight));
+                    o.setScore(o.getScore() + db(j).getStock.weight);
                 }
             }
         }
@@ -86,3 +86,4 @@ public class Scoring implements IScoring{
     public void update() {
     }
 }
+*/

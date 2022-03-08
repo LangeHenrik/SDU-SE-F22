@@ -10,6 +10,15 @@ public class Brand {
     private String headquarters;
     private ArrayList<String> products;
 
+    public Brand(int id, String name, String description, String founded, String headquarters, ArrayList<String> products) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.founded = founded;
+        this.headquarters = headquarters;
+        this.products = products;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.Scoring;
+package dk.sdu.se_f22.sortingmodule.scoring;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class Scoring implements IScoring{
             }
         }
     }
-    
+
     private void stock(ArrayList<Object> input) {
         for (Object o : input) {
             int stock = o.getStock();

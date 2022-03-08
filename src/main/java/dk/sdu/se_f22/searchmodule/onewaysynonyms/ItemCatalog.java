@@ -1,14 +1,16 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class ItemCatalog {
     //Attributes
     private LinkedList<Item> catalog;
 
     //Constructor
-    public ItemCatalog(){
+    public ItemCatalog(Item[] items){
         this.catalog = new LinkedList<>();
+        this.catalog.addAll(List.of(items));
         addSubItems();
     }
 
@@ -23,7 +25,11 @@ public class ItemCatalog {
 
     private void addSubItems(){
         for(Item item : catalog){
-            item.getSuperItem().AddSubItem(item);
+            try{
+                item.getSuperItem().AddSubItem(item);
+            } catch (NullPointerException ex){
+
+            }
         }
     }
 

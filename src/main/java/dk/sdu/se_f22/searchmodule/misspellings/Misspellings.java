@@ -14,6 +14,10 @@ public class Misspellings implements DatabaseOperator{
     private static final String SELECT = "SELECT * FROM misspellings";
     private static final String INSERT_misspellings = "INSERT INTO misspellings (wrong, correct) VALUES (?,?);";
 
+    /*
+    Help found at:
+    https://www.javaguides.net/2020/02/java-jdbc-postgresql-select-example.html
+     */
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) throws SQLException {
         ArrayList<String> corrected = tokens;

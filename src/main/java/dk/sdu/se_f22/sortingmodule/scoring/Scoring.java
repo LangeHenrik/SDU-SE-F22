@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Scoring implements IScoring{
 
-    private void price(ArrayList<Object> input) {
+    private void price(List<Object> input) {
         for (Object o : input) {
             int price = o.getPrice();
 

@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IScoring {
 

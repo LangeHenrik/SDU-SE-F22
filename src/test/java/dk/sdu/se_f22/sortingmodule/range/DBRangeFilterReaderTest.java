@@ -3,10 +3,7 @@ package dk.sdu.se_f22.sortingmodule.range;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
@@ -43,10 +40,11 @@ public class DBRangeFilterReaderTest {
     @DisplayName("Read rangeFilters")
     class readRangeFilters {
         DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
-        List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
-        DatabaseInterface db = MockDatabase.getInstance();
+        static List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
+        static DatabaseInterface db = MockDatabase.getInstance();
 
-        void insertData(){
+        @BeforeAll
+        public static void setup (){
             for(DBRangeFilter filter: dbFilters){
                 db.create(filter);
             }
@@ -55,14 +53,12 @@ public class DBRangeFilterReaderTest {
         @Test
         @DisplayName("Test getRangeFilter with valid id")
         void testGetRangeFilterWithValidId() {
-            insertData();
             try {
                 Assertions.assertEquals(db.read(0),dbRangeFilterReader.getRangeFilter(0));
             } catch (InvalidFilterIdException e) {
                 fail("Id didnt exist");
             }
         }
-
 
         @Test
         @DisplayName("Test getRangeFilter with invalid id")
@@ -77,9 +73,9 @@ public class DBRangeFilterReaderTest {
         @DisplayName("Test getRangeFilters")
         void testGetRangeFilters() {
             Assertions.assertAll("Testing that the objects in the array are the same as the ones in the hashmap",
-                    () -> Assertions.assertTrue(db.readAllFilters().get(0).equals(dbRangeFilterReader.getRangeFilters().get(0))),
-                    () -> Assertions.assertTrue(db.readAllFilters().get(1).equals(dbRangeFilterReader.getRangeFilters().get(1))),
-                    () -> Assertions.assertTrue(db.readAllFilters().get(2).equals(dbRangeFilterReader.getRangeFilters().get(2)))
+                    () -> Assertions.assertEquals(db.readAllFilters().get(0), dbRangeFilterReader.getRangeFilters().get(0)),
+                    () -> Assertions.assertEquals(db.readAllFilters().get(1), dbRangeFilterReader.getRangeFilters().get(1)),
+                    () -> Assertions.assertEquals(db.readAllFilters().get(2), dbRangeFilterReader.getRangeFilters().get(2))
             );
         }
     }

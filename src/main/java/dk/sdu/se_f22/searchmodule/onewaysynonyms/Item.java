@@ -11,6 +11,7 @@ public class Item {
     //Constructor
     public Item(String name){
         this.name = name;
+        this.subItems = new LinkedList<>();
     }
     public Item(String name, Item superItem){
         this(name);
@@ -26,5 +27,14 @@ public class Item {
     }
     public Boolean removeSubItem(Item item){
         return subItems.remove(item);
+    }
+    public String getName() {
+        return name;
+    }
+    public LinkedList<Item> getSubItems(){
+        return this.subItems;
+    }
+    public Item getSuperItem() {
+        return superItem;
     }
 }

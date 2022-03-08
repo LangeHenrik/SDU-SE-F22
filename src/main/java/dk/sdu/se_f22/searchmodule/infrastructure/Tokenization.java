@@ -11,6 +11,12 @@ public class Tokenization {
 
     public List<String> tokenize(String s){
         String[] string = s.split(searchModuleUtils.convertDelimitersToRegex(stringList));
-        return Arrays.stream(string).toList();
+        List<String> returnList = new ArrayList<>();
+        for(String s1:Arrays.stream(string).toList()){
+            if (!s1.equals("")){
+                returnList.add(s1);
+            }
+        }
+        return returnList;
     }
 }

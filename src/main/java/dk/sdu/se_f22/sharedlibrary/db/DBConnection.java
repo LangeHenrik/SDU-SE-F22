@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sharedlibrary.db;
 
-
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -12,50 +12,36 @@ public class DBConnection {
     private String url;
     private String user;
     private String password;
-
     private static Connection conn;
-    private static DBConnection dbConnection;
-
+    private static DBConnection dbConnection = null;
 
     private DBConnection(){
-        loadConfig("config.properties");
+        loadConfig();
 
         try {
-            conn = DriverManager.getConnection(url,user,password);
+            conn = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static Connection getConn(){
+    private void loadConfig() {
+        try (InputStream inputStream = new FileInputStream("config.properties")) {
+            Properties props = new Properties();
+            props.load(inputStream);
+
+            url = props.getProperty("db_url");
+            user = props.getProperty("db_user");
+            password = props.getProperty("db_password");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Connection getConnection(){
         if (dbConnection == null){
             dbConnection = new DBConnection();
         }
         return conn;
-    }
-
-    private void loadConfig(String configFileName) {
-        Properties prop = new Properties();
-
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFileName);
-        try {
-            prop.load(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        url = prop.getProperty("url");
-        user = prop.getProperty("user");
-        password = prop.getProperty("password");
-    }
-
-    //Sørger for at kalde hver gruppes seedDatabase metode:
-    public static void main(String[] args) {
-        System.out.println("Not yet implemented");
-
-
-        //----------------Seeding af brands----------------------
-        //Persistence brandPersistence = new Persistence();
-        //brandPersistence.seedDatabase();
-
     }
 }

@@ -8,7 +8,7 @@ public class TokenFiltration {
 
 /*        tokens = Misspellings.filter(tokens);
         tokens = OneWaySynonyms.filter(tokens);
-        tokens = TwoWaySynonyms.filter(tokens);*/
+        tokens = TwoWaySynonyms.filter(tokens);
 
         return tokens;
     }

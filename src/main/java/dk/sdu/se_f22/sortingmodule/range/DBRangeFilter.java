@@ -21,6 +21,28 @@ public class DBRangeFilter{
         this.max = max;
     }
 
+    public boolean equals(DBRangeFilter other) {
+        if (this.id != other.getId()) {
+            return false;
+        }
+        if (this.name != other.getName()) {
+            return false;
+        }
+        if (this.description != other.getDescription()) {
+            return false;
+        }
+        if (this.productAttribute != other.getProductAttribute()) {
+            return false;
+        }
+        if (this.min != other.getMin()) {
+            return false;
+        }
+        if (this.max != other.getMax()) {
+            return false;
+        }
+        return true;
+    }
+
     public int getId() {
         return this.id;
     }

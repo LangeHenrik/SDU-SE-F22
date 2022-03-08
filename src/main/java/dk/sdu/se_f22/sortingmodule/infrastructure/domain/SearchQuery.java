@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class SearchQuery {
     String query;
     int[] pagination = new int[2];
-    HashMap<Integer, String[]> range = new HashMap<>();
+    ArrayList<Object> range = new ArrayList<>();
     ArrayList<Integer> category = new ArrayList<>();
 
     public void setCategory(ArrayList<Integer> categories) {
@@ -25,7 +25,8 @@ public class SearchQuery {
     }
 
     public void addRange(int rangeId, String startRange, String endRange) {
-        range.put(rangeId, new String[]{startRange, endRange});
+        //range.add(Range(rangeId, new String[]{startRange, endRange}));
+        // CODE DOESN'T WORK, CHANGE RANGE ATTRIBUTE AND OBJECT NAME WHEN AVAILABLE
     }
 
     public void clearRange() {

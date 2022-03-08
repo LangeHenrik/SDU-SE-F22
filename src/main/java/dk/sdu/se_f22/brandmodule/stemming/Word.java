@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.BrandModule.Stemming;
+package dk.sdu.se_f22.brandmodule.stemming;
 
 public class Word {
     String word;

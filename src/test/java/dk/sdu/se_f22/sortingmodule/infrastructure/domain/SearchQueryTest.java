@@ -42,7 +42,7 @@ class SearchQueryTest {
         assertArrayEquals(values, s.pagination);
 
         values[0] = -48;
-        values[0] = 867;
+        values[1] = 867;
         s.setPagination(values[0], values[1]);
         assertArrayEquals(values, s.pagination);
     }

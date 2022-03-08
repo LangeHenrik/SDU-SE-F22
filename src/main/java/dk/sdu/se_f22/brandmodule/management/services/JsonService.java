@@ -31,6 +31,7 @@ public class JsonService implements IJsonService {
                 JSONObject properties =  (JSONObject) jo.get(name);
 
                 Brand brand = new Brand();
+
                 // Set single valued properties
                 brand.name = (name.toString());
                 brand.description = (properties.get("description").toString());

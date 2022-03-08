@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SearchSettings {
-    private ArrayList<String> delimiters = new ArrayList<String>(Arrays.asList(" ","\\p{Punct}"));
+    private ArrayList<String> delimiters = new ArrayList<String>(Arrays.asList("\\p{Punct}"));
 
     public ArrayList<String> getDelimiters() {
         return delimiters;

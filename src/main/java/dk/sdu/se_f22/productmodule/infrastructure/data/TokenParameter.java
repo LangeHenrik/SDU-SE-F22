@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.ProductModule.Infrastructure.data;
+package dk.sdu.se_f22.productmodule.infrastructure.data;
 
 import java.util.Arrays;
 import java.util.List;

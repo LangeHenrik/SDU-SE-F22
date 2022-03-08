@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.ProductModule.Infrastructure.domain;
+package dk.sdu.se_f22.productmodule.infrastructure.domain;
 
 import dk.sdu.se_f22.SharedLibrary.models.Product;
 

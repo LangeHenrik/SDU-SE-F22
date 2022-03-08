@@ -1,36 +1,48 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
+    ArrayList<String> synonymList;
+
+    @BeforeClass
+    public void setupClass(){
+        synonymList = new ArrayList<>();
+    }
 
     @Test
     @DisplayName("Add new synonym to DB")
     public void testCreateSynonym() {
-        assertNull(operator.create("Blah"));
+        assertNotNull(operator.create("Power Supply"));
+
+        synonymList.add("Power Supply");
     }
 
     @Test
     @DisplayName("Update group id from an existing synonym")
     public void testUpdateGroupID(){
     }
+
     @Test
     public void testFilter(){
         //Creates two new synonyms and synonym groups
-        TwoWaySynonym.getInstance().create("anger");
-        TwoWaySynonym.getInstance().create("sad");
+        operator.create("anger");
+        operator.create("sad");
 
         //adds all the other synosyms based on the two synonyms above
-        TwoWaySynonym.getInstance().create("acrimony","anger");
-        TwoWaySynonym.getInstance().create("annoyance","anger");
-        TwoWaySynonym.getInstance().create("bitter","sad");
-        TwoWaySynonym.getInstance().create("heartbroken","sad");
+        operator.create("acrimony","anger");
+        operator.create("annoyance","anger");
+        operator.create("bitter","sad");
+        operator.create("heartbroken","sad");
 
         ArrayList<String> tokens = new ArrayList<>();
         ArrayList<String> expectedOutput = new ArrayList<>();
@@ -46,6 +58,8 @@ public class TestTwoWaySynonym {
         expectedOutput.add("bitter");
         expectedOutput.add("heartbroken");
 
+        Collections.addAll(synonymList, "anger", "sad", "acrimony", "annoyance", "bitter", "heartbroken");
+
         methodOutput = TwoWaySynonym.getInstance().filter(tokens);
 
         assertEquals(expectedOutput,methodOutput);
@@ -55,17 +69,16 @@ public class TestTwoWaySynonym {
     public void testSynonymGroup(){
         UUID methodOutput = TwoWaySynonym.getInstance().create("pants");
 
+        synonymList.add("pants");
+
         assertNotNull(methodOutput);
     }
 
     @AfterClass
     public void deleteAllData(){
-        //delete all data added from testFilter
-        TwoWaySynonym.getInstance().delete("anger");
-        TwoWaySynonym.getInstance().delete("acrimony");
-        TwoWaySynonym.getInstance().delete("annoyance");
-        TwoWaySynonym.getInstance().delete("sad");
-        TwoWaySynonym.getInstance().delete("bitter");
-        TwoWaySynonym.getInstance().delete("heartbroken");
+        //Deletes all the added data from the tests
+        for(String synonym : synonymList){
+            operator.delete(synonym);
+        }
     }
 }

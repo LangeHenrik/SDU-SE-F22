@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Scoring implements IScoring{
 
@@ -16,7 +16,7 @@ public class Scoring implements IScoring{
         }
     }
 
-    private void review(ArrayList<Object> input) {
+    private void review(List<Object> input) {
         for (Object o : input) {
             int review = o.getReview();
 
@@ -28,7 +28,7 @@ public class Scoring implements IScoring{
         }
     }
 
-    private void stock(ArrayList<Object> input) {
+    private void stock(List<Object> input) {
         for (Object o : input) {
             int stock = o.getStock();
 
@@ -40,7 +40,7 @@ public class Scoring implements IScoring{
         }
     }
 
-    private void releaseDate(ArrayList<Object> input) {
+    private void releaseDate(List<Object> input) {
         for (Object o : input) {
             int releaseDate = o.getReleaseDate();
 
@@ -53,7 +53,7 @@ public class Scoring implements IScoring{
     }
 
     @Override
-    public ArrayList<Object> scoreSort(ArrayList<Object> input) {
+    public List<Object> scoreSort(List<Object> input) {
         this.price(input);
         this.review(input);
         this.stock(input);
@@ -63,22 +63,22 @@ public class Scoring implements IScoring{
     }
 
     @Override
-    public ArrayList<Object> scoreSortPrice(ArrayList<Object> input) {
+    public List<Object> scoreSortPrice(List<Object> input) {
         throw new UnsupportedOperationException("Unsupported");
     }
 
     @Override
-    public ArrayList<Object> scoreSortReview(ArrayList<Object> input) {
+    public List<Object> scoreSortReview(List<Object> input) {
         throw new UnsupportedOperationException("Unsupported");
     }
 
     @Override
-    public ArrayList<Object> scoreSortStock(ArrayList<Object> input) {
+    public List<Object> scoreSortStock(List<Object> input) {
         throw new UnsupportedOperationException("Unsupported");
     }
 
     @Override
-    public ArrayList<Object> scoreSortReleaseDate(ArrayList<Object> input) {
+    public List<Object> scoreSortReleaseDate(List<Object> input) {
         throw new UnsupportedOperationException("Unsupported");
     }
 

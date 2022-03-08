@@ -7,28 +7,28 @@ public interface IScoring {
     /**
     <p> Returns weight value sum for multiple categories </p>
     */
-    ArrayList<Object> scoreSort(ArrayList<Object> input);
+    List<Object> scoreSort(List<Object> input);
 
     /**
     <p> Returns weight value for price </p>
      * @return
      */
-    ArrayList<Object> scoreSortPrice(ArrayList<Object> input);
+    List<Object> scoreSortPrice(List<Object> input);
 
     /**
     <p> Returns weight value for review </p>
     */
-    ArrayList<Object> scoreSortReview(ArrayList<Object> input);
+    List<Object> scoreSortReview(List<Object> input);
 
     /**
     <p> Returns weight value for stock </p>
     */
-    ArrayList<Object> scoreSortStock(ArrayList<Object> input);
+    List<Object> scoreSortStock(List<Object> input);
 
     /**
     <p> Returns weight value for release date </p>
     */
-    ArrayList<Object> scoreSortReleaseDate(ArrayList<Object> input);
+    List<Object> scoreSortReleaseDate(List<Object> input);
 
     /**
     <p> ??? </p>

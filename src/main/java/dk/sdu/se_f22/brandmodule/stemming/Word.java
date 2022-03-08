@@ -70,6 +70,27 @@ public class Word {
         return false;
     }
 
+    public boolean endsWithDoubleCons() {
+        if (this.getWordString().charAt(this.getWordString().length() - 1) == this.getWordString().charAt(this.getWordString().length() - 2)) {
+            return isCons(this.getWordString().length() - 1) && isCons(this.getWordString().length() - 2);
+        }
+        return false;
+    }
+
+    // *o - the stem ends cvc, where the second c is not W, X or Y (e.g. -WIL, -HOP).
+    public boolean endsWithCVC() {
+
+        if (isCons(word.length() - 1) && isVowel(this.getWordString().length() - 2) && isCons(this.getWordString().length() - 3)) {
+            switch (this.getWordString().charAt(this.getWordString().length() - 1)) {
+                case 'w', 'x', 'y': return false;
+                default: return true;
+            }
+        }
+
+        return false;
+    }
+
+
     @Override
     public String toString() {
         return this.word;

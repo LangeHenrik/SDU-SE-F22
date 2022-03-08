@@ -1,12 +1,12 @@
 package dk.sdu.se_f22.brandmodule.management;
+import dk.sdu.se_f22.brandmodule.management.persistence.IPersistence;
+import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 public class Bim implements IBim {
 
     @Override
-    public void createBrand(Brand brand) {
-
-    }
+    public void createBrand(Brand brand) {}
 
     @Override
     public Brand getBrand(int id) {
@@ -19,9 +19,7 @@ public class Bim implements IBim {
     }
 
     @Override
-    public void removeBrand(Brand brand) {
-
-    }
+    public void removeBrand(Brand brand) {}
 
     @Override
     public Brand updateBrand(Brand brand) {
@@ -29,7 +27,5 @@ public class Bim implements IBim {
     }
 
     @Override
-    public void setIndexInterval(int indexInterval) {
-
-    }
+    public void setIndexInterval(int indexInterval) {}
 }

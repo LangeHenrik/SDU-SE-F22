@@ -64,7 +64,8 @@ public class Word {
     }
 
     public boolean containsVowel(int startIndex, int endIndex) {
-        for (int i = 0; i < this.getWordString().length(); i++) {
+        String stem = getWordString().substring(startIndex, endIndex);
+        for (int i = 0; i < stem.length(); i++) {
             if (this.isVowel(i)) return true;
         }
         return false;

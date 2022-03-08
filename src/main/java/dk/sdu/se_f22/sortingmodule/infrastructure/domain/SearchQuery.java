@@ -30,12 +30,12 @@ public class SearchQuery {
         
     }
 
-    /*
-    * TODO Range object not available, so the used one is a placeholder. Change 'range' attribute and the
-    *  object instantiation in the method.
-    */
     public void addRange(int rangeId, String startRange, String endRange) {
         //range.add(Range(rangeId, new String[]{startRange, endRange}));
+        /*
+         * TODO Range object not available, so the used one is a placeholder. Change 'range' attribute and the
+         *  object instantiation in the method.
+        */
     }
 
     public void clearRange() {

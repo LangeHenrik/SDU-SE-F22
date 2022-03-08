@@ -8,6 +8,7 @@ public class Word {
     }
 
     // Get the measure of the word
+    // FIXME: getMeasure needs another implementation
     public int getMeasure() {
         char[] characters = word.toLowerCase().toCharArray();
         int mCounter = 0;
@@ -21,6 +22,11 @@ public class Word {
         return mCounter;
     }
 
+    /**
+     *
+     * @param idx
+     * @return
+     */
     public boolean isVowel(int idx) {
         // If the character isn't a consonant, it's a vowel.
         return !isCons(idx);
@@ -39,10 +45,31 @@ public class Word {
 
     public Word replaceIfEnds(String match, String replace) {
         if (word.endsWith(match)) {
-            word.replace(match, replace);
+            word = word.replace(match, replace);
         }
         return this;
     }
+
+    public Word replaceM0(Word word, String end, String replace){
+        if (endsWith(end)) {
+            Word base = word.subWord(0, word.length() - end.length());
+            if (base.getMeasure() > 0){
+                this.word = base.append(replace).getWordString();
+            }
+        }
+        return word;
+    }
+
+    public Word replaceM1(Word word, String end, String replace){
+        if (endsWith(end)) {
+            Word base = word.subWord(0, word.length() - end.length());
+            if (base.getMeasure() > 1){
+                this.word = base.append(replace).getWordString();
+            }
+        }
+        return word;
+    }
+
 
     public boolean endsWith(String string) {
         return word.endsWith(string);
@@ -59,6 +86,7 @@ public class Word {
     public int length() {
         return word.length();
     }
+
     public Word subWord(int beginIndex, int endIndex) {
         return new Word(this.getWordString().substring(beginIndex, endIndex));
     }

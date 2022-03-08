@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS BrandProductTypeJunction;
 -- Drop all other tables
 DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
-DROP TABLE IF EXISTS config;
+DROP TABLE IF EXISTS Config;
 
 /*
  Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,

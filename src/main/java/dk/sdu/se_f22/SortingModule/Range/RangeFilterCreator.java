@@ -3,7 +3,8 @@ package dk.sdu.se_f22.SortingModule.Range;
 import dk.sdu.se_f22.SortingModule.Range.Exceptions.InvalidFilterException;
 
 class RangeFilterCreator {
-    private DBRangeFilterCreator dbRangeFilterCreator;
+    private CreateRangeFilterInterface dbRangeFilterCreator;
+    private ReadRangeFilterInterface dbReader;
 
     public RangeFilterCreator() {
         this(new DBRangeFilterCreator());
@@ -17,13 +18,11 @@ class RangeFilterCreator {
         }catch (InvalidFilterException e){
             System.out.println(e.getMessage());
         }
+
+        dbReader = new DBRangeFilterReader();
     }
 
-    private DBRangeFilter getDBRangeFilter(int id) {
-        return this.dbRangeFilterCreator.getRangeFilterFromDB(id);
-    }
-
-    private static boolean validateFilter() {
+    private boolean validateFilter() {
         return true;
     }
 
@@ -32,7 +31,7 @@ class RangeFilterCreator {
         //if it doesn't, or min, max is invalid
 //        return null;
         //if it does and everything is valid:
-        DBRangeFilter dbfilter = getDBRangeFilter(filterCheck.getId());
+        DBRangeFilter dbfilter = this.dbReader.getRangeFilter(filterCheck.getId());
         if (validateFilter()) {
             return new InternalFilter(filterCheck.getMin(), filterCheck.getMax(), dbfilter.getProductAttribute());
         } else {

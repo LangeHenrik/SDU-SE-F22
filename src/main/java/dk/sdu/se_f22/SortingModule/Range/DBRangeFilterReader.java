@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class DBRangeFilterReader implements ReadRangeFilterInterface {
-    Map<Integer, DBRangeFilter> map;
+    private DatabaseInterface database;
 
     public DBRangeFilterReader () {
-        //map = getRangeFilterFromDB();
+        database = MockDatabase.getInstance();
     }
 
     public Map<Integer, DBRangeFilter> getRangeFilterFromDB () {
@@ -20,19 +20,21 @@ public class DBRangeFilterReader implements ReadRangeFilterInterface {
 
     @Override
     public DBRangeFilter[] getRangeFilters() {
-        DBRangeFilter[] out = new DBRangeFilter[this.map.size()];
+//        DBRangeFilter[] out = new DBRangeFilter[this.map.size()];
+//
+//        int index = 0;
+//        for (Map.Entry<Integer, DBRangeFilter> element : this.map.entrySet()) {
+//            out[index] = element.getValue();
+//            index++;
+//        }
+//
+//        return out;
 
-        int index = 0;
-        for (Map.Entry<Integer, DBRangeFilter> element : this.map.entrySet()) {
-            out[index] = element.getValue();
-            index++;
-        }
-
-        return out;
+        return null;
     }
 
     @Override
     public DBRangeFilter getRangeFilter(int id) {
-        return this.map.get(id);
+        return database.read(id);
     }
 }

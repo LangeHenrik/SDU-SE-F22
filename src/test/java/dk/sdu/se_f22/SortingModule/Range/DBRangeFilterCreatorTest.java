@@ -13,10 +13,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DBRangeFilterCreatorTest {
     private DBRangeFilterCreator dbRangeFilterCreator;
+    private DBRangeFilterReader dbRangeFilterReader;
 
     @BeforeEach
     void setUp() {
         dbRangeFilterCreator = new DBRangeFilterCreator();
+        dbRangeFilterReader = new DBRangeFilterReader();
     }
 
     @Nested
@@ -123,7 +125,6 @@ class DBRangeFilterCreatorTest {
 
     @Test
     void getRangeFilterFromDB() {
-        int id = 0;
         String description = "This filter checks a lot of attributes bla bla";
         String name = "Sample filter";
         String productAttribute = "price";
@@ -136,16 +137,34 @@ class DBRangeFilterCreatorTest {
         );
 
 
-        DBRangeFilter createdFilter = dbRangeFilterCreator.getRangeFilterFromDB(returnId.get());
+        DBRangeFilter createdFilter = dbRangeFilterReader.getRangeFilter(returnId.get());
 
         Assertions.assertAll("Testing that the values created match the values supplied",
-                () -> Assertions.assertEquals(id, createdFilter.getId()),
                 () -> Assertions.assertEquals(description, createdFilter.getDescription()),
                 () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
                 () -> Assertions.assertEquals(name, createdFilter.getName()),
                 () -> Assertions.assertEquals(min, createdFilter.getMin()),
                 () -> Assertions.assertEquals(max, createdFilter.getMax())
         );
+    }
+
+    @Test
+    void getRangeFilterFromId() {
+        String description = "This filter checks a lot of attributes bla bla";
+        String name = "Sample filter";
+        String productAttribute = "price";
+        double min = 0;
+        double max = 800;
+
+        Assertions.assertDoesNotThrow(
+                () -> dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max)
+        );
+
+        int id = 0;
+
+        DBRangeFilter retrievedFilter = dbRangeFilterReader.getRangeFilter(id);
+
+        Assertions.assertEquals(id, retrievedFilter.getId());
     }
 
 }

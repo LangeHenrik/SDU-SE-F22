@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.SortingModule.Range;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MockDatabase implements DatabaseInterface{
@@ -43,5 +44,10 @@ public class MockDatabase implements DatabaseInterface{
         DBRangeFilter out = this.mockDB.get(id);
         this.mockDB.remove(id);
         return out;
+    }
+
+    @Override
+    public List<DBRangeFilter> readAllFilters() {
+        return null;
     }
 }

@@ -80,7 +80,8 @@ public class Word {
     }
 
     public Word append(String appendString) {
-        return new Word(getWordString() + appendString);
+        word = word + appendString;
+        return this;
     }
 
     public int length() {

@@ -86,7 +86,6 @@ public class StemmingUtilities {
             }
         }
         return word;
-
     }
 
     public static Word step3(Word word){
@@ -157,6 +156,8 @@ public class StemmingUtilities {
         if (word.endsWith("e")) {
             word.replaceM1(word, "e", "");
         }
+
+
 
         if (word.getMeasure() == 1 && !word.endsWithCVC()){
             return word.replaceIfEnds("e", "");

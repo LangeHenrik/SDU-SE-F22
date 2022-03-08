@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 
 class RangeFilterCreator {
     private CreateRangeFilterInterface dbRangeFilterCreator;
@@ -26,7 +27,7 @@ class RangeFilterCreator {
         return true;
     }
 
-    public InternalFilter createInternalFilter(RangeFilter filterCheck) {
+    public InternalFilter createInternalFilter(RangeFilter filterCheck) throws InvalidFilterIdException {
         //check if the filter exists in the database
         //if it doesn't, or min, max is invalid
 //        return null;

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.sortingmodule.infrastructure.SearchHits;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,10 @@ class RangeMainTest {
         hits.setProducts(mockResults);
 
 
-        rangeMain.filterResults(hits, mockFilters);
+        try {
+            rangeMain.filterResults(hits, mockFilters);
+        } catch (InvalidFilterIdException e) {
+            e.printStackTrace();
+        }
     }
 }

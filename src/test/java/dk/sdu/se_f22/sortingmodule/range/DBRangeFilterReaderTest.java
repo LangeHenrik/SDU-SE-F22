@@ -1,7 +1,12 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -39,48 +44,43 @@ public class DBRangeFilterReaderTest {
     class readRangeFilters {
         DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
         List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
+        DatabaseInterface db = MockDatabase.getInstance();
 
-        void test(){
-            DatabaseInterface db = MockDatabase.getInstance();
-            DBRangeFilterCreator dbrangeFilterCreator = new DBRangeFilterCreator();
+        void insertData(){
             for(DBRangeFilter filter: dbFilters){
-//                dbrangeFilterCreator.createRangeFilter(filter);
                 db.create(filter);
             }
         }
 
+        @Test
+        @DisplayName("Test getRangeFilter with valid id")
+        void testGetRangeFilterWithValidId() {
+            insertData();
+            try {
+                Assertions.assertEquals(db.read(0),dbRangeFilterReader.getRangeFilter(0));
+            } catch (InvalidFilterIdException e) {
+                fail("Id didnt exist");
+            }
+        }
 
-//        @Test
-//        @DisplayName("Test getRangeFilter with valid id")
-//        void testGetRangeFilterWithValidId() {
-//            dbRangeFilterReader.map = new HashMap<>();
-//            dbRangeFilterReader.map.put(test1.getId(),test1);
-//            Assertions.assertSame(dbRangeFilterReader.getRangeFilter(0),test1);
-//        }
-//
-//        @Test
-//        @DisplayName("Test getRangeFilter with invalid id")
-//        void testGetRangeFilterWithInvalidId() {
-//            dbRangeFilterReader.map = new HashMap<>();
-//            dbRangeFilterReader.map.put(test1.getId(),test1);
-//            Assertions.assertEquals(null, dbRangeFilterReader.getRangeFilter(1));
-//        }
-//
-//        @Test
-//        @DisplayName("Test getRangeFilters")
-//        void testGetRangeFilters() {
-//            dbRangeFilterReader.map = new HashMap<>();
-//            dbRangeFilterReader.map.put(test1.getId(), test1);
-//            dbRangeFilterReader.map.put(test2.getId(), test2);
-//            dbRangeFilterReader.map.put(test3.getId(), test3);
-//            dbRangeFilterReader.map.put(test4.getId(), test4);
-//
-//            Assertions.assertAll("Testing that the objects in the array are the same as the ones in the hashmap",
-//                    () -> Assertions.assertEquals(dbRangeFilterReader.map.get(0), dbRangeFilterReader.getRangeFilters()[0]),
-//                    () -> Assertions.assertEquals(dbRangeFilterReader.map.get(1), dbRangeFilterReader.getRangeFilters()[1]),
-//                    () -> Assertions.assertEquals(dbRangeFilterReader.map.get(2), dbRangeFilterReader.getRangeFilters()[2]),
-//                    () -> Assertions.assertEquals(dbRangeFilterReader.map.get(3), dbRangeFilterReader.getRangeFilters()[3])
-//            );
-//        }
+
+        @Test
+        @DisplayName("Test getRangeFilter with invalid id")
+        void testGetRangeFilterWithInvalidId() {
+            Assertions.assertThrows(InvalidFilterIdException.class,
+                    () -> dbRangeFilterReader
+                            .getRangeFilter(dbRangeFilterReader.getRangeFilters().size()+1)
+            );
+        }
+
+        @Test
+        @DisplayName("Test getRangeFilters")
+        void testGetRangeFilters() {
+            Assertions.assertAll("Testing that the objects in the array are the same as the ones in the hashmap",
+                    () -> Assertions.assertTrue(db.readAllFilters().get(0).equals(dbRangeFilterReader.getRangeFilters().get(0))),
+                    () -> Assertions.assertTrue(db.readAllFilters().get(1).equals(dbRangeFilterReader.getRangeFilters().get(1))),
+                    () -> Assertions.assertTrue(db.readAllFilters().get(2).equals(dbRangeFilterReader.getRangeFilters().get(2)))
+            );
+        }
     }
 }

@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+
 import java.util.List;
 
 public class DBRangeFilterReader implements ReadRangeFilterInterface {
@@ -15,7 +17,10 @@ public class DBRangeFilterReader implements ReadRangeFilterInterface {
     }
 
     @Override
-    public DBRangeFilter getRangeFilter(int id) {
+    public DBRangeFilter getRangeFilter(int id) throws InvalidFilterIdException {
+        if (database.read(id) == null) {
+            throw new InvalidFilterIdException("Invalid id");
+        }
         return database.read(id);
     }
 }

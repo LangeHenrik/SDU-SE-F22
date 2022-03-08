@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -137,15 +138,18 @@ class DBRangeFilterCreatorTest {
         );
 
 
-        DBRangeFilter createdFilter = dbRangeFilterReader.getRangeFilter(returnId.get());
-
-        Assertions.assertAll("Testing that the values created match the values supplied",
-                () -> Assertions.assertEquals(description, createdFilter.getDescription()),
-                () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
-                () -> Assertions.assertEquals(name, createdFilter.getName()),
-                () -> Assertions.assertEquals(min, createdFilter.getMin()),
-                () -> Assertions.assertEquals(max, createdFilter.getMax())
-        );
+        try {
+            DBRangeFilter createdFilter = dbRangeFilterReader.getRangeFilter(returnId.get());
+            Assertions.assertAll("Testing that the values created match the values supplied",
+                    () -> Assertions.assertEquals(description, createdFilter.getDescription()),
+                    () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
+                    () -> Assertions.assertEquals(name, createdFilter.getName()),
+                    () -> Assertions.assertEquals(min, createdFilter.getMin()),
+                    () -> Assertions.assertEquals(max, createdFilter.getMax())
+            );
+        } catch (InvalidFilterIdException e) {
+            fail("Id does not exist");
+        }
     }
 
     @Test
@@ -162,7 +166,12 @@ class DBRangeFilterCreatorTest {
 
         int id = 0;
 
-        DBRangeFilter retrievedFilter = dbRangeFilterReader.getRangeFilter(id);
+        DBRangeFilter retrievedFilter = null;
+        try {
+            retrievedFilter = dbRangeFilterReader.getRangeFilter(id);
+        } catch (InvalidFilterIdException e) {
+            fail("Id does not exist");
+        }
 
         Assertions.assertEquals(id, retrievedFilter.getId());
     }

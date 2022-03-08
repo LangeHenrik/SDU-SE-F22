@@ -1,15 +1,11 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
@@ -17,7 +13,7 @@ public class TestTwoWaySynonym {
     @Test
     @DisplayName("Add new synonym to DB")
     public void testCreateSynonym() {
-        Assertions.assertNull(operator.create("Blah"));
+        assertNull(operator.create("Blah"));
     }
 
     @Test
@@ -52,14 +48,14 @@ public class TestTwoWaySynonym {
 
         methodOutput = TwoWaySynonym.getInstance().filter(tokens);
 
-        Assertions.assertEquals(expectedOutput,methodOutput);
+        assertEquals(expectedOutput,methodOutput);
     }
 
     @Test
     public void testSynonymGroup(){
         UUID methodOutput = TwoWaySynonym.getInstance().create("pants");
 
-        Assertions.assertNotNull(methodOutput);
+        assertNotNull(methodOutput);
     }
 
     @AfterClass

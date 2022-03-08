@@ -1,6 +1,9 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
@@ -21,11 +24,22 @@ public class TestTwoWaySynonym {
     }
     @Test
     public void testFilter(){
-        ArrayList<String> tokends = new ArrayList<>();
-        ArrayList<String> expectedOutput = new ArrayList<>();
+        //Creates two new synonyms and synonym groups
+        TwoWaySynonym.getInstance().create("anger");
+        TwoWaySynonym.getInstance().create("sad");
 
-        tokends.add("anger");
-        tokends.add("sad");
+        //adds all the other synosyms based on the two synonyms above
+        TwoWaySynonym.getInstance().create("acrimony","anger");
+        TwoWaySynonym.getInstance().create("annoyance","anger");
+        TwoWaySynonym.getInstance().create("bitter","sad");
+        TwoWaySynonym.getInstance().create("heartbroken","sad");
+
+        ArrayList<String> tokens = new ArrayList<>();
+        ArrayList<String> expectedOutput = new ArrayList<>();
+        ArrayList<String> methodOutput;
+
+        tokens.add("anger");
+        tokens.add("sad");
 
         expectedOutput.add("anger");
         expectedOutput.add("acrimony");
@@ -34,8 +48,19 @@ public class TestTwoWaySynonym {
         expectedOutput.add("bitter");
         expectedOutput.add("heartbroken");
 
-        TwoWaySynonym.getInstance().filter(tokends);
+        methodOutput = TwoWaySynonym.getInstance().filter(tokens);
 
-        Assertions.assertEquals(expectedOutput,tokends);
+        Assertions.assertEquals(expectedOutput,methodOutput);
+    }
+
+    @AfterClass
+    public void deleteAllData(){
+        //delete all data added from testFilter
+        TwoWaySynonym.getInstance().delete("anger");
+        TwoWaySynonym.getInstance().delete("acrimony");
+        TwoWaySynonym.getInstance().delete("annoyance");
+        TwoWaySynonym.getInstance().delete("sad");
+        TwoWaySynonym.getInstance().delete("bitter");
+        TwoWaySynonym.getInstance().delete("heartbroken");
     }
 }

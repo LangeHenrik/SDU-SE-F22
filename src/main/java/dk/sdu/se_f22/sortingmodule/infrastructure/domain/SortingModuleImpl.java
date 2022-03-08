@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 
 public class SortingModuleImpl implements SortingModule {
 
@@ -55,6 +56,8 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public SearchHits search() {
+        SearchModuleImpl seachModule = new SearchModuleImpl(this.searchString);
+
         // TODO Auto-generated method stub
         return null;
     }

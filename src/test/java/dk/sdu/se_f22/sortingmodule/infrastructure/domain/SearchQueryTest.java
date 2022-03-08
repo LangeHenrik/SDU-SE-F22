@@ -35,5 +35,8 @@ class SearchQueryTest {
 
     @Test
     void setScoringTest() {
+        SearchQuery s = new SearchQuery();
+        s.setScoring(5);
+        assertEquals(5, s.scoring);
     }
 }

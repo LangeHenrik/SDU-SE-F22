@@ -8,11 +8,13 @@ public class SearchQuery {
     int[] pagination;
     ArrayList<Object> range;
     ArrayList<Integer> category;
+    int scoring;
 
     public SearchQuery() {
         this.pagination = new int[2];
         this.range = new ArrayList<>();
         this.category = new ArrayList<>();
+        this.scoring = 0;
     }
 
     public void setCategory(ArrayList<Integer> categories) {
@@ -48,9 +50,8 @@ public class SearchQuery {
         
     }
 
-    public void setScoring(String scoring) {
-        // TODO Auto-generated method stub
-        
+    public void setScoring(int scoring) {
+        this.scoring = scoring;
     }
 
 }

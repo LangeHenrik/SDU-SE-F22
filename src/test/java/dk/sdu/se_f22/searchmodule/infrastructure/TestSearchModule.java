@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+/*package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
@@ -93,3 +93,4 @@ public class TestSearchModule {
         assertTrue(searchResult.getProductPages().stream().findFirst().isPresent());
     }
 }
+*/

@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+/*package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import java.util.ArrayList;
 
@@ -14,3 +14,4 @@ public class TokenFiltration {
     }
 
 }
+*/

@@ -17,7 +17,7 @@ public class JsonService implements IJsonService {
     public List<Brand> deserializeBrand() {
         try {
             // Load .json file
-            Object obj = new JSONParser().parse(new FileReader("src/main/java/dk/sdu/se_f22/Bim/src/json/brands.json"));
+            Object obj = new JSONParser().parse(new FileReader("src/main/java/dk/sdu/se_f22/brandmodule/management/json/brands.json"));
 
             // JSONObject will be worked with
             JSONObject jo = (JSONObject) obj;
@@ -31,6 +31,7 @@ public class JsonService implements IJsonService {
                 JSONObject properties =  (JSONObject) jo.get(name);
 
                 Brand brand = new Brand();
+
                 // Set single valued properties
                 brand.name = (name.toString());
                 brand.description = (properties.get("description").toString());

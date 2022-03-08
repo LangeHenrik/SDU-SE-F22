@@ -10,19 +10,30 @@ public class Misspellings implements DatabaseOperator{
     private final String url = "jdbc:postgresql://abul.db.elephantsql.com/hzajyqbo";
     private final String user = "hzajyqbo";
     private final String password = "K8664qtGojuBvQczzv66EhaqkUNbXLj0";
+    private static final String QUERY = "SELECT wrong, correct FROM misspellings WHERE wrong =?";
+    private static final String SELECT = "SELECT * FROM misspellings";
     private static final String INSERT_misspellings = "INSERT INTO misspellings (wrong, correct) VALUES (?,?);";
 
     @Override
-    public ArrayList<String> filter(ArrayList<String> tokens) {
-        ArrayList<String> corrected = new ArrayList<String>();
-        String databaseMatch = "noget"; //temp
-        String databaseMatchCorrected = "nogetandet"; //temp
-
-        for (String s: tokens){
-            if (s == databaseMatch) {
-                s = databaseMatchCorrected;
+    public ArrayList<String> filter(ArrayList<String> tokens) throws SQLException {
+        ArrayList<String> corrected = tokens;
+        for (int i = 0; i < tokens.size() ; i++) {
+            // Step 1: Establishing a Connection
+            try (Connection connection = DriverManager.getConnection(url, user, password);
+                 // Step 2:Create a statement using connection object
+                 PreparedStatement preparedStatement = connection.prepareStatement(QUERY);) {
+                preparedStatement.setString(1, tokens.get(i));
+                System.out.println(preparedStatement);
+                // Step 3: Execute the query or update query
+                ResultSet rs = preparedStatement.executeQuery();
+                // Step 4: Process the ResultSet object.
+                while (rs.next()) {
+                    String correctWord = rs.getString("correct");
+                    corrected.set(i, correctWord);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            corrected.add(s);
         }
         return corrected;
     }
@@ -67,7 +78,15 @@ public class Misspellings implements DatabaseOperator{
 
     public static void main(String[] args) throws SQLException {
         Misspellings mis = new Misspellings();
-        mis.addMispellings();
+        //mis.addMispellings();
+
+        /*ArrayList<String> strings = new ArrayList<String>();
+        strings.add("HEJ");
+        strings.add("HAJ");
+        strings.add("HEJ");
+        System.out.println(strings);
+        mis.filter(strings);
+        System.out.println(strings);*/
     }
 
 }

@@ -49,6 +49,6 @@ public class MockDatabase implements DatabaseInterface{
 
     @Override
     public List<DBRangeFilter> readAllFilters() {
-        return null;
+        return new ArrayList<DBRangeFilter>(this.mockDB.values());
     }
 }

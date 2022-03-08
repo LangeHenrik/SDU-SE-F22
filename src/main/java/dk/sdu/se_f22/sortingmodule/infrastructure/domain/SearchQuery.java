@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 public class SearchQuery {
     String query;
-    int[] pagination;
-    HashMap<Integer, String[]> range;
-    ArrayList<Integer> category;
+    int[] pagination = new int[2];
+    HashMap<Integer, String[]> range = new HashMap<>();
+    ArrayList<Integer> category = new ArrayList<>();
 
     public void setCategory(ArrayList<Integer> categories) {
         // TODO Auto-generated method stub
@@ -42,4 +42,5 @@ public class SearchQuery {
         // TODO Auto-generated method stub
         
     }
+
 }

@@ -1,7 +1,7 @@
 CREATE TABLE querys (
 	id SERIAL PRIMARY KEY,
 	tekst VARCHAR(512) NOT NULL,
-	date_stamp TIMESTAMP NOT NULL
+	date_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE querys_settings (

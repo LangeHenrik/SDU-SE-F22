@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
+
 import java.util.LinkedList;
 import java.util.List;
 

@@ -9,31 +9,37 @@ public class Item {
     private LinkedList<Item> subItems;
 
     //Constructor
-    public Item(String name){
+    public Item(String name) {
         this.name = name;
         this.subItems = new LinkedList<>();
     }
-    public Item(String name, Item superItem){
+
+    public Item(String name, Item superItem) {
         this(name);
         this.superItem = superItem;
     }
 
     //Methods
-    public void AddSubItem(Item subItem){
+    public void AddSubItem(Item subItem) {
         subItems.add(subItem);
     }
+
     public void setSuperItem(Item superItem) {
         this.superItem = superItem;
     }
-    public Boolean removeSubItem(Item item){
+
+    public Boolean removeSubItem(Item item) {
         return subItems.remove(item);
     }
+
     public String getName() {
         return name;
     }
-    public LinkedList<Item> getSubItems(){
+
+    public LinkedList<Item> getSubItems() {
         return this.subItems;
     }
+
     public Item getSuperItem() {
         return superItem;
     }

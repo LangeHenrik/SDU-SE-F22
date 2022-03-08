@@ -1,8 +1,8 @@
-package dk.sdu.se_f22.ProductModule.Infrastructure.domain;
+package dk.sdu.se_f22.productmodule.infrastructure.domain;
 
-import dk.sdu.se_f22.ProductModule.Infrastructure.ProductIndexInfrastructure;
-import dk.sdu.se_f22.ProductModule.Infrastructure.data.TokenParameter;
-import dk.sdu.se_f22.SharedLibrary.models.Product;
+import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
+import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;

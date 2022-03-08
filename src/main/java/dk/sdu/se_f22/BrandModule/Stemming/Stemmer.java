@@ -1,39 +1,31 @@
 package dk.sdu.se_f22.BrandModule.Stemming;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 public class Stemmer implements IStemmer {
+    public String[] stem(String[] words) {
+       throw new UnsupportedOperationException();
+    }
 
-   public String[] stem(String[] words) {
-       ArrayList<String> stemmedList = new ArrayList<>();
-       for (String word : words) {
-           stem(word);
-       }
-       return stemmedList.toArray(new String[0]);
-   }
-
-   public String stem(String word) {
-        return "";
+    public String stem(String word) {
+       throw new UnsupportedOperationException();
    }
 
     private Word step1a(Word word) {
         if (word.endsWith("sses")) return word.subWord(0, word.length() - 2);
-        if (word.endsWith("ies")) return word.substring(0, word.getWordString().length() - 2);
+        if (word.endsWith("ies")) return word.subWord(0, word.length() - 2);
         if (word.endsWith("ss")) return word;
-        if (word.endsWith("s")) return word.substring(0, word.getWordString().length() - 1);
+        if (word.endsWith("s")) return word.subWord(0, word.length() - 1);
         return word;
     }
 
     private Word step1b(Word word) {
         if (word.getMeasure() > 1 && word.endsWith("eed")) {
-            return word.substring(0, word.getWordString().length() - 1);
+            return word.subWord(0, word.getWordString().length() - 1);
         }
-        if (containsVowel(word.getWordString().substring(0, word.getWordString().length() - 2)) && word.endsWith("ed") && !word.endsWith("eed")) {
-            return finish1b(word.getWordString().substring(0, word.getWordString().length() - 2));
+        if (word.containsVowel(0, word.length() - 2) && word.endsWith("ed") && !word.endsWith("eed")) {
+            return finish1b(word.subWord(0, word.getWordString().length() - 2));
         }
-        if(containsVowel(word.getWordString().substring(0, word.getWordString().length() - 3)) && word.endsWith("ing")){
-            return finish1b(word.getWordString().substring(0, word.getWordString().length() - 3));
+        if(word.containsVowel(0, word.getWordString().length() - 3) && word.endsWith("ing")){
+            return finish1b(word.subWord(0, word.getWordString().length() - 3));
         }
         return word;
     }
@@ -44,7 +36,7 @@ public class Stemmer implements IStemmer {
         }
         if (endsWithDoubleCons(word)) {
             if (!(word.endsWith("l") || word.endsWith("s") || word.endsWith("z"))) {
-                return word.getWordString().substring(0, word.getWordString().length() - 1);
+                return word.subWord(0, word.getWordString().length() - 1);
             }
         }
         if (word.getMeasure() == 1 && endsWithCVC(word)) {
@@ -56,19 +48,16 @@ public class Stemmer implements IStemmer {
 
     private Word step1c(Word word) {
         String stem = word.getWordString().substring(0, word.getWordString().length() - 1);
-        if (containsVowel(stem) && word.endsWith("y")) {
-            return stem + "i";
+        if (word.containsVowel(0, word.length() - 1) && word.endsWith("y")) {
+            return word.subWord(0, word.length() - 1);
         }
         return word;
     }
 
     private Word step2(Word word) {
-        word.replaceIfEnds( "rd", "d");
+        return word.replaceIfEnds( "rd", "d");
 
     }
-    // Tænker dette vil give measure fra et givet ord
-    // Doesn't take into account the ending vowel.
-
 
 
 //    private boolean endsWith(String word, char character) {
@@ -90,14 +79,7 @@ public class Stemmer implements IStemmer {
 
     private boolean endsWithDoubleCons(Word word) {
         if (word.getWordString().charAt(word.getWordString().length() - 1) == word.getWordString().charAt(word.getWordString().length() - 2)) {
-            if (word.isCons(word.getWordString().length() - 1 ) && word.isCons(word.getWordString().length() - 2)) return true;
-        }
-        return false;
-    }
-
-    private boolean containsVowel(Word word) {
-        for (int i = 0; i < word.getWordString().length(); i++) {
-            if (word.isVowel(i)) return true;
+            return word.isCons(word.getWordString().length() - 1) && word.isCons(word.getWordString().length() - 2);
         }
         return false;
     }

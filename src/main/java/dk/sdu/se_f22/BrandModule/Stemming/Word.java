@@ -1,6 +1,4 @@
-package dk.sdu.se_f22.bim4;
-
-import java.util.Locale;
+package dk.sdu.se_f22.BrandModule.Stemming;
 
 public class Word {
     String word;
@@ -15,7 +13,7 @@ public class Word {
         int mCounter = 0;
         for (int i = 0; i < characters.length; i++) {
             if (i > 0) {
-                if (isCons(word, i) && isVowel(word, i-1)){
+                if (isCons(i) && isVowel(i-1)){
                     mCounter++;
                 }
             }
@@ -39,8 +37,11 @@ public class Word {
         }
     }
 
-    public String replaceIfEnds(String match, String replace) {
-        if (word.endsWith(match)) return word.replace(match, replace);
+    public Word replaceIfEnds(String match, String replace) {
+        if (word.endsWith(match)) {
+            word.replace(match, replace);
+        }
+        return this;
     }
 
     public boolean endsWith(String string) {
@@ -59,10 +60,18 @@ public class Word {
         return word.length();
     }
     public Word subWord(int beginIndex, int endIndex) {
-        word.substring(beginIndex, endIndex);
-        return this;
+        return new Word(this.getWordString().substring(beginIndex, endIndex));
     }
 
+    public boolean containsVowel(int startIndex, int endIndex) {
+        for (int i = 0; i < this.getWordString().length(); i++) {
+            if (this.isVowel(i)) return true;
+        }
+        return false;
+    }
 
-
+    @Override
+    public String toString() {
+        return this.word;
+    }
 }

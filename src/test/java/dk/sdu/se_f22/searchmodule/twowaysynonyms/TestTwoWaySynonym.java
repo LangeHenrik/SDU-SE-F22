@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
@@ -72,6 +74,13 @@ public class TestTwoWaySynonym {
         UUID methodOutput = operator.create("pants");
 
         assertNotNull(methodOutput);
+    }
+
+    @Test
+    public void testSynonymGroup(){
+        UUID methodOutput = TwoWaySynonym.getInstance().create("pants");
+
+        Assertions.assertNotNull(methodOutput);
     }
 
     @AfterClass

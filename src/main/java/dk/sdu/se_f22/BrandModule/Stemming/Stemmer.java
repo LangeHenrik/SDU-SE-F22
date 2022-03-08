@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Stemmer implements IStemmer {
     public String[] stem(List<String> words) {
-       throw new UnsupportedOperationException();
+       throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public String stem(String word) {
-       throw new UnsupportedOperationException();
+       throw new UnsupportedOperationException("Not yet implemented");
    }
 
     private Word step1a(Word word) {

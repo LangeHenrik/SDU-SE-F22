@@ -23,6 +23,6 @@ class TokenizationTest {
 
     @Test
     void tokenize() {
-        assertEquals(s,t.tokenize("Hej. hje  !hej"));
+        assertEquals(s, t.tokenize("Hej. hje  !hej"));
     }
 }

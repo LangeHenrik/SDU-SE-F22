@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SearchSettingsTest {
     SearchSettings ss;
     List<String> initialArray;
+
     @BeforeEach
     void setUp() {
         initialArray = new ArrayList<>();
@@ -21,17 +22,17 @@ class SearchSettingsTest {
 
     @Test
     void getDelimiters() {
-        assertArrayEquals(initialArray.toArray(),ss.getDelimiters().toArray());
+        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
         ss.appendDelimiters("m");
         initialArray.add("m");
-        assertArrayEquals(initialArray.toArray(),ss.getDelimiters().toArray());
+        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
     }
 
     @Test
     void appendDelimiters() {
-        assertArrayEquals(initialArray.toArray(),ss.getDelimiters().toArray());
+        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
         ss.appendDelimiters("m");
         initialArray.add("m");
-        assertArrayEquals(initialArray.toArray(),ss.getDelimiters().toArray());
+        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
     }
 }

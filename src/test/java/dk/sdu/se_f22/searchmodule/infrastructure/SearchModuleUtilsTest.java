@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SearchModuleUtilsTest {
 
     List<String> stringList;
+
     @BeforeEach
     void setUp() {
         stringList = new ArrayList<>();
@@ -20,6 +21,6 @@ class SearchModuleUtilsTest {
 
     @Test
     void convertDelimitersToRegex() {
-        assertEquals(" |\\p{Punct}",SearchModuleUtils.convertDelimitersToRegex(stringList));
+        assertEquals(" |\\p{Punct}", SearchModuleUtils.convertDelimitersToRegex(stringList));
     }
 }

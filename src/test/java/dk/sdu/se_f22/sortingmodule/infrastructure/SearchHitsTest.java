@@ -20,7 +20,7 @@ class SearchHitsTest {
     @BeforeEach
     void setUp() {
         // Test search hits start of empty
-        this.sh = SearchHits.getInstance();
+        this.sh = new SearchHits();
 
         this.products = this.sh.getProducts();
         this.sh.setProducts(new ArrayList());
@@ -36,35 +36,31 @@ class SearchHitsTest {
     void tearDown() {
     }
 
-    @DisplayName("Instance test")
-    @Test
-    void instance() {
-        // This will ensure that it is a singleton class
-        assertEquals(this.sh, SearchHits.getInstance());
-    }
-
     @DisplayName("Set empty collection")
     @Nested
     public class SetEmptySearchHitsTest {
         @DisplayName("Set empty products test")
         @Test
         void setEmptyProducts() {
-            SearchHits.getInstance().setProducts(new ArrayList<>());
-            assertEquals(new ArrayList<>(), SearchHits.getInstance().getProducts());
+            SearchHits currentSh = new SearchHits();
+            currentSh.setProducts(new ArrayList<>());
+            assertEquals(currentSh.getProducts(), new SearchHits().getProducts());
         }
 
         @DisplayName("Set empty brands test")
         @Test
         void setEmptyBrands() {
-            SearchHits.getInstance().setBrands(new ArrayList<>());
-            assertEquals(new ArrayList<>(), SearchHits.getInstance().getBrands());
+            SearchHits currentSh = new SearchHits();
+            currentSh.setBrands(new ArrayList<>());
+            assertEquals(new ArrayList<>(), new SearchHits().getBrands());
         }
 
         @DisplayName("Set empty content test")
         @Test
         void setEmptyContents() {
-            SearchHits.getInstance().setContents(new ArrayList<>());
-            assertEquals(new ArrayList<>(), SearchHits.getInstance().getContents());
+            SearchHits currentSh = new SearchHits();
+            currentSh.setContents(new ArrayList<>());
+            assertEquals(new ArrayList<>(), new SearchHits().getContents());
         }
     }
 
@@ -74,19 +70,19 @@ class SearchHitsTest {
         @DisplayName("Get empty products test")
         @Test
         void getEmptyProducts() {
-            assertEquals(new ArrayList<>(), SearchHits.getInstance().getProducts());
+            assertEquals(new ArrayList<>(), new SearchHits().getProducts());
         }
 
         @DisplayName("Get empty brands test")
         @Test
         void getEmptyBrands() {
-            assertEquals(new ArrayList<>(), SearchHits.getInstance().getBrands());
+            assertEquals(new ArrayList<>(), new SearchHits().getBrands());
         }
 
         @DisplayName("Get empty content test")
         @Test
         void getEmptyContents() {
-            assertEquals(new ArrayList<>(), SearchHits.getInstance().getContents());
+            assertEquals(new ArrayList<>(), new SearchHits().getContents());
         }
     }
 
@@ -96,40 +92,40 @@ class SearchHitsTest {
         @DisplayName("Add products through getProducts")
         @Test
         void addProductsGet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             Collection productsHits = hits.getProducts();
 
             productsHits.add("Product 1");
             productsHits.add("Product 2");
             productsHits.add("Product 3");
 
-            assertEquals(productsHits, SearchHits.getInstance().getProducts());
+            assertNotEquals(productsHits, new SearchHits().getProducts());
         }
 
         @DisplayName("Add brands through getBrands")
         @Test
         void addBrandsGet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             Collection brandHits = hits.getBrands();
 
             brandHits.add("Brand 1");
             brandHits.add("Brand 2");
             brandHits.add("Brand 3");
 
-            assertEquals(brandHits, SearchHits.getInstance().getBrands());
+            assertNotEquals(brandHits, new SearchHits().getBrands());
         }
 
         @DisplayName("Add contents through getContents")
         @Test
         void addContentsGet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             Collection contentsHits = hits.getContents();
 
             contentsHits.add("Page 1");
             contentsHits.add("Page 2");
             contentsHits.add("Page 3");
 
-            assertEquals(contentsHits, SearchHits.getInstance().getContents());
+            assertNotEquals(contentsHits, new SearchHits().getContents());
         }
     }
 
@@ -139,7 +135,7 @@ class SearchHitsTest {
         @DisplayName("Add products through setProducts")
         @Test
         void addProductsSet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             Collection productsHits = new ArrayList<>();
 
             productsHits.add("Product 1");
@@ -148,13 +144,13 @@ class SearchHitsTest {
 
             hits.setProducts(productsHits);
 
-            assertEquals(productsHits, SearchHits.getInstance().getProducts());
+            assertEquals(productsHits, hits.getProducts());
         }
 
         @DisplayName("Add brands through setBrands")
         @Test
         void addBrandsSet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             Collection brandHits = new ArrayList<>();
 
             brandHits.add("Brand 1");
@@ -163,13 +159,13 @@ class SearchHitsTest {
 
             hits.setBrands(brandHits);
 
-            assertEquals(brandHits, SearchHits.getInstance().getBrands());
+            assertEquals(brandHits, hits.getBrands());
         }
 
         @DisplayName("Add contents through setContents")
         @Test
         void addContentsSet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             Collection contentsHits = new ArrayList<>();
 
             contentsHits.add("Page 1");
@@ -178,7 +174,7 @@ class SearchHitsTest {
 
             hits.setContents(contentsHits);
 
-            assertEquals(contentsHits, SearchHits.getInstance().getContents());
+            assertEquals(contentsHits, hits.getContents());
         }
     }
 
@@ -187,19 +183,19 @@ class SearchHitsTest {
     public class NullSetSearchHitsTest {
         @Test
         void NullProductsSet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             assertThrows(NullPointerException.class, () -> hits.setProducts(null));
         }
 
         @Test
         void NullBrandsSet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits =new SearchHits();
             assertThrows(NullPointerException.class, () -> hits.setBrands(null));
         }
 
         @Test
         void NullContentsSet() {
-            SearchHits hits = SearchHits.getInstance();
+            SearchHits hits = new SearchHits();
             assertThrows(NullPointerException.class, () -> hits.setContents(null));
         }
     }

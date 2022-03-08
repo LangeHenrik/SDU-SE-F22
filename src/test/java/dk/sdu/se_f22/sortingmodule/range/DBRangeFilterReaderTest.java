@@ -1,9 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -42,20 +40,32 @@ public class DBRangeFilterReaderTest {
         DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
         List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
 
-
-        @Test
-        @DisplayName("Test getRangeFilter with valid id")
-        void testGetRangeFilterWithValidId() {
-            Assertions.assertSame(dbFilters.get(0), dbRangeFilterReader.getRangeFilter(0));
+        void test(){
+            DatabaseInterface db = MockDatabase.getInstance();
+            DBRangeFilterCreator dbrangeFilterCreator = new DBRangeFilterCreator();
+            for(DBRangeFilter filter: dbFilters){
+//                dbrangeFilterCreator.createRangeFilter(filter);
+                db.create(filter);
+            }
         }
 
 
-        @Test
-        @DisplayName("Test getRangeFilter with invalid id")
-        void testGetRangeFilterWithInvalidId() {
-            Assertions.assertEquals(null, dbRangeFilterReader.getRangeFilter(1));
-        }
-
+//        @Test
+//        @DisplayName("Test getRangeFilter with valid id")
+//        void testGetRangeFilterWithValidId() {
+//            dbRangeFilterReader.map = new HashMap<>();
+//            dbRangeFilterReader.map.put(test1.getId(),test1);
+//            Assertions.assertSame(dbRangeFilterReader.getRangeFilter(0),test1);
+//        }
+//
+//        @Test
+//        @DisplayName("Test getRangeFilter with invalid id")
+//        void testGetRangeFilterWithInvalidId() {
+//            dbRangeFilterReader.map = new HashMap<>();
+//            dbRangeFilterReader.map.put(test1.getId(),test1);
+//            Assertions.assertEquals(null, dbRangeFilterReader.getRangeFilter(1));
+//        }
+//
 //        @Test
 //        @DisplayName("Test getRangeFilters")
 //        void testGetRangeFilters() {

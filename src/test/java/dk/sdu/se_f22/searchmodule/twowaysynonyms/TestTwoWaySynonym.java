@@ -12,4 +12,9 @@ public class TestTwoWaySynonym {
     public void testCreateSynonym() {
         Assertions.assertNull(operator.create("Blah"));
     }
+
+    @Test
+    @DisplayName("Update group id from an existing synonym")
+    public void testUpdateGroupID(){
+    }
 }

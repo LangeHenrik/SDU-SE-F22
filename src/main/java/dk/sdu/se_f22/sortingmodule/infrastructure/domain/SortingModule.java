@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
+
 import dk.sdu.se_f22.sortingmodule.infrastructure.SearchHits;
 
 public interface SortingModule {
@@ -44,6 +45,13 @@ public interface SortingModule {
      * @param pageSize The number of hits to return for the current page. The default is 25.
      */
     public void setPagination(int page, int pageSize);
+
+    /**
+     * Set the scoring method for the search result
+     * 
+     * @param scoring Scoring method
+     */
+    public void setScoring(String scoring);
 
     /**
      * Run search, and get the hits the search creates.

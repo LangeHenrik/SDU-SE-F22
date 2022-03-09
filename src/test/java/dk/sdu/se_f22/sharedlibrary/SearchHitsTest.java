@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.infrastructure;
+package dk.sdu.se_f22.sharedlibrary;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -3,16 +3,12 @@ package dk.sdu.se_f22.sharedlibrary.models;
 import java.util.ArrayList;
 
 public class Brand {
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private String founded;
     private String headquarters;
     private ArrayList<String> products;
-
-    public Brand(){
-        //TODO Fix this
-    }
 
     public Brand(int id, String name, String description, String founded, String headquarters, ArrayList<String> products) {
         this.id = id;
@@ -23,11 +19,13 @@ public class Brand {
         this.products = products;
     }
 
+    public Brand(){}
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

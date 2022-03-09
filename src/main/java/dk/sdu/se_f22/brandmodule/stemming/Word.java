@@ -22,6 +22,11 @@ public class Word {
         return mCounter;
     }
 
+    public int getMeasure(Word word, String end) {
+        Word base = word.subWord(0, word.length() - end.length());
+        return base.getMeasure();
+    }
+
     /**
      *
      * @param idx

@@ -153,16 +153,20 @@ public class StemmingUtilities {
     }
 
     public static Word step5a (Word word) {
-        if (word.endsWith("e")) {
-            word.replaceM1(word, "e", "");
-        }
-
-
-
-        if (word.getMeasure() == 1 && !word.endsWithCVC()){
-            return word.replaceIfEnds("e", "");
+        if (word.endsWith("e")){
+            Word base = word.subWord(0, word.length()-1);
+            if (word.getMeasure(word, "e") > 1) {
+                word = base;
+            } else if (base.getMeasure() == 1 && !base.endsWithCVC()){
+                word = base;
+            }
         }
         return word;
+
+        /*if (word.getMeasure(word, "e") == 1 && !word.endsWithCVC()){
+            return word.replaceIfEnds("e", "");
+        }
+        return word;*/
     }
 
     public static Word step5b (Word word) {

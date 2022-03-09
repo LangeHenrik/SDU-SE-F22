@@ -43,7 +43,7 @@ public class Item {
     public Item getSuperItem() {
         return superItem;
     }
-    
+
     public static void main(String[] args) {
         OneWayImplementation implementation = new OneWayImplementation();
         implementation.showCatalog();

@@ -13,24 +13,24 @@ import java.util.UUID;
  * and then parses it into the correct attribute values.
  */
 public class ProductHit {
-    UUID id;
+    UUID uuid;
     double averageUserReview;
-    List<String> inStock;
-    long ean;
     double price;
-    Instant publishedDate;
-    Instant expirationDate;
+    double clockspeed;
+    double weight;
+    long ean;
     String category;
     String name;
     String description;
     String size;
-    double clockspeed;
-    double weight;
+    Instant publishedDate;
+    Instant expirationDate;
+    List<String> inStock;
 
     /** The constructor for setting all attributes at once including those that are optional
      */
-    public ProductHit(UUID id, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
-        this(id, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
+    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+        this(uuid, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
         this.size = size;
         this.clockspeed = clockspeed;
         this.weight = weight;
@@ -40,8 +40,8 @@ public class ProductHit {
      * <br>
      * Except for clockspeed and weight, which are doubles and thus not capable of being null.
      */
-    public ProductHit(UUID id, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
-        this.id = id;
+    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+        this.uuid = uuid;
         this.averageUserReview = averageUserReview;
         this.inStock = inStock;
         this.ean = ean;
@@ -62,7 +62,7 @@ public class ProductHit {
      */
     public ProductHit(Product product) throws DateTimeParseException, NumberFormatException  {
         String stringId = product.get(ProductAttribute.ID);
-        this.id = UUID.fromString(stringId);
+        this.uuid = UUID.fromString(stringId);
 
         this.averageUserReview = Double.parseDouble(product.get(ProductAttribute.AVERAGE_USER_REVIEW));
         this.inStock = product.getLocations();
@@ -85,5 +85,78 @@ public class ProductHit {
         if (!product.get(ProductAttribute.WEIGHT).equals("unavailable")){
             this.weight = Double.parseDouble(product.get(ProductAttribute.WEIGHT));
         }
+    }
+
+    /**@param attributeName The name of the attribute to retrieve
+     * @return The value of the attribute referenced
+     * @throws IllegalArgumentException if the attribute input does not correspond to any of the attributes, whose value is a double
+     */
+    public double getDoubleValue(String attributeName){
+        return switch (attributeName) {
+            case ("price") -> this.getPrice();
+            case ("averageUserReview") -> this.getAverageUserReview();
+            case ("clockspeed") -> this.getClockspeed();
+            case ("weight") -> this.getWeight();
+            default -> throw new IllegalArgumentException(attributeName + "does not exist as a double attribute: ");
+        };
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public double getAverageUserReview() {
+        return averageUserReview;
+    }
+
+    public List<String> getInStock() {
+        return inStock;
+    }
+
+    public long getEan() {
+        return ean;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public Instant getPublishedDate() {
+        return publishedDate;
+    }
+
+    public Instant getExpirationDate() {
+        return expirationDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public double getClockspeed() {
+        return clockspeed;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public long getLongValue(String productAttribute) {
+        if(productAttribute.equals("ean")){
+            return this.getEan();
+        }
+        throw new IllegalArgumentException(productAttribute + "does not exist as a double attribute: ");
     }
 }

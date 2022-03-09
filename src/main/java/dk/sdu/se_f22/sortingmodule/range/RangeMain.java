@@ -3,7 +3,7 @@ package dk.sdu.se_f22.sortingmodule.range;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
-import dk.sdu.se_f22.sortingmodule.infrastructure.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.json.simple.parser.ParseException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 

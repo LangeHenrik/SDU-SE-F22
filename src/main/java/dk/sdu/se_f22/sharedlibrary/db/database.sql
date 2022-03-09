@@ -15,9 +15,20 @@ DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
 DROP TABLE IF EXISTS StemmingException;
 DROP TABLE IF EXISTS TokenParameters;
+DROP TABLE IF EXISTS logs;
 
  --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
  --og kalder hver gruppes seedDatabase()-metode
+
+CREATE TABLE IF NOT EXISTS logs
+(
+    log_id TEXT PRIMARY KEY,
+    entry_date TIMESTAMP,
+    logger TEXT,
+    log_level TEXT,
+    message TEXT,
+    exception TEXT
+);
 
 CREATE TABLE Brand(
     id           serial PRIMARY KEY,

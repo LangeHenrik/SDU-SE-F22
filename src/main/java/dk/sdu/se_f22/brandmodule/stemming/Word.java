@@ -26,6 +26,13 @@ public class Word {
         Word base = word.subWord(0, word.length() - end.length());
         return base.getMeasure();
     }
+    // Lige noget jeg havde i tankerne. Ved ikke om det bliver nødvendigt eller ej. For kan ikke lige gennemskue
+    // om det er nemmere eller bare mere besværligt
+    // Er lavet, så man ikke behøver at bruge den overloaded metode af getMeasure, der tager de to argumenter
+    public Word getBase(Word word, String end) {
+        Word base = word.subWord(0, word.length() - end.length());
+        return base;
+    }
 
     /**
      *

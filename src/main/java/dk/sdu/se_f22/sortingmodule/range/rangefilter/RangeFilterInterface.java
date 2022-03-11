@@ -13,7 +13,7 @@ public interface RangeFilterInterface {
      * If a product does not have the attribute that a filter is comparing, it will <i>not</i> be removed from the results.
       * @param searchHits The searchHits to filter
      *  @param rangeFilters The rangefilters to use for filtering the search hits
-     * @return
+     * @return The {@link SearchHits} object, where the products attribute now contains the filtered list
      */
     SearchHits filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters) throws InvalidFilterIdException;
 }

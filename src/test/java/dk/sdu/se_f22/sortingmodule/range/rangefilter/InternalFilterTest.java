@@ -46,7 +46,7 @@ class InternalFilterTest {
 
             Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(mockResults);
 
-            assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults.toString());
+            assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults);
         }
 
         @Test

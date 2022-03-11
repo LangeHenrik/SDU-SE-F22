@@ -13,7 +13,7 @@ public class PopulateDBFromCsv {
      * The first line will be ignored. Assuming these are headers.
      *
      * @param fileName the file is assumed to be located in the range folder of the resources folder
-     * @return
+     * @return A list of the {@link DBRangeFilter}s stored in the csv file
      */
     public static List<DBRangeFilter> readDBFiltersFromCSV(String fileName){
         List<String> lines = Helpers.readFromCSV(fileName);

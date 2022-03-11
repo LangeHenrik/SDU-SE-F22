@@ -63,7 +63,8 @@ public class SortingModuleImpl implements SortingModule {
     @Override
     public SearchHits search() {
         SearchModuleImpl searchModule = new SearchModuleImpl();
-        searchModule.search(this.searchString);
+
+        SearchHits searchHits = searchModule.search(this.searchString);
 
         // TODO Auto-generated method stub
         return null;

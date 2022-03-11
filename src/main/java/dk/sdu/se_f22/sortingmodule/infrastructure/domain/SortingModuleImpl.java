@@ -21,13 +21,13 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public void setCategory(ArrayList<Integer> categories) {
-        // TODO Auto-generated method stub
+        this.query.setCategory(categories);
         
     }
 
     @Override
     public void addCategory(int category) {
-        // TODO Auto-generated method stub
+        this.query.addCategory(category);
         
     }
 
@@ -38,8 +38,8 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void addRange(int rangeId, String startRange, String endRange) {
-        // TODO Auto-generated method stub
+    public void addRange(int rangeId, double startRange, double endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
         
     }
 
@@ -55,8 +55,8 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void setScoring(String scoring) {
-        // TODO Auto-generated method stub
+    public void setScoring(int scoring) {
+        this.query.setScoring(scoring);
         
     }
 

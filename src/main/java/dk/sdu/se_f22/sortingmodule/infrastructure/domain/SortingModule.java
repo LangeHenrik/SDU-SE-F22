@@ -38,7 +38,7 @@ public interface SortingModule {
      * @param startRange The start of the range - Formattet as a string, but should align with the data type the range require
      * @param endRange   The start of the range - Formattet as a string, but should align with the data type the range require
      */
-    public void addRange(int rangeId, String startRange, String endRange);
+    public void addRange(int rangeId, double startRange, double endRange);
 
     /**
      * Remove all range filters from the search
@@ -58,7 +58,7 @@ public interface SortingModule {
      * 
      * @param scoring Scoring method
      */
-    public void setScoring(String scoring);
+    public void setScoring(int scoring);
 
     /**
      * Run search, and get the hits the search creates.

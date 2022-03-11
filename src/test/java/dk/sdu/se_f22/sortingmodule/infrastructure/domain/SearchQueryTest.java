@@ -42,6 +42,20 @@ class SearchQueryTest {
 
     @Test
     void setPaginationTest() {
+        SearchQuery s = new SearchQuery();
+        int[] values = {1,2};
+        s.setPagination(values[0], values[1]);
+        assertArrayEquals(values, s.pagination);
+
+        values[0] = 654;
+        values[1] = 68469826;
+        s.setPagination(values[0], values[1]);
+        assertArrayEquals(values, s.pagination);
+
+        values[0] = -48;
+        values[1] = 867;
+        s.setPagination(values[0], values[1]);
+        assertArrayEquals(values, s.pagination);
     }
 
     @Test

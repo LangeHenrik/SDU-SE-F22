@@ -3,13 +3,20 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 
 public class SortingModuleImpl implements SortingModule {
 
     private SearchQuery query;
+    private String searchString;
 
     public SortingModuleImpl() {
 
+    }
+
+    @Override
+    public void searchString(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override
@@ -44,8 +51,7 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public void setPagination(int page, int pageSize) {
-        // TODO Auto-generated method stub
-        
+        this.query.setPagination(page, pageSize);
     }
 
     @Override
@@ -56,6 +62,9 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public SearchHits search() {
+        SearchModuleImpl searchModule = new SearchModuleImpl();
+        searchModule.search(this.searchString);
+
         // TODO Auto-generated method stub
         return null;
     }

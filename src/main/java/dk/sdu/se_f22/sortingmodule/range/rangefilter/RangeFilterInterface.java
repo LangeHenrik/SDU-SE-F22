@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.rangefilter;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
@@ -15,5 +15,5 @@ public interface RangeFilterInterface {
      *  @param rangeFilters The rangefilters to use for filtering the search hits
      * @return
      */
-    SearchHits filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters) throws InvalidFilterIdException;
+    SearchHits filterResults(SearchHits searchHits, List<UserInputtedRangeFilter> rangeFilters) throws InvalidFilterIdException;
 }

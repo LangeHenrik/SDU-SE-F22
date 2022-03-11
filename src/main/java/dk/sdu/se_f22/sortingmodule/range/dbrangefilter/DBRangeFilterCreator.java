@@ -1,9 +1,11 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
+import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
+import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
 
-public class DBRangeFilterCreator implements CreateRangeFilterInterface{
+public class DBRangeFilterCreator implements CreateRangeFilterInterface {
     DatabaseInterface database;
 
     public DBRangeFilterCreator() {
@@ -24,10 +26,10 @@ public class DBRangeFilterCreator implements CreateRangeFilterInterface{
     }
 
     @Override
-    public int createRangeFilter(String description, String name, String productAttribute, double min, double max) throws InvalidFilterException {
+    public DBRangeFilter createRangeFilter(String description, String name, String productAttribute, double min, double max) throws InvalidFilterException {
         DBRangeFilter filter = createAndCheckFilter(description, name, productAttribute, min, max);
 
         DBRangeFilter createdFilter = database.create(filter);
-        return createdFilter.getId();
+        return createdFilter;
     }
 }

@@ -1,5 +1,6 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 
 import java.util.List;

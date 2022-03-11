@@ -1,5 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterReader;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.*;
@@ -38,9 +41,8 @@ class DBRangeFilterCreatorTest {
                 double min = 0;
                 double max = 800;
 
-                AtomicInteger returnId = new AtomicInteger(); // Refactoring needed
                 Assertions.assertDoesNotThrow(
-                        () -> returnId.set(dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max))
+                        () -> dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max)
                 );
             }
         }
@@ -134,8 +136,8 @@ class DBRangeFilterCreatorTest {
 
         AtomicInteger returnId = new AtomicInteger(); // Refactoring needed
         Assertions.assertDoesNotThrow(
-                () -> returnId.set(dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max))
-        );
+                () -> (dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max)
+        ));
 
 
         try {

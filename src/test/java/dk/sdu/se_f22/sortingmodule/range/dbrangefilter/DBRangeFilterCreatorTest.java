@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
@@ -136,22 +136,17 @@ class DBRangeFilterCreatorTest {
 
         AtomicInteger returnId = new AtomicInteger(); // Refactoring needed
         Assertions.assertDoesNotThrow(
-                () -> (dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max)
-        ));
-
-
-        try {
-            DBRangeFilter createdFilter = dbRangeFilterReader.getRangeFilter(returnId.get());
-            Assertions.assertAll("Testing that the values created match the values supplied",
-                    () -> Assertions.assertEquals(description, createdFilter.getDescription()),
-                    () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
-                    () -> Assertions.assertEquals(name, createdFilter.getName()),
-                    () -> Assertions.assertEquals(min, createdFilter.getMin()),
-                    () -> Assertions.assertEquals(max, createdFilter.getMax())
+                () -> {
+                    DBRangeFilter createdFilter  = dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max);
+                    Assertions.assertAll("Testing that the values created match the values supplied",
+                            () -> Assertions.assertEquals(description, createdFilter.getDescription()),
+                            () -> Assertions.assertEquals(productAttribute, createdFilter.getProductAttribute()),
+                            () -> Assertions.assertEquals(name, createdFilter.getName()),
+                            () -> Assertions.assertEquals(min, createdFilter.getMin()),
+                            () -> Assertions.assertEquals(max, createdFilter.getMax())
+                    );
+                }
             );
-        } catch (InvalidFilterIdException e) {
-            fail("Id does not exist");
-        }
     }
 
     @Test

@@ -19,10 +19,10 @@ public class ProductHit {
     double clockspeed;
     double weight;
     long ean;
+    String size;
     String category;
     String name;
     String description;
-    String size;
     Instant publishedDate;
     Instant expirationDate;
     List<String> inStock;

@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangefilter;
 
 /** This is the dataclass for range filters
  */
-public class UserInputtedRangeFilter {
+public class RangeFilter {
     private int id;
     private double min;
     private double max;
@@ -13,7 +13,7 @@ public class UserInputtedRangeFilter {
      * @param min the lower bound for the values accepted
      * @param max the upper bound for the values accepted
      */
-    public UserInputtedRangeFilter(int id, double min, double max) {
+    public RangeFilter(int id, double min, double max) {
         this.id = id;
         this.min = min;
         this.max = max;

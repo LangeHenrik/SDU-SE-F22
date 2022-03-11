@@ -6,10 +6,9 @@ import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.ReadRangeFilterInterface;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.InternalFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterInterface;
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.UserInputtedRangeFilter;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,8 +21,8 @@ import java.util.List;
  * 3. Internal filter bruges til at validere på
 **/
 
-public class RangeMain implements RangeFilterInterface {
-    private RangeFilterCreator rangeFilterCreator;
+public class RangeMain{
+    private RangeFilterInterface rangeFilterCreator;
 
     public RangeMain() {
         this.rangeFilterCreator = new RangeFilterCreator();
@@ -48,29 +47,5 @@ public class RangeMain implements RangeFilterInterface {
         product.setLocations(ProductAttribute.IN_STOCK, locations);
 
         ProductHit productHit = new ProductHit(product);
-    }
-
-    /**This is the method that filters the products in the searchHits based on the filters given.
-     *
-     * @param rangeFilters The rangefilters to use for filtering the search hits, they must be in accordance with the filters stored in our DB.
-     *                     See {@link ReadRangeFilterInterface} for details on getting active/valid filters.
-     * @return The {@link SearchHits} object that was given as input, but where the products Colloction have been filtered
-     * using the filters specified in rangeFilters param.
-     */
-    public SearchHits filterResults(SearchHits searchHits, List<UserInputtedRangeFilter> rangeFilters) throws InvalidFilterIdException {
-        Collection productHits = searchHits.getProducts();
-
-        for (UserInputtedRangeFilter rangeFilter : rangeFilters) {
-            InternalFilter iFilter = rangeFilterCreator.createInternalFilter(rangeFilter);
-
-            if (iFilter == null) {
-                continue;
-            }
-
-
-            productHits = iFilter.useFilter(productHits);
-        }
-
-        return searchHits;
     }
 }

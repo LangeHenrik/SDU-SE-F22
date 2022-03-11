@@ -17,5 +17,4 @@ public interface IProductManager {
     void reparse();
 
     ArrayList<Product> getAllProducts();
-
 }

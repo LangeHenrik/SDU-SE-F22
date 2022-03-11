@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.validators;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;

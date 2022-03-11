@@ -15,7 +15,7 @@ public class PopulateDBFromCsv {
      * @param fileName the file is assumed to be located in the range folder of the resources folder
      * @return
      */
-    static List<DBRangeFilter> readDBFiltersFromCSV(String fileName){
+    public static List<DBRangeFilter> readDBFiltersFromCSV(String fileName){
         List<String> lines = Helpers.readFromCSV(fileName);
 
         // remove headers from the file
@@ -34,7 +34,7 @@ public class PopulateDBFromCsv {
         return out;
     }
 
-    static DBRangeFilter ParseSingleLine(String line) {
+    public static DBRangeFilter ParseSingleLine(String line) {
         String[] lineSplit = line.split(",");
         DBRangeFilter filter;
         try{

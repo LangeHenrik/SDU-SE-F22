@@ -1,5 +1,7 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.rangefilter;
 
+import dk.sdu.se_f22.sortingmodule.range.Helpers;
+import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.InternalFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

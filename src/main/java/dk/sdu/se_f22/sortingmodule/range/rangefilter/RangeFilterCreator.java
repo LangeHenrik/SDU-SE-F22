@@ -1,5 +1,10 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.rangefilter;
 
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.ReadRangeFilterInterface;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.CreateRangeFilterInterface;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterReader;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 
@@ -27,7 +32,7 @@ class RangeFilterCreator {
         return true;
     }
 
-    public InternalFilter createInternalFilter(RangeFilter filterCheck) throws InvalidFilterIdException {
+    public InternalFilter createInternalFilter(UserInputtedRangeFilter filterCheck) throws InvalidFilterIdException {
         //check if the filter exists in the database
         //if it doesn't, or min, max is invalid
 //        return null;

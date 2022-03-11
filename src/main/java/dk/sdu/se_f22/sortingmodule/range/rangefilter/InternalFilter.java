@@ -1,6 +1,7 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.rangefilter;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 
 import java.util.ArrayList;
 import java.util.Collection;

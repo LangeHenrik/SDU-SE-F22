@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
 public class DBRangeFilter{
     private int id;

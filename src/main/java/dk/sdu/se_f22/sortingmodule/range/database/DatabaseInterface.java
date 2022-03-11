@@ -1,4 +1,6 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.database;
+
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 
 import java.util.List;
 
@@ -6,7 +8,7 @@ import java.util.List;
  * <br>
  * It defines the mthods, that our daatabase class must implement to allow for performing CRUD
  */
-interface DatabaseInterface {
+public interface DatabaseInterface {
     DBRangeFilter create(DBRangeFilter filter);
     DBRangeFilter read(int id);
     DBRangeFilter update(DBRangeFilter filter);

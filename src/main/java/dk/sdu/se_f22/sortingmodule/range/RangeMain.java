@@ -4,8 +4,12 @@ import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import org.json.simple.parser.ParseException;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.ReadRangeFilterInterface;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.InternalFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterInterface;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.UserInputtedRangeFilter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +22,7 @@ import java.util.List;
  * 3. Internal filter bruges til at validere på
 **/
 
-public class RangeMain implements RangeFilterInterface{
+public class RangeMain implements RangeFilterInterface {
     private RangeFilterCreator rangeFilterCreator;
 
     public RangeMain() {
@@ -53,10 +57,10 @@ public class RangeMain implements RangeFilterInterface{
      * @return The {@link SearchHits} object that was given as input, but where the products Colloction have been filtered
      * using the filters specified in rangeFilters param.
      */
-    public SearchHits filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters) throws InvalidFilterIdException {
+    public SearchHits filterResults(SearchHits searchHits, List<UserInputtedRangeFilter> rangeFilters) throws InvalidFilterIdException {
         Collection productHits = searchHits.getProducts();
 
-        for (RangeFilter rangeFilter : rangeFilters) {
+        for (UserInputtedRangeFilter rangeFilter : rangeFilters) {
             InternalFilter iFilter = rangeFilterCreator.createInternalFilter(rangeFilter);
 
             if (iFilter == null) {

@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.UserInputtedRangeFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import java.util.*;
 class RangeMainTest {
     private RangeMain rangeMain;
     private List<RangeSearchResultMock> mockResults;
-    private List<RangeFilter> mockFilters;
+    private List<UserInputtedRangeFilter> mockFilters;
 
     @BeforeEach
     void setup() {

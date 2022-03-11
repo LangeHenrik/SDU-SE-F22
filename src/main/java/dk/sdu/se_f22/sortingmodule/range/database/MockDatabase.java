@@ -1,4 +1,6 @@
-package dk.sdu.se_f22.sortingmodule.range;
+package dk.sdu.se_f22.sortingmodule.range.database;
+
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 
 import java.util.ArrayList;
 import java.util.HashMap;

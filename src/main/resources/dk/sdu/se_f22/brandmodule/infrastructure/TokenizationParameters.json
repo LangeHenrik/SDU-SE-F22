@@ -1,4 +1,4 @@
 {
-  "delimiterRegex": ",",
-  "ignoreRegex": "."
+  "delimiterRegex": "p",
+  "ignoreRegex": "k"
 }

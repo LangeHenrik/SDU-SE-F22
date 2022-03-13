@@ -50,7 +50,6 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     public List<Brand> getBrandsFromSearchTokens(List<String> tokens) {
         return null;
     }
-
     @Override
     public void indexBrands(List<Brand> brands) {
 

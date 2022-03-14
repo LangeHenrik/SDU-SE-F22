@@ -1,38 +1,76 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
 import java.sql.*;
+import java.util.HashMap;
 
 public class DatabaseAPI {
 
-    Connection connection = null;
+    static Connection connection = null;
 
-    public DatabaseAPI(String url,String username,String password){
+    public DatabaseAPI(){
+        this.connection = DBConnection.getConnection();
     }
 
-    public static void create(String itemName){
-        PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-        insertStatement.setString(1,itemName);
-        insertStatement.setString(2,0;
+    public static void addItem(String itemName){
+        PreparedStatement insertStatement = null;
+        try {
+            insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+            insertStatement.setString(1,itemName);
+            insertStatement.setString(2, "0");
+            insertStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void create(String itemName, int superId){
-        PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-        insertStatement.setString(1,itemName);
-        insertStatement.setString(2, String.valueOf(superId));
+    public static void addItem(String itemName, int superId){
+        PreparedStatement insertStatement = null;
+        try {
+            insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+            insertStatement.setString(1,itemName);
+            insertStatement.setString(2,String.valueOf(superId));
+            insertStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void updateSuperId(int id,int superId) {
-        PreparedStatement updateStatement = connect.prepareStatement("UPDATE items SET superId=? WHERE name=?");
-        updateStatement.setString(1,String.valueOf(superId));
-        updateStatement.setString(2,String.valueOf(id));
+    public static void updateSuperId(String name,int superId) {
+        PreparedStatement updateStatement = null;
+        try {
+            updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE name=?");
+            updateStatement.setString(1, String.valueOf(superId));
+            updateStatement.setString(2, name);
+            updateStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void updateName(int id,String name) {
-        PreparedStatement updateStatement = connect.prepareStatement("UPDATE items SET name=? WHERE name=?");
-        updateStatement.setString(1,String.valueOf(name));
-        updateStatement.setString(2,String.valueOf(id));
+        PreparedStatement updateStatement = null;
+        try {
+            updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE name=?");
+            updateStatement.setString(1,String.valueOf(name));
+            updateStatement.setString(2,String.valueOf(id));
+            updateStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    public static ResultSet read(){
+        try {
+            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items");
+            ResultSet quaryResultSet = null;
+            quaryResultSet = quaryStatement.executeQuery();
 
-
+            return quaryResultSet;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

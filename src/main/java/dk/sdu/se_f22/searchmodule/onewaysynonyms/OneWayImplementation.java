@@ -3,7 +3,6 @@ package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class OneWayImplementation implements OneWayInterface {
     DatabaseAPI db = new DatabaseAPI();

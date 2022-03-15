@@ -3,9 +3,7 @@ package dk.sdu.se_f22.brandmodule.infrastructure;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,13 +47,34 @@ class BrandInfrastructureTest extends BrandInfrastructure {
         String del = " ";
         brandInfrastructure.setTokenizationParameters(del,reg);
         List<String> expected = List.of("Lorem","ipsum","dolor","sit","amet");
-        List<String> received = brandInfrastructure.tokenizeString(s);
-        assertEquals(expected,received);
+        List<String> actual = brandInfrastructure.tokenizeString(s);
+        assertEquals(expected,actual);
     }
 
     @Test
     void testTokenizeBrand(){
-        Brand brand = new Brand(0,"Lorem","","","", new ArrayList<>());
+        Brand brand = new Brand(0,"Lorem","Lorem, ipsum. dolor, sit amet","ipsum","Lorem", new ArrayList<String>());
+        Set<String> expected = new HashSet<>();
+        expected.addAll(List.of("Lorem","ipsum","dolor","sit","amet"));
+        String reg = "[,\\.]";
+        String del = " ";
+        brandInfrastructure.setTokenizationParameters(del,reg);
+        Set<String> actual = tokenizeBrand(brand);
+        assertEquals(expected,actual);
     }
+
+    @Test
+    void testTokenizeBrandFail(){
+        Brand brand = new Brand(0,"Lorem","Lorem, ipsum. dolor, sit amet","ipsum","Lorem", new ArrayList<String>());
+        Set<String> expected = new HashSet<>();
+        expected.addAll(List.of("Lorem","ipsum","dolor","sit","amet","FAIL"));
+        String reg = "[,\\.]";
+        String del = " ";
+        brandInfrastructure.setTokenizationParameters(del,reg);
+        Set<String> actual = tokenizeBrand(brand);
+        assertNotEquals(expected,actual);
+    }
+
+
 
 }

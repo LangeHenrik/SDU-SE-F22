@@ -3,13 +3,13 @@ package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
-
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     ArrayList<String> synonymList;
@@ -22,6 +22,22 @@ public class TestTwoWaySynonym {
     @Test
     @DisplayName("Add new synonym to DB")
     public void testCreateSynonym() {
+        //Creates synonym
+        operator.create("pants");
+
+        //Creates arraylists
+        ArrayList<String> tokens = new ArrayList<>();
+        ArrayList<String> expectedOutput = new ArrayList<>();
+        ArrayList<String> methodOutput;
+
+        //Adds synonyms to arraylists
+        tokens.add("pants");
+        expectedOutput.add("pants");
+        methodOutput = operator.filter(tokens);
+
+        //Runs test
+        assertEquals(expectedOutput, methodOutput);
+        assertNull(operator.create("Blah"));
         assertNotNull(operator.create("Power Supply"));
 
         synonymList.add("Power Supply");
@@ -57,11 +73,9 @@ public class TestTwoWaySynonym {
         expectedOutput.add("sad");
         expectedOutput.add("bitter");
         expectedOutput.add("heartbroken");
-
         Collections.addAll(synonymList, "anger", "sad", "acrimony", "annoyance", "bitter", "heartbroken");
 
         methodOutput = operator.filter(tokens);
-
         assertEquals(expectedOutput,methodOutput);
     }
 
@@ -92,8 +106,28 @@ public class TestTwoWaySynonym {
         assertNotEquals(operator.filter(readList), notExpected);
     }
 
+    @Test
+    public void testDeleteSynonym(){
+        operator.create("pants");
+
+        assertNotNull(operator.read("pants"));
+
+        operator.delete("pants");
+
+        assertNull(operator.read("pants"));
+    }
+
     @AfterClass
     public void deleteAllData(){
+        //delete all data added from testFilter
+        operator.delete("anger");
+        operator.delete("acrimony");
+        operator.delete("annoyance");
+        operator.delete("sad");
+        operator.delete("bitter");
+        operator.delete("heartbroken");
+        operator.delete("pants");
+        assertNull(operator.create("Blah"));
         //Deletes all the added data from the tests
         for(String synonym : synonymList){
             operator.delete(synonym);

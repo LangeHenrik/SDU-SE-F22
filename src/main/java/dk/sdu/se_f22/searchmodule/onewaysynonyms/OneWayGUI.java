@@ -11,7 +11,7 @@ public class OneWayGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OneWayGUI.class.getResource("dk/sdu/se_f22/searchmodule/onewaysynonyms/OneWayGUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OneWayGUI.class.getResource("OneWayGUI.fxml"));
         Scene scene = new Scene(fxmlLoader.load(),320,240);
         primaryStage.setTitle("OneWayGUI");
         primaryStage.setScene(scene);

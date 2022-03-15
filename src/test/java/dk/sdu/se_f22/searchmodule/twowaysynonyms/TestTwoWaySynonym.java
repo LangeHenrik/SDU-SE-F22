@@ -1,9 +1,12 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,6 +14,12 @@ import java.sql.ResultSet;
 
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
+    ArrayList<String> synonymList;
+
+    @BeforeClass
+    public void setupClass(){
+        synonymList = new ArrayList<>();
+    }
 
     @Test
     @DisplayName("Add new synonym to DB")
@@ -31,12 +40,16 @@ public class TestTwoWaySynonym {
         //Runs test
         assertEquals(expectedOutput, methodOutput);
         assertNull(operator.create("Blah"));
+        assertNotNull(operator.create("Power Supply"));
+
+        synonymList.add("Power Supply");
     }
 
     @Test
     @DisplayName("Update group id from an existing synonym")
     public void testUpdateGroupID(){
     }
+
     @Test
     public void testFilter(){
         //Creates two new synonyms and synonym groups
@@ -62,8 +75,8 @@ public class TestTwoWaySynonym {
         expectedOutput.add("sad");
         expectedOutput.add("bitter");
         expectedOutput.add("heartbroken");
-
         methodOutput = operator.filter(tokens);
+        Collections.addAll(synonymList, "anger", "sad", "acrimony", "annoyance", "bitter", "heartbroken");
 
         assertEquals(expectedOutput,methodOutput);
     }
@@ -71,6 +84,8 @@ public class TestTwoWaySynonym {
     @Test
     public void testSynonymGroup(){
         UUID methodOutput = operator.create("pants");
+
+        synonymList.add("pants");
 
         assertNotNull(methodOutput);
     }
@@ -86,6 +101,10 @@ public class TestTwoWaySynonym {
         operator.delete("heartbroken");
         operator.delete("pants");
         assertNull(operator.create("Blah"));
+        //Deletes all the added data from the tests
+        for(String synonym : synonymList){
+            operator.delete(synonym);
+        }
     }
 
 }

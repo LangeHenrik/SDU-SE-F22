@@ -88,6 +88,23 @@ public class TestTwoWaySynonym {
         assertNotNull(methodOutput);
     }
 
+    @Test
+    public void testNoDuplicatesCreated(){
+        ArrayList<String> notExpected = new ArrayList<>();
+        ArrayList<String> readList = new ArrayList<>();
+        Collections.addAll(readList,"hello");
+        Collections.addAll(notExpected,"hello","hello");
+
+
+        operator.create("hello");
+        operator.create("hello");
+        assertNotEquals(operator.filter(readList), notExpected);
+
+        Collections.addAll(notExpected,"hello");
+        operator.create("hello","hello");
+
+        assertNotEquals(operator.filter(readList), notExpected);
+    }
 
     @Test
     public void testDeleteSynonym(){
@@ -98,8 +115,6 @@ public class TestTwoWaySynonym {
         operator.delete("pants");
 
         assertNull(operator.read("pants"));
-
-        //Important that read method returns null if synonym isn't found in list.
     }
 
     @AfterClass

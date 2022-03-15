@@ -60,14 +60,14 @@ public class TestTwoWaySynonym {
 
         Collections.addAll(synonymList, "anger", "sad", "acrimony", "annoyance", "bitter", "heartbroken");
 
-        methodOutput = TwoWaySynonym.getInstance().filter(tokens);
+        methodOutput = operator.filter(tokens);
 
         assertEquals(expectedOutput,methodOutput);
     }
 
     @Test
     public void testSynonymGroup(){
-        UUID methodOutput = TwoWaySynonym.getInstance().create("pants");
+        UUID methodOutput = operator.create("pants");
 
         synonymList.add("pants");
 

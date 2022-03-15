@@ -4,9 +4,9 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import com.google.gson.*;
-import dk.sdu.se_f22.brandmodule.index.BrandIndex;
-import dk.sdu.se_f22.brandmodule.index.IndexInterface;
-import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.brandmodule.index.*;
+import dk.sdu.se_f22.brandmodule.stemming.*;
+import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
 
@@ -14,6 +14,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     private final Gson gson;
     private final File file;
     private final IndexInterface index;
+    private final IStemmer stemming;
 
     public BrandInfrastructure() {
         GsonBuilder builder = new GsonBuilder();
@@ -22,6 +23,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
         file = new File("src/main/resources/dk/sdu/se_f22/brandmodule/infrastructure/TokenizationParameters.json");
         loadTokenizationParameters();
         index = new BrandIndex();
+        stemming = new Stemmer();
     }
 
     private void loadTokenizationParameters(){
@@ -58,8 +60,15 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     @Override
     public void indexBrands(List<Brand> brands) {
         for (Brand brand : brands) {
-            index.indexBrandInformation(brand, tokenizeBrand(brand).stream().toList());
+            List<String> brandTokens = tokenizeBrand(brand).stream().toList();
+
+            index.indexBrandInformation(brand, filterTokens(brandTokens));
         }
+    }
+
+    private List<String> filterTokens(List<String> tokens) {
+        tokens = stemming.stem(tokens);
+        return tokens;
     }
 
     protected Set<String> tokenizeBrand(Brand b){

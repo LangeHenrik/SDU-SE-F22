@@ -3,7 +3,6 @@ package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.sql.*;
-import java.util.HashMap;
 
 public class DatabaseAPI {
 

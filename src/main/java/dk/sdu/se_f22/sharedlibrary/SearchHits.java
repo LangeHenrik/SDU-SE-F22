@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.infrastructure;
+package dk.sdu.se_f22.sharedlibrary;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,24 +15,11 @@ public final class SearchHits {
     private Collection products;
     private Collection brands;
     private Collection contents;
-    private static SearchHits instance;
 
-    private SearchHits() {
+    public SearchHits() {
         this.products = new ArrayList();
         this.brands = new ArrayList();
         this.contents = new ArrayList();
-    }
-
-    /**
-     * Get instance of SearchHits class
-     * 
-     * @return SearchHits
-     */
-    public static SearchHits getInstance() {
-        if (instance == null) {
-            instance = new SearchHits();
-        }
-        return instance;
     }
 
     /**

@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import com.google.gson.*;
+import dk.sdu.se_f22.brandmodule.index.IndexInterface;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
@@ -11,6 +12,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     protected TokenizationParameters tokenizationParameters;
     private final Gson gson;
     private final File file;
+    private IndexInterface index;
 
     public BrandInfrastructure() {
         GsonBuilder builder = new GsonBuilder();
@@ -53,12 +55,9 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 
     @Override
     public void indexBrands(List<Brand> brands) {
-
-    }
-
-    protected List<String> tokenizeString(String s){
-        s = s.replaceAll(tokenizationParameters.ignoreRegex,"");
-        return List.of(s.split(tokenizationParameters.delimiterRegex));
+        for (Brand brand : brands) {
+            index.indexBrandInformation(brand, tokenizeBrand(brand).stream().toList());
+        }
     }
 
     protected Set<String> tokenizeBrand(Brand b){
@@ -71,6 +70,12 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
             tokens.addAll(tokenizeString(product));
         }
         return tokens;
+    }
+
+    protected List<String> tokenizeString(String s){
+        s = s.replaceAll(tokenizationParameters.ignoreRegex,"");
+        List<String> tokens = List.of(s.split(tokenizationParameters.delimiterRegex));
+        return tokens.stream().filter(String::isEmpty).toList();
     }
 
 

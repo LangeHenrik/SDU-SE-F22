@@ -10,6 +10,7 @@ module dk.sdu.se_f22 {
 	requires java.sql;
 	requires org.postgresql.jdbc;
     requires com.google.gson;
+    requires org.jsoup;
     opens dk.sdu.se_f22 to javafx.fxml;
 	exports dk.sdu.se_f22;
 }

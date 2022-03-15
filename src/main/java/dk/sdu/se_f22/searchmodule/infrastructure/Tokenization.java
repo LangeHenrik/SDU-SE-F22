@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Tokenization {
-    SearchModuleUtils searchModuleUtils = new SearchModuleUtils();
-    SearchSettings ss = new SearchSettings();
-    List<String> stringList = ss.getDelimiters();
+    private SearchModuleUtils searchModuleUtils = new SearchModuleUtils();
+    private SearchSettings ss = new SearchSettings();
+    private List<String> stringList = ss.getDelimiters();
 
     public List<String> tokenize(String s) {
         String[] string = s.split(searchModuleUtils.convertDelimitersToRegex(stringList));

@@ -44,7 +44,10 @@ public class ProductInfIndexImpl implements ProductInfIndex{
     private List<String> extractData(Product product, String delimiter) {
         ArrayList<String> productData = new ArrayList<>();
         for (ProductAttribute attr : ProductAttribute.values()) {
-            productData.addAll(List.of(product.get(attr).split(delimiter)));
+            String data = product.get(attr);
+            if (!data.equalsIgnoreCase("unavailable")) {
+                productData.addAll(List.of(product.get(attr).split(delimiter)));
+            }
         }
         productData.addAll(product.getLocations());
         return productData;

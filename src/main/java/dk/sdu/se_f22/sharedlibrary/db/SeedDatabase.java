@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary.db;
 
+import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,7 +18,9 @@ public class SeedDatabase {
         //Ensure that the database is up to date
         runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/database.sql");
 
-        //Seed the database
+//------Seed the database-----------------------------------------------------------------------------
+
+        //BIM-1
 
 
     }
@@ -29,6 +33,7 @@ public class SeedDatabase {
             BufferedReader br = new BufferedReader(new FileReader(SQLFileName));
             Statement stmt = c.createStatement();
 
+            //Read the file one line at a time
             while((currentLine = br.readLine()) != null){
                 //Safeguards commented code
                 if(currentLine.contains("--")) continue;

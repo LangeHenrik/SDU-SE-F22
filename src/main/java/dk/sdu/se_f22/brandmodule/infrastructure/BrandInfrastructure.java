@@ -7,6 +7,8 @@ import java.util.*;
 import com.google.gson.*;
 import dk.sdu.se_f22.brandmodule.index.*;
 import dk.sdu.se_f22.brandmodule.stemming.*;
+import dk.sdu.se_f22.contentmodule.stopwords.*;
+import dk.sdu.se_f22.productmodule.irregularwords.*;
 import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
@@ -16,6 +18,8 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 	private final File file;
 	private final IndexInterface index;
 	private final IStemmer stemming;
+	private final IStopWords stopWords;
+	private final IIrregularWords irregularWords;
 
 	public BrandInfrastructure() {
 		GsonBuilder builder = new GsonBuilder();
@@ -25,12 +29,14 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 		loadTokenizationParameters();
 		index = new BrandIndex();
 		stemming = new Stemmer();
+		stopWords = new StopWords();
+		irregularWords = new IrregularWords();
 	}
 
 	@Override
 	public void indexBrands(List<Brand> brands) {
 		for (Brand brand : brands) {
-			index.indexBrandInformation(brand, tokenizeBrand(brand).stream().toList());
+			index.indexBrandInformation(brand, tokenizeBrand(brand));
 		}
 	}
 
@@ -46,11 +52,13 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 	}
 
 	private List<String> filterTokens(List<String> tokens) {
+		tokens = irregularWords.addIrregularWords(tokens);
 		tokens = stemming.stem(tokens);
+		tokens = stopWords.filter(tokens);
 		return tokens;
 	}
 
-	protected Set<String> tokenizeBrand(Brand brand) {
+	protected List<String> tokenizeBrand(Brand brand) {
 		Set<String> tokens = new HashSet<>();
 		tokens.addAll(tokenizeString(brand.getName()));
 		tokens.addAll(tokenizeString(brand.getDescription()));
@@ -59,7 +67,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 		for (String product : brand.getProducts()) {
 			tokens.addAll(tokenizeString(product));
 		}
-		return tokens;
+		return tokens.stream().toList();
 	}
 
 	protected List<String> tokenizeString(String toTokenize) {

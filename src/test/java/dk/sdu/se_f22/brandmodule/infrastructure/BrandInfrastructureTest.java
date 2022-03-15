@@ -54,22 +54,22 @@ class BrandInfrastructureTest extends BrandInfrastructure {
     @Test
     void testTokenizeBrand(){
         Brand brand = new Brand(0,"Lorem","Lorem, ipsum. dolor, sit amet","ipsum","Lorem", new ArrayList<String>());
-        Set<String> expected = new HashSet<>(List.of("Lorem", "ipsum", "dolor", "sit", "amet"));
-        String reg = "[,\\.]";
+        List<String> expected = new ArrayList<>(List.of("Lorem", "ipsum", "dolor", "sit", "amet"));
+        String reg = "[,.]";
         String del = " ";
         brandInfrastructure.setTokenizationParameters(del,reg);
-        Set<String> actual = brandInfrastructure.tokenizeBrand(brand);
+        List<String> actual = brandInfrastructure.tokenizeBrand(brand);
         assertEquals(expected,actual);
     }
 
     @Test
     void testTokenizeBrandFail(){
         Brand brand = new Brand(0,"Lorem","Lorem, ipsum. dolor, sit amet","ipsum","Lorem", new ArrayList<String>());
-        Set<String> expected = new HashSet<>(List.of("Lorem", "ipsum", "dolor", "sit", "amet", "FAIL"));
+        List<String> expected = new ArrayList<>(List.of("Lorem", "ipsum", "dolor", "sit", "amet", "FAIL"));
         String reg = "[,\\.]";
         String del = " ";
         brandInfrastructure.setTokenizationParameters(del,reg);
-        Set<String> actual = tokenizeBrand(brand);
+        List<String> actual = tokenizeBrand(brand);
         assertNotEquals(expected,actual);
     }
 

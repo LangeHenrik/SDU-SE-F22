@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
+import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -51,4 +52,10 @@ class BrandInfrastructureTest extends BrandInfrastructure {
         List<String> received = brandInfrastructure.tokenizeString(s);
         assertEquals(expected,received);
     }
+
+    @Test
+    void testTokenizeBrand(){
+        Brand brand = new Brand(0,"Lorem","","","", new ArrayList<>());
+    }
+
 }

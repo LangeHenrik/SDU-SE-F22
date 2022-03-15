@@ -61,6 +61,19 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
         return List.of(s.split(tokenizationParameters.delimiterRegex));
     }
 
+    protected Set<String> tokenizeBrand(Brand b){
+        Set<String> tokens = new HashSet<>();
+        tokens.addAll(tokenizeString(b.getName()));
+        tokens.addAll(tokenizeString(b.getDescription()));
+        tokens.addAll(tokenizeString(b.getFounded()));
+        tokens.addAll(tokenizeString(b.getHeadquarters()));
+        for(String product : b.getProducts()){
+            tokens.addAll(tokenizeString(product));
+        }
+        return tokens;
+    }
+
+
     @Override
     public void setTokenizationParameters(String delimiterRegex, String ignoreRegex) {
         this.tokenizationParameters = new TokenizationParameters(delimiterRegex, ignoreRegex);

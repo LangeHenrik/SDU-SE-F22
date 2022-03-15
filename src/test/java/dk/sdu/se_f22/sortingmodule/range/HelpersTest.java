@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -29,7 +30,4 @@ class HelpersTest {
         Map<String, Double> generatedMap = Helpers.createAttributeMapForMockResults(new String[]{"price", "height", "stock"},"price,height,stock" );
         assertEquals(new HashMap<String, Double>(), generatedMap);
     }
-
-
-
 }

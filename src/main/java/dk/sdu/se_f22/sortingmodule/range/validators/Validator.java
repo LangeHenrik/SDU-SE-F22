@@ -10,6 +10,7 @@ public class Validator {
     }
 
 
+    //TODO Make this validator also throw an exception if the strings contain special characters at all
     public static void NoSpecialCharacters(String s) throws InvalidFilterException{
         String[] characters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
 

@@ -8,7 +8,7 @@ import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
 
-    private TokenizationParameters tokenizationParameters;
+    protected TokenizationParameters tokenizationParameters;
     private final Gson gson;
     private final File file;
 
@@ -20,7 +20,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
         loadTokenizationParameters();
     }
 
-    public void loadTokenizationParameters(){
+    private void loadTokenizationParameters(){
         String jsonString;
         try {
             jsonString = Files.readString(file.toPath());
@@ -34,7 +34,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
         this.tokenizationParameters = new TokenizationParameters(delimiter, ignore);
     }
 
-    public void saveTokenizationParameters() {
+    private void saveTokenizationParameters() {
         JsonObject object = new JsonObject();
         object.addProperty("delimiterRegex", tokenizationParameters.delimiterRegex);
         object.addProperty("ignoreRegex", tokenizationParameters.ignoreRegex);
@@ -56,13 +56,14 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 
     }
 
+    protected List<String> tokenizeString(String s){
+        s = s.replaceAll(tokenizationParameters.ignoreRegex,"");
+        return List.of(s.split(tokenizationParameters.delimiterRegex));
+    }
+
     @Override
     public void setTokenizationParameters(String delimiterRegex, String ignoreRegex) {
         this.tokenizationParameters = new TokenizationParameters(delimiterRegex, ignoreRegex);
         saveTokenizationParameters();
-    }
-
-    public TokenizationParameters getTokenizationParameters() {
-        return this.tokenizationParameters;
     }
 }

@@ -1,14 +1,14 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BrandInfrastructureTest {
+class BrandInfrastructureTest extends BrandInfrastructure {
     BrandInfrastructure brandInfrastructure;
 
     @BeforeEach
@@ -21,7 +21,7 @@ class BrandInfrastructureTest {
     void testTokenizationParameters() {
         brandInfrastructure.setTokenizationParameters(",",".");
         brandInfrastructure = new BrandInfrastructure();
-        TokenizationParameters tokenizationParameters = brandInfrastructure.getTokenizationParameters();
+        TokenizationParameters tokenizationParameters = brandInfrastructure.tokenizationParameters;
         assertEquals(",", tokenizationParameters.delimiterRegex);
         assertEquals(".", tokenizationParameters.ignoreRegex);
     }
@@ -35,10 +35,20 @@ class BrandInfrastructureTest {
 
         brandInfrastructure.setTokenizationParameters(Character.toString(c1),Character.toString(c2));
         brandInfrastructure = new BrandInfrastructure();
-        TokenizationParameters tokenizationParameters = brandInfrastructure.getTokenizationParameters();
+        TokenizationParameters tokenizationParameters = brandInfrastructure.tokenizationParameters;
         assertEquals(Character.toString(c1), tokenizationParameters.delimiterRegex);
         assertEquals(Character.toString(c2), tokenizationParameters.ignoreRegex);
 
+    }
 
+    @Test
+    void testTokenizeString(){
+        String s = "Lorem, ipsum. dolor, sit amet";
+        String reg = "[,\\.]";
+        String del = " ";
+        brandInfrastructure.setTokenizationParameters(del,reg);
+        List<String> expected = List.of("Lorem","ipsum","dolor","sit","amet");
+        List<String> received = brandInfrastructure.tokenizeString(s);
+        assertEquals(expected,received);
     }
 }

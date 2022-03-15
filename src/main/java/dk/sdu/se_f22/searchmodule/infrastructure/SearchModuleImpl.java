@@ -3,6 +3,7 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sharedlibrary.models.*;
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -34,23 +35,27 @@ public class SearchModuleImpl implements SearchModule {
             return matcher.find() && Objects.equals(matcher.group(1), target);
         };
 
-        for (var index : indexingModules)
-            for (Type genericInterface : index.getClass().getGenericInterfaces())
-                if (interfaceGenericEquals.apply(genericInterface, clazz.getTypeName()))
+        for (var index : indexingModules) {
+            for (Type genericInterface : index.getClass().getGenericInterfaces()) {
+                if (interfaceGenericEquals.apply(genericInterface, clazz.getTypeName())) {
                     return (List<T>) index.queryIndex(tokens);
+                }
+            }
+        }
 
         throw new NoSuchElementException();
     }
 
     @Override
-    public SearchResult search(String query) {
+    public SearchHits search(String query) {
         List<String> tokens = List.of();
 
-        SearchResult searchResult = new SearchResult(/*new ArrayList<Content>(), */
-                queryIndexOfType(Product.class, tokens),
-                queryIndexOfType(Brand.class, tokens));
-        return searchResult;
+        SearchHits searchHits = new SearchHits();
+        searchHits.setContents(List.of());
+        searchHits.setProducts(queryIndexOfType(Product.class, tokens));
+        searchHits.setBrands(queryIndexOfType(Brand.class, tokens));
+        //searchHits.setContents(queryIndexOfType(Content.class, tokens));
+
+        return searchHits;
     }
-
-
 }

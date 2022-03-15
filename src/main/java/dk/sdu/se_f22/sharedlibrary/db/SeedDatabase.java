@@ -10,50 +10,45 @@ import java.sql.Statement;
 
 public class SeedDatabase {
     public static void main(String[] args) {
-        Connection c = DBConnection.getConnection();
+        //Get the connection
+        Connection connection = DBConnection.getConnection();
 
-        /*
+        //Ensure that the database is up to date
+        runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/database.sql");
+
+        //Seed the database
+
+
+    }
+
+
+    private static void runSQLFromFile(Connection c, String SQLFileName) {
         try {
-            //Ensure that the database is up to date
             String currentLine;
             String sqlCode = "";
-            BufferedReader br = new BufferedReader(new FileReader("src/main/java/dk/sdu/se_f22/sharedlibrary/db/database.sql"));
+            BufferedReader br = new BufferedReader(new FileReader(SQLFileName));
             Statement stmt = c.createStatement();
 
             while((currentLine = br.readLine()) != null){
                 //Safeguards commented code
                 if(currentLine.contains("--")) continue;
 
+                //Execute the sql-code
                 if(currentLine.contains(";")) {
                     sqlCode += currentLine+"\n";
-                    System.out.println(sqlCode);
+                    //System.out.println("Printing sql code...");
+                    //System.out.println(sqlCode);
                     stmt.execute(sqlCode);
                     sqlCode = "";
+                    continue;
                 }
                 sqlCode+=currentLine + "\n";
             }
+
             stmt.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {e.printStackTrace();
+        } catch (SQLException e) {e.printStackTrace();
+        } catch (IOException e) {e.printStackTrace();
         }
-
-         */
-
-        //Seed the database
-        try {
-            Statement stmt = c.createStatement();
-            stmt.execute("INSERT INTO brand(name,description,founded,headquarters) VALUES('Microsoft','sells computers','24/12/1950','Ohio');");
-            stmt.execute("SELECT * FROM brand");
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
     }
 }

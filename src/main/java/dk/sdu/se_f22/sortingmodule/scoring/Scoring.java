@@ -8,11 +8,14 @@ public class Scoring implements IScoring{
         for (Object o : input) {
            /* int price = o.getPrice();
 
-            for (int j = 0; j < db.size(); j++) {
-                if (price < db(j).get(Price.bracket)) {
-                    o.setScore(o.getScore() + db(j).get(Price.weight));
+            for (int j = 0; j < 5; j++) {
+                if (price < j*1000) {
+                    product.setScore(j);
+                    break;
+                } else if (price > 5000) {
+                    product.setScore(5);
                 }
-            }*/
+            }
         }
     }
 
@@ -52,14 +55,34 @@ public class Scoring implements IScoring{
         }
     }
 
-    @Override
-    public List<Object> scoreSort(List<Object> input) {
-        this.price(input);
-        this.review(input);
-        this.stock(input);
-        this.releaseDate(input);
+    public List<ProductScore> wrapProduct (List<Product> input) {
+        List<ProductScore> products = new ArrayList<>();
+        for (int i = 0; i < input.size(); i++) {
+            ProductScore productScore = new ProductScore(input.get(i));
+            products.add(productScore);
+        }
+        return products;
+    }
 
-        throw new UnsupportedOperationException("Unsupported");
+    public List<Product> unWrapProduct (List<ProductScore> input) {
+        List<Product> products = new ArrayList<>();
+        for (int i = 0; i < input.size(); i++) {
+            products.add(input.get(i).getProduct());
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> scoreSort(List<Product> input) {
+        List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+        this.price(products);
+        //this.review(products);
+        //this.stock(products);
+        //this.releaseDate(products);
+
+        Collections.sort(products);
+
+        return unWrapProduct(products);
     }
 
     @Override

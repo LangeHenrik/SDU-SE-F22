@@ -12,7 +12,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import java.util.Collection;
 import java.util.List;
 
-public class RangeFilterCreator  implements RangeFilterInterface {
+public class RangeFilterCreator implements RangeFilterInterface {
     private CreateRangeFilterInterface dbRangeFilterCreator;
     private ReadRangeFilterInterface dbReader;
 
@@ -20,12 +20,12 @@ public class RangeFilterCreator  implements RangeFilterInterface {
         this(new DBRangeFilterCreator());
     }
 
-    public RangeFilterCreator(DBRangeFilterCreator dbRangeFilterCreator){
+    public RangeFilterCreator(DBRangeFilterCreator dbRangeFilterCreator) {
         this.dbRangeFilterCreator = dbRangeFilterCreator;
-        try{
-            dbRangeFilterCreator.createRangeFilter( "hello object", "uno", "price", 0, 2000);
+        try {
+            dbRangeFilterCreator.createRangeFilter("hello object", "uno", "price", 0, 2000);
             dbRangeFilterCreator.createRangeFilter("hello fella", "dos", "height", 0, 4000);
-        }catch (InvalidFilterException e){
+        } catch (InvalidFilterException e) {
             System.out.println(e.getMessage());
         }
 
@@ -36,20 +36,21 @@ public class RangeFilterCreator  implements RangeFilterInterface {
         return true;
     }
 
-    public InternalFilter createInternalFilter(RangeFilter filterCheck) throws InvalidFilterIdException {
+    public InternalFilter createInternalFilter(RangeFilter filterToCheck) throws InvalidFilterIdException {
         //check if the filter exists in the database
         //if it doesn't, or min, max is invalid
 //        return null;
         //if it does and everything is valid:
-        DBRangeFilter dbfilter = this.dbReader.getRangeFilter(filterCheck.getId());
+        DBRangeFilter dbfilter = this.dbReader.getRangeFilter(filterToCheck.getId());
         if (validateFilter()) {
-            return new InternalFilter(filterCheck.getMin(), filterCheck.getMax(), dbfilter.getProductAttribute());
+            return new InternalFilter(filterToCheck.getMin(), filterToCheck.getMax(), dbfilter.getProductAttribute());
         } else {
             return null;
         }
     }
 
-    /**This is the method that filters the products in the searchHits based on the filters given.
+    /**
+     * This is the method that filters the products in the searchHits based on the filters given.
      *
      * @param rangeFilters The rangefilters to use for filtering the search hits, they must be in accordance with the filters stored in our DB.
      *                     See {@link ReadRangeFilterInterface} for details on getting active/valid filters.

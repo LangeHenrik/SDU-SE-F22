@@ -1,6 +1,6 @@
 DROP VIEW IF EXISTS SortingRangeDoubleView;
 DROP VIEW IF EXISTS SortingRangeTimeView;
-DROP VIEW IF EXISTS SortingRangeDoubleView;
+DROP VIEW IF EXISTS SortingRangeLongView;
 
 DROP TABLE IF EXISTS SortingRangeTimeFilters;
 DROP TABLE IF EXISTS SortingRangeDoubleFilters;
@@ -61,4 +61,22 @@ from SortingRangeFilters
 
 
 select * from SortingRangeDoubleView;
+
+select * from SortingRangeLongView;
+
+
+-- the below insert is necessary to have first to pass our unit-tests
+INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name double', 'price');
+INSERT INTO SortingRangeDoubleFilters (filterId, min, max) VALUES (1, 0, 10);
+
+INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name time', 'expirationDate');
+-- INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (2, 0, 10);
+
+INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name ean', 'ean');
+INSERT INTO SortingRangeLongFilters (filterId, min, max) VALUES (3, 0, 10);
+
+select * from SortingRangeDoubleView;
+
+select * from SortingRangeLongView;
+
 

@@ -17,6 +17,7 @@ public class SeedDatabase {
 
         //Ensure that the database is up to date
         runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/database.sql");
+        runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/rangeFilters.sql");
 
 //------Seed the database-----------------------------------------------------------------------------
 

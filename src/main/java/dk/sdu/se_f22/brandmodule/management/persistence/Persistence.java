@@ -1,12 +1,10 @@
 package dk.sdu.se_f22.brandmodule.management.persistence;
 import dk.sdu.se_f22.brandmodule.management.services.IJsonService;
 import dk.sdu.se_f22.brandmodule.management.services.JsonService;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,61 +15,108 @@ public class Persistence implements IPersistence {
     private IJsonService jsonService = null;
 
     public Persistence() {
+        //Connect to database
         jsonService = new JsonService();
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/semesterprojekt",
-                            "postgres", "new_password");
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-        }
-
-        // Make sure tables are always created
-        setupDatabase();
+        c = DBConnection.getConnection();
 
         // Seed database
         seedDatabase();
     }
 
     @Override
-    public Brand getBrand(int id) {
-        return null;
+    public Brand getBrand(int id)  {
+        return brandGetter(null, id);
     }
 
     @Override
-    public Brand getBrand(Brand brand) {
-        return null;
+    public Brand getBrand(String name) {
+        return brandGetter(name, null);
+    }
+
+    private Brand brandGetter(String name, Integer id) {
+        setAutoCommit(true);
+
+        Brand b = null;
+        try {
+            var stmt = c.createStatement();
+
+            ResultSet r;
+            if(name == null) {
+                PreparedStatement getBrand = c.prepareStatement(String.format("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
+                        "inner join brand on bpj.brandid = brand.id " +
+                        "inner join producttype on bpj.productid = producttype.id " +
+                        "where brandid = '%d';", id));
+
+                r = getBrand.executeQuery();
+            } else{
+                PreparedStatement getBrand = c.prepareStatement(String.format("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
+                        "inner join brand on bpj.brandid = brand.id " +
+                        "inner join producttype on bpj.productid = producttype.id " +
+                        "where brand.name = '%s';", name));
+                r = getBrand.executeQuery();
+            }
+            Set<String> productSet = new HashSet<>();
+
+            int counter = 0;
+            while(r.next() && r != null){
+                if (counter == 0){
+                    b = new Brand(
+                            r.getInt("id"),
+                            r.getString("name"),
+                            r.getString("description"),
+                            r.getString("founded"),
+                            r.getString("headquarters")
+                    );
+                }
+
+                productSet.add(r.getString(6));
+                counter++;
+            }
+
+            // Parse to arraylist
+            ArrayList<String> productList = new ArrayList<String>(productSet);
+
+            if (!productList.isEmpty())
+                b.setProducts(productList);
+
+            stmt.close();
+        } catch (SQLException e) {
+            rollback();
+            e.printStackTrace();
+        }
+
+        return b;
+    }
+
+    @Override
+    public void deleteBrand(Brand brand) {deleteBrand(brand.getId());
     }
 
     @Override
     public void deleteBrand(int id) {
-
-    }
-
-    @Override
-    public void deleteBrand(Brand brand) {
+        setAutoCommit(false);
         try {
-            var stmt = c.createStatement();
-
             // Delete from both Brand and Junction table
             // Products may be used by another brand, so it won't be deleted
-            stmt.addBatch(String.format("DELETE FROM Brand where id = '%s'", brand.getId()));
-            stmt.addBatch(String.format("DELETE FROM BrandProductTypeJunction where id = '%s'", brand.getId()));
+            PreparedStatement deleteBrandJunction = c.prepareStatement(String.format("DELETE FROM BrandProductTypeJunction where brandid = '%d'", id));
+            PreparedStatement deleteBrand = c.prepareStatement(String.format("DELETE FROM Brand where id = '%d'", id));
 
-            stmt.executeBatch();
-            stmt.close();
+            deleteBrandJunction.execute();
+            deleteBrand.execute();
+
+
+            c.commit();
         } catch (SQLException e) {
+            rollback();
             e.printStackTrace();
         }
     }
 
     @Override
     public void addOrUpdateBrands(List<Brand> brands) {
+        setAutoCommit(false);
         try {
             /* ------ Insert all products ------ */
-            var insertStmt = c.createStatement();
 
             // Keep no duplicate products
             Set<String> products = new HashSet<>();
@@ -81,28 +126,28 @@ public class Persistence implements IPersistence {
 
             // Insert products into database
             for (var product : products) {
-                insertStmt.addBatch(String.format("INSERT INTO ProductType (name) VALUES ('%s') ON CONFLICT DO NOTHING;", product));
+                PreparedStatement insertAllProducts = c.prepareStatement(String.format("INSERT INTO ProductType (name) VALUES ('%s') ON CONFLICT DO NOTHING;", product));
+
+                insertAllProducts.execute();
             }
 
             /* ------ Insert all brands ------ */
             for (var brand : brands) {
-                insertStmt.addBatch(String.format("INSERT INTO Brand (name, description, founded, headquarters) VALUES ('%s','%s','%s','%s') ON CONFLICT DO NOTHING;",
+                PreparedStatement insertAllBrands = c.prepareStatement(String.format("INSERT INTO Brand (name, description, founded, headquarters) VALUES ('%s','%s','%s','%s') ON CONFLICT DO NOTHING;",
                         brand.getName(),
                         brand.getDescription().replaceAll("'", "''"),
                         brand.getFounded(),
                         brand.getHeadquarters()));
+
+                insertAllBrands.execute();
             }
 
-            // Run all insert statements
-            insertStmt.executeBatch();
-
             /* ------ Insert into junction table ------ */
-            var fetchStmt = c.createStatement();
-
             Integer brandId = null;
             Integer productId = null;
             for (var brand : brands) {
-                ResultSet brandResult = fetchStmt.executeQuery(String.format("SELECT id FROM Brand WHERE name = '%s';", brand.getName()));
+                PreparedStatement getBrandName = c.prepareStatement(String.format("SELECT id FROM Brand WHERE name = '%s';", brand.getName()));
+                ResultSet brandResult = getBrandName.executeQuery();
 
                 // Get brand id, for junction table
                 if (brandResult.next()) {
@@ -111,67 +156,61 @@ public class Persistence implements IPersistence {
 
                 // Get product id, for junction table
                 for (var product : products) {
-                    ResultSet productResult = fetchStmt.executeQuery(String.format("SELECT id FROM ProductType WHERE name = '%s';", product));
+                    PreparedStatement getProductId = c.prepareStatement(String.format("SELECT id FROM ProductType WHERE name = '%s';", product));
+                    ResultSet productResult = getProductId.executeQuery();
+
                     if (productResult.next()) {
                         productId = productResult.getInt("id");
 
                         // With both brand and product id, junction table can be filled
-                        insertStmt.addBatch(String.format("INSERT INTO BrandProductTypeJunction (Brandid, Productid) values ('%s', '%s')", brandId, productId));
+                        PreparedStatement insertIntoJunction = c.prepareStatement(String.format("INSERT INTO BrandProductTypeJunction (Brandid, Productid) values ('%s', '%s')", brandId, productId));
+                        insertIntoJunction.execute();
                     }
                 }
             }
 
-            // Insert into junction table, and close statements
-            insertStmt.executeBatch();
-            insertStmt.close();
-            fetchStmt.close();
+            c.commit();
         }
         catch (Exception e) {
+            rollback();
             System.out.println(e);
         }
     }
 
-    @Override
-    public void setupDatabase() {
+    public void databaseIndexer() {
+        setAutoCommit(false);
         try {
-            var stmt = c.createStatement();
-
-            var brandTableSql =  "CREATE TABLE IF NOT EXISTS Brand " +
-                    "(id serial PRIMARY KEY," +
-                    "name VARCHAR(255) UNIQUE NOT NULL, " +
-                    "description TEXT, " +
-                    "founded VARCHAR(255), " +
-                    "headquarters VARCHAR(255));";
-
-            var productTableSql = "CREATE TABLE IF NOT EXISTS ProductType(" +
-                    "id serial PRIMARY KEY," +
-                    "name VARCHAR(255) UNIQUE NOT NULL);";
-
-            var brandProductTableSql = "CREATE TABLE IF NOT EXISTS BrandProductTypeJunction(" +
-                    "Brandid INTEGER REFERENCES Brand(id)," +
-                    "Productid INTEGER REFERENCES ProductType(id));";
-
-            var configTableSql = "CREATE TABLE IF NOT EXISTS config(" +
-                    "brandindexinterval INTEGER NOT NULL" +
-                    ");";
-
-            var sql = brandTableSql +
-                    productTableSql +
-                    brandProductTableSql +
-                    configTableSql;
-
-            stmt.executeUpdate(sql);
-            stmt.close();
-        }
-        catch (Exception e) {
-            System.out.println(e);
+            PreparedStatement indexDatabase = c.prepareStatement(String.format("create index on producttype(name); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);"));
+            indexDatabase.execute();
+            c.commit();
+        }  catch (SQLException e) {
+            rollback();
+            e.printStackTrace();
         }
     }
+
 
     @Override
     public void seedDatabase() {
         // Get brands from file
         List<Brand> brands = jsonService.deserializeBrand();
         addOrUpdateBrands(brands);
+        databaseIndexer();
+    }
+
+    private void rollback() {
+        try {
+            c.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setAutoCommit(Boolean set) {
+        try {
+            c.setAutoCommit(set);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

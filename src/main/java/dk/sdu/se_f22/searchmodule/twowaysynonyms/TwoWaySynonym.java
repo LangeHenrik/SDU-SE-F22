@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -24,11 +23,10 @@ public class TwoWaySynonym implements DatabaseOperator {
     @Override
     public UUID create(String synonym) {
         PreparedStatement statement;
-        ArrayList<Object> statementList = new ArrayList<>() {{
+        ArrayList<Object> statementList = new ArrayList<>(){{
             add(UUID.randomUUID());
             add(synonym);
         }};
-
         statement = Foo.prepareStatement("INSERT INTO BAR(uuid, name) VALUES (?, ?)");
         prepareStatement(statement, statementList);
         executeStatement(statement);
@@ -91,45 +89,44 @@ public class TwoWaySynonym implements DatabaseOperator {
         public boolean delete (String synonym){
             return false;
         }
+    /**
+     * Goes through a list of tokens, to find all
+     * their respective two-way synonyms.
+     * @param tokens    List of keywords to find synonyms for
+     * @return          List of found synonyms and tokens
+     */
+    @Override
+    public ArrayList<String> filter(ArrayList<String> tokens) {
+        return null;
+    }
 
-        /**
-         * Goes through a list of tokens, to find all
-         * their respective two-way synonyms.
-         * @param tokens    List of keywords to find synonyms for
-         * @return List of found synonyms and tokens
-         */
-        @Override
-        public ArrayList<String> filter (ArrayList < String > tokens) {
+    private void prepareStatement (PreparedStatement statement, ArrayList<Object> parameters){
+        try {
+            for (int i = 1; i < parameters.size(); i++) {
+                statement.setObject(i, parameters.get(i-1));
+            }
+        } catch (SQLException throwables) {
+            System.out.println("Preparing statement failed");
+            throwables.printStackTrace();
+        }
+    }
+
+    private void executeStatement (PreparedStatement statement) {
+        try{
+            statement.execute();
+        } catch (SQLException ex){
+            System.out.println("Couldn't execute statement");
+            ex.printStackTrace();
+        }
+    }
+
+    private UUID getUUID (ResultSet resultSet){
+        try{
+            return (UUID)resultSet.getObject("UUID");
+        } catch (SQLException throwables) {
+            System.out.println("No UUID found");
+            throwables.printStackTrace();
             return null;
         }
-
-        private void prepareStatement (PreparedStatement statement, ArrayList < Object > parameters){
-            try {
-                for (int i = 1; i < parameters.size(); i++) {
-                    statement.setObject(i, parameters.get(i - 1));
-                }
-            } catch (SQLException throwables) {
-                System.out.println("Preparing statement failed");
-                throwables.printStackTrace();
-            }
-        }
-
-        private void executeStatement (PreparedStatement statement){
-            try {
-                statement.execute();
-            } catch (SQLException throwables) {
-                System.out.println("Couldn't execute statement");
-                throwables.printStackTrace();
-            }
-        }
-
-        private UUID getUUID (ResultSet resultSet){
-            try {
-                return (UUID) resultSet.getObject("UUID");
-            } catch (SQLException throwables) {
-                System.out.println("No UUID found");
-                throwables.printStackTrace();
-                return null;
-            }
-        }
+    }
 }

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -67,7 +68,6 @@ public class TwoWaySynonym implements DatabaseOperator {
 
         prepareStatement(statement, statementList);
         executeStatement(statement);
-
         // TODO: Return actual UUID
         return UUID.randomUUID();
     }
@@ -139,7 +139,10 @@ public class TwoWaySynonym implements DatabaseOperator {
     private void executeStatement(PreparedStatement statement) {
         try{
             statement.execute();
-        } catch (SQLException throwables){
+        } catch (PSQLException throwables) {
+            System.out.println("Your synonym already exists in the database. Note that identical words cannot exist in the database");
+        }
+        catch (SQLException throwables){
             System.out.println("Couldn't execute statement");
             throwables.printStackTrace();
         }

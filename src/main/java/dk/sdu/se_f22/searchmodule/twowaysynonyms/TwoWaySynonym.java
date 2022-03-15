@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public class TwoWaySynonym implements DatabaseOperator {
     private TwoWaySynonym() {}
-
     public static TwoWaySynonym getInstance() {
         return TwoWaySynonymHolder.INSTANCE;
     }
@@ -91,11 +90,6 @@ public class TwoWaySynonym implements DatabaseOperator {
 
         return null;
     }
-        @Override
-        public UUID update (String synonym, String correctedSynonym){
-            return null;
-        }
-
         /**
          * Delete a synonym from the database
          * @param synonym           Word to delete

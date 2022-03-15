@@ -1,11 +1,17 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
+<<<<<<< HEAD
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
+=======
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+>>>>>>> 58b7352 (Added initial test class and singleton pattern to TwoWaySynonym)
 
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
@@ -13,6 +19,7 @@ public class TestTwoWaySynonym {
     @Test
     @DisplayName("Add new synonym to DB")
     public void testCreateSynonym() {
+<<<<<<< HEAD
         //Creates synonym
         operator.create("pants");
 
@@ -82,5 +89,8 @@ public class TestTwoWaySynonym {
         operator.delete("bitter");
         operator.delete("heartbroken");
         operator.delete("pants");
+=======
+        Assertions.assertNull(operator.create("Blah"));
+>>>>>>> 58b7352 (Added initial test class and singleton pattern to TwoWaySynonym)
     }
 }

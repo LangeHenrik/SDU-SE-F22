@@ -41,4 +41,7 @@ public class ProductIndex implements ProductInfIndex, ProductInfSearch {
     }
 
 
+=======
+public class ProductIndex {
+>>>>>>> 6e04a599a43aaf27b640e40e86c5fd5c6808ce85
 }

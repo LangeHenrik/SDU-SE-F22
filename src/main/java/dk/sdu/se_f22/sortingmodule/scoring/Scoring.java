@@ -1,8 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
-import java.util.List;
+import java.util.*;
 
-public class Scoring implements IScoring{
+public class Scoring implements IScoring {
 
     private void price(List<ProductScore> input) {
         for (ProductScore product : input) {

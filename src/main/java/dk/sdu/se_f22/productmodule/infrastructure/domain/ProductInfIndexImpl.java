@@ -2,6 +2,7 @@ package dk.sdu.se_f22.productmodule.infrastructure.domain;
 
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
+import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
@@ -40,8 +41,11 @@ public class ProductInfIndexImpl implements ProductInfIndex{
     }
 
     private List<String> extractData(Product product, String delimiter) {
-        return new ArrayList<>(
-            //Arrays.asList(product.description.split(delimiter))
-        );
+        ArrayList<String> productData = new ArrayList<>();
+        for (ProductAttribute attr : ProductAttribute.values()) {
+            productData.addAll(List.of(product.get(attr).split(delimiter)));
+        }
+        productData.addAll(product.getLocations());
+        return productData;
     }
 }

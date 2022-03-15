@@ -61,8 +61,8 @@ public class Misspellings implements DatabaseOperator{
         try (Connection connection = DriverManager.getConnection(url, user, password);
              // Step 2:Create a statement using connection object
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_misspellings)) {
-                preparedStatement.setString(1, misspelling);
-                preparedStatement.setString(2, correct);
+            preparedStatement.setString(1, misspelling);
+            preparedStatement.setString(2, correct);
 
             System.out.println(preparedStatement);
             //System.out.println("The misspelling: "+misspelling+" have been added."+" The correct spelling is "+correct);
@@ -73,8 +73,22 @@ public class Misspellings implements DatabaseOperator{
         }
     }
 
-    public void deleteMispellings(String word){
+    public void deleteMispellings(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Write the word you wish to delete:");
+        String word = scanner.nextLine();
+        String SQL = "DELETE FROM misspellings WHERE wrong = ?";
+        int rows = 0;
+        scanner.close();
 
+        try(Connection con = DriverManager.getConnection(url, user, password); PreparedStatement pst = con.prepareStatement(SQL)){
+            pst.setString(1, word);
+            rows = pst.executeUpdate();
+        } catch (SQLException throwables) {
+            System.out.println("The misspelling does not exist in the database.");
+            throwables.printStackTrace();
+        }
+        System.out.println("The misspelling " + word + " was deleted.");
     }
 
     public void updateMisspellingIfExist(){
@@ -120,8 +134,9 @@ public class Misspellings implements DatabaseOperator{
     public static void main(String[] args) throws SQLException {
         Misspellings mis = new Misspellings();
         //mis.addMispellings();
-        //mis.does_misspelling_exist();
-
+        //mis.deleteMispellings();
+        //mis.updateMisspellingIfExist();
+      
         /*ArrayList<String> strings = new ArrayList<String>();
         strings.add("HEJ");
         strings.add("HAJ");

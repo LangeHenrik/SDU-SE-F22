@@ -74,6 +74,20 @@ public class TestTwoWaySynonym {
         assertNotNull(methodOutput);
     }
 
+
+    @Test
+    public void testDeleteSynonym(){
+        operator.create("pants");
+
+        assertNotNull(operator.read("pants"));
+
+        operator.delete("pants");
+
+        assertNull(operator.read("pants"));
+
+        //Important that read method returns null if synonym isn't found in list.
+    }
+
     @AfterClass
     public void deleteAllData(){
         //Deletes all the added data from the tests

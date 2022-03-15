@@ -1,8 +1,17 @@
 @startuml
 
-interface Filterable {
-    + filter(tokens): String[]
+interface BrandGetter {
+    + query(tokens: List<String>): List<Integer>
 }
+
+interface Filterable {
+    + filter(tokens: ArrayList<String>): ArrayList<String>
+}
+
+interface IndexingModule {
+    + queryIndex(tokens: List<String>): List<T>
+}
+
 
 interface SearchModule {
     + search(query: String): SearchResult
@@ -12,6 +21,48 @@ interface SearchModule {
     + addIgnoredCharacter(c: Character)
     + removeDelimiter(delimiter: String)
     + removeIgnoredCharacter(c: Character)
+    + SearchHits search(query: String)
+}
+
+class ReplaceForbbidenChars {
+    + removeForbiddenChars(toSort: String): String
+}
+
+class SearchModuleImpl implements SearchModule {
+    - indexingModules: Set<IndexingModule<?>>
+    - delimiters: String[]
+    - ignoredCharacters: Character[]
+    - databaseConnection: DatabaseConnection
+    - logger: Logger
+    - addIndexingModule(index: T): void
+    - removeIndexingmModule(index: T): void
+    + queryIndexOfType(clazz: Class<T>, tokens: List<String>): List<T>
+    + search(query: String): SearchHits
+    - tokenize(mystring): String[]
+    - saveSettingsToDB()
+    - readSettingsFromDB()
+}
+
+class SearchModuleUtils {
+    + convertDelimitersToRegex(stringList: List<String>): String
+    - addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+}
+
+class SearchSettings {
+    - delimiters: ArrayList<String>
+    + getDelimiters(): ArrayList<String>
+    + appendDelimiters(delimitier: String): void
+}
+
+class TokenFiltration {
+    +filter(tokens: ArrayList<String>): ArrayList<String>
+}
+
+class Tokenization {
+    - searchModuleUtils: SearchModuleUtils
+    - ss: SearchSettings
+    - stringList: List<String>
+    +tokenize(s: String): list<String>
 }
 
 class DatabaseConnection {
@@ -37,24 +88,6 @@ class DatabaseConnectionException extends Exception {
     // Throws when the database connection failed //
 }
 
-class SearchModuleImpl implements SearchModule {
-    - delimiters: String[]
-    - ignoredCharacters: Character[]
-    - databaseConnection: DatabaseConnection
-    - logger: Logger
-    - tokenize(mystring): String[]
-    - saveSettingsToDB()
-    - readSettingsFromDB()
-}
-
-class SearchResult {
-    - contentPageIds: ArrayList<Content>
-    - productPageIds: ArrayList<Product>
-    - brandPageIds: ArrayList<Brand>
-    + getContentPageIds(): ArrayList<Content>
-    + getProductPageIds(): ArrayList<Product>
-    + getBrandPageIds(): ArrayList<Brand>
-}
 
 class Connection {
     // from postgresql jdbc //
@@ -72,6 +105,8 @@ class Logger {
     // from log4j //
 }
 
+Tokenization -> SearchModuleUtils
+Tokenization --> SearchSettings
 SearchResult <- SearchModule
 Filterable <- SearchModuleImpl
 SearchModuleImpl -> DatabaseConnection

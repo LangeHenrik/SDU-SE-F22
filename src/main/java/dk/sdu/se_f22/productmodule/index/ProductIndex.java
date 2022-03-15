@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.productmodule.index;
 
-<<<<<<< HEAD
+
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfIndex;
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearch;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
@@ -20,6 +20,7 @@ public class ProductIndex implements ProductInfIndex, ProductInfSearch {
     public void indexProducts(List<Product> products) {
 
     }
+
     @Override
     public List<Product> searchProducts(List<String> tokens) {
         JSONParser parser = new JSONParser();
@@ -29,8 +30,7 @@ public class ProductIndex implements ProductInfIndex, ProductInfSearch {
             Object obj = parser.parse(fileReader);
             JSONArray employeeList = (JSONArray) obj;
             System.out.println(employeeList);
-        }
-        catch (FileNotFoundException fileNotFoundException){
+        } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("File not found");
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,8 +40,4 @@ public class ProductIndex implements ProductInfIndex, ProductInfSearch {
         return null;
     }
 
-
-=======
-public class ProductIndex {
->>>>>>> 6e04a599a43aaf27b640e40e86c5fd5c6808ce85
 }

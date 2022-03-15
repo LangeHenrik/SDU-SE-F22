@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.productmodule.index;
 
-<<<<<<< HEAD
+
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
@@ -18,7 +18,4 @@ public class Main {
 
 
     }
-=======
-public class Main {
->>>>>>> 6e04a599a43aaf27b640e40e86c5fd5c6808ce85
 }

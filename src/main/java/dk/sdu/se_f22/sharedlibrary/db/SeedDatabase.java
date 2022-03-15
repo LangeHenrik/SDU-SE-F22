@@ -27,30 +27,42 @@ public class SeedDatabase {
 
 
     private static void runSQLFromFile(Connection c, String SQLFileName) {
-        try {
+        try (FileReader fr = new FileReader(SQLFileName);
+             BufferedReader br = new BufferedReader(fr);
+             Statement stmt = c.createStatement();){
+
             String currentLine;
             String sqlCode = "";
-            BufferedReader br = new BufferedReader(new FileReader(SQLFileName));
-            Statement stmt = c.createStatement();
 
             //Read the file one line at a time
             while((currentLine = br.readLine()) != null){
-                //Safeguards commented code
+                //Safeguards commented code in -- format
                 if(currentLine.contains("--")) continue;
+
+                //Safeguards commented code in /* comment \n */ format
+                if(currentLine.contains("/*")){
+                    //Safeguards /* */ in same line
+                    if(currentLine.contains("*/")) break;
+
+                    String commentedLine;
+                    while ((commentedLine = br.readLine()) != null){
+                        if(commentedLine.contains("*/"))
+                            break;
+                    }
+                    continue;
+                }
 
                 //Execute the sql-code
                 if(currentLine.contains(";")) {
                     sqlCode += currentLine+"\n";
-                    //System.out.println("Printing sql code...");
-                    //System.out.println(sqlCode);
+                    System.out.println("Printing sql code...");
+                    System.out.println(sqlCode);
                     stmt.execute(sqlCode);
                     sqlCode = "";
                     continue;
                 }
                 sqlCode+=currentLine + "\n";
             }
-
-            stmt.close();
         } catch (FileNotFoundException e) {e.printStackTrace();
         } catch (SQLException e) {e.printStackTrace();
         } catch (IOException e) {e.printStackTrace();

@@ -75,7 +75,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     protected List<String> tokenizeString(String s){
         s = s.replaceAll(tokenizationParameters.ignoreRegex,"");
         List<String> tokens = List.of(s.split(tokenizationParameters.delimiterRegex));
-        return tokens.stream().filter(String::isEmpty).toList();
+        return tokens.stream().filter(x -> !x.isEmpty()).toList();
     }
 
 

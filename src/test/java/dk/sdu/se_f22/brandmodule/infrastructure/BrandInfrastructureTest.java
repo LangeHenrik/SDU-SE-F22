@@ -59,7 +59,7 @@ class BrandInfrastructureTest extends BrandInfrastructure {
         String reg = "[,\\.]";
         String del = " ";
         brandInfrastructure.setTokenizationParameters(del,reg);
-        Set<String> actual = tokenizeBrand(brand);
+        Set<String> actual = brandInfrastructure.tokenizeBrand(brand);
         assertEquals(expected,actual);
     }
 

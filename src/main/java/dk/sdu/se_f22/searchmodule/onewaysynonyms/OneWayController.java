@@ -5,6 +5,5 @@ import javafx.event.ActionEvent;
 public class OneWayController {
 
     public void onHelloButtonClick(ActionEvent actionEvent) {
-
     }
 }

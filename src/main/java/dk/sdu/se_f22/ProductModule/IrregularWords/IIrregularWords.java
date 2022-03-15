@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.ProductModule.IrregularWords;
 
+import java.util.ArrayList;
+
 public interface IIrregularWords {
 
         public void createIRWord(int ID, String Word);
@@ -20,4 +22,5 @@ public interface IIrregularWords {
 
         public void loadBackup();
 
+        public ArrayList<String> searchForIrregularWords(ArrayList<String> arrayList);
     }

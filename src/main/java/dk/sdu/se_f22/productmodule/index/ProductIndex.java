@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.productmodule.index;
 
+<<<<<<< HEAD
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfIndex;
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearch;
 import dk.sdu.se_f22.sharedlibrary.models.Product;

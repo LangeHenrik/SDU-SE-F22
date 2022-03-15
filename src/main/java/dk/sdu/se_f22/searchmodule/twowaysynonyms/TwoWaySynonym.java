@@ -43,7 +43,19 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public UUID create(String synonym, String groupMember) {
-        return null;
+        PreparedStatement statement;
+        ArrayList<Object> statementList = new ArrayList<>(){{
+            add(UUID.randomUUID());
+            add(synonym);
+            add(groupMember);
+        }};
+
+
+        statement = Foo.prepareStatement("INSERT INTO BAR(uuid, synonym, group_id) VALUES (?, ?, ?)");
+        prepareStatement(statement, statementList);
+        executeStatement(statement);
+
+        return getUUID(read(synonym));
     }
 
     /**

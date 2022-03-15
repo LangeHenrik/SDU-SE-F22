@@ -91,31 +91,47 @@ public class Misspellings implements DatabaseOperator{
         System.out.println("The misspelling " + word + " was deleted.");
     }
 
-    public void updateMispellings(){
-        //get the misspelling you want to update
-        Scanner scannerWrong = new Scanner(System.in);
-        System.out.println("What misspelling do you want to update?");
-        String whereUpdate = scannerWrong.nextLine();
-        //get the update
-        Scanner scannerCorrect = new Scanner(System.in);
-        System.out.println("Write what the update for the misspelling");
-        String setUpdate = scannerCorrect.nextLine();
-        //update the misspelling
-        // Step 1: Establishing a Connection
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_misspellings)) {
-            preparedStatement.setString(1, setUpdate);
-            preparedStatement.setString(2, whereUpdate);
+    public void updateMisspellingIfExist(){
+        Scanner scanner = new Scanner(System.in);
 
-            System.out.println(preparedStatement);
-            // Step 3: Execute the query or update query
-            preparedStatement.executeUpdate();
+        try {
+            Connection con = DriverManager.getConnection(url, user, password);
+            Statement statement = con.createStatement();
+            System.out.println("What misspelling do you want to update?");
+            String misForUpdate = scanner.next();
+            String SQL = "SELECT wrong FROM misspellings WHERE wrong='"+misForUpdate+"'";
+            ResultSet rs = statement.executeQuery(SQL);
+            if (rs.next()){
+                System.out.println("Misspelling exists");
+                //get the update
+                Scanner scannerCorrect = new Scanner(System.in);
+                System.out.println("Write what the update for the misspelling");
+                String corretMisForUpdate = scannerCorrect.nextLine();
+
+                //update the misspelling
+                // Step 1: Establishing a Connection
+                try (Connection connection = DriverManager.getConnection(url, user, password);
+                     // Step 2:Create a statement using connection object
+                     PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_misspellings)) {
+                    preparedStatement.setString(1, corretMisForUpdate);
+                    preparedStatement.setString(2, misForUpdate);
+
+                    System.out.println(preparedStatement);
+                    // Step 3: Execute the query or update query
+                    preparedStatement.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("Could not update misspelling");
+                }
+            } else {
+                System.out.println("Misspelling does not exist");
+            }
         } catch (SQLException e) {
-            System.out.println("Could not update misspelling maybe it does not exists");
+            e.printStackTrace();
         }
     }
+    
 
-    public static void main(String[] args) throws SQLException {
-        
+
+
+
 }

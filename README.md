@@ -1,4 +1,4 @@
-# SDU-SE-F22 - Hesehus Case
+# SDU-SE-F22 - Hesehus Case [![Java compile test](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml/badge.svg)](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml)
 
 ## Folder Structure
 
@@ -10,37 +10,37 @@ The structure includes a main folder for each module, a folder for each submodul
 flowchart LR
 dk --- sdu --- javase[se_f22]
 
-javase --- som[Sorting Module]
-som --- som_som[Category]
-som --- som_inf[Infrastructure]
-som --- Range
-som --- Scoring
+javase --- som[sortingmodule]
+som --- som_som[category]
+som --- som_inf[infrastructure]
+som --- range
+som --- scoring
 
-javase --- sem[Search Module]
-sem --- sem_inf[Infrastructure]
-sem --- Misspellings
-sem --- OneWaySynonyms
-sem --- TwoWaySynonyms
+javase --- sem[searchmodule]
+sem --- sem_inf[infrastructure]
+sem --- misspellings
+sem --- onewaysynonyms
+sem --- twowaysynonyms
 
-javase --- SharedLibrary
-SharedLibrary --- db
-SharedLibrary --- models
+javase --- cms[contentmodule]
+cms --- cms_ind[index]
+cms --- cms_man[management]
+cms --- cms_inf[infrastructure]
+cms --- stopwords
 
-javase --- cms[Content Module]
-cms --- cms_ind[Index]
-cms --- cms_man[Management]
-cms --- cms_inf[Infrastructure]
-cms --- Stopwords
+javase --- bim[brandmodule]
+bim --- bim_ind[index]
+bim --- bim_inf[infrastructure]
+bim --- bim_man[management]
+bim --- stemming
 
-javase --- bim[Brand Indexing]
-bim --- bim_ind[Index]
-bim --- bim_inf[Infrastructure]
-bim --- bim_man[Management]
-bim --- Stemming
+javase --- prm[productmodule]
+prm --- prm_ind[index]
+prm --- irregularwords
+prm --- prm_inf[infrastructure]
+prm --- prm_man[management]
 
-javase --- prm[Product Module]
-prm --- prm_ind[Index]
-prm --- IrregularWords
-prm --- prm_inf[Infrastructure]
-prm --- prm_man[Management]
+javase --- sharedlibrary
+sharedlibrary --- db
+sharedlibrary --- models
 ```

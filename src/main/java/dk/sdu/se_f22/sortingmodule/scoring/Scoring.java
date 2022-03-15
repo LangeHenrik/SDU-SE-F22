@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Scoring implements IScoring{
 
-    private void price(List<Object> input) {
-        for (Object o : input) {
-           /* int price = o.getPrice();
+    private void price(List<ProductScore> input) {
+        for (ProductScore product : input) {
+           int price = product.getProduct().getPrice();
 
             for (int j = 0; j < 5; j++) {
                 if (price < j*1000) {
@@ -19,7 +19,7 @@ public class Scoring implements IScoring{
         }
     }
 
-    private void review(List<Object> input) {
+    private void review(List<ProductScore> input) {
         for (Object o : input) {
            /* int review = o.getReview();
 
@@ -31,7 +31,7 @@ public class Scoring implements IScoring{
         }
     }
 
-    private void stock(List<Object> input) {
+    private void stock(List<ProductScore> input) {
         for (Object o : input) {
             /*int stock = o.getStock();
 
@@ -43,7 +43,7 @@ public class Scoring implements IScoring{
         }
     }
 
-    private void releaseDate(List<Object> input) {
+    private void releaseDate(List<ProductScore> input) {
         for (Object o : input) {
             /*int releaseDate = o.getReleaseDate();
 

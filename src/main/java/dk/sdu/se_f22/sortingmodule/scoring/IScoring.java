@@ -7,7 +7,7 @@ public interface IScoring {
     /**
     <p> Returns weight value sum for multiple categories </p>
     */
-    List<Object> scoreSort(List<Object> input);
+    List<Product> scoreSort(List<Product> input);
 
     /**
     <p> Returns weight value for price </p>

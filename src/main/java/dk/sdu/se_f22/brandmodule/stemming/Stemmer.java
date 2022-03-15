@@ -5,18 +5,23 @@ import java.util.List;
 
 public class Stemmer implements IStemmer {
     public ArrayList<String> stem(List<String> words) {
-       throw new UnsupportedOperationException("Not yet implemented");
+        ArrayList<String> returnList = new ArrayList<>();
+        for (String word : words) {
+            returnList.add(stem(word));
+        }
+        return returnList;
     }
 
     public String stem(String word) {
-       throw new UnsupportedOperationException("Not yet implemented");
-   }
-
-
-
-    public static void main(String[] args) {
-        System.out.println(StemmingUtilities.step1a(new Word("bled")));
-        Stemmer stemmer = new Stemmer();
-//        System.out.println(stemmer.step1b(new Word("bled")));
+        Word stemmingWord = new Word(word);
+        stemmingWord = StemmingUtilities.step1a(stemmingWord);
+        stemmingWord = StemmingUtilities.step1b(stemmingWord);
+        stemmingWord = StemmingUtilities.step1c(stemmingWord);
+        stemmingWord = StemmingUtilities.step2(stemmingWord);
+        stemmingWord = StemmingUtilities.step3(stemmingWord);
+        stemmingWord = StemmingUtilities.step4(stemmingWord);
+        stemmingWord = StemmingUtilities.step5a(stemmingWord);
+        stemmingWord = StemmingUtilities.step5b(stemmingWord);
+        return stemmingWord.getWordString();
     }
 }

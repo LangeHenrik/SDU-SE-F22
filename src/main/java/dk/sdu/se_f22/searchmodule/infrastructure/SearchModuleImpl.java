@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sharedlibrary.models.*;
@@ -13,10 +14,12 @@ import java.util.regex.Pattern;
 
 
 public class SearchModuleImpl implements SearchModule {
+    private final Set<Filterable> filteringModules;
     private final Set<IndexingModule<?>> indexingModules;
 
     public SearchModuleImpl() {
         this.indexingModules = new HashSet<>();
+        this.filteringModules = new HashSet<>();
     }
 
     public <T extends IndexingModule<?>> void addIndexingModule(T index) {
@@ -25,6 +28,21 @@ public class SearchModuleImpl implements SearchModule {
 
     public <T extends IndexingModule<?>> void removeIndexingModule(T index) {
         indexingModules.remove(index);
+    }
+
+    public void addFilteringModule(Filterable filteringModule) {
+        filteringModules.add(filteringModule);
+    }
+
+    public void removeFilteringModule(Filterable filteringModule) {
+        filteringModules.remove(filteringModule);
+    }
+
+    public List<String> filterTokens(List<String> tokens){
+        for(var filteringModule : filteringModules) {
+            tokens = filteringModule.filter((ArrayList<String>) tokens);
+        }
+        return tokens;
     }
 
     @SuppressWarnings("unchecked")
@@ -49,6 +67,7 @@ public class SearchModuleImpl implements SearchModule {
     @Override
     public SearchHits search(String query) {
         List<String> tokens = List.of();
+        tokens = filterTokens(tokens);
 
         SearchHits searchHits = new SearchHits();
         searchHits.setContents(List.of());

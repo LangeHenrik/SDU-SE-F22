@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockFilteringModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
@@ -15,6 +16,22 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSearchModule {
+
+    @Test
+    public void testFilterTokens() {
+        SearchModuleImpl searchModule = new SearchModuleImpl();
+        searchModule.addFilteringModule(MockFilteringModule.getInstance());
+
+        var testTokens = new ArrayList<>(List.of("My", "Search", "Tokens"));
+        var filteredTokens = searchModule.filterTokens(testTokens);
+        assertArrayEquals(List.of("My", "Search").toArray(), filteredTokens.toArray());
+
+        searchModule.removeFilteringModule(MockFilteringModule.getInstance());
+        testTokens = new ArrayList<>(List.of("My", "Search", "Tokens"));
+        filteredTokens = searchModule.filterTokens(testTokens);
+        assertArrayEquals(List.of("My", "Search", "Tokens").toArray(), filteredTokens.toArray());
+
+    }
 
     @Test
     public void testQueryIndexOfType() {

@@ -27,8 +27,7 @@ public class TwoWaySynonym implements DatabaseOperator {
             add(UUID.randomUUID());
             add(synonym);
         }};
-
-        statement = Foo.prepareStatement("INSERT INTO BAR(UUID, name) VALUES (?, ?)");
+        statement = Foo.prepareStatement("INSERT INTO BAR(uuid, name) VALUES (?, ?)");
         prepareStatement(statement, statementList);
         executeStatement(statement);
 

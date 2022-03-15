@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.productmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.brandmodule.stemming.Stemmer;
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
@@ -21,7 +22,7 @@ public class ProductInfIndexImpl implements ProductInfIndex{
     }
 
     private List<String> tokenFilter(List<String> tokens){
-        //tokens = BIM4.filter(tokens);
+        tokens = new Stemmer().stem(tokens);
         //tokens = CMS.filter(tokens);
         //tokens = PIM4.filter(tokens);
         return tokens;

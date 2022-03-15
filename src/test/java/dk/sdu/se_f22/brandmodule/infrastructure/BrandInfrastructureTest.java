@@ -27,7 +27,7 @@ class BrandInfrastructureTest {
     }
 
 
-    @RepeatedTest(50)
+    @RepeatedTest(1000)
     void testTokenizationParametersAtRandom(){
         Random r = new Random();
         char c1 = (char)(r.nextInt(26) + 'a');

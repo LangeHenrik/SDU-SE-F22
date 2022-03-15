@@ -51,9 +51,9 @@ public class DatabaseAPI {
     public static void updateName(int id,String name) {
         PreparedStatement updateStatement = null;
         try {
-            updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE name=?");
-            updateStatement.setString(1,String.valueOf(name));
-            updateStatement.setString(2,String.valueOf(id));
+            updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
+            updateStatement.setString(1, String.valueOf(name));
+            updateStatement.setString(2, String.valueOf(id));
             updateStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

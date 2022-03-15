@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockFilteringModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
@@ -15,6 +16,21 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSearchModule {
+
+    @Test
+    public void testFilterTokens() {
+        SearchModuleImpl searchModule = new SearchModuleImpl();
+        searchModule.addFilteringModule(MockFilteringModule.getInstance());
+
+        List<String> testTokens = new ArrayList<>(List.of("My", "Search", "Tokens"));
+        List<String> filteredTokens = searchModule.filterTokens(testTokens);
+        assertArrayEquals(List.of("My", "Search").toArray(), filteredTokens.toArray());
+
+        searchModule.removeFilteringModule(MockFilteringModule.getInstance());
+        testTokens = new ArrayList<>(List.of("My", "Search", "Tokens"));
+        filteredTokens = searchModule.filterTokens(testTokens);
+        assertArrayEquals(List.of("My", "Search", "Tokens").toArray(), filteredTokens.toArray());
+    }
 
     @Test
     public void testQueryIndexOfType() {
@@ -64,19 +80,17 @@ public class TestSearchModule {
         SearchModule searchModule = new SearchModuleImpl() {
             @Override
             public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
-                if(clazz == Product.class) {
+                if (clazz == Product.class) {
                     List<Product> productPages = new ArrayList<>();
                     productPages.add(new Product());
                     return (List<T>) productPages;
-                }
-                else if(clazz == Brand.class) {
+                } else if (clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
                     brand.setName("Test brand");
                     brandPages.add(brand);
                     return (List<T>) brandPages;
-                }
-                else {
+                } else {
                     return null;
                 }
             }
@@ -88,7 +102,7 @@ public class TestSearchModule {
         // the name on the first element to check whether the query method was called for brand pages
 
         List<Brand> brands = searchResult.getBrands().stream().toList();
-        if(brands.stream().findFirst().isPresent()) {
+        if (brands.stream().findFirst().isPresent()) {
             assertEquals(brands.stream().findFirst().get().getName(), "Test brand");
         }
 

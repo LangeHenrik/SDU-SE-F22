@@ -154,7 +154,7 @@ public class StemmingUtilities {
 
     public static Word step5a (Word word) {
         if (word.endsWith("e")){
-            Word base = word.getBase(word, "e");
+            Word base = word.getBase("e");
             if (base.getMeasure() > 1) {
                 word = base;
             } else if (base.getMeasure() == 1 && !base.endsWithCVC()){

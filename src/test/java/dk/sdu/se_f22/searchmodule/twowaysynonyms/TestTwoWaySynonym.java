@@ -74,6 +74,24 @@ public class TestTwoWaySynonym {
         assertNotNull(methodOutput);
     }
 
+    @Test
+    public void testNoDuplicatesCreated(){
+        ArrayList<String> notExpected = new ArrayList<>();
+        ArrayList<String> readList = new ArrayList<>();
+
+        operator.create("hello");
+        operator.create("hello");
+        operator.create("hello","hello");
+
+        readList.add("hello");
+
+        notExpected.add("hello");
+        notExpected.add("hello");
+        notExpected.add("hello");
+
+        assertNotEquals(operator.filter(readList), notExpected);
+    }
+
     @AfterClass
     public void deleteAllData(){
         //Deletes all the added data from the tests

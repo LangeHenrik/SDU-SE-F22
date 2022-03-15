@@ -61,7 +61,6 @@ public class TwoWaySynonym implements DatabaseOperator {
     }
 
     /**
-     * <<<<<<< HEAD
      * Update a synonyms group ID
      *
      * @param synonym        Word to update
@@ -75,21 +74,15 @@ public class TwoWaySynonym implements DatabaseOperator {
 
     /**
      * Update spelling of a synonym
-     *
      * @param synonym           Word to update
      * @param correctedSpelling Corrected spelling of Synonym
-     * @return UUID of updated Synonym
+     * @return                  UUID of updated Synonym
      */
     @Override
     public UUID updateSpelling(String synonym, String correctedSpelling) {
-        /**Update a synonym(mainly spelling correction)
-         * @param synonym Word to update
-         * @param correctedSynonym Corrected form of Synonym
-         * @return UUID of updated Synonym
-         * */
-
         return null;
     }
+
         /**
          * Delete a synonym from the database
          * @param synonym           Word to delete

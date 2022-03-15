@@ -93,4 +93,9 @@ public class TestTwoWaySynonym {
         Assertions.assertNull(operator.create("Blah"));
 >>>>>>> 58b7352 (Added initial test class and singleton pattern to TwoWaySynonym)
     }
+
+    @Test
+    @DisplayName("Update group id from an existing synonym")
+    public void testUpdateGroupID(){
+    }
 }

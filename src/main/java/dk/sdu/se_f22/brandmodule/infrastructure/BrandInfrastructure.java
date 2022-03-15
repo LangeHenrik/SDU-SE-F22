@@ -27,43 +27,22 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 		stemming = new Stemmer();
 	}
 
-	private void loadTokenizationParameters() {
-		String jsonString;
-		try {
-			jsonString = Files.readString(file.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		JsonObject object = gson.fromJson(jsonString, JsonObject.class);
-		String delimiter = object.get("delimiterRegex").getAsString();
-		String ignore = object.get("ignoreRegex").getAsString();
-		this.tokenizationParameters = new TokenizationParameters(delimiter, ignore);
-	}
-
-	private void saveTokenizationParameters() {
-		JsonObject object = new JsonObject();
-		object.addProperty("delimiterRegex", tokenizationParameters.delimiterRegex);
-		object.addProperty("ignoreRegex", tokenizationParameters.ignoreRegex);
-		String jsonString = gson.toJson(object);
-		try {
-			Files.write(file.toPath(), jsonString.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public List<Brand> getBrandsFromSearchTokens(List<String> tokens) {
-		tokens = filterTokens(tokens);
-		return index.searchBrandIndex(tokens);
-	}
-
 	@Override
 	public void indexBrands(List<Brand> brands) {
 		for (Brand brand : brands) {
 			index.indexBrandInformation(brand, tokenizeBrand(brand).stream().toList());
 		}
+	}
+
+	@Override
+	public List<Brand> getBrandsFromSearchTokens(List<String> tokens) {
+		return index.searchBrandIndex(filterTokens(tokens));
+	}
+
+	@Override
+	public void setTokenizationParameters(String delimiterRegex, String ignoreRegex) {
+		this.tokenizationParameters = new TokenizationParameters(delimiterRegex, ignoreRegex);
+		saveTokenizationParameters();
 	}
 
 	private List<String> filterTokens(List<String> tokens) {
@@ -89,10 +68,29 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 		return tokens.stream().filter(x -> !x.isEmpty()).toList();
 	}
 
+	private void loadTokenizationParameters() {
+		String jsonString;
+		try {
+			jsonString = Files.readString(file.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		JsonObject object = gson.fromJson(jsonString, JsonObject.class);
+		String delimiter = object.get("delimiterRegex").getAsString();
+		String ignore = object.get("ignoreRegex").getAsString();
+		this.tokenizationParameters = new TokenizationParameters(delimiter, ignore);
+	}
 
-	@Override
-	public void setTokenizationParameters(String delimiterRegex, String ignoreRegex) {
-		this.tokenizationParameters = new TokenizationParameters(delimiterRegex, ignoreRegex);
-		saveTokenizationParameters();
+	private void saveTokenizationParameters() {
+		JsonObject object = new JsonObject();
+		object.addProperty("delimiterRegex", tokenizationParameters.delimiterRegex);
+		object.addProperty("ignoreRegex", tokenizationParameters.ignoreRegex);
+		String jsonString = gson.toJson(object);
+		try {
+			Files.write(file.toPath(), jsonString.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

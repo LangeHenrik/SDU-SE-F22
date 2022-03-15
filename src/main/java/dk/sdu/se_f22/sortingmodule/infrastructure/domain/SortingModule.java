@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
 
-import dk.sdu.se_f22.sortingmodule.infrastructure.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
 public interface SortingModule {
     /**

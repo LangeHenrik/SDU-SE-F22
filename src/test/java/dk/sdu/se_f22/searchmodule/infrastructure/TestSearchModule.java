@@ -5,6 +5,7 @@ import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class TestSearchModule {
                 else if(clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
-                    brand.name = "Test brand";
+                    brand.setName("Test brand");
                     brandPages.add(brand);
                     return (List<T>) brandPages;
                 }
@@ -81,15 +82,18 @@ public class TestSearchModule {
             }
         };
 
-        SearchResult searchResult = searchModule.search("Hello world");
+        SearchHits searchResult = searchModule.search("Hello world");
 
         // We cannot use assertArrayEquals because brand doesn't implement the comparable operator, so we just match
         // the name on the first element to check whether the query method was called for brand pages
-        if(searchResult.getBrandPages().stream().findFirst().isPresent()) {
-            assertEquals(searchResult.getBrandPages().stream().findFirst().get().name, "Test brand");
+
+        List<Brand> brands = searchResult.getBrands().stream().toList();
+        if(brands.stream().findFirst().isPresent()) {
+            assertEquals(brands.stream().findFirst().get().getName(), "Test brand");
         }
 
         // Same here, although we don't have any attribute fields to test against, so we just check that an object is in the list
-        assertTrue(searchResult.getProductPages().stream().findFirst().isPresent());
+        List<Brand> products = searchResult.getProducts().stream().toList();
+        assertTrue(products.stream().findFirst().isPresent());
     }
 }

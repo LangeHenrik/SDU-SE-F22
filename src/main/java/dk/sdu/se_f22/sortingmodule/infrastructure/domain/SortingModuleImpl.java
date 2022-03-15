@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
 
-import dk.sdu.se_f22.sortingmodule.infrastructure.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
 public class SortingModuleImpl implements SortingModule {
 
@@ -44,8 +44,7 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public void setPagination(int page, int pageSize) {
-        // TODO Auto-generated method stub
-        
+        this.query.setPagination(page, pageSize);
     }
 
     @Override

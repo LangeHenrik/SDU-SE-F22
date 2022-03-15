@@ -13,6 +13,7 @@ public class Misspellings implements DatabaseOperator{
     private static final String QUERY = "SELECT wrong, correct FROM misspellings WHERE wrong =?";
     private static final String SELECT = "SELECT * FROM misspellings";
     private static final String INSERT_misspellings = "INSERT INTO misspellings (wrong, correct) VALUES (?,?);";
+    private static final String UPDATE_misspellings = "UPDATE misspellings misspellings SET wrong=? WHERE wrong=?";
 
     /*
     Help found at:
@@ -90,21 +91,31 @@ public class Misspellings implements DatabaseOperator{
         System.out.println("The misspelling " + word + " was deleted.");
     }
 
-    public void updateMispellings(String word){
+    public void updateMispellings(){
+        //get the misspelling you want to update
+        Scanner scannerWrong = new Scanner(System.in);
+        System.out.println("What misspelling do you want to update?");
+        String whereUpdate = scannerWrong.nextLine();
+        //get the update
+        Scanner scannerCorrect = new Scanner(System.in);
+        System.out.println("Write what the update for the misspelling");
+        String setUpdate = scannerCorrect.nextLine();
+        //update the misspelling
+        // Step 1: Establishing a Connection
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             // Step 2:Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_misspellings)) {
+            preparedStatement.setString(1, setUpdate);
+            preparedStatement.setString(2, whereUpdate);
 
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Could not update misspelling maybe it does not exists");
+        }
     }
 
     public static void main(String[] args) throws SQLException {
-        Misspellings mis = new Misspellings();
-        //mis.addMispellings();
-        //mis.deleteMispellings();
-        /*ArrayList<String> strings = new ArrayList<String>();
-        strings.add("HEJ");
-        strings.add("HAJ");
-        strings.add("HEJ");
-        System.out.println(strings);
-        mis.filter(strings);
-        System.out.println(strings);*/
-    }
-
+        
 }

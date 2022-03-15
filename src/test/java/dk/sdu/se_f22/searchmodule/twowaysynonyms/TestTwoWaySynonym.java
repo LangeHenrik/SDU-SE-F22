@@ -3,15 +3,13 @@ package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.sql.ResultSet;
-
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     ArrayList<String> synonymList;
@@ -75,9 +73,9 @@ public class TestTwoWaySynonym {
         expectedOutput.add("sad");
         expectedOutput.add("bitter");
         expectedOutput.add("heartbroken");
-        methodOutput = operator.filter(tokens);
         Collections.addAll(synonymList, "anger", "sad", "acrimony", "annoyance", "bitter", "heartbroken");
 
+        methodOutput = operator.filter(tokens);
         assertEquals(expectedOutput,methodOutput);
     }
 
@@ -106,5 +104,4 @@ public class TestTwoWaySynonym {
             operator.delete(synonym);
         }
     }
-
 }

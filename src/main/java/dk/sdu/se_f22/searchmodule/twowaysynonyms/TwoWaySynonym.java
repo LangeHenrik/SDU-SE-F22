@@ -16,9 +16,8 @@ public class TwoWaySynonym implements DatabaseOperator {
 
     /**
      * Add a new synonym and create a new synonym group.
-     *
-     * @param synonym Word to add
-     * @return UUID of created Synonym
+     * @param synonym           Word to add
+     * @return                  UUID of created Synonym
      */
     @Override
     public UUID create(String synonym) {
@@ -36,10 +35,9 @@ public class TwoWaySynonym implements DatabaseOperator {
 
     /**
      * Add a new synonym to an existing synonym group.
-     *
-     * @param synonym     Word to add
-     * @param groupMember Existing related Synonym
-     * @return UUID of created Synonym
+     * @param synonym       Word to add
+     * @param groupMember   Existing related Synonym
+     * @return              UUID of created Synonym
      */
     @Override
     public UUID create(String synonym, String groupMember) {
@@ -60,9 +58,8 @@ public class TwoWaySynonym implements DatabaseOperator {
 
     /**
      * Retrieve the data from the database related to the given synonym
-     *
-     * @param synonym Word to receive synonyms for
-     * @return ResultSet of all matching synonyms
+     * @param synonym   Word to receive synonyms for
+     * @return          ResultSet of all matching synonyms
      */
     @Override
     public ResultSet read(String synonym) {
@@ -71,10 +68,9 @@ public class TwoWaySynonym implements DatabaseOperator {
 
     /**
      * Update a synonyms group ID
-     *
-     * @param synonym        Word to update
-     * @param relatedSynonym Related Synonym
-     * @return UUID of updated Synonym
+     * @param synonym           Word to update
+     * @param relatedSynonym    Related Synonym
+     * @return                  UUID of updated Synonym
      */
     @Override
     public UUID updateGroupID(String synonym, String relatedSynonym) {
@@ -92,15 +88,16 @@ public class TwoWaySynonym implements DatabaseOperator {
         return null;
     }
 
-        /**
-         * Delete a synonym from the database
-         * @param synonym           Word to delete
-         * @return Boolean value
-         */
-        @Override
-        public boolean delete (String synonym){
-            return false;
-        }
+    /**
+     * Delete a synonym from the database
+     * @param synonym           Word to delete
+     * @return                  Boolean value
+     */
+    @Override
+    public boolean delete(String synonym) {
+        return false;
+    }
+
     /**
      * Goes through a list of tokens, to find all
      * their respective two-way synonyms.

@@ -54,8 +54,7 @@ class BrandInfrastructureTest extends BrandInfrastructure {
     @Test
     void testTokenizeBrand(){
         Brand brand = new Brand(0,"Lorem","Lorem, ipsum. dolor, sit amet","ipsum","Lorem", new ArrayList<String>());
-        Set<String> expected = new HashSet<>();
-        expected.addAll(List.of("Lorem","ipsum","dolor","sit","amet"));
+        Set<String> expected = new HashSet<>(List.of("Lorem", "ipsum", "dolor", "sit", "amet"));
         String reg = "[,\\.]";
         String del = " ";
         brandInfrastructure.setTokenizationParameters(del,reg);
@@ -66,8 +65,7 @@ class BrandInfrastructureTest extends BrandInfrastructure {
     @Test
     void testTokenizeBrandFail(){
         Brand brand = new Brand(0,"Lorem","Lorem, ipsum. dolor, sit amet","ipsum","Lorem", new ArrayList<String>());
-        Set<String> expected = new HashSet<>();
-        expected.addAll(List.of("Lorem","ipsum","dolor","sit","amet","FAIL"));
+        Set<String> expected = new HashSet<>(List.of("Lorem", "ipsum", "dolor", "sit", "amet", "FAIL"));
         String reg = "[,\\.]";
         String del = " ";
         brandInfrastructure.setTokenizationParameters(del,reg);

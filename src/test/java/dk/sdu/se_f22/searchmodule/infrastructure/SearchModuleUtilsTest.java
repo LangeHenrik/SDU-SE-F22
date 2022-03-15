@@ -16,11 +16,12 @@ class SearchModuleUtilsTest {
     void setUp() {
         stringList = new ArrayList<>();
         stringList.add(" ");
-        stringList.add("\\p{Punct}");
+        stringList.add("|");
+        stringList.add("p{Punct}");
     }
 
     @Test
     void convertDelimitersToRegex() {
-        assertEquals(" |\\p{Punct}", SearchModuleUtils.convertDelimitersToRegex(stringList));
+        assertEquals("\\ |\\||\\p{Punct}", SearchModuleUtils.convertDelimitersToRegex(stringList));
     }
 }

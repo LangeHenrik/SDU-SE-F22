@@ -16,7 +16,7 @@ class SearchSettingsTest {
     void setUp() {
         initialArray = new ArrayList<>();
         initialArray.add(" ");
-        initialArray.add("\\p{Punct}");
+        initialArray.add("p{Punct}");
         ss = new SearchSettings();
     }
 

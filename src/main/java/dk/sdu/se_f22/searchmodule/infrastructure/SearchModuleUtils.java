@@ -14,9 +14,9 @@ public class SearchModuleUtils {
 
     private static void addDelimiterToStringBuilder(StringBuilder sb, int i, List<String> stringList) {
         if (i != stringList.size() - 1) {
-            sb.append(stringList.get(i) + "|");
+            sb.append("\\" + stringList.get(i) + "|");
         } else {
-            sb.append(stringList.get(i));
+            sb.append("\\" + stringList.get(i));
         }
     }
 }

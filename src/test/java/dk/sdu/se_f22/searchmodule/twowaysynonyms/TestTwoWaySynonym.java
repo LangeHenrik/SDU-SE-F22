@@ -78,16 +78,16 @@ public class TestTwoWaySynonym {
     public void testNoDuplicatesCreated(){
         ArrayList<String> notExpected = new ArrayList<>();
         ArrayList<String> readList = new ArrayList<>();
+        Collections.addAll(readList,"hello");
+        Collections.addAll(notExpected,"hello","hello");
+
 
         operator.create("hello");
         operator.create("hello");
+        assertNotEquals(operator.filter(readList), notExpected);
+
+        Collections.addAll(notExpected,"hello");
         operator.create("hello","hello");
-
-        readList.add("hello");
-
-        notExpected.add("hello");
-        notExpected.add("hello");
-        notExpected.add("hello");
 
         assertNotEquals(operator.filter(readList), notExpected);
     }

@@ -56,6 +56,7 @@ public class TwoWaySynonym implements DatabaseOperator {
         ArrayList<Object> statementList = new ArrayList<>(){{
             add(UUID.randomUUID());
             add(synonym);
+
             add(groupMember);
         }};
 
@@ -101,6 +102,19 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public UUID updateSpelling(String synonym, String correctedSpelling) {
+        PreparedStatement statement = null;
+        ArrayList<Object> statementList = new ArrayList<>(){{
+            add(correctedSpelling);
+            add(synonym);
+        }};
+
+        try {
+            statement = conn.prepareStatement("UPDATE twoway_synonym_temp SET synonym = ? WHERE synonym = ?");
+            prepareStatement(statement,statementList);
+            executeStatement(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

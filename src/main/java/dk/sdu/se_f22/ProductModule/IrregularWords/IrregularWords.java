@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.ProductModule.IrregularWords;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IrregularWords implements IIrregularWords{
 
@@ -52,7 +53,7 @@ public class IrregularWords implements IIrregularWords{
     }
 
     @Override
-    public ArrayList<String> searchForIrregularWords(ArrayList<String> arrayList) {
-        return null;
+    public List<String> searchForIrregularWords(List<String> arrayList) {
+        return arrayList;
     }
 }

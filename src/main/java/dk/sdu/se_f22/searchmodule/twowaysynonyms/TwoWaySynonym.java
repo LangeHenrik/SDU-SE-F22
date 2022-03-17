@@ -25,14 +25,13 @@ public class TwoWaySynonym implements DatabaseOperator {
     @Override
     public UUID create(String synonym) {
         UUID uuid = UUID.randomUUID();
-        String format = "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?)";
-        ArrayList<Object> args = new ArrayList(){{
-                add(uuid);
-                add(synonym);
-            }};
+        String format = "INSERT INTO twoway_synonym (uuid, synonym) VALUES (?, ?)";
+        ArrayList<Object> args = new ArrayList<>(){{
+            add(uuid);
+            add(synonym);
+        }};
         PreparedStatement statement = getPreparedStatement(format, args);
-        updateDatabase(statement);
-        return uuid;
+        return (updateDatabase(statement) > 0) ? uuid : null;
     }
 
     /**
@@ -44,16 +43,15 @@ public class TwoWaySynonym implements DatabaseOperator {
     @Override
     public UUID create(String synonym, String groupMember) {
         UUID uuid = UUID.randomUUID();
-        String format = "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?, ?)";
+        String format = "INSERT INTO twoway_synonym (uuid, synonym, group_id) VALUES (?, ?, ?)";
         // TODO: Get GroupMemeber group_id
         ArrayList<Object> args = new ArrayList<>(){{
             add(uuid);
             add(synonym);
             add(groupMember);
         }};
-        PreparedStatement preparedStatement = getPreparedStatement(format, args);
-        if(updateDatabase(preparedStatement) !=0 ) return uuid;
-        return null;
+        PreparedStatement statement = getPreparedStatement(format, args);
+        return (updateDatabase(statement) > 0) ? uuid : null;
     }
 
     /**
@@ -62,11 +60,23 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return          ResultSet of all matching synonyms
      */
     @Override
-    public ResultSet readAll(String synonym) {
+    public ArrayList<Synonym> readAll(String synonym) {
         String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
-        PreparedStatement stmt =getPreparedStatement(statementFormat, args);
-        return readDatabase(stmt);
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        ResultSet rs = readDatabase(stmt);
+        ArrayList<Synonym> synonymList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                new Synonym((UUID)rs.getObject(1),
+                        rs.getString(2),
+                        rs.getInt(3));
+            }
+            return synonymList;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return synonymList;
     }
 
     /**
@@ -75,12 +85,21 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return          ResultSet containing the found synonym
      */
     @Override
-    public ResultSet read(String synonym) {
+    public Synonym read(String synonym) {
         String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
-
-        PreparedStatement stmt =getPreparedStatement(statementFormat, args);
-        return readDatabase(stmt);
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        ResultSet rs = readDatabase(stmt);
+        try {
+            if (rs.next()) {
+                return new Synonym(
+                        (UUID)rs.getObject(1), rs.getString(2), rs.getInt(3)
+                );
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -189,6 +208,7 @@ public class TwoWaySynonym implements DatabaseOperator {
             System.out.println("Driver timed out, statement execution took too long");
             return 0;
         } catch (SQLException throwables){
+            System.out.println(throwables.getMessage());
             System.out.println("Update could not be executed");
             return 0;
         }

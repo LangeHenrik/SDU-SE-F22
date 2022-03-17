@@ -3,13 +3,12 @@ package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
+
 public class TestTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     ArrayList<String> synonymList;

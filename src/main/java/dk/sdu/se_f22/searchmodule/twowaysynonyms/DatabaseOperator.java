@@ -7,8 +7,8 @@ import java.util.UUID;
 public interface DatabaseOperator extends Filterable {
     UUID create(String synonym);
     UUID create(String synonym, String groupMember);
-    ResultSet read(String synonym);
-    ResultSet readAll(String synonym);
+    Synonym read(String synonym);
+    ArrayList<Synonym> readAll(String synonym);
     UUID updateGroupID(String synonym, String relatedSynonym);
     UUID updateSpelling(String synonym, String correctedSpelling);
     boolean delete(String synonym);

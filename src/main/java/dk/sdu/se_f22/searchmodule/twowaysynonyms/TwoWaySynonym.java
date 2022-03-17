@@ -23,8 +23,8 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return                  UUID of created Synonym
      */
     @Override
-    public UUID create(String synonym) {
-        UUID uuid = UUID.randomUUID();
+    public String create(String synonym) {
+        String uuid = UUID.randomUUID().toString();
         String format = "INSERT INTO twoway_synonym (uuid, synonym) VALUES (?, ?)";
         ArrayList<Object> args = new ArrayList<>(){{
             add(uuid);
@@ -41,8 +41,8 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return              UUID of created Synonym
      */
     @Override
-    public UUID create(String synonym, String groupMember) {
-        UUID uuid = UUID.randomUUID();
+    public String create(String synonym, String groupMember) {
+        String uuid = UUID.randomUUID().toString();
         String format = "INSERT INTO twoway_synonym (uuid, synonym, group_id) VALUES (?, ?, ?)";
         // TODO: Get GroupMemeber group_id
         ArrayList<Object> args = new ArrayList<>(){{
@@ -68,7 +68,7 @@ public class TwoWaySynonym implements DatabaseOperator {
         ArrayList<Synonym> synonymList = new ArrayList<>();
         try {
             while (rs.next()) {
-                new Synonym((UUID)rs.getObject(1),
+                new Synonym(rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3));
             }
@@ -93,7 +93,7 @@ public class TwoWaySynonym implements DatabaseOperator {
         try {
             if (rs.next()) {
                 return new Synonym(
-                        (UUID)rs.getObject(1), rs.getString(2), rs.getInt(3)
+                        rs.getString(1), rs.getString(2), rs.getInt(3)
                 );
             }
         } catch (SQLException ex) {
@@ -109,7 +109,7 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return                  UUID of updated Synonym
      */
     @Override
-    public UUID updateGroupID(String synonym, String relatedSynonym) {
+    public String updateGroupID(String synonym, String relatedSynonym) {
         return null;
     }
 
@@ -120,7 +120,7 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return                  UUID of updated Synonym
      */
     @Override
-    public UUID updateSpelling(String synonym, String correctedSpelling) {
+    public String updateSpelling(String synonym, String correctedSpelling) {
         return null;
     }
 

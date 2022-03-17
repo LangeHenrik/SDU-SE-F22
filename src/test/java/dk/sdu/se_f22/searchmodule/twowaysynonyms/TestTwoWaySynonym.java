@@ -80,7 +80,7 @@ public class TestTwoWaySynonym {
 
     @Test
     public void testSynonymGroup(){
-        UUID methodOutput = operator.create("pants");
+        String methodOutput = operator.create("pants");
 
         synonymList.add("pants");
 

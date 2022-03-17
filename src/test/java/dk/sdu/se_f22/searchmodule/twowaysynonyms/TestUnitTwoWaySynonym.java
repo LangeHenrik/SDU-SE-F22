@@ -3,7 +3,7 @@ package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class TestUnitTwoWaySynonym {
     Connection conn = DBConnection.getConnection();
@@ -25,8 +24,8 @@ public class TestUnitTwoWaySynonym {
     static void setUp() {
         _defaultSynonym = "Computer";
         _defaultRelatedSynonymCollection = new ArrayList<Synonym>(){{
-            add(new Synonym(UUID.fromString("sduconst-0000-0000-1000-000const0001"), "PC", 1));
-            add(new Synonym(UUID.fromString("sduconst-0000-0000-1000-000const0002"), "Computer", 1));
+            add(new Synonym("sduconst-0000-0000-1000-000const0001", "PC", 1));
+            add(new Synonym("sduconst-0000-0000-1000-000const0002", "Computer", 1));
         }};
     }
 
@@ -46,7 +45,7 @@ public class TestUnitTwoWaySynonym {
     public void testCreateNewSynonym() {
         // ARRANGE
         // ACT
-        UUID createdUUID = operator.create("Computer");
+        String createdUUID = operator.create("Computer");
         // ASSERT
         assertNotNull(createdUUID);
     }
@@ -57,7 +56,7 @@ public class TestUnitTwoWaySynonym {
         // ARRANGE
         operator.create(_defaultSynonym);
         // ACT
-        UUID createdUUID = operator.create(_defaultSynonym);
+        String createdUUID = operator.create(_defaultSynonym);
         // ASSERT
         assertNull(createdUUID);
     }
@@ -69,7 +68,7 @@ public class TestUnitTwoWaySynonym {
         // ARRANGE
         String newSynonym = "PC";
         // ACT
-        UUID createdUUID = operator.create(newSynonym, _defaultSynonym);
+        String createdUUID = operator.create(newSynonym, _defaultSynonym);
         // ASSERT
         assertNotNull(createdUUID);
     }
@@ -78,6 +77,7 @@ public class TestUnitTwoWaySynonym {
     @DisplayName("Read single synonym")
     public void testReadSingleSynonym() {
         // ARRANGE
+        operator.create("Computer");
         String expectedResult = "Computer";
         // ACT
         Synonym actualResult = operator.read(_defaultSynonym);
@@ -86,7 +86,18 @@ public class TestUnitTwoWaySynonym {
     }
 
     @Test
-    @DisplayName("Read all synonym")
+    @DisplayName("Read non-existing synonym")
+    public void testReadNonExistingSynonym() {
+        // ARRANGE
+        // ACT
+        Synonym actualResult = operator.read(_defaultSynonym);
+        // ASSERT
+        assertNull(actualResult);
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("Read all synonyms")
     public void testReadAllRelatedSynonyms() {
         // ARRANGE
         operator.create("Computer");

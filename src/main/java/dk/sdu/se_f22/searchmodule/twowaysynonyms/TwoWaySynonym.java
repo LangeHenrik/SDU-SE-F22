@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -42,13 +41,13 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public String create(String synonym, String groupMember) {
+        Integer group_id = read(groupMember).groupId();
         String uuid = UUID.randomUUID().toString();
         String format = "INSERT INTO twoway_synonym (uuid, synonym, group_id) VALUES (?, ?, ?)";
-        // TODO: Get GroupMemeber group_id
         ArrayList<Object> args = new ArrayList<>(){{
             add(uuid);
             add(synonym);
-            add(groupMember);
+            add(group_id);
         }};
         PreparedStatement statement = getPreparedStatement(format, args);
         return (updateDatabase(statement) > 0) ? uuid : null;
@@ -61,16 +60,17 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public ArrayList<Synonym> readAll(String synonym) {
-        String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
-        ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
+        Integer group_id = read(synonym).groupId();
+        String statementFormat = "SELECT * FROM twoway_synonym WHERE group_id = ?";
+        ArrayList<Object> args = new ArrayList<>(){{add(group_id);}};
         PreparedStatement stmt = getPreparedStatement(statementFormat, args);
         ResultSet rs = readDatabase(stmt);
         ArrayList<Synonym> synonymList = new ArrayList<>();
         try {
             while (rs.next()) {
-                new Synonym(rs.getString(1),
+                synonymList.add(new Synonym(rs.getString(1),
                         rs.getString(2),
-                        rs.getInt(3));
+                        rs.getInt(3)));
             }
             return synonymList;
         } catch (SQLException ex) {

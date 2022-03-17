@@ -1,14 +1,12 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,7 +32,6 @@ public class TestUnitTwoWaySynonym {
         try {
             Statement stmt = conn.createStatement();
             stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY ");
-            System.out.println("Temp database has been wiped");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -62,15 +59,15 @@ public class TestUnitTwoWaySynonym {
     }
 
     @Test
-    @Disabled
     @DisplayName("Create synonym in existing group")
     public void testAddNewSynonymToExistingGroup() {
         // ARRANGE
+        operator.create(_defaultSynonym);
         String newSynonym = "PC";
         // ACT
-        String createdUUID = operator.create(newSynonym, _defaultSynonym);
+        operator.create(newSynonym, _defaultSynonym);
         // ASSERT
-        assertNotNull(createdUUID);
+        assertEquals(operator.read(_defaultSynonym).groupId(), operator.read(newSynonym).groupId());
     }
 
     @Test
@@ -96,8 +93,7 @@ public class TestUnitTwoWaySynonym {
     }
 
     @Test
-    @Disabled
-    @DisplayName("Read all synonyms")
+    @DisplayName("Read all synonyms from group")
     public void testReadAllRelatedSynonyms() {
         // ARRANGE
         operator.create("Computer");
@@ -105,6 +101,6 @@ public class TestUnitTwoWaySynonym {
         // ACT
         ArrayList<Synonym> actualResult = operator.readAll(_defaultSynonym);
         // ASSERT
-        assertArrayEquals(_defaultRelatedSynonymCollection.toArray(), actualResult.toArray());
+        assertEquals(_defaultRelatedSynonymCollection.size(), actualResult.size());
     }
 }

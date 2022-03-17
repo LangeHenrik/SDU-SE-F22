@@ -69,11 +69,12 @@ select * from SortingRangeLongView;
 INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name double', 'price');
 INSERT INTO SortingRangeDoubleFilters (filterId, min, max) VALUES (1, 0, 10);
 
-INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name time', 'expirationDate');
--- INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (2, 0, 10);
 
 INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name ean', 'ean');
-INSERT INTO SortingRangeLongFilters (filterId, min, max) VALUES (3, 0, 10);
+INSERT INTO SortingRangeLongFilters (filterId, min, max) VALUES (2, 2, 100);
+
+INSERT INTO SortingRangeFilters (description, name, productAttribute) VALUES ('test description', 'test name time', 'expirationDate');
+-- INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (3, 0, 10);
 
 select * from SortingRangeDoubleView;
 

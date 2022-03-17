@@ -158,9 +158,11 @@ public class TwoWaySynonym implements DatabaseOperator {
     }
 
     /**
+     * An execute statement function that queries to the database
      *
+     * @param statement     Prepared statement that should be executed
+     * @return              returns a resultset from the query
      */
-
     private ResultSet readDatabase(PreparedStatement statement){
         try {
             return statement.executeQuery();
@@ -173,6 +175,12 @@ public class TwoWaySynonym implements DatabaseOperator {
         }
     }
 
+    /**
+     * An execute statement function that queries to the database
+     *
+     * @param statement     Prepared statement that should be executed
+     * @return              returns an int of effected rows from the query
+     */
     private int updateDatabase(PreparedStatement statement){
         try {
             return statement.executeUpdate();
@@ -185,14 +193,4 @@ public class TwoWaySynonym implements DatabaseOperator {
             return 0;
         }
     }
-
-
-    /*private void executeStatement(PreparedStatement statement) {
-        try{
-            statement.execute();
-        } catch (SQLException throwables){
-            System.out.println("Couldn't execute statement");
-            throwables.printStackTrace();
-        }
-    }*/
 }

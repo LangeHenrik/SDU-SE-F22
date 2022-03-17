@@ -65,11 +65,9 @@ public class TwoWaySynonym implements DatabaseOperator {
             add(synonym);
             add(groupMember);
         }};
-
         try {
             statement = conn.prepareStatement(
-                    "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?, ?)",
-                    PreparedStatement.RETURN_GENERATED_KEYS
+                    "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?, ?)"
             );
             prepareStatement(statement, args);
             statement.executeUpdate();
@@ -81,7 +79,6 @@ public class TwoWaySynonym implements DatabaseOperator {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return uuid;
     }
 
@@ -92,19 +89,11 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public ResultSet readAll(String synonym) {
-        ResultSet rs = null;
+        String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM twoway_synonym WHERE synonym = ?");
-            prepareStatement(stmt, args);
-            rs = stmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return rs;
+        PreparedStatement stmt =getPreparedStatement(statementFormat, args);
+        return readDatabase(stmt);
     }
 
     /**
@@ -114,19 +103,11 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public ResultSet read(String synonym) {
-        ResultSet rs = null;
+        String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM twoway_synonym WHERE synonym = ?");
-            prepareStatement(stmt, args);
-            rs = stmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return rs;
+        PreparedStatement stmt =getPreparedStatement(statementFormat, args);
+        return readDatabase(stmt);
     }
 
     /**
@@ -173,6 +154,22 @@ public class TwoWaySynonym implements DatabaseOperator {
     }
 
     /**
+     * @param  format        Format of the statement that is to be executed
+     * @param  parameters    Params to be mapped in the Query
+     * @return               A fully prepared statement if no exception is caught
+     */
+    private PreparedStatement getPreparedStatement(String format, ArrayList<Object> parameters){
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(format);
+            prepareStatement(statement, parameters);
+        } catch(SQLException exception){
+            System.out.println("Formatting statement failed");
+        }
+        return statement;
+    }
+
+    /**
      * Helper function for preparing statements
      * @param statement     SQL Query
      * @param parameters    Params to be mapped in Query
@@ -184,9 +181,38 @@ public class TwoWaySynonym implements DatabaseOperator {
             }
         } catch (SQLException throwables) {
             System.out.println("Preparing statement failed");
-            throwables.printStackTrace();
         }
     }
+
+    /**
+     *
+     */
+
+    private ResultSet readDatabase(PreparedStatement statement){
+        try {
+            return statement.executeQuery();
+        } catch (SQLTimeoutException throwables){
+            System.out.println("Driver timed out, statement execution took too long");
+            return null;
+        } catch (SQLException throwables){
+            System.out.println("Query could not be executed");
+            return null;
+        }
+    }
+
+    private int updateDatabase(PreparedStatement statement){
+        try {
+            return statement.executeUpdate();
+
+        } catch (SQLTimeoutException throwables){
+            System.out.println("Driver timed out, statement execution took too long");
+            return 0;
+        } catch (SQLException throwables){
+            System.out.println("Update could not be executed");
+            return 0;
+        }
+    }
+
 
     /*private void executeStatement(PreparedStatement statement) {
         try{

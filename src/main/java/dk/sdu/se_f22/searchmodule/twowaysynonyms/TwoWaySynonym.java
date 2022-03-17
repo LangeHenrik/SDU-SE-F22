@@ -24,27 +24,14 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public UUID create(String synonym) {
-        UUID uuid = null;
-        PreparedStatement statement = null;
-        ArrayList<Object> args = new ArrayList<>(){{
-            add(UUID.randomUUID());
-            add(synonym);
-        }};
-        try {
-            statement = conn.prepareStatement(
-                    "INSERT INTO twoway_synonym(uuid, synonym) VALUES (?, ?)",
-                    PreparedStatement.RETURN_GENERATED_KEYS);
-            prepareStatement(statement, args);
-            statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-
-            if (rs.next()) {
-                uuid = (UUID)rs.getObject(1);
-                System.out.println("Created synonoym with UUID: " + uuid);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        UUID uuid = UUID.randomUUID();
+        String format = "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?)";
+        ArrayList<Object> args = new ArrayList(){{
+                add(uuid);
+                add(synonym);
+            }};
+        PreparedStatement statement = getPreparedStatement(format, args);
+        updateDatabase(statement);
         return uuid;
     }
 
@@ -56,30 +43,17 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public UUID create(String synonym, String groupMember) {
-        UUID uuid = null;
-        PreparedStatement statement = null;
-
+        UUID uuid = UUID.randomUUID();
+        String format = "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?, ?)";
         // TODO: Get GroupMemeber group_id
         ArrayList<Object> args = new ArrayList<>(){{
-            add(UUID.randomUUID());
+            add(uuid);
             add(synonym);
             add(groupMember);
         }};
-        try {
-            statement = conn.prepareStatement(
-                    "INSERT INTO twoway_synonym(uuid, synonym, group_id) VALUES (?, ?, ?)"
-            );
-            prepareStatement(statement, args);
-            statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-
-            if (rs.next()) {
-                uuid = (UUID)rs.getObject(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return uuid;
+        PreparedStatement preparedStatement = getPreparedStatement(format, args);
+        if(updateDatabase(preparedStatement) !=0 ) return uuid;
+        return null;
     }
 
     /**
@@ -91,7 +65,6 @@ public class TwoWaySynonym implements DatabaseOperator {
     public ResultSet readAll(String synonym) {
         String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
-
         PreparedStatement stmt =getPreparedStatement(statementFormat, args);
         return readDatabase(stmt);
     }

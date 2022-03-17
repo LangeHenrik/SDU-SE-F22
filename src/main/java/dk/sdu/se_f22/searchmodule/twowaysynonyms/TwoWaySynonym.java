@@ -5,6 +5,8 @@ import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 public class TwoWaySynonym implements DatabaseOperator {
@@ -111,6 +113,22 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public boolean delete(String synonym) {
+        PreparedStatement statement = null;
+
+        try{
+            statement = conn.prepareStatement("DELETE FROM twoway_synonym_temp WHERE synonym = ?");
+
+            statement.setObject(1, synonym);
+
+            int row = statement.executeUpdate();
+
+            if(row > 0){
+                return true;
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
         return false;
     }
 

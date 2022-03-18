@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.database;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,33 +16,48 @@ public class Database implements DatabaseInterface {
         return null;
     }
 
+    /** This method will search the database for a filter matching the id given, and will return a representation of this filter.
+     *
+     * @param id The id to query for in the database
+     * @return an instance of {@link DBRangeFilter} if succesful otherwise null, if the result contained either no filter with this id or contained more than 1 (black magic, it can't)
+     */
     @Override
     public DBRangeFilter read(int id) {
+        // currently only works for a Double Filter
         Connection connection = DBConnection.getConnection();
+        DBRangeFilter dbRangeFilter = null;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Filters WHERE FilterId = ?");
-            ps.setString(1, String.valueOf(id));
+            //Change the table queried to reflect the actual type.
+            //The current plan is that we will create a stored function, which can retrieve the filter from the correct table/view
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM SortingRangeDoubleView WHERE FilterId = ?");
+            ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
-            DBRangeFilter dbRangeFilter = new DBRangeFilter(
-                    resultSet.getInt("FilterId"),
-                    resultSet.getString("Description"),
-                    resultSet.getString("Name"),
-                    resultSet.getString("ProductAttribute"),
-                    resultSet.getDouble("Min"),
-                    resultSet.getDouble("Max")
-                    );
+            if (resultSet.next()){
+                dbRangeFilter = new DBRangeFilter(
+                        resultSet.getInt("FilterId"),
+                        resultSet.getString("Description"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("ProductAttribute"),
+                        //The below two lines assume the filter read is a Double filter
+                        resultSet.getDouble("Min"),
+                        resultSet.getDouble("Max")
+                );
+            }
+
             if (resultSet.next()){
 //                throw up;
             //uncommented because: pseudocode
             }
 
-//            return dbRangeFilter;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+//        if(dbRangeFilter == null){
+//            throw new InvalidFilterIdException("invalid id when reading from the database");
+//        }
+        //uncommented because it may not actually be the desired behaviour
+        return dbRangeFilter;
     }
 
     @Override

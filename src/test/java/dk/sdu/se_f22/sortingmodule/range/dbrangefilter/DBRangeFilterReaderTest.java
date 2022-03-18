@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
 import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
+import dk.sdu.se_f22.sortingmodule.range.database.Database;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;

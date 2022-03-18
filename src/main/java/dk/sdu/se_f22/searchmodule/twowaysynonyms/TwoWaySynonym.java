@@ -109,8 +109,15 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return                  UUID of updated Synonym
      */
     @Override
-    public String updateGroupID(String synonym, String relatedSynonym) {
-        return null;
+    public boolean updateGroupID(String synonym, String relatedSynonym) {
+        Integer group_id = read(relatedSynonym).groupId();
+        String format = "UPDATE twoway_synonym SET group_id = ? WHERE synonym = ?";
+        ArrayList<Object> args = new ArrayList<>(){{
+            add(group_id);
+            add(synonym);
+        }};
+        PreparedStatement statement = getPreparedStatement(format, args);
+        return (updateDatabase(statement) > 0);
     }
 
     /**
@@ -120,8 +127,14 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return                  UUID of updated Synonym
      */
     @Override
-    public String updateSpelling(String synonym, String correctedSpelling) {
-        return null;
+    public boolean updateSpelling(String synonym, String correctedSpelling) {
+        String statementFormat = "UPDATE twoway_synonym SET synonym = ? WHERE synonym = ?";
+        ArrayList<Object> args = new ArrayList<>(){{
+            add(correctedSpelling);
+            add(synonym);
+        }};
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        return updateDatabase(stmt) > 0;
     }
 
     /**
@@ -131,7 +144,10 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public boolean delete(String synonym) {
-        return false;
+        String statementFormat = "DELETE FROM twoway_synonym WHERE synonym = ?";
+        ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        return updateDatabase(stmt) > 0;
     }
 
     /**

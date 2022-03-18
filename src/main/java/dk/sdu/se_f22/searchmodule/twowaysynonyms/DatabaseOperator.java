@@ -9,8 +9,8 @@ public interface DatabaseOperator extends Filterable {
     String create(String synonym, String groupMember);
     Synonym read(String synonym);
     ArrayList<Synonym> readAll(String synonym);
-    String updateGroupID(String synonym, String relatedSynonym);
-    String updateSpelling(String synonym, String correctedSpelling);
+    boolean updateGroupID(String synonym, String relatedSynonym);
+    boolean updateSpelling(String synonym, String correctedSpelling);
     boolean delete(String synonym);
 }
 

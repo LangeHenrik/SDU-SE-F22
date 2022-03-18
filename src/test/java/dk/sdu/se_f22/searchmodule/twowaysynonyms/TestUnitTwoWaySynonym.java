@@ -5,7 +5,6 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -98,6 +97,41 @@ public class TestUnitTwoWaySynonym {
         ArrayList<Synonym> actualResult = operator.readAll(_defaultSynonym);
         // ASSERT
         assertEquals(_defaultRelatedSynonymCollection.size(), actualResult.size());
+    }
+
+    @Test
+    @DisplayName("Delete synonym")
+    public void testDeleteSynonym() {
+        // ARRANGE
+        operator.create(_defaultSynonym);
+        // ACT
+        boolean status = operator.delete(_defaultSynonym);
+        // ASSERT
+        assertTrue(status);
+    }
+
+    @Test
+    @DisplayName("Update synonym spelling")
+    public void testUpdateSpelling() {
+        // ARRANGE
+        operator.create(_defaultSynonym);
+        String expectedResult = "COMPUTER";
+        // ACT
+        operator.updateSpelling(_defaultSynonym, "COMPUTER");
+        // ASSERT
+        assertEquals(operator.read(expectedResult).synonym(), expectedResult);
+    }
+
+    @Test
+    @DisplayName("Update group id of synonym")
+    public void testUpdateGroupId(){
+        // ARRANGE
+        operator.create(_defaultSynonym);
+        operator.create("PC");
+        // ACT
+        operator.updateGroupID("PC", _defaultSynonym);
+        // ASSERT
+        assertEquals(operator.read(_defaultSynonym).groupId(), operator.read("PC").groupId());
     }
 
     private static void TruncateDB() {

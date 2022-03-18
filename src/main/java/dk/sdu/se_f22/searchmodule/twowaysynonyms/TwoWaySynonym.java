@@ -56,7 +56,7 @@ public class TwoWaySynonym implements DatabaseOperator {
     /**
      * Retrieve the data from the database related to the given synonym
      * @param synonym   Word to receive synonyms for
-     * @return          ResultSet of all matching synonyms
+     * @return          ArrayList of all matching synonyms
      */
     @Override
     public ArrayList<Synonym> readAll(String synonym) {
@@ -82,7 +82,7 @@ public class TwoWaySynonym implements DatabaseOperator {
     /**
      * Retrieve a single synonym from the database
      * @param synonym   Word to search for
-     * @return          ResultSet containing the found synonym
+     * @return          Synonym Record of found synonym
      */
     @Override
     public Synonym read(String synonym) {

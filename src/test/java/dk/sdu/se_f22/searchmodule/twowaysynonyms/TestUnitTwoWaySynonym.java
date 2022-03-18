@@ -13,13 +13,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TestUnitTwoWaySynonym {
-    Connection conn = DBConnection.getConnection();
+    static Connection conn = DBConnection.getConnection();
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     static String _defaultSynonym;
     static ArrayList<Synonym> _defaultRelatedSynonymCollection;
 
     @BeforeAll
     static void setUp() {
+        TruncateDB();
         _defaultSynonym = "Computer";
         _defaultRelatedSynonymCollection = new ArrayList<Synonym>(){{
             add(new Synonym("sduconst-0000-0000-1000-000const0001", "PC", 1));
@@ -29,12 +30,7 @@ public class TestUnitTwoWaySynonym {
 
     @AfterEach
     public void tearDown() {
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY ");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        TruncateDB();
     }
 
     @Test
@@ -102,5 +98,14 @@ public class TestUnitTwoWaySynonym {
         ArrayList<Synonym> actualResult = operator.readAll(_defaultSynonym);
         // ASSERT
         assertEquals(_defaultRelatedSynonymCollection.size(), actualResult.size());
+    }
+
+    private static void TruncateDB() {
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY ");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

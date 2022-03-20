@@ -29,6 +29,15 @@ public class Database implements DatabaseInterface {
         try {
             //Change the table queried to reflect the actual type.
             //The current plan is that we will create a stored function, which can retrieve the filter from the correct table/view
+
+            // Scratch the comment above, the plan has changed to this:
+            // First get the type of the filter by calling the stored function:
+            // "SELECT get_type_of_filter(filter_id);"
+            // where filter_id is the id we are interested in retrieving
+            // Then get the filter from the correct view by using the now known data type
+            // This can be done by calling the stored function: (e.g. for type double)
+            // "SELECT * from get_double_filter(filter_id);"
+
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM SortingRangeDoubleView WHERE FilterId = ?");
             ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();

@@ -13,35 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class DBRangeFilterReaderTest {
-    @Nested
-    @DisplayName("Read RangeFiltersFromDB")
-    class createDbFilters {
-    }
 
-    /*
-    Ancient relic of the past...
-    public boolean equals(DBRangeFilter DBRF1, DBRangeFilter DBRF2) {
-        if (DBRF1.getId() == DBRF2.getId()) {
-            if (DBRF1.getName() == DBRF2.getName()) {
-                if (DBRF1.getDescription() == DBRF2.getDescription()) {
-                    if (DBRF1.getProductAttribute() == DBRF2.getProductAttribute()) {
-                        if (DBRF1.getMin() == DBRF2.getMin()) {
-                            if (DBRF1.getMax() == DBRF2.getMax()) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-    */
-    
-    @Nested
-    @DisplayName("Read rangeFilters")
-    class readRangeFilters {
         DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
         static List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
         static DatabaseInterface db = MockDatabase.getInstance();
@@ -82,4 +54,3 @@ public class DBRangeFilterReaderTest {
             );
         }
     }
-}

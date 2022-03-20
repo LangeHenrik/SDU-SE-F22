@@ -8,10 +8,12 @@ import java.util.List;
 public class DBRangeFilterCRUD implements IDBRangeFilterCRUD{
     DBRangeFilterCreator creator;
     DBRangeFilterReader reader;
+    DBRangeFilterDeleter deleter;
 
     public DBRangeFilterCRUD(){
         creator = new DBRangeFilterCreator();
         reader = new DBRangeFilterReader();
+        deleter = new DBRangeFilterDeleter();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class DBRangeFilterCRUD implements IDBRangeFilterCRUD{
 
     @Override
     public DBRangeFilter delete(int id) throws InvalidFilterIdException {
-        return null;
+        return deleter.deleteRangeFilter(id);
     }
 
     @Override

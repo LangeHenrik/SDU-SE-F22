@@ -30,11 +30,9 @@ public class DBRangeFilterDeleterTest {
     @BeforeEach
     public void setup (){
         cleanUp();
-        for(DBRangeFilter filter: dbFilters){
-            plads1 = db.create(filter).getId();
-            plads2 = db.create(filter).getId();
-            plads3 = db.create(filter).getId();
-        }
+        plads1 = db.create(dbFilters.get(0)).getId();
+        plads2 = db.create(dbFilters.get(1)).getId();
+        plads3 = db.create(dbFilters.get(2)).getId();
         System.out.println(db.readAllFilters().toString());
     }
 
@@ -74,13 +72,13 @@ public class DBRangeFilterDeleterTest {
     @DisplayName("Delete filter twice")
     void deleteFilterTwice() {
         try {
-            dbRangeFilterDeleter.deleteRangeFilter(0);
+            dbRangeFilterDeleter.deleteRangeFilter(plads1);
         } catch (InvalidFilterIdException e) {
             e.printStackTrace();
         }
 
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> dbRangeFilterDeleter.deleteRangeFilter(0)
+                () -> dbRangeFilterDeleter.deleteRangeFilter(plads1)
         );
     }
 }

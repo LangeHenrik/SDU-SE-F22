@@ -17,19 +17,34 @@ public class DBRangeFilterReaderTest {
         DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
         static List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
         static DatabaseInterface db = MockDatabase.getInstance();
+        int plads1;
+        int plads2;
+        int plads3;
 
-        @BeforeAll
-        public static void setup (){
+        @BeforeEach
+        public void setup (){
+            cleanUp();
             for(DBRangeFilter filter: dbFilters){
-                db.create(filter);
+                plads1 = db.create(filter).getId();
+                plads2 = db.create(filter).getId();
+                plads3 = db.create(filter).getId();
             }
+            System.out.println(db.readAllFilters().toString());
+        }
+
+        @AfterEach
+        public void cleanUp (){
+            db.delete(plads1);
+            db.delete(plads2);
+            db.delete(plads3);
+            System.out.printf(dbFilters.toString());
         }
 
         @Test
         @DisplayName("Test getRangeFilter with valid id")
         void testGetRangeFilterWithValidId() {
             try {
-                Assertions.assertEquals(db.read(0),dbRangeFilterReader.getRangeFilter(0));
+                Assertions.assertEquals(db.read(plads1),dbRangeFilterReader.getRangeFilter(plads1));
             } catch (InvalidFilterIdException e) {
                 fail("Id didnt exist");
             }
@@ -40,7 +55,7 @@ public class DBRangeFilterReaderTest {
         void testGetRangeFilterWithInvalidId() {
             Assertions.assertThrows(InvalidFilterIdException.class,
                     () -> dbRangeFilterReader
-                            .getRangeFilter(dbRangeFilterReader.getRangeFilters().size()+1)
+                            .getRangeFilter(-1)
             );
         }
 
@@ -48,9 +63,9 @@ public class DBRangeFilterReaderTest {
         @DisplayName("Test getRangeFilters")
         void testGetRangeFilters() {
             Assertions.assertAll("Testing that the objects in the array are the same as the ones in the hashmap",
-                    () -> Assertions.assertEquals(db.readAllFilters().get(0), dbRangeFilterReader.getRangeFilters().get(0)),
-                    () -> Assertions.assertEquals(db.readAllFilters().get(1), dbRangeFilterReader.getRangeFilters().get(1)),
-                    () -> Assertions.assertEquals(db.readAllFilters().get(2), dbRangeFilterReader.getRangeFilters().get(2))
+                    () -> Assertions.assertEquals(db.readAllFilters().get(plads1), dbRangeFilterReader.getRangeFilters().get(plads1)),
+                    () -> Assertions.assertEquals(db.readAllFilters().get(plads2), dbRangeFilterReader.getRangeFilters().get(plads2)),
+                    () -> Assertions.assertEquals(db.readAllFilters().get(plads3), dbRangeFilterReader.getRangeFilters().get(plads3))
             );
         }
     }

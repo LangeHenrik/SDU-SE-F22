@@ -6,13 +6,14 @@ import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,63 +23,64 @@ public class DBRangeFilterDeleterTest {
     DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
     static List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
     static DatabaseInterface db = MockDatabase.getInstance();
+    static int plads1;
+    static int plads2;
+    static int plads3;
 
-    @BeforeAll
-    public static void setup (){
+    @BeforeEach
+    public void setup (){
+        cleanUp();
         for(DBRangeFilter filter: dbFilters){
-            db.create(filter);
+            plads1 = db.create(filter).getId();
+            plads2 = db.create(filter).getId();
+            plads3 = db.create(filter).getId();
         }
+        System.out.println(db.readAllFilters().toString());
+    }
+
+    @AfterEach
+    public void cleanUp (){
+        db.delete(plads1);
+        db.delete(plads2);
+        db.delete(plads3);
+        System.out.printf(dbFilters.toString());
     }
 
     @Test
     @DisplayName("Delete valid filter")
-    @ValueSource(ints = {0, 1, 2})
-    void deleteValidFilter(int input) {
+    void deleteValidFilter() {
         Assertions.assertAll("Test deleteRangeFilter method using a valid id",
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(input),dbFilters.get(input))
+                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads1),dbFilters.get(0)),
+                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads2),dbFilters.get(1)),
+                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads3),dbFilters.get(2))
         );
 
-//        assertThrows(IndexOutOfBoundsException.class,
-//                () -> dbRangeFilterReader.getRangeFilter(input)
-//        );
-    }
 
-    @Test
-    @DisplayName("Delete invalid filter")
-    @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE})
-    void deleteInvalidFilter(int input) {
-        Assertions.assertAll("Test deleteRangeFilter method using an invalid id",
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(input),dbFilters.get(input))
-        );
-
-    }
-
-    @Test
-    @DisplayName("Test getRangeFilter with valid id")
-    void testGetRangeFilterWithValidId() {
-        try {
-            Assertions.assertEquals(db.read(0),dbRangeFilterReader.getRangeFilter(0));
-        } catch (InvalidFilterIdException e) {
-            fail("Id didnt exist");
-        }
-    }
-
-    @Test
-    @DisplayName("Test getRangeFilter with invalid id")
-    void testGetRangeFilterWithInvalidId() {
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> dbRangeFilterReader
-                        .getRangeFilter(dbRangeFilterReader.getRangeFilters().size()+1)
+                () -> dbRangeFilterReader.getRangeFilter(plads1)
+        );
+    }
+
+    @ParameterizedTest
+    @DisplayName("Delete invalid filter")
+    @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE, Integer.MAX_VALUE})
+    void deleteInvalidFilter(int input) {
+        Assertions.assertThrows(InvalidFilterIdException.class,
+                () -> dbRangeFilterDeleter.deleteRangeFilter(input)
         );
     }
 
     @Test
-    @DisplayName("Test getRangeFilters")
-    void testGetRangeFilters() {
-        Assertions.assertAll("Testing that the objects in the array are the same as the ones in the hashmap",
-                () -> Assertions.assertEquals(db.readAllFilters().get(0), dbRangeFilterReader.getRangeFilters().get(0)),
-                () -> Assertions.assertEquals(db.readAllFilters().get(1), dbRangeFilterReader.getRangeFilters().get(1)),
-                () -> Assertions.assertEquals(db.readAllFilters().get(2), dbRangeFilterReader.getRangeFilters().get(2))
+    @DisplayName("Delete filter twice")
+    void deleteFilterTwice() {
+        try {
+            dbRangeFilterDeleter.deleteRangeFilter(0);
+        } catch (InvalidFilterIdException e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertThrows(InvalidFilterIdException.class,
+                () -> dbRangeFilterDeleter.deleteRangeFilter(0)
         );
     }
 }

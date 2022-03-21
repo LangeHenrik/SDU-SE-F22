@@ -1,4 +1,8 @@
 DROP FUNCTION IF EXISTS get_type_of_filter;
+DROP function if exists get_long_filter;
+DROP function if exists get_time_filter;
+DROP function if exists get_double_filter;
+
 DROP TRIGGER IF EXISTS trg_double_view_insert_trigger ON SortingRangeDoubleView;
 DROP TRIGGER IF EXISTS trg_time_view_insert_trigger ON SortingRangeTimeView;
 DROP TRIGGER IF EXISTS trg_long_view_insert_trigger ON sortingrangelongview;
@@ -228,7 +232,8 @@ end;
 $$
     language plpgsql;
 
-DROP function if exists get_double_filter;
+
+
 create or replace function get_double_filter(filter_id_input integer)
     returns SortingRangeDoubleView
 as
@@ -242,8 +247,37 @@ end;
 $$
     language plpgsql;
 
+
+
+create or replace function get_long_filter(filter_id_input integer)
+    returns SortingRangeLongView
+as
+$$
+DECLARE result record;
+BEGIN
+    SELECT * from SortingRangeLongView where filter_id_input = SortingRangeLongView.filterId into result;
+    RETURN result;
+
+end;
+$$
+    language plpgsql;
+
+
+create or replace function get_time_filter(filter_id_input integer)
+    returns SortingRangeTimeView
+as
+$$
+DECLARE result record;
+BEGIN
+    SELECT * from SortingRangeTimeView where filter_id_input = SortingRangeTimeView.filterId into result;
+    RETURN result;
+
+end;
+$$
+    language plpgsql;
+
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);
-SELECT * FROM get_double_filter(1);
+SELECT * FROM get_double_filter(3);
 
 

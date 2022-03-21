@@ -24,7 +24,7 @@ public class DBRangeFilterReader implements ReadRangeFilterInterface {
         // Refactor needed
         // In this implementation, you make the same call to the database twice,
         // you should use a local variable instead, like:
-        // DBRangeFilter result = database.read(id);
+//        DBRangeFilter result = database.read(id);
         if (database.read(id) == null) {
             throw new InvalidFilterIdException("Invalid id");
         }

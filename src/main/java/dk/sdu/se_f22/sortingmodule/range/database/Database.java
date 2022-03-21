@@ -34,10 +34,74 @@ public class Database implements DatabaseInterface {
             // First get the type of the filter by calling the stored function:
             // "SELECT get_type_of_filter(filter_id);"
             // where filter_id is the id we are interested in retrieving
-            // Then get the filter from the correct view by using the now known data type
-            // This can be done by calling the stored function: (e.g. for type double)
-            // "SELECT * from get_double_filter(filter_id);"
+            PreparedStatement typeStatement = connection.prepareStatement("SELECT get_type_of_filter(?);");
+            typeStatement.setInt(1, id);
+            ResultSet typeResult = typeStatement.executeQuery();
+            if (typeResult.next()){
+                // Then get the filter from the correct view by using the now known data type
+                // This can be done by calling the stored function: (e.g. for type double)
+                // "SELECT * from get_double_filter(filter_id);"
+                ResultSet filterResultSet;
+                switch (typeResult.getString(1)){
+                    case "Double":
+                        filterResultSet = getSpecificFilter(connection, "get_double_filter", id);
+                        if (filterResultSet.next()){
+                            dbRangeFilter = new DBRangeFilter(
+                                    filterResultSet.getInt("FilterId"),
+                                    filterResultSet.getString("Description"),
+                                    filterResultSet.getString("Name"),
+                                    filterResultSet.getString("ProductAttribute"),
+                                    //The below two lines assume the filter read is a Double filter
+                                    filterResultSet.getDouble("Min"),
+                                    filterResultSet.getDouble("Max")
+                            );
+                        }
+                        break;
+                    case "Long":
+                        filterResultSet = getSpecificFilter(connection, "get_long_filter", id);
+                        if (filterResultSet.next()){
+                            dbRangeFilter = new DBRangeFilter(
+                                    filterResultSet.getInt("FilterId"),
+                                    filterResultSet.getString("Description"),
+                                    filterResultSet.getString("Name"),
+                                    filterResultSet.getString("ProductAttribute"),
+                                    //The below two lines assume the filter read is a Double filter
+                                    filterResultSet.getLong("Min"),
+                                    filterResultSet.getLong("Max")
+                            );
+                        }
+                        break;
+                    case "Time":
+                        filterResultSet = getSpecificFilter(connection, "get_time_filter", id);
+                        if (filterResultSet.next()){
+                            dbRangeFilter = new DBRangeFilter(
+                                    filterResultSet.getInt("FilterId"),
+                                    filterResultSet.getString("Description"),
+                                    filterResultSet.getString("Name"),
+                                    filterResultSet.getString("ProductAttribute"),
+                                    //The below two lines assume the filter read is a Double filter
+                                    filterResultSet.getTimestamp("Min").toInstant(),
+                                    filterResultSet.getTimestamp("Max").toInstant()
+                            );
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
+                if (filterResultSet.next()){
+                    // This means we somehow got 2 filters returned
+//                throw up;
+                    //uncommented because: pseudocode
+                }
+            }
+
+
+/* Commented because it is an olf implementation, which is getting yeeted
+// It is kept in as a comment to give the group a chance to compare the old vs the new implementation
+// Will get deleted ASAP
+
+            // old
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM SortingRangeDoubleView WHERE FilterId = ?");
             ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
@@ -57,6 +121,7 @@ public class Database implements DatabaseInterface {
 //                throw up;
             //uncommented because: pseudocode
             }
+            */
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,6 +132,12 @@ public class Database implements DatabaseInterface {
 //        }
         //uncommented because it may not actually be the desired behaviour
         return dbRangeFilter;
+    }
+
+    private ResultSet getSpecificFilter(Connection conn, String sqlFunction, int id) throws SQLException {
+        PreparedStatement getDoubleFilterStatement = conn.prepareStatement("SELECT * from " + sqlFunction + "(?);");
+        getDoubleFilterStatement.setInt(1, id);
+        return getDoubleFilterStatement.executeQuery();
     }
 
     @Override

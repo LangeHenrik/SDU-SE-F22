@@ -21,11 +21,11 @@ public class DBRangeFilterDeleterTest {
 
     DBRangeFilterDeleter dbRangeFilterDeleter = new DBRangeFilterDeleter();
     DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
-    static List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
-    static DatabaseInterface db = MockDatabase.getInstance();
-    static int plads1;
-    static int plads2;
-    static int plads3;
+    List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
+    DatabaseInterface db = MockDatabase.getInstance();
+    int plads1;
+    int plads2;
+    int plads3;
 
     @BeforeEach
     public void setup (){
@@ -33,7 +33,7 @@ public class DBRangeFilterDeleterTest {
         plads1 = db.create(dbFilters.get(0)).getId();
         plads2 = db.create(dbFilters.get(1)).getId();
         plads3 = db.create(dbFilters.get(2)).getId();
-        System.out.println(db.readAllFilters().toString());
+//        System.out.println(db.readAllFilters().toString());
     }
 
     @AfterEach
@@ -41,40 +41,57 @@ public class DBRangeFilterDeleterTest {
         db.delete(plads1);
         db.delete(plads2);
         db.delete(plads3);
-        System.out.printf(dbFilters.toString());
+//        System.out.println(dbFilters.toString());
     }
 
     @Test
-    @DisplayName("Delete valid filter")
+    @DisplayName("Delete valid filters")
     void deleteValidFilter() {
         Assertions.assertAll("Test deleteRangeFilter method using a valid id",
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads1),dbFilters.get(0)),
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads2),dbFilters.get(1)),
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads3),dbFilters.get(2))
+                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads1), dbFilters.get(0)),
+                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads2), dbFilters.get(1)),
+                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads3), dbFilters.get(2))
         );
 
-
-        Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> dbRangeFilterReader.getRangeFilter(plads1)
+        assertAll(
+                () -> Assertions.assertThrows(InvalidFilterIdException.class,
+                        () -> dbRangeFilterReader.getRangeFilter(plads1)
+                ),
+                () -> Assertions.assertThrows(InvalidFilterIdException.class,
+                        () -> dbRangeFilterReader.getRangeFilter(plads2)
+                ),
+                () -> Assertions.assertThrows(InvalidFilterIdException.class,
+                        () -> dbRangeFilterReader.getRangeFilter(plads3)
+                )
         );
+
+//        Assertions.assertThrows(InvalidFilterIdException.class,
+//                () -> dbRangeFilterReader.getRangeFilter(plads1)
+//        );
     }
 
     @ParameterizedTest
-    @DisplayName("Delete invalid filter")
-    @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE, Integer.MAX_VALUE})
+    @DisplayName("Delete invalid filter throws exception")
+    @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE, Integer.MAX_VALUE, 0})
     void deleteInvalidFilter(int input) {
+        if (input == 0){
+            input = ++plads3;
+        }
+
+        final int testInput = input;
+
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> dbRangeFilterDeleter.deleteRangeFilter(input)
+                () -> dbRangeFilterDeleter.deleteRangeFilter(testInput)
         );
     }
 
     @Test
-    @DisplayName("Delete filter twice")
+    @DisplayName("Delete filter twice throws exception")
     void deleteFilterTwice() {
         try {
             dbRangeFilterDeleter.deleteRangeFilter(plads1);
         } catch (InvalidFilterIdException e) {
-            e.printStackTrace();
+            fail();
         }
 
         Assertions.assertThrows(InvalidFilterIdException.class,

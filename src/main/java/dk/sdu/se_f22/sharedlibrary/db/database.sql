@@ -56,10 +56,6 @@ CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL
 );
-CREATE TABLE StemmingException (
-    id SERIAL PRIMARY KEY,
-    exceptionName varchar(50) UNIQUE NOT NULL
-);
 
 CREATE TABLE TokenParameters(
     id serial PRIMARY KEY,

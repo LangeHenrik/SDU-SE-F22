@@ -1,43 +1,61 @@
 package dk.sdu.se_f22.productmodule.index;
 
 
-import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfIndex;
-import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearch;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+// Requires ProductHit from group 4.4 and works it gets approved and merged
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class ProductIndex implements ProductInfIndex, ProductInfSearch {
-    @Override
-    public void indexProducts(List<Product> products) {
+public class ProductIndex implements IProductIndex{
 
-    }
+    // Method for finding amount of hits within a product by a token, then returning an indexed list by the hits
+    public List<ProductHit> indexProductsByToken(List<ProductHit> products, List<String> token) {
 
-    @Override
-    public List<Product> searchProducts(List<String> tokens) {
-        JSONParser parser = new JSONParser();
+        int categoryHits = 0;
+        int nameHits = 0;
+        int descriptionHits = 0;
+        List<ProductHit> sortedList = new ArrayList<>();
 
-        try {
-            FileReader fileReader = new FileReader("/Users/mathiaspetersen/Documents/GitHub/SDU-SE-F22/src/main/java/dk/sdu/se_f22/productmodule/index/products.json");
-            Object obj = parser.parse(fileReader);
-            JSONArray employeeList = (JSONArray) obj;
-            System.out.println(employeeList);
-        } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        for (int i = 0; i < products.size(); i++) {
+            for (int n = 0; n < token.size(); n++) {
+                String[] categoryWords = products.get(i).getCategory().toLowerCase().split("/");
+                String[] nameWords = products.get(i).getName().toLowerCase().split(" ");
+                String[] descriptionWords = products.get(i).getDescription().toLowerCase().split(" ");
+
+
+                for (String cateElem : categoryWords) {
+                    if (cateElem.contains(token.get(n).toLowerCase())) {
+                        categoryHits += 1;
+                    }
+                }
+                for (String nameElem : nameWords) {
+                    if (nameElem.contains(token.get(n).toLowerCase())) {
+                        nameHits += 1;
+                    }
+                }
+                for (String descElem : descriptionWords) {
+                    if (descElem.contains(token.get(n).toLowerCase())) {
+                        descriptionHits += 1;
+                    }
+                }
+            }
+            int total = categoryHits + nameHits + descriptionHits;
+            /*
+            System.out.printf("Product: " + i +
+                            "\nCategory hit counter: %4d " +
+                            "\nName hit counter: %8d " +
+                            "\nDescription hit counter: %d " +
+                            "\nTotal: %19d\n\n",
+                            categoryHits, nameHits, descriptionHits, total);
+            */
+            products.get(i).setHitNum(total);
+            sortedList.add(products.get(i));
+            Collections.sort(sortedList);
+
+
+            categoryHits = 0;
+            nameHits = 0;
+            descriptionHits = 0;
         }
-        return null;
+        return sortedList;
     }
-
 }

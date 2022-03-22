@@ -38,3 +38,9 @@ CREATE TABLE Config(
     brandIndexInterval INTEGER NOT NULL
 );
 
+DROP TABLE IF EXISTS SearchTokenDelimiterSettings;
+
+CREATE TABLE SearchTokenDelimiterSettings (
+    id serial PRIMARY KEY,
+    delimiter VARCHAR NOT NULL UNIQUE
+);

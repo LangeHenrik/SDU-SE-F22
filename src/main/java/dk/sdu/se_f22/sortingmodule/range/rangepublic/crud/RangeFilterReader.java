@@ -2,7 +2,6 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
@@ -25,7 +24,7 @@ public class RangeFilterReader implements ReadRangeFilterInterface {
         // Refactor needed
         // In this implementation, you make the same call to the database twice,
         // you should use a local variable instead, like:
-//        DBRangeFilter result = database.read(id);
+//        RangeFilter result = database.read(id);
         if (database.read(id) == null) {
             throw new InvalidFilterIdException("Invalid id");
         }

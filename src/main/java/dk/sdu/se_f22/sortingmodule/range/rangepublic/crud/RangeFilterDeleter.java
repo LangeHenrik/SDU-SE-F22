@@ -2,8 +2,6 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.database.Database;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
-import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 

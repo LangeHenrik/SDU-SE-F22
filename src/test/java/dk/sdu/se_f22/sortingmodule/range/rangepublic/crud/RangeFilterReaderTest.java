@@ -36,7 +36,7 @@ public class RangeFilterReaderTest {
         db.delete(id1);
         db.delete(id2);
         db.delete(id3);
-        System.out.printf(filters.toString());
+        System.out.println(filters.toString());
     }
 
     @Test

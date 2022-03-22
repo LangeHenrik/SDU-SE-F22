@@ -1,14 +1,10 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.PopulateFromCsv;
+import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
 import dk.sdu.se_f22.sortingmodule.range.database.Database;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
-import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterDeleter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -21,7 +17,7 @@ public class RangeFilterDeleterTest {
 
     RangeFilterDeleter rangeFilterDeleter = new RangeFilterDeleter();
     RangeFilterReader rangeFilterReader = new RangeFilterReader();
-    List<RangeFilter> filters = PopulateFromCsv.readFiltersFromCSV("ValidRangeFilters.csv");
+    List<RangeFilter> filters = PopulateDBFromCsv.readFiltersFromCSV("ValidRangeFilters.csv");
     DatabaseInterface db = new Database();
     int id1;
     int id2;

@@ -9,7 +9,7 @@ public interface DeleteRangeFilterInterface {
      * and deletes the filter corresponding with the id given as a parameter. <br>
      * Throws InvalidFilterIdException
      * @param id Integer
-     * @return DBRangeFilter
+     * @return RangeFilter
      */
     RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException;
 }

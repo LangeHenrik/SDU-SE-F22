@@ -8,8 +8,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SearchSettingsTest {
-    SearchSettings ss;
+class DelimiterSettingsTest {
+    DelimiterSettings ss;
     List<String> initialArray;
 
     @BeforeEach
@@ -17,7 +17,7 @@ class SearchSettingsTest {
         initialArray = new ArrayList<>();
         initialArray.add(" ");
         initialArray.add("p{Punct}");
-        ss = new SearchSettings();
+        ss = new DelimiterSettings();
     }
 
     @Test

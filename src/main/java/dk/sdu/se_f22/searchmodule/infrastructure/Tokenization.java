@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Tokenization {
     private SearchModuleUtils searchModuleUtils = new SearchModuleUtils();
-    private SearchSettings ss = new SearchSettings();
+    private DelimiterSettings ss = DelimiterSettings.getInstance();
     private List<String> stringList = ss.getDelimiters();
 
     public List<String> tokenize(String s) {

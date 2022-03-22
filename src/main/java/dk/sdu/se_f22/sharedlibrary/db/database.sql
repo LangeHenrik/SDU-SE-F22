@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS BrandProductTypeJunction;
 DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
-
+DROP TABLE IF EXISTS StemmingException;
 
  --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
  --og kalder hver gruppes seedDatabase()-metode
@@ -38,3 +38,11 @@ CREATE TABLE Config(
     brandIndexInterval INTEGER NOT NULL
 );
 
+CREATE TABLE StemmingException (
+    id SERIAL PRIMARY KEY,
+    exceptionName varchar(50) UNIQUE NOT NULL
+);
+CREATE TABLE StemmingException (
+    id SERIAL PRIMARY KEY,
+    exceptionName varchar(50) UNIQUE NOT NULL
+);

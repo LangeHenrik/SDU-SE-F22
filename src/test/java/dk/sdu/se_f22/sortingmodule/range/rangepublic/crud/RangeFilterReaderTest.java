@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class RangeFilterReaderTest {
     RangeFilterReader rangeFilterReader = new RangeFilterReader();
-    static List<RangeFilter> filters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
+    static List<RangeFilter> filters = PopulateDBFromCsv.readFiltersFromCSV("ValidDBRangeFilters.csv");
     static DatabaseInterface db = new Database();
     int id1;
     int id2;

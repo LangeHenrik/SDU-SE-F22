@@ -4,7 +4,6 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ class ProductManagerTest {
         try {
             FileWriter fw = new FileWriter("src/test/resources/dk/sdu/se_f22/productmodule/management/cheese.txt");
             fw.write("");
+            fw.flush();
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();

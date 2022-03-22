@@ -15,5 +15,5 @@ public interface RangeFilterInterface {
      *  @param rangeFilters The rangefilters to use for filtering the search hits
      * @return The {@link SearchHits} object, where the products attribute now contains the filtered list
      */
-    SearchHits filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters) throws InvalidFilterIdException;
+    SearchHits filterResults(SearchHits searchHits, List<OldRangeFilter> rangeFilters) throws InvalidFilterIdException;
 }

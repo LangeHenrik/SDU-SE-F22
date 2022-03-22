@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.OldRangeFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,8 +57,8 @@ public class Helpers {
         return attributeMap;
     }
 
-    public static List<RangeFilter> readRangeFiltersFromFile(String fileName){
-        List<RangeFilter> mockResults = new ArrayList<>();
+    public static List<OldRangeFilter> readRangeFiltersFromFile(String fileName){
+        List<OldRangeFilter> mockResults = new ArrayList<>();
 
         List<String> filters = Helpers.readFromCSV(fileName);
 
@@ -71,7 +71,7 @@ public class Helpers {
                 continue;
             }
 
-            mockResults.add(new RangeFilter(Integer.parseInt(filterSplit[0]), Double.parseDouble(filterSplit[1]), Double.parseDouble(filterSplit[2])));
+            mockResults.add(new OldRangeFilter(Integer.parseInt(filterSplit[0]), Double.parseDouble(filterSplit[1]), Double.parseDouble(filterSplit[2])));
         }
 
         return mockResults;

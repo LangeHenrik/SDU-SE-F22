@@ -36,7 +36,7 @@ public class RangeFilterCreator implements RangeFilterInterface {
         return true;
     }
 
-    public InternalFilter createInternalFilter(RangeFilter filterToCheck) throws InvalidFilterIdException {
+    public InternalFilter createInternalFilter(OldRangeFilter filterToCheck) throws InvalidFilterIdException {
         //check if the filter exists in the database
         //if it doesn't, or min, max is invalid
 //        return null;
@@ -57,10 +57,10 @@ public class RangeFilterCreator implements RangeFilterInterface {
      * @return The {@link SearchHits} object that was given as input, but where the products Colloction have been filtered
      * using the filters specified in rangeFilters param.
      */
-    public SearchHits filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters) throws InvalidFilterIdException {
+    public SearchHits filterResults(SearchHits searchHits, List<OldRangeFilter> rangeFilters) throws InvalidFilterIdException {
         Collection productHits = searchHits.getProducts();
 
-        for (RangeFilter rangeFilter : rangeFilters) {
+        for (OldRangeFilter rangeFilter : rangeFilters) {
             InternalFilter iFilter = this.createInternalFilter(rangeFilter);
 
             if (iFilter == null) {

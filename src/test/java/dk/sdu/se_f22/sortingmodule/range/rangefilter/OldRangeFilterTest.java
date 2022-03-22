@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class RangeFilterTest {
+class OldRangeFilterTest {
     private RangeFilterInterface rangeFilterInterface;
     private List<RangeSearchResultMock> mockResults;
-    private List<RangeFilter> mockFilters;
+    private List<OldRangeFilter> mockFilters;
 
     @BeforeEach
     void setup() {

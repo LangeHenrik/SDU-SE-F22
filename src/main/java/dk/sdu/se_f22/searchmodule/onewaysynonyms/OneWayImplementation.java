@@ -14,12 +14,20 @@ public class OneWayImplementation implements OneWayInterface {
 
     @Override
     public void createItem() {
-        db.addItem("Cake");
+        try {
+            db.addItem("Cake");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void changeItemPlacement() {
-        db.updateSuperId("Cake", 2);
+        try {
+            db.updateSuperId("Cake", 2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -36,7 +44,11 @@ public class OneWayImplementation implements OneWayInterface {
 
     @Override
     public void changeItemName() {
-        db.updateName(1, "Football");
+        try {
+            db.updateName(1, "Football");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

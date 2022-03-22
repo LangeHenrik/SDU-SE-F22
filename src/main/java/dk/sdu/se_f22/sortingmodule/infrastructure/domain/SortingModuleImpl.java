@@ -69,10 +69,8 @@ public class SortingModuleImpl implements SortingModule {
     @Override
     public SearchHits search() {
         SearchModuleImpl searchModule = new SearchModuleImpl();
-
-        SearchHits searchHits = searchModule.search(this.searchString);
-
-        return searchHits;
+      
+        return searchModule.search(this.searchString);
     }
     
     private void saveSearch() {

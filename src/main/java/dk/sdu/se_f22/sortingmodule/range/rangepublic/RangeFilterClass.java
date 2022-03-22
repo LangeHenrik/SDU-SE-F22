@@ -40,6 +40,7 @@ abstract class RangeFilterClass implements RangeFilter{
         if (!this.DESCRIPTION.equals(casted.getDescription())) {
             return false;
         }
+        //noinspection RedundantIfStatement
         if (!this.PRODUCT_ATTRIBUTE.equals(casted.getProductAttribute())) {
             return false;
         }

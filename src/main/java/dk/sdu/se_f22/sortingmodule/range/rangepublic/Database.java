@@ -38,7 +38,8 @@ public class Database implements DatabaseInterface {
                     return dbRangeFilter;
                 }
                 // Then get the filter from the correct view by using the now known data type
-                ResultSet filterResultSet = null;
+                ResultSet filterResultSet;
+                //noinspection EnhancedSwitchMigration
                 switch (typeResult.getString(1)){
                     case "Double":
                         filterResultSet = getSpecificFilter(connection, "get_double_filter", id);
@@ -84,6 +85,7 @@ public class Database implements DatabaseInterface {
                         throw new UnknownFilterTypeException("The filter type retrieved from the database, does not match implemented types");
                 }
 
+                //noinspection StatementWithEmptyBody
                 if (filterResultSet.next()){
                     // This means we somehow got 2 filters returned
 //                throw up;

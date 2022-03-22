@@ -74,26 +74,28 @@ public class Database implements DatabaseInterface {
                     case "Time":
                         filterResultSet = getSpecificFilter(connection, "get_time_filter", id);
                         if (filterResultSet.next()){
-                            dbRangeFilter = new DBRangeFilter(
-                                    filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
-                                    filterResultSet.getString("Name"),
-                                    filterResultSet.getString("ProductAttribute"),
-                                    //The below two lines assume the filter read is a Double filter
-                                    filterResultSet.getTimestamp("Min").toInstant(),
-                                    filterResultSet.getTimestamp("Max").toInstant()
-                            );
+//                            dbRangeFilter = new DBRangeFilter(
+//                                    filterResultSet.getInt("FilterId"),
+//                                    filterResultSet.getString("Description"),
+//                                    filterResultSet.getString("Name"),
+//                                    filterResultSet.getString("ProductAttribute"),
+//                                    //The below two lines assume the filter read is a Double filter
+//                                    filterResultSet.getTimestamp("Min").toInstant(),
+//                                    filterResultSet.getTimestamp("Max").toInstant()
+//                            );
+                            // Commented because: compile error
                         }
                         break;
                     default:
                         break;
                 }
 
-                if (filterResultSet.next()){
-                    // This means we somehow got 2 filters returned
-//                throw up;
-                    //uncommented because: pseudocode
-                }
+//                if (filterResultSet.next()){
+//                    // This means we somehow got 2 filters returned
+////                throw up;
+//                    //commented because: pseudocode
+//                }
+                //commented because compile error
             }
 
 

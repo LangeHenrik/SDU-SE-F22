@@ -7,6 +7,7 @@ import java.util.List;
 public interface IPersistence {
     Brand getBrand(int id);
     Brand getBrand(String name);
+    public List<Brand> getAllBrands();
     void deleteBrand(int id);
     void deleteBrand(Brand brand);
     void databaseIndexer();

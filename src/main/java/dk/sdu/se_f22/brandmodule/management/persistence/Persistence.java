@@ -32,6 +32,31 @@ public class Persistence implements IPersistence {
     public Brand getBrand(String name) {
         return brandGetter(name, null);
     }
+    
+    @Override
+    public List<Brand> getAllBrands() {
+        List<Brand> brandList = new ArrayList<>();
+
+        try {
+            List<Integer> brandIdList = new ArrayList();
+
+            PreparedStatement getBrandId = c.prepareStatement("SELECT id FROM brand");
+            ResultSet r = getBrandId.executeQuery();
+
+            while(r.next()){
+                brandIdList.add(r.getInt(1));
+            }
+
+            for (int i : brandIdList ){
+                brandList.add(getBrand(i));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return brandList;
+    }
 
     private Brand brandGetter(String name, Integer id) {
         setAutoCommit(true);
@@ -42,17 +67,20 @@ public class Persistence implements IPersistence {
 
             ResultSet r;
             if(name == null) {
-                PreparedStatement getBrand = c.prepareStatement(String.format("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
+                PreparedStatement getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
                         "inner join brand on bpj.brandid = brand.id " +
                         "inner join producttype on bpj.productid = producttype.id " +
-                        "where brandid = '%d';", id));
+                        "where brandid = ?;");
+                getBrand.setInt(1,id);
+
 
                 r = getBrand.executeQuery();
             } else{
-                PreparedStatement getBrand = c.prepareStatement(String.format("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
+                PreparedStatement getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
                         "inner join brand on bpj.brandid = brand.id " +
                         "inner join producttype on bpj.productid = producttype.id " +
-                        "where brand.name = '%s';", name));
+                        "where brand.name = ?");
+                getBrand.setString(1,"name");
                 r = getBrand.executeQuery();
             }
             Set<String> productSet = new HashSet<>();
@@ -98,10 +126,13 @@ public class Persistence implements IPersistence {
         try {
             // Delete from both Brand and Junction table
             // Products may be used by another brand, so it won't be deleted
-            PreparedStatement deleteBrandJunction = c.prepareStatement(String.format("DELETE FROM BrandProductTypeJunction where brandid = '%d'", id));
-            PreparedStatement deleteBrand = c.prepareStatement(String.format("DELETE FROM Brand where id = '%d'", id));
+            PreparedStatement deleteBrandJunction = c.prepareStatement("DELETE FROM BrandProductTypeJunction where brandid = ?");
+            PreparedStatement deleteBrand = c.prepareStatement(("DELETE FROM Brand where id = ?"));
 
+            deleteBrandJunction.setInt(1,id);
             deleteBrandJunction.execute();
+
+            deleteBrand.setInt(1,id);
             deleteBrand.execute();
 
 
@@ -126,18 +157,20 @@ public class Persistence implements IPersistence {
 
             // Insert products into database
             for (var product : products) {
-                PreparedStatement insertAllProducts = c.prepareStatement(String.format("INSERT INTO ProductType (name) VALUES ('%s') ON CONFLICT DO NOTHING;", product));
+                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO ProductType (name) VALUES (?) ON CONFLICT DO NOTHING;");
 
+                insertAllProducts.setString(1, product);
                 insertAllProducts.execute();
             }
 
             /* ------ Insert all brands ------ */
             for (var brand : brands) {
-                PreparedStatement insertAllBrands = c.prepareStatement(String.format("INSERT INTO Brand (name, description, founded, headquarters) VALUES ('%s','%s','%s','%s') ON CONFLICT DO NOTHING;",
-                        brand.getName(),
-                        brand.getDescription().replaceAll("'", "''"),
-                        brand.getFounded(),
-                        brand.getHeadquarters()));
+                PreparedStatement insertAllBrands = c.prepareStatement("INSERT INTO Brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT DO NOTHING;");
+
+                insertAllBrands.setString(1, brand.getName());
+                insertAllBrands.setString(2,brand.getDescription().replaceAll("'", "''"));
+                insertAllBrands.setString(3,brand.getFounded());
+                insertAllBrands.setString(4, brand.getHeadquarters());
 
                 insertAllBrands.execute();
             }
@@ -146,7 +179,8 @@ public class Persistence implements IPersistence {
             Integer brandId = null;
             Integer productId = null;
             for (var brand : brands) {
-                PreparedStatement getBrandName = c.prepareStatement(String.format("SELECT id FROM Brand WHERE name = '%s';", brand.getName()));
+                PreparedStatement getBrandName = c.prepareStatement("SELECT id FROM Brand WHERE name = ?;");
+                getBrandName.setString(1, brand.getName());
                 ResultSet brandResult = getBrandName.executeQuery();
 
                 // Get brand id, for junction table
@@ -156,14 +190,18 @@ public class Persistence implements IPersistence {
 
                 // Get product id, for junction table
                 for (var product : products) {
-                    PreparedStatement getProductId = c.prepareStatement(String.format("SELECT id FROM ProductType WHERE name = '%s';", product));
+                    PreparedStatement getProductId = c.prepareStatement("SELECT id FROM ProductType WHERE name = ?;");
+                    getProductId.setString(1,product);
                     ResultSet productResult = getProductId.executeQuery();
 
                     if (productResult.next()) {
                         productId = productResult.getInt("id");
 
                         // With both brand and product id, junction table can be filled
-                        PreparedStatement insertIntoJunction = c.prepareStatement(String.format("INSERT INTO BrandProductTypeJunction (Brandid, Productid) values ('%s', '%s')", brandId, productId));
+                        PreparedStatement insertIntoJunction = c.prepareStatement(("INSERT INTO BrandProductTypeJunction (Brandid, Productid) values (?, ?)"));
+
+                        insertIntoJunction.setInt(1,brandId);
+                        insertIntoJunction.setInt(2,productId);
                         insertIntoJunction.execute();
                     }
                 }
@@ -180,7 +218,7 @@ public class Persistence implements IPersistence {
     public void databaseIndexer() {
         setAutoCommit(false);
         try {
-            PreparedStatement indexDatabase = c.prepareStatement(String.format("create index on producttype(name); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);"));
+            PreparedStatement indexDatabase = c.prepareStatement("create index on producttype(name); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);");
             indexDatabase.execute();
             c.commit();
         }  catch (SQLException e) {

@@ -135,6 +135,20 @@ public class TestUnitTwoWaySynonym {
         assertEquals(operator.read(_defaultSynonym).groupId(), operator.read("PC").groupId());
     }
 
+    @Test
+    @DisplayName("Update group id of synonym")
+    public void testFilterMethod(){
+        // ARRANGE
+        ArrayList<String> tokenList = new ArrayList<>();
+        operator.create(_defaultSynonym);
+        operator.create("PC", _defaultSynonym);
+        tokenList.add(_defaultSynonym);
+        // ACT
+        ArrayList<String> results = operator.filter(tokenList);
+        // ASSERT
+        assertTrue(results.contains("PC"));
+    }
+
     private static void TruncateDB() {
         try {
             Statement stmt = conn.createStatement();

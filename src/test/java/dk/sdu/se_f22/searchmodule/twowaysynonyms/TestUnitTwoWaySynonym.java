@@ -139,14 +139,33 @@ public class TestUnitTwoWaySynonym {
     @DisplayName("Update group id of synonym")
     public void testFilterMethod(){
         // ARRANGE
-        ArrayList<String> tokenList = new ArrayList<>();
-        operator.create(_defaultSynonym);
-        operator.create("PC", _defaultSynonym);
-        tokenList.add(_defaultSynonym);
+        ArrayList<String> synonymGroup1 = new ArrayList<>(){{
+            add(_defaultSynonym);
+            add("PC");
+        }};
+        ArrayList<String> synonymGroup2 = new ArrayList<>(){{
+            add("Socks");
+            add("tights");
+        }};
+        operator.create(synonymGroup1.get(0));
+        operator.create(synonymGroup1.get(1), synonymGroup1.get(0));
+        operator.create(synonymGroup2.get(0));
+        operator.create(synonymGroup2.get(1), synonymGroup2.get(0));
+        operator.create("lonely");
+
+        ArrayList<String> tokenList = new ArrayList<>(){{
+            add(synonymGroup1.get(0));
+            add(synonymGroup2.get(0));
+        }};
+
+        ArrayList<String> expectedTokens = new ArrayList<>(){{
+            addAll(synonymGroup1);
+            addAll(synonymGroup2);
+        }};
         // ACT
         ArrayList<String> results = operator.filter(tokenList);
         // ASSERT
-        assertTrue(results.contains("PC"));
+        assertEquals(results, expectedTokens);
     }
 
     private static void TruncateDB() {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bim implements IBim {
-    Persistence persistence = new Persistence();
+    IPersistence persistence = new Persistence();
 
     @Override
     public void createBrand(List<Brand>brands){

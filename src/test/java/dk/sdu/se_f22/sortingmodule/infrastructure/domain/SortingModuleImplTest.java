@@ -4,12 +4,7 @@ import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 public class SortingModuleImplTest {
-
-    @Test
-    void searchTest() {
-        SearchModuleImpl s = new SearchModuleImpl();
-
-        assertNotNull(s.search("Hello World!"));
-    }
 }

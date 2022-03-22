@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IrregularWords implements IIrregularWords{
@@ -72,27 +71,27 @@ return false;
             PreparedStatement PS = connection.prepareStatement("ALTER TABLE irwords ADD COLUMN ? ?");
             PS.setString(1, Cname);
             PS.setString(2, dataType);
+            if(!constraints.equals("")) {
+                addConstraints(Cname, constraints);
+            }
             return PS.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return addConstraints(Cname, constraints);
     }
 
-    private boolean addConstraints(String Cname, String constraints) {
+    private void addConstraints(String Cname, String constraints) {
         if (!constraints.equals("")) {
             try {
                 PreparedStatement ps = connection.prepareStatement("ALTER TABLE irwords ADD ? (?)");
                 ps.setString(1, constraints);
                 ps.setString(2, Cname);
-                return ps.execute();
+                ps.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
-                return false;
             }
         }
-        return true;
     }
 
     @Override
@@ -118,5 +117,6 @@ return false;
 
     public static void main(String[] args) {
         irregularWords.initialize();
+        irregularWords.createIRColumn("int","int","");
     }
 }

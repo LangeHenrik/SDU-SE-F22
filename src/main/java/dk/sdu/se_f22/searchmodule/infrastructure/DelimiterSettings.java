@@ -12,11 +12,11 @@ public class DelimiterSettings {
     public List<String> getDelimiters() {
         try {
             PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
-                    "SELECT delimiter FROM searchtokendelimiters");
+                    "SELECT * FROM searchtokendelimiters");
             ResultSet resultSet = stmt.executeQuery();
             delimiters = new ArrayList<>();
             while (resultSet.next()) {
-                delimiters.add(resultSet.getString(2));
+                delimiters.add(resultSet.getString(1));
             }
             return delimiters;
         } catch (SQLException e) {
@@ -25,7 +25,34 @@ public class DelimiterSettings {
         }
     }
 
-    public void appendDelimiters(String delimiter) {
-        this.delimiters.add(delimiter);
+    public void addDelimiter(String delimiter) {
+        try {
+            PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
+                    "INSERT INTO searchtokendelimiters (delimiter) VALUES (?)");
+            stmt.setString(1, delimiter);
+            stmt.execute();
+
+            System.out.println("Delimiter added.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean removeDelimiter(String delim) {
+        try {
+            PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
+                    "DELETE FROM searchtokendelimiters WHERE delimiter=?"
+            );
+            stmt.setString(1, delim);
+            for (String s : getDelimiters()) {
+                if (s.equals(delim)) {
+                    stmt.execute();
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

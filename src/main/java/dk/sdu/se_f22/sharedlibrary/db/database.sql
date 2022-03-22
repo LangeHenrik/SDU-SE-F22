@@ -41,6 +41,5 @@ CREATE TABLE Config(
 DROP TABLE IF EXISTS SearchTokenDelimiters;
 
 CREATE TABLE SearchTokenDelimiters (
-    id serial PRIMARY KEY,
-    delimiter VARCHAR NOT NULL UNIQUE
+    delimiter VARCHAR PRIMARY KEY
 );

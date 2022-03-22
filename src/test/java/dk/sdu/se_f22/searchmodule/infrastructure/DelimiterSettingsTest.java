@@ -23,7 +23,7 @@ class DelimiterSettingsTest {
     @Test
     void getDelimiters() {
         assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
-        ss.appendDelimiters("m");
+
         initialArray.add("m");
         assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
     }

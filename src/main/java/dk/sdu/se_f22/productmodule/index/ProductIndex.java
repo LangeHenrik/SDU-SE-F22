@@ -7,13 +7,14 @@ import java.util.*;
 
 public class ProductIndex implements IProductIndex{
 
+    private int categoryHits = 0;
+    private int nameHits = 0;
+    private int descriptionHits = 0;
+    private List<ProductHit> sortedList = new ArrayList<>();
+
     // Method for finding amount of hits within a product by a token, then returning an indexed list by the hits
     public List<ProductHit> indexProductsByToken(List<ProductHit> products, List<String> token) {
 
-        int categoryHits = 0;
-        int nameHits = 0;
-        int descriptionHits = 0;
-        List<ProductHit> sortedList = new ArrayList<>();
 
         for (int i = 0; i < products.size(); i++) {
             for (int n = 0; n < token.size(); n++) {

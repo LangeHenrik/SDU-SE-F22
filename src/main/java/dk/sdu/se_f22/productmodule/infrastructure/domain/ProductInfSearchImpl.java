@@ -16,7 +16,6 @@ public class ProductInfSearchImpl implements ProductInfSearch, IndexingModule<Pr
 
     @Override
     public List<Product> queryIndex(List<String> tokens) {
-        // Return PIM3.searchProducts;
-        return new ArrayList<>();
+        return this.searchProducts(tokens);
     }
 }

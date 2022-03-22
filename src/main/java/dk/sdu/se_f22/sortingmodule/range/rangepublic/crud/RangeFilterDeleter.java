@@ -16,9 +16,10 @@ public class RangeFilterDeleter implements DeleteRangeFilterInterface{
 
     @Override
     public RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException, UnknownFilterTypeException {
-        if (database.read(id)==null) {
+        RangeFilter result = database.delete(id);
+        if (result==null) {
             throw new InvalidFilterIdException("Invalid id");
         }
-        return database.delete(id);
+        return result;
     }
 }

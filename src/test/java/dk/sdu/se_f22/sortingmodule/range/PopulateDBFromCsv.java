@@ -1,10 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterCreator;
 
 import java.util.ArrayList;
 import java.util.List;

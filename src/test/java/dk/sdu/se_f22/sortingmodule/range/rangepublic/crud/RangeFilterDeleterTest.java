@@ -5,6 +5,7 @@ import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -44,20 +45,20 @@ public class RangeFilterDeleterTest {
     @DisplayName("Delete valid filters")
     void deleteValidFilter() {
         Assertions.assertAll("Test deleteRangeFilter method using a valid id",
-                () -> Assertions.assertEquals(RangeFilterDeleter.deleteRangeFilter(id1), filters.get(0)),
-                () -> Assertions.assertEquals(RangeFilterDeleter.deleteRangeFilter(id2), filters.get(1)),
-                () -> Assertions.assertEquals(RangeFilterDeleter.deleteRangeFilter(id3), filters.get(2))
+                () -> Assertions.assertEquals(rangeFilterDeleter.deleteRangeFilter(id1), filters.get(0)),
+                () -> Assertions.assertEquals(rangeFilterDeleter.deleteRangeFilter(id2), filters.get(1)),
+                () -> Assertions.assertEquals(rangeFilterDeleter.deleteRangeFilter(id3), filters.get(2))
         );
 
         assertAll(
                 () -> Assertions.assertThrows(InvalidFilterIdException.class,
-                        () -> RangeFilterReader.getRangeFilter(id1)
+                        () -> rangeFilterReader.getRangeFilter(id1)
                 ),
                 () -> Assertions.assertThrows(InvalidFilterIdException.class,
-                        () -> RangeFilterReader.getRangeFilter(id2)
+                        () -> rangeFilterReader.getRangeFilter(id2)
                 ),
                 () -> Assertions.assertThrows(InvalidFilterIdException.class,
-                        () -> RangeFilterReader.getRangeFilter(id3)
+                        () -> rangeFilterReader.getRangeFilter(id3)
                 )
         );
 
@@ -77,7 +78,7 @@ public class RangeFilterDeleterTest {
         final int testInput = input;
 
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> RangeFilterDeleter.deleteRangeFilter(testInput)
+                () -> rangeFilterDeleter.deleteRangeFilter(testInput)
         );
     }
 
@@ -85,13 +86,13 @@ public class RangeFilterDeleterTest {
     @DisplayName("Delete filter twice throws exception")
     void deleteFilterTwice() {
         try {
-            RangeFilterDeleter.deleteRangeFilter(id1);
-        } catch (InvalidFilterIdException e) {
+            rangeFilterDeleter.deleteRangeFilter(id1);
+        } catch (InvalidFilterIdException | UnknownFilterTypeException e) {
             fail();
         }
 
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> RangeFilterDeleter.deleteRangeFilter(id1)
+                () -> rangeFilterDeleter.deleteRangeFilter(id1)
         );
     }
 }

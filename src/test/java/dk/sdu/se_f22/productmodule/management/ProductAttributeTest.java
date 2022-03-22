@@ -2,11 +2,10 @@ package dk.sdu.se_f22.productmodule.management;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductAttributeTest {
-
+    
     @Test
     void values() {
         //Først laver jeg en liste over alle de værdier vi gerne vil have ProductAttribe skal have
@@ -23,7 +22,7 @@ class ProductAttributeTest {
         //Til sidst tjekker vi om de to string arrays indeholder det samme
         assertArrayEquals(sArr, sArr2);
     }
-
+    
     @Test
     void valueOf() {
         //Først laver jeg en liste over alle de værdier vi gerne vil have ProductAttribe skal kunne lave om til enum-værdien af samme navn

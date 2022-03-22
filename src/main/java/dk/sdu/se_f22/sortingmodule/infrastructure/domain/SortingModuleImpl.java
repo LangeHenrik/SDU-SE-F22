@@ -5,17 +5,25 @@ import java.util.ArrayList;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 
+/**
+ * Implemented version of SortingModule
+ */
 public class SortingModuleImpl implements SortingModule {
-
+    /**
+     * The search query object, that holds query information
+     */
     private SearchQuery query;
+    /**
+     * Search text
+     */
     private String searchString;
 
     public SortingModuleImpl() {
-
+        this.query = new SearchQuery();
     }
 
     @Override
-    public void searchString(String searchString) {
+    public void setSearchString(String searchString) {
         this.searchString = searchString;
     }
 
@@ -33,8 +41,7 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public void clearCategory() {
-        // TODO Auto-generated method stub
-        
+        this.query.clearCategory();
     }
 
     @Override
@@ -45,8 +52,7 @@ public class SortingModuleImpl implements SortingModule {
 
     @Override
     public void clearRange() {
-        // TODO Auto-generated method stub
-        
+        this.query.clearRange();
     }
 
     @Override
@@ -66,8 +72,7 @@ public class SortingModuleImpl implements SortingModule {
 
         SearchHits searchHits = searchModule.search(this.searchString);
 
-        // TODO Auto-generated method stub
-        return null;
+        return searchHits;
     }
     
     private void saveSearch() {

@@ -10,10 +10,7 @@ public class Main {
         HTMLParser parser = new HTMLParser("src/index.html");
         String parsedHTML = parser.parseHTML();
 
-
         ArrayList<String> tokens = Tokenizer.tokenizeString(parsedHTML);
-
-
 
         Database database = new Database();
         database.setupDatabase();

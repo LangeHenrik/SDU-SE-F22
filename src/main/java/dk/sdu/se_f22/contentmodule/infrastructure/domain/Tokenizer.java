@@ -3,8 +3,8 @@ package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class Tokenizer {
-    public static ArrayList<String> tokenizeString(String text) {
+class Tokenizer {
+    static ArrayList<String> tokenizeString(String text) {
         String[] splittedString = text.split("[-.,;:_ ]");
         ArrayList<String> tokens = new ArrayList();
 
@@ -15,5 +15,6 @@ public class Tokenizer {
             }
         }
         return tokens;
+        //filterStopwords(tokens); //preparation for chain reaction, change method to void, remove return statement
     }
 }

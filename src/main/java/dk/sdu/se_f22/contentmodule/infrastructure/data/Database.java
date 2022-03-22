@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.data;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class Database implements DatabaseInterface {
             statement=conn.createStatement();
             statement.executeUpdate(query);
             System.out.println("Table created");
-        }catch (Exception e) {
+        }catch (SQLException e) {
             //System.out.println(e);
         }
     }
@@ -51,7 +52,7 @@ public class Database implements DatabaseInterface {
             }
             statement.executeBatch();
             statement.close();
-        } catch(Exception e){
+        } catch(SQLException e){
             //System.out.println(e);
         }
     }
@@ -71,6 +72,8 @@ public class Database implements DatabaseInterface {
         }
         return tokens;
     }
+
+
 
     public void saveFilteredTokens(ArrayList<String> tokens) {
         throw new UnsupportedOperationException("Not yet implemented");

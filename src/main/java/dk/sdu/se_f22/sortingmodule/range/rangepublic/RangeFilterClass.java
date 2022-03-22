@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -23,6 +24,26 @@ abstract class RangeFilterClass implements RangeFilter{
 
     public abstract Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs);
 
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof RangeFilterClass casted)){
+            return false;
+        }
+
+        if (this.ID != casted.getId()) {
+            return false;
+        }
+        if (!this.NAME.equals(casted.getName())) {
+            return false;
+        }
+        if (!this.DESCRIPTION.equals(casted.getDescription())) {
+            return false;
+        }
+        if (!this.PRODUCT_ATTRIBUTE.equals(casted.getProductAttribute())) {
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public int getId() {

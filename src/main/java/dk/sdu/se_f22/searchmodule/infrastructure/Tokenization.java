@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Tokenization {
     private SearchModuleUtils searchModuleUtils = new SearchModuleUtils();
-    private DelimiterSettings ss = new DelimiterSettings();
-    private List<String> stringList = ss.getDelimiters();
+    private DelimiterSettings delimiterSettings = new DelimiterSettings();
+    private List<String> stringList = delimiterSettings.getDelimiters();
 
     public List<String> tokenize(String s) {
         String[] string = s.split(searchModuleUtils.convertDelimitersToRegex(stringList));

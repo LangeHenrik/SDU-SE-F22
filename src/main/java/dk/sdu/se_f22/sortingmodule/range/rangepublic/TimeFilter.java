@@ -24,6 +24,37 @@ public class TimeFilter extends RangeFilterClass{
         return FilterTypes.INSTANT;
     }
 
+
+    @Override
+    public boolean equals(Object other) {
+        if(! super.equals(other)) {
+            return false;
+        }
+
+        if(! (other instanceof TimeFilter otherFilter)){
+            return false;
+        }
+
+        if(otherFilter.getDbMinInstant() != this.getDbMinInstant()){
+            return false;
+        }
+
+        if(otherFilter.getDbMaxInstant() != this.getDbMaxInstant()){
+            return false;
+        }
+
+        if(otherFilter.getUserMinInstant() != this.getUserMinInstant()){
+            return false;
+        }
+
+        if(otherFilter.getUserMaxInstant() != this.getUserMaxInstant()){
+            return false;
+        }
+
+        return true;
+
+    }
+
     @Override
     public Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs) {
         // Filter inputs based on min and max value.

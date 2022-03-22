@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.UnknownFilterTypeException;
 
 public interface DeleteRangeFilterInterface {
     /**
@@ -11,5 +12,5 @@ public interface DeleteRangeFilterInterface {
      * @param id Integer
      * @return RangeFilter
      */
-    RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException;
+    RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException, UnknownFilterTypeException;
 }

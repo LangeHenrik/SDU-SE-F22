@@ -23,6 +23,36 @@ public class LongFilter extends RangeFilterClass{
         return FilterTypes.LONG;
     }
 
+
+    @Override
+    public boolean equals(Object other) {
+        if(! super.equals(other)) {
+            return false;
+        }
+
+        if(! (other instanceof LongFilter otherFilter)){
+            return false;
+        }
+
+        if(otherFilter.getDbMinLong() != this.getDbMinLong()){
+            return false;
+        }
+
+        if(otherFilter.getDbMaxLong() != this.getDbMaxLong()){
+            return false;
+        }
+
+        if(otherFilter.getUserMinLong() != this.getUserMinLong()){
+            return false;
+        }
+
+        if(otherFilter.getUserMaxLong() != this.getUserMaxLong()){
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs) {
         // Filter inputs based on min and max value.

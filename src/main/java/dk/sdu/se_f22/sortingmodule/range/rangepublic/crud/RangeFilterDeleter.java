@@ -1,9 +1,11 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.database.Database;
-import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
+
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.UnknownFilterTypeException;
 
 public class RangeFilterDeleter implements DeleteRangeFilterInterface{
     private DatabaseInterface database;
@@ -13,7 +15,7 @@ public class RangeFilterDeleter implements DeleteRangeFilterInterface{
     }
 
     @Override
-    public RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException {
+    public RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException, UnknownFilterTypeException {
         if (database.read(id)==null) {
             throw new InvalidFilterIdException("Invalid id");
         }

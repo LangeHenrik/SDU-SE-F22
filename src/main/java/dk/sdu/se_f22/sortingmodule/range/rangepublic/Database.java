@@ -1,31 +1,30 @@
-package dk.sdu.se_f22.sortingmodule.range.database;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.List;
 
 public class Database implements DatabaseInterface {
     @Override
-    public DBRangeFilter create(DBRangeFilter filter) {
+    public RangeFilter create(RangeFilter filter) {
         return null;
     }
+
 
     /** This method will search the database for a filter matching the id given, and will return a representation of this filter.
      *
      * @param id The id to query for in the database
-     * @return an instance of {@link DBRangeFilter} if succesful otherwise null, if the result contained either no filter with this id or contained more than 1 (black magic, it can't)
+     * @return an instance of {@link RangeFilter} if succesful otherwise null, if the result contained either no filter with this id or contained more than 1 (black magic, it can't)
      */
     @Override
-    public DBRangeFilter read(int id) {
-        // currently only works for a Double Filter and long filter
+    public RangeFilter read(int id) throws UnknownFilterTypeException {
         Connection connection = DBConnection.getConnection();
-        DBRangeFilter dbRangeFilter = null;
+        RangeFilter dbRangeFilter = null;
         try {
             //Change the table queried to reflect the actual type.
             //The current plan is that we will create a stored function, which can retrieve the filter from the correct table/view
@@ -42,14 +41,12 @@ public class Database implements DatabaseInterface {
                     return dbRangeFilter;
                 }
                 // Then get the filter from the correct view by using the now known data type
-                // This can be done by calling the stored function: (e.g. for type double)
-                // "SELECT * from get_double_filter(filter_id);"
-                ResultSet filterResultSet;
+                ResultSet filterResultSet = null;
                 switch (typeResult.getString(1)){
                     case "Double":
                         filterResultSet = getSpecificFilter(connection, "get_double_filter", id);
                         if (filterResultSet.next()){
-                            dbRangeFilter = new DBRangeFilter(
+                            dbRangeFilter = new DoubleFilter(
                                     filterResultSet.getInt("FilterId"),
                                     filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
@@ -63,12 +60,11 @@ public class Database implements DatabaseInterface {
                     case "Long":
                         filterResultSet = getSpecificFilter(connection, "get_long_filter", id);
                         if (filterResultSet.next()){
-                            dbRangeFilter = new DBRangeFilter(
+                            dbRangeFilter = new LongFilter(
                                     filterResultSet.getInt("FilterId"),
                                     filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
                                     filterResultSet.getString("ProductAttribute"),
-                                    //The below two lines assume the filter read is a Double filter
                                     filterResultSet.getLong("Min"),
                                     filterResultSet.getLong("Max")
                             );
@@ -77,27 +73,25 @@ public class Database implements DatabaseInterface {
                     case "Time":
                         filterResultSet = getSpecificFilter(connection, "get_time_filter", id);
                         if (filterResultSet.next()){
-//                            dbRangeFilter = new DBRangeFilter(
-//                                    filterResultSet.getInt("FilterId"),
-//                                    filterResultSet.getString("Description"),
-//                                    filterResultSet.getString("Name"),
-//                                    filterResultSet.getString("ProductAttribute"),
-//                                    //The below two lines assume the filter read is a Double filter
-//                                    filterResultSet.getTimestamp("Min").toInstant(),
-//                                    filterResultSet.getTimestamp("Max").toInstant()
-//                            );
-                            // Commented because: compile error
+                            dbRangeFilter = new TimeFilter(
+                                    filterResultSet.getInt("FilterId"),
+                                    filterResultSet.getString("Description"),
+                                    filterResultSet.getString("Name"),
+                                    filterResultSet.getString("ProductAttribute"),
+                                    filterResultSet.getTimestamp("Min").toInstant(),
+                                    filterResultSet.getTimestamp("Max").toInstant()
+                            );
                         }
                         break;
                     default:
-                        break;
+                        throw new UnknownFilterTypeException("The filter type retrieved from the database, does not match implemented types");
                 }
 
-//                if (filterResultSet.next()){
-//                    // This means we somehow got 2 filters returned
-////                throw up;
-//                    //commented because: pseudocode
-//                }
+                if (filterResultSet.next()){
+                    // This means we somehow got 2 filters returned
+//                throw up;
+                    //commented because: pseudocode
+                }
                 //commented because compile error
             }
 
@@ -146,17 +140,18 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public DBRangeFilter update(DBRangeFilter filter) {
+    public RangeFilter update(RangeFilter filter) {
         return null;
     }
 
     @Override
-    public DBRangeFilter delete(int id) {
+    public RangeFilter delete(int id) {
         return null;
     }
 
+
     @Override
-    public List<DBRangeFilter> readAllFilters() {
+    public List<RangeFilter> readAllFilters() {
         return null;
     }
 }

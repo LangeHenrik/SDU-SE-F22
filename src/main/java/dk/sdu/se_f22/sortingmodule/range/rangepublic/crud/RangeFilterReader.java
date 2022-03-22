@@ -1,8 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
-import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class RangeFilterReader implements ReadRangeFilterInterface {
     private DatabaseInterface database;
 
     public RangeFilterReader() {
-        database = MockDatabase.getInstance();
+        database = new Database();
     }
 
     @Override

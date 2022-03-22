@@ -24,6 +24,36 @@ public class DoubleFilter extends RangeFilterClass{
     }
 
     @Override
+    public boolean equals(Object other) {
+        if(! super.equals(other)) {
+            return false;
+        }
+
+        if(! (other instanceof DoubleFilter otherFilter)){
+            return false;
+        }
+
+        if(otherFilter.getDbMinDouble() != this.getDbMinDouble()){
+            return false;
+        }
+
+        if(otherFilter.getDbMaxDouble() != this.getDbMaxDouble()){
+            return false;
+        }
+
+        if(otherFilter.getUserMinDouble() != this.getUserMinDouble()){
+            return false;
+        }
+
+        if(otherFilter.getUserMaxDouble() != this.getUserMaxDouble()){
+            return false;
+        }
+        
+        return true;
+
+    }
+
+    @Override
     public Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max

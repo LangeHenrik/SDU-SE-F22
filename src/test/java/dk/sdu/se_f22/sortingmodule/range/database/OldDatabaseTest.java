@@ -1,25 +1,23 @@
 package dk.sdu.se_f22.sortingmodule.range.database;
 
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DatabaseTest {
+class OldDatabaseTest {
 
-    private Database database;
+    private OldDatabase oldDatabase;
 
     @BeforeEach
     void setup() {
-        database = new Database();
+        oldDatabase = new OldDatabase();
     }
 
 
@@ -36,7 +34,7 @@ class DatabaseTest {
 //        double filterMin = Double.parseDouble(min);
 //        double filterMax = Double.parseDouble(max);
         // All lines above are commented because it turns out that CSV sources can automatically parse input data
-        DBRangeFilter dbTestFilter = database.read(id);
+        DBRangeFilter dbTestFilter = oldDatabase.read(id);
         Assertions.assertAll(
                 () -> assertEquals(id, dbTestFilter.getId()),
                 () -> assertEquals(name, dbTestFilter.getName()),
@@ -61,7 +59,7 @@ class DatabaseTest {
         // The mock database simply returns null, so that is the functionality described in the interface
         // The exception is then subsequently thrown by another method
 
-        assertNull(database.read(inputId));
+        assertNull(oldDatabase.read(inputId));
     }
 
     @Test

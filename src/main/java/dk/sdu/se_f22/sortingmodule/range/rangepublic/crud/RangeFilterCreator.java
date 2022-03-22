@@ -1,12 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
-import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.DoubleFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.LongFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.TimeFilter;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
 
 import java.time.Instant;
@@ -15,7 +10,7 @@ public class RangeFilterCreator implements IRangeFilterCreator {
     DatabaseInterface database;
 
     public RangeFilterCreator() {
-        this.database = MockDatabase.getInstance();
+        this.database = new Database();
     }
 
     @Override
@@ -43,7 +38,7 @@ public class RangeFilterCreator implements IRangeFilterCreator {
 
         Validator.MaxLessThanMin(min,max);
 
-        return new LongFilter(id, description, name, productAttribute, min, max);
+        return database.create(new LongFilter(id, description, name, productAttribute, min, max));
     }
 
     @Override

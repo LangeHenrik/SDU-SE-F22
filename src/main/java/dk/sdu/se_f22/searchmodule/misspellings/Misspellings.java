@@ -91,7 +91,7 @@ public class Misspellings implements DatabaseOperator{
         System.out.println("The misspelling " + word + " was deleted.");
     }
 
-    public void updateMisspellingIfExist(){
+    public void updateMisspellings(){
         Scanner scanner = new Scanner(System.in);
 
         try {
@@ -135,7 +135,7 @@ public class Misspellings implements DatabaseOperator{
         Misspellings mis = new Misspellings();
         //mis.addMispellings();
         //mis.deleteMispellings();
-        //mis.updateMisspellingIfExist();
+        //mis.updateMisspellings();
       
         /*ArrayList<String> strings = new ArrayList<String>();
         strings.add("HEJ");

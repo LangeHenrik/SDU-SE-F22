@@ -5,27 +5,43 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MisspellingsTest {
+    Misspellings misspelling = new Misspellings();
 
     @BeforeEach
     void setUp() {
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void filter() {
+        ArrayList<String> listWrong = new ArrayList<String>();
+        listWrong.add("HEJ");
+        listWrong.add("HAJ");
+        listWrong.add("HIJ");
+        listWrong.add("HEJ");
 
+        ArrayList<String> listCorrect = new ArrayList<String>();
+        listCorrect.add("HEJ");
+        listCorrect.add("HEJ");
+        listCorrect.add("HEJ");
+        listCorrect.add("HEJ");
+
+
+        try {
+            assertEquals(listCorrect, misspelling.filter(listWrong));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     void addMisspellings() {
+        
 
     }
 
@@ -37,5 +53,9 @@ class MisspellingsTest {
     @Test
     void updateMisspellings() {
 
+    }
+
+    @AfterEach
+    void tearDown() {
     }
 }

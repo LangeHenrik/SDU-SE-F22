@@ -1,8 +1,11 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,25 +17,55 @@ class DelimiterSettingsTest {
 
     @BeforeEach
     void setUp() {
-        initialArray = new ArrayList<>();
-        initialArray.add(" ");
-        initialArray.add("p{Punct}");
         ss = new DelimiterSettings();
+        try {
+            PreparedStatement stmt = DBConnection.getConnection().prepareStatement("DELETE FROM searchtokendelimiters");
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     void getDelimiters() {
-        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
+        assertArrayEquals(new String[0], ss.getDelimiters().toArray());
 
-        initialArray.add("m");
-        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
+        ss.addDelimiter("hello");
+
+        var delimiters = ss.getDelimiters();
+        var expectedDelimiters = List.of("hello");
+
+        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
+        ss.addDelimiter("hello");
+
+        delimiters = ss.getDelimiters();
+        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
     }
 
     @Test
-    void appendDelimiters() {
-        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
-        ss.appendDelimiters("m");
-        initialArray.add("m");
-        assertArrayEquals(initialArray.toArray(), ss.getDelimiters().toArray());
+    void addDelimiters(){
+        assertArrayEquals(new String[0], ss.getDelimiters().toArray());
+
+        ss.addDelimiter("hello");
+
+        var delimiters = ss.getDelimiters();
+        var expectedDelimiters = List.of("hello");
+
+        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
+        ss.addDelimiter("hello");
+
+        delimiters = ss.getDelimiters();
+        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
+    }
+
+    @Test
+    void removeDelimiter(){
+        ss.addDelimiter("hello");
+        var expectedDelimiters = List.of("hello");
+
+        assertArrayEquals(expectedDelimiters.toArray(), ss.getDelimiters().toArray());
+
+        ss.removeDelimiter("hello");
+        assertArrayEquals(new String[0], ss.getDelimiters().toArray());
     }
 }

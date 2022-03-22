@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class SearchModuleImpl implements SearchModule {
     private final Set<Filterable> filteringModules;
     private final Set<IndexingModule<?>> indexingModules;
+    private DelimiterSettings ss = new DelimiterSettings();
 
     public SearchModuleImpl() {
         this.indexingModules = new HashSet<>();
@@ -77,4 +78,20 @@ public class SearchModuleImpl implements SearchModule {
 
         return searchHits;
     }
+
+    @Override
+    public List<String> getDelimiters() {
+        return ss.getDelimiters();
+    }
+
+    @Override
+    public void addDelimiter(String delimiter) {
+        ss.addDelimiter(delimiter);
+    }
+
+    @Override
+    public boolean removeDelimiter(String delim) {
+        return ss.removeDelimiter(delim);
+    }
+
 }

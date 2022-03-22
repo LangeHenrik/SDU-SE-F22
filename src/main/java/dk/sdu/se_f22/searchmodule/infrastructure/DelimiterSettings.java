@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,7 +20,8 @@ public class DelimiterSettings {
                 delimiters.add(resultSet.getString(1));
             }
             return delimiters;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -33,6 +35,8 @@ public class DelimiterSettings {
             stmt.execute();
 
             System.out.println("Delimiter added.");
+        } catch (PSQLException ex){
+            System.out.println("This delimiter already exist");
         } catch (SQLException e) {
             e.printStackTrace();
         }

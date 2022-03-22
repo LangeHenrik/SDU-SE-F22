@@ -16,6 +16,7 @@ public class TestUnitTwoWaySynonym {
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     static String _defaultSynonym;
     static ArrayList<Synonym> _defaultRelatedSynonymCollection;
+    static ArrayList<String> _defaultExpectedSynonymCollection;
 
     @BeforeAll
     static void setUp() {
@@ -24,6 +25,12 @@ public class TestUnitTwoWaySynonym {
         _defaultRelatedSynonymCollection = new ArrayList<Synonym>(){{
             add(new Synonym("sduconst-0000-0000-1000-000const0001", "PC", 1));
             add(new Synonym("sduconst-0000-0000-1000-000const0002", "Computer", 1));
+        }};
+        _defaultExpectedSynonymCollection = new ArrayList<String>(){{
+            add("Computer");
+            add("PC");
+            add("Processor");
+            add("CPU");
         }};
     }
 
@@ -139,14 +146,16 @@ public class TestUnitTwoWaySynonym {
     @DisplayName("Update group id of synonym")
     public void testFilterMethod(){
         // ARRANGE
-        ArrayList<String> tokenList = new ArrayList<>();
+        ArrayList<String> tokens = new ArrayList<>(){{add("PC"); add("CPU");}};;
         operator.create(_defaultSynonym);
         operator.create("PC", _defaultSynonym);
-        tokenList.add(_defaultSynonym);
+        operator.create("Processor");
+        operator.create("CPU", "Processor");
+        operator.create("Havenisse");
         // ACT
-        ArrayList<String> results = operator.filter(tokenList);
+        ArrayList<String> actualOutput =  operator.filter(tokens);
         // ASSERT
-        assertTrue(results.contains("PC"));
+        assertEquals(_defaultExpectedSynonymCollection, actualOutput);
     }
 
     private static void TruncateDB() {

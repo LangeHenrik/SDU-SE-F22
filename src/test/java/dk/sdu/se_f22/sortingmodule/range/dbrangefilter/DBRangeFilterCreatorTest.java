@@ -156,21 +156,20 @@ class DBRangeFilterCreatorTest {
         String productAttribute = "price";
         double min = 0;
         double max = 800;
+        final int[] id = new int[1];
 
         Assertions.assertDoesNotThrow(
-                () -> dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max)
+                () -> id[0] = dbRangeFilterCreator.createRangeFilter(description, name, productAttribute, min, max).getId()
         );
-
-        int id = 0;
 
         DBRangeFilter retrievedFilter = null;
         try {
-            retrievedFilter = dbRangeFilterReader.getRangeFilter(id);
+            retrievedFilter = dbRangeFilterReader.getRangeFilter(id[0]);
         } catch (InvalidFilterIdException e) {
             fail("Id does not exist");
         }
 
-        Assertions.assertEquals(id, retrievedFilter.getId());
+        Assertions.assertEquals(id[0], retrievedFilter.getId());
     }
 
 }

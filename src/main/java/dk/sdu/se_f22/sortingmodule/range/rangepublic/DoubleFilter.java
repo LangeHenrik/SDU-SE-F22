@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-class DoubleFilter extends RangeFilterClass{
+public class DoubleFilter extends RangeFilterClass{
     private final double DB_MIN;
     private final double DB_MAX;
     private double userMin;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-class TimeFilter extends RangeFilterClass{
+public class TimeFilter extends RangeFilterClass{
     private final Instant DB_MIN;
     private final Instant DB_MAX;
     private Instant userMin;

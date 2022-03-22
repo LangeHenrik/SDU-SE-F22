@@ -64,10 +64,7 @@ public class SortingModuleImpl implements SortingModule {
     public SearchHits search() {
         SearchModuleImpl searchModule = new SearchModuleImpl();
 
-        SearchHits searchHits = searchModule.search(this.searchString);
-
-        // TODO Auto-generated method stub
-        return null;
+        return searchModule.search(this.searchString);
     }
     
     private void saveSearch() {

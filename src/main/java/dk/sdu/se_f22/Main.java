@@ -13,12 +13,13 @@ public class Main {
         operator.create("PC", "Computer");
         System.out.println(operator.read("Software").toString());
 
-        ArrayList<String> asd = new ArrayList<>(){
-        };
+        ArrayList<String> asd = new ArrayList<>();
 
         asd.add("Computer");
+        asd.add("Computer");
+        asd.add("Computer");
+        asd.add("Computer");
         asd.add("Software");
-
 
         operator.filter(asd);
     }

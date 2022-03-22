@@ -3,10 +3,7 @@ package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.postgresql.util.PSQLException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 public class TwoWaySynonym implements DatabaseOperator {
     private TwoWaySynonym() {}
@@ -162,11 +159,17 @@ public class TwoWaySynonym implements DatabaseOperator {
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) {
         ArrayList<String> args = new ArrayList<>();
+        Set<Integer> unique = new TreeSet<>();
+
         for(String token : tokens){
-            readAll(token).forEach(s -> args.add(s.synonym()));
+            int groupId = read(token).groupId();
+
+            var statement = unique.contains(groupId) ?  null : unique.add(groupId);
         }
 
-        args.forEach(s -> System.out.println(s));
+        for(Integer groupId : unique){
+            readAll(groupId).forEach(s -> args.add(s.synonym()));
+        }
 
         return args;
     }

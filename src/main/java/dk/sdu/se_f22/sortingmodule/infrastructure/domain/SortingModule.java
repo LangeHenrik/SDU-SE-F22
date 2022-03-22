@@ -4,13 +4,16 @@ import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
+/**
+ * Search product, brand and content with range- and category filtering and scoring as well as pagination
+ */
 public interface SortingModule {
     /**
      * Set the search string the users enters, when searching
      *
      * @param searchString A text string from user
      */
-    public void searchString(String searchString);
+    public void setSearchString(String searchString);
 
     /**
      * Set the categories for the search filter

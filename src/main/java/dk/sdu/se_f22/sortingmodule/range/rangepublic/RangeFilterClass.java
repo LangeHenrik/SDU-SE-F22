@@ -21,6 +21,13 @@ abstract class RangeFilterClass implements RangeFilter{
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
     }
 
+    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE) {
+        this.NAME = NAME;
+        this.DESCRIPTION = DESCRIPTION;
+        this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
+        ID = 0; // Better way to do this?
+    }
+
     //todo test this
     public abstract Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs);
 

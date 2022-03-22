@@ -18,6 +18,12 @@ public class LongFilter extends RangeFilterClass{
         DB_MAX = dbMax;
     }
 
+    public LongFilter(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, long dbMin, long dbMax) {
+        super(NAME, DESCRIPTION, PRODUCT_ATTRIBUTE);
+        DB_MIN = dbMin;
+        DB_MAX = dbMax;
+    }
+
     @Override
     public FilterTypes getType() {
         return FilterTypes.LONG;

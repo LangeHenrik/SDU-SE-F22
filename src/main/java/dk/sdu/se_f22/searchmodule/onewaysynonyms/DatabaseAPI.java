@@ -19,7 +19,10 @@ public class DatabaseAPI {
             insertStatement.setString(1,itemName);
             insertStatement.setString(2, "0");
             insertStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Item: " + itemName + " was added");
         } catch (SQLException e) {
+            System.out.println("Could not add: " + itemName);
             e.printStackTrace();
         }
     }
@@ -31,7 +34,10 @@ public class DatabaseAPI {
             insertStatement.setString(1,itemName);
             insertStatement.setString(2,String.valueOf(superId));
             insertStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Item: " + itemName + " with super ID: " + superId +  " was added");
         } catch (SQLException e) {
+            System.out.println("Could not add " + itemName + " with super ID: " + superId);
             e.printStackTrace();
         }
     }
@@ -43,7 +49,10 @@ public class DatabaseAPI {
             updateStatement.setString(1, String.valueOf(superId));
             updateStatement.setString(2, name);
             updateStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Updated Super ID: " + superId);
         } catch (SQLException e) {
+            System.out.println("Could not update Super ID: " + superId);
             e.printStackTrace();
         }
     }
@@ -55,7 +64,10 @@ public class DatabaseAPI {
             updateStatement.setString(1, String.valueOf(name));
             updateStatement.setString(2, String.valueOf(id));
             updateStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Updated Name: " + name);
         } catch (SQLException e) {
+            System.out.println("Unable to update name: " + name);
             e.printStackTrace();
         }
     }
@@ -65,9 +77,10 @@ public class DatabaseAPI {
             PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items");
             ResultSet quaryResultSet = null;
             quaryResultSet = quaryStatement.executeQuery();
-
+            System.out.println("The read was a succes");
             return quaryResultSet;
         } catch (SQLException e) {
+            System.out.println("Cant read :/");
             e.printStackTrace();
         }
         return null;

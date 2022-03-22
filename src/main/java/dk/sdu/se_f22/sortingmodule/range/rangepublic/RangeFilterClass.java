@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -20,6 +19,13 @@ abstract class RangeFilterClass implements RangeFilter{
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
+    }
+
+    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE) {
+        this.NAME = NAME;
+        this.DESCRIPTION = DESCRIPTION;
+        this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
+        ID = 0; // Better way to do this?
     }
 
     //todo test this
@@ -41,6 +47,7 @@ abstract class RangeFilterClass implements RangeFilter{
         if (!this.DESCRIPTION.equals(casted.getDescription())) {
             return false;
         }
+        //noinspection RedundantIfStatement
         if (!this.PRODUCT_ATTRIBUTE.equals(casted.getProductAttribute())) {
             return false;
         }

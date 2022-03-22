@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.IDBRangeFilterCRUD;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterCRUDInterface;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +15,7 @@ public class RangeFilterFilterResults {
      * You will get an {@link IllegalImplementationException} if you try.
      *
      * @param rangeFilters The rangefilters to use for filtering the search hits, they must be in accordance with the filters stored in our DB.
-     *                     See {@link IDBRangeFilterCRUD} for details on getting active/valid filters.
+     *                     See {@link RangeFilterCRUDInterface} for details on getting active/valid filters.
      * @return The {@link SearchHits} object that was given as input, but where the products Colloction have been filtered
      * using the filters specified in rangeFilters param.
      */

@@ -18,6 +18,12 @@ public class DoubleFilter extends RangeFilterClass{
         DB_MAX = dbMax;
     }
 
+    public DoubleFilter(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, double dbMin, double dbMax) {
+        super(NAME, DESCRIPTION, PRODUCT_ATTRIBUTE);
+        DB_MIN = dbMin;
+        DB_MAX = dbMax;
+    }
+
     @Override
     public FilterTypes getType() {
         return FilterTypes.DOUBLE;

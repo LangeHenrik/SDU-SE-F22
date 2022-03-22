@@ -1,26 +1,27 @@
-package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.database.Database;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 import java.util.List;
 
-public class DBRangeFilterReader implements ReadRangeFilterInterface {
+public class RangeFilterReader implements ReadRangeFilterInterface {
     private DatabaseInterface database;
 
-    public DBRangeFilterReader () {
+    public RangeFilterReader() {
         database = MockDatabase.getInstance();
     }
 
     @Override
-    public List<DBRangeFilter> getRangeFilters() {
+    public List<RangeFilter> getRangeFilters() {
         return database.readAllFilters();
     }
 
     @Override
-    public DBRangeFilter getRangeFilter(int id) throws InvalidFilterIdException {
+    public RangeFilter getRangeFilter(int id) throws InvalidFilterIdException {
         // Refactor needed
         // In this implementation, you make the same call to the database twice,
         // you should use a local variable instead, like:

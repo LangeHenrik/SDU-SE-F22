@@ -1,26 +1,24 @@
-package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
-import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
-import org.junit.After;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterDeleter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DBRangeFilterDeleterTest {
 
-    DBRangeFilterDeleter dbRangeFilterDeleter = new DBRangeFilterDeleter();
-    DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
+    RangeFilterDeleter dbRangeFilterDeleter = new RangeFilterDeleter();
+    RangeFilterReader dbRangeFilterReader = new RangeFilterReader();
     List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
     DatabaseInterface db = MockDatabase.getInstance();
     int plads1;

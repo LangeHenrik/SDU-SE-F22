@@ -1,11 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
 import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
-import dk.sdu.se_f22.sortingmodule.range.database.Database;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterReader;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.*;
 
@@ -14,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class DBRangeFilterReaderTest {
-    DBRangeFilterReader dbRangeFilterReader = new DBRangeFilterReader();
+    RangeFilterReader dbRangeFilterReader = new RangeFilterReader();
     static List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
     static DatabaseInterface db = MockDatabase.getInstance();
     int plads1;

@@ -1,6 +1,7 @@
-package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 public interface DeleteRangeFilterInterface {
     /**
@@ -10,5 +11,5 @@ public interface DeleteRangeFilterInterface {
      * @param id Integer
      * @return DBRangeFilter
      */
-    DBRangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException;
+    RangeFilter deleteRangeFilter(int id) throws InvalidFilterIdException;
 }

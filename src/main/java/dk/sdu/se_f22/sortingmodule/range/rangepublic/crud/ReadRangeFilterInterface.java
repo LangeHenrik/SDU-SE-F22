@@ -1,7 +1,8 @@
-package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ReadRangeFilterInterface {
      * It then returns all filters in a list.
      * @return List<DBRangeFilter>
      */
-    List<DBRangeFilter> getRangeFilters();
+    List<RangeFilter> getRangeFilters();
 
     /**
      * Method first reads a filter from the database.
@@ -20,5 +21,5 @@ public interface ReadRangeFilterInterface {
      * @param id
      * @return DBRangeFilter
      */
-    DBRangeFilter getRangeFilter(int id) throws InvalidFilterIdException;
+    RangeFilter getRangeFilter(int id) throws InvalidFilterIdException;
 }

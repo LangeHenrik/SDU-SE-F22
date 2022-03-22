@@ -20,7 +20,6 @@ public class Persistence implements IPersistence {
         c = DBConnection.getConnection();
 
         // Seed database
-        seedDatabase();
     }
 
     @Override
@@ -176,37 +175,32 @@ public class Persistence implements IPersistence {
             }
 
             /* ------ Insert into junction table ------ */
-            Integer brandId = null;
-            Integer productId = null;
-            for (var brand : brands) {
-                PreparedStatement getBrandName = c.prepareStatement("SELECT id FROM Brand WHERE name = ?;");
-                getBrandName.setString(1, brand.getName());
-                ResultSet brandResult = getBrandName.executeQuery();
+            for (Brand brand : brands){
+                for(String product : brand.getProducts()){
+                    int brandID = 0;
+                    int productID = 0;
+                    PreparedStatement selectBrandID = c.prepareStatement("SELECT id FROM brand WHERE name = ?");
+                    selectBrandID.setString(1,brand.getName());
+                    ResultSet resultsBrand = selectBrandID.executeQuery();
 
-                // Get brand id, for junction table
-                if (brandResult.next()) {
-                    brandId = brandResult.getInt("id");
-                }
-
-                // Get product id, for junction table
-                for (var product : products) {
-                    PreparedStatement getProductId = c.prepareStatement("SELECT id FROM ProductType WHERE name = ?;");
-                    getProductId.setString(1,product);
-                    ResultSet productResult = getProductId.executeQuery();
-
-                    if (productResult.next()) {
-                        productId = productResult.getInt("id");
-
-                        // With both brand and product id, junction table can be filled
-                        PreparedStatement insertIntoJunction = c.prepareStatement(("INSERT INTO BrandProductTypeJunction (Brandid, Productid) values (?, ?)"));
-
-                        insertIntoJunction.setInt(1,brandId);
-                        insertIntoJunction.setInt(2,productId);
-                        insertIntoJunction.execute();
+                    while(resultsBrand.next()) {
+                        brandID = resultsBrand.getInt("id");
                     }
+
+                    PreparedStatement selectProductID = c.prepareStatement("SELECT id FROM producttype WHERE name = ?");
+                    selectProductID.setString(1,product);
+                    ResultSet resultsProduct = selectProductID.executeQuery();
+
+                    while(resultsProduct.next()){
+                        productID = resultsProduct.getInt("id");
+                    }
+
+                    PreparedStatement insertIntoJunction = c.prepareStatement("INSERT INTO brandproducttypejunction(brandid,productid) VALUES(?,?);");
+                    insertIntoJunction.setInt(1,brandID);
+                    insertIntoJunction.setInt(2,productID);
+                    insertIntoJunction.execute();
                 }
             }
-
             c.commit();
         }
         catch (Exception e) {

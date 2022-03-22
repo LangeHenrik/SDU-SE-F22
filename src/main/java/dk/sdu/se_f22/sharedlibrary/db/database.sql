@@ -6,7 +6,7 @@
 */
 -- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
-DROP TABLE IF EXISTS TokenBrandTypeJunction;
+DROP TABLE IF EXISTS TokenBrandMap;
 
 -- Drop all other tables
 DROP TABLE IF EXISTS Tokens;
@@ -36,7 +36,7 @@ CREATE TABLE Tokens(
     token VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE TokenBrandTypeJunction(
+CREATE TABLE TokenBrandMap(
     id serial PRIMARY KEY,
     tokenId INTEGER NOT NULL REFERENCES Tokens (id),
     brandId INTEGER NOT NULL REFERENCES Brand (id)

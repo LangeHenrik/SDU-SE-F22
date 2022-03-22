@@ -13,6 +13,7 @@ module dk.sdu.se_f22 {
     requires org.controlsfx.controls;
     requires org.postgresql.jdbc;
     requires validatorfx;
+	requires java.desktop;
     requires com.google.gson;
 
     opens dk.sdu.se_f22 to javafx.fxml;

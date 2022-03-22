@@ -1,8 +1,11 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
-import java.util.*;
+import javax.swing.*;
 
-public class ItemCatalog {
+import java.util.*;
+import java.util.List;
+
+public class ItemCatalog{
     //Attributes
     private LinkedList<Item> catalog;
 
@@ -20,6 +23,10 @@ public class ItemCatalog {
 
     public boolean removeItem(Item item){
         return catalog.remove(item);
+    }
+
+    public LinkedList<Item> getCatalog() {
+        return catalog;
     }
 
     private void addSubItems(){
@@ -41,56 +48,26 @@ public class ItemCatalog {
         throw new notFoundException("Item not found in database.");
     }
 
-    private HashMap<Integer, Integer> fillNumberInEachGeneration(Item root){
-        HashMap<Integer, Integer> map = new HashMap<>();
-
-        map.put(0,1);
-        LinkedList<Item> childrenInGeneration = new LinkedList<>();
-        childrenInGeneration.add(root);
-        LinkedList<Item> nextGeneration = new LinkedList<>();
-        int cycle = 1;
-        while (true){
-            for(Item item : childrenInGeneration){
-                try{
-                    nextGeneration.addAll(item.getSubItems());
-                }catch (NullPointerException ex){
-                }
-            }
-            if(nextGeneration.size() == 0){
-                break;
-            }
-            map.put(cycle,nextGeneration.size());
-            cycle++;
-            childrenInGeneration.clear();
-            childrenInGeneration.addAll(nextGeneration);
-            nextGeneration.clear();
-        }
-        return map;
-    }
-   
-    public void drawImage(Item item){
-        HashMap<Integer, Integer> numberInEachGeneration = fillNumberInEachGeneration(item);
-
-        int width = imageWidth(numberInEachGeneration.keySet());
-        int length = imageLength(numberInEachGeneration.values());
-
-
-    }
-
-    private int imageLength(Collection<Integer> collection){
-        int biggest = 0;
-        for(int i : collection){
-            if(i > biggest){
-                biggest = i;
-            }
-        }
-        return biggest * 110;
-    }
-    private int imageWidth(Set<Integer> set){
-        return set.size() * 150;
-    }
-
     public static void main(String[] args) {
+        Item i1 = new Item("køretøjer");
+        Item i2 = new Item("motordrevet",i1);
+        Item i3 = new Item("menneskedrevet",i1);
+        Item i4 = new Item("racerbil",i2);
+        Item i5 = new Item("personbil",i2);
+        Item i6 = new Item("lastbil",i2);
+        Item i7 = new Item("superbil",i5);
+        Item i8 = new Item("5 dørs",i5);
+        Item i9 = new Item("3 dørs",i5);
+        Item i10 = new Item("børnecontainer",i8);
+        Item i11 = new Item("lukus",i8);
+        Item i12 = new Item("cykel",i3);
+        Item i13 = new Item("løbehjul",i3);
+        Item i14 = new Item("skateboard",i3);
+
+        Item[] list = new Item[]{i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14};
+        ItemCatalog test = new ItemCatalog(list);
+        OneWayFrame owf = new OneWayFrame(i1);
+
 
     }
 

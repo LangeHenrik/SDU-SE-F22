@@ -6,7 +6,9 @@ public class SortingModuleDemo {
     public static void main (String[] args) {
         SortingModuleImpl module = new SortingModuleImpl();
 
-        module.searchString("Hello, World!");
-        module.search();
+        // TODO: Wait for search module infrastructure to finish there "queryIndexOfType" and
+        //  "search" metode, before using below:
+        // module.searchString("Hello, World!");
+        // module.search();
     }
 }

@@ -1,15 +1,37 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IrregularWords implements IIrregularWords{
 
-    public IrregularWords irregularWords;
+   static public IrregularWords irregularWords = new IrregularWords();
+
+    private Connection connection = null;
+
+    public void initialize(){
+        try {
+            DriverManager.registerDriver(new org.postgresql.Driver());
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Irregularwords",
+                    "postgres",
+                    "aaaa1234");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void createIRWord(int ID, String Word) {
-
+        try {
+            PreparedStatement insertStatement = connection.prepareStatement(
+                    "INSERT INTO irwords (ID, Word) VALUES (?,?)");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -31,6 +53,7 @@ public class IrregularWords implements IIrregularWords{
     public void getIRWord() {
 
     }
+
 
     @Override
     public void createIRColumn(String Cname, String dataType, String constraints) {
@@ -72,5 +95,9 @@ public class IrregularWords implements IIrregularWords{
     @Override
     public List<String> searchForIrregularWords(List<String> arrayList) {
         return arrayList;
+    }
+
+    public static void main(String[] args) {
+        irregularWords.initialize();
     }
 }

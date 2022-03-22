@@ -3,23 +3,23 @@ import java.util.ArrayList;
 import java.util.List;
 public interface IIrregularWords {
 
-        public void createIRWord(int ID, String Word);
+        void createIRWord(int ID, String Word);
 
-        public void deleteIRWord(int serialKey);
+        void deleteIRWord(int serialKey);
 
-        public void updateIRWord();
+        void updateIRWord();
 
-        public void readIRWord();
+        void readIRWord();
 
-        public void getIRWord();
+        void getIRWord();
 
-        public void createColumnIR(String CName);
+        void createIRColumn(String Cname, String dataType, String constraints);
 
-        public void deleteColumnIR(String CName);
+        void deleteColumnIR(String CName);
 
-        public void createBackup();
+        void createBackup();
 
-        public void loadBackup();
+        void loadBackup();
 
-        public List<String> searchForIrregularWords(List<String> arrayList);
+        List<String> searchForIrregularWords(List<String> arrayList);
 }

@@ -8,6 +8,7 @@ public class DatabaseAPI {
 
     static Connection connection = DBConnection.getConnection();
 
+    //for adding superItem
     public static void addItem(String itemName) throws SQLException {
         PreparedStatement insertStatement = null;
         insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
@@ -16,6 +17,7 @@ public class DatabaseAPI {
         insertStatement.execute();
     }
 
+    //for adding subItem
     public static void addItem(String itemName, int superId) throws SQLException {
         PreparedStatement insertStatement = null;
         insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");

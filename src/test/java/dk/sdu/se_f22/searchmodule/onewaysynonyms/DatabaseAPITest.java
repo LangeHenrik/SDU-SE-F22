@@ -11,8 +11,10 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseAPITest {
+
     @BeforeEach
     void setUp() {
+        Connection connection = DBConnection.getConnection();
     }
 
     @AfterEach
@@ -57,7 +59,5 @@ class DatabaseAPITest {
 
     @Test
     void read() {
-
-
     }
 }

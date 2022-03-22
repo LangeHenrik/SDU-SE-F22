@@ -3,6 +3,7 @@
     -  Drop tabeller som refererer til andre tabeller
     -   Drop resten af tabellerne
 */
+-- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
 
 -- Drop all other tables
@@ -13,6 +14,7 @@ DROP TABLE IF EXISTS StemmingException;
 
  --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
  --og kalder hver gruppes seedDatabase()-metode
+
 
 /*
  Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
@@ -49,7 +51,6 @@ CREATE TABLE items
     name    varchar,
     superId varchar
 );
-
 
 CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,

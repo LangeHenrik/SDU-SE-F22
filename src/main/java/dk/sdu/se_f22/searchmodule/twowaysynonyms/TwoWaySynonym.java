@@ -1,11 +1,9 @@
 package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import org.postgresql.util.PSQLException;
+
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.UUID;
 
 public class TwoWaySynonym implements DatabaseOperator {

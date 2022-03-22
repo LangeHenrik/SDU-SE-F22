@@ -26,6 +26,7 @@ CREATE TABLE Brand(
     headquarters VARCHAR(255)
 );
 
+
 CREATE TABLE ProductType(
     id   serial PRIMARY KEY,
     type VARCHAR(255) UNIQUE NOT NULL
@@ -33,7 +34,7 @@ CREATE TABLE ProductType(
 
 CREATE TABLE Tokens(
     id serial PRIMARY KEY,
-    token VARCHAR(255) NOT NULL
+    token VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE TokenBrandMap(

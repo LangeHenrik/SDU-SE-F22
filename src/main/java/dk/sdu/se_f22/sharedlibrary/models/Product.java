@@ -51,6 +51,13 @@ public class Product { //initialize class
         return productAttributes.get(pA).equalsIgnoreCase(value);
     }
     
+    public boolean setLocations(ProductAttribute pattr, ArrayList<String> values){
+        if(pattr != ProductAttribute.IN_STOCK){
+            return false;
+        }
+        return setLocations(values);
+    }
+    
     public boolean setLocations(ArrayList<String> values){
         
         availableAt = values;

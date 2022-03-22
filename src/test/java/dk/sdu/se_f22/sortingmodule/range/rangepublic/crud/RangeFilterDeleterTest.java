@@ -1,10 +1,12 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
+import dk.sdu.se_f22.sortingmodule.range.PopulateFromCsv;
+import dk.sdu.se_f22.sortingmodule.range.database.Database;
 import dk.sdu.se_f22.sortingmodule.range.database.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.database.MockDatabase;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterDeleter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 import org.junit.jupiter.api.*;
@@ -15,56 +17,56 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DBRangeFilterDeleterTest {
+public class RangeFilterDeleterTest {
 
-    RangeFilterDeleter dbRangeFilterDeleter = new RangeFilterDeleter();
-    RangeFilterReader dbRangeFilterReader = new RangeFilterReader();
-    List<DBRangeFilter> dbFilters = PopulateDBFromCsv.readDBFiltersFromCSV("ValidDBRangeFilters.csv");
-    DatabaseInterface db = MockDatabase.getInstance();
-    int plads1;
-    int plads2;
-    int plads3;
+    RangeFilterDeleter rangeFilterDeleter = new RangeFilterDeleter();
+    RangeFilterReader rangeFilterReader = new RangeFilterReader();
+    List<RangeFilter> filters = PopulateFromCsv.readFiltersFromCSV("ValidRangeFilters.csv");
+    DatabaseInterface db = new Database();
+    int id1;
+    int id2;
+    int id3;
 
     @BeforeEach
     public void setup (){
         cleanUp();
-        plads1 = db.create(dbFilters.get(0)).getId();
-        plads2 = db.create(dbFilters.get(1)).getId();
-        plads3 = db.create(dbFilters.get(2)).getId();
-//        System.out.println(db.readAllFilters().toString());
+        id1 = db.create(filters.get(0)).getId();
+        id2 = db.create(filters.get(1)).getId();
+        id3 = db.create(filters.get(2)).getId();
+//        System.out.println(.readAllFilters().toString());
     }
 
     @AfterEach
     public void cleanUp (){
-        db.delete(plads1);
-        db.delete(plads2);
-        db.delete(plads3);
-//        System.out.println(dbFilters.toString());
+        db.delete(id1);
+        db.delete(id2);
+        db.delete(id3);
+//        System.out.println(Filters.toString());
     }
 
     @Test
     @DisplayName("Delete valid filters")
     void deleteValidFilter() {
         Assertions.assertAll("Test deleteRangeFilter method using a valid id",
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads1), dbFilters.get(0)),
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads2), dbFilters.get(1)),
-                () -> Assertions.assertEquals(dbRangeFilterDeleter.deleteRangeFilter(plads3), dbFilters.get(2))
+                () -> Assertions.assertEquals(RangeFilterDeleter.deleteRangeFilter(id1), filters.get(0)),
+                () -> Assertions.assertEquals(RangeFilterDeleter.deleteRangeFilter(id2), filters.get(1)),
+                () -> Assertions.assertEquals(RangeFilterDeleter.deleteRangeFilter(id3), filters.get(2))
         );
 
         assertAll(
                 () -> Assertions.assertThrows(InvalidFilterIdException.class,
-                        () -> dbRangeFilterReader.getRangeFilter(plads1)
+                        () -> RangeFilterReader.getRangeFilter(id1)
                 ),
                 () -> Assertions.assertThrows(InvalidFilterIdException.class,
-                        () -> dbRangeFilterReader.getRangeFilter(plads2)
+                        () -> RangeFilterReader.getRangeFilter(id2)
                 ),
                 () -> Assertions.assertThrows(InvalidFilterIdException.class,
-                        () -> dbRangeFilterReader.getRangeFilter(plads3)
+                        () -> RangeFilterReader.getRangeFilter(id3)
                 )
         );
 
 //        Assertions.assertThrows(InvalidFilterIdException.class,
-//                () -> dbRangeFilterReader.getRangeFilter(plads1)
+//                () -> RangeFilterReader.getRangeFilter(id1)
 //        );
     }
 
@@ -73,13 +75,13 @@ public class DBRangeFilterDeleterTest {
     @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE, Integer.MAX_VALUE, 0})
     void deleteInvalidFilter(int input) {
         if (input == 0){
-            input = ++plads3;
+            input = ++id3;
         }
 
         final int testInput = input;
 
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> dbRangeFilterDeleter.deleteRangeFilter(testInput)
+                () -> RangeFilterDeleter.deleteRangeFilter(testInput)
         );
     }
 
@@ -87,13 +89,13 @@ public class DBRangeFilterDeleterTest {
     @DisplayName("Delete filter twice throws exception")
     void deleteFilterTwice() {
         try {
-            dbRangeFilterDeleter.deleteRangeFilter(plads1);
+            RangeFilterDeleter.deleteRangeFilter(id1);
         } catch (InvalidFilterIdException e) {
             fail();
         }
 
         Assertions.assertThrows(InvalidFilterIdException.class,
-                () -> dbRangeFilterDeleter.deleteRangeFilter(plads1)
+                () -> RangeFilterDeleter.deleteRangeFilter(id1)
         );
     }
 }

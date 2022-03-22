@@ -60,24 +60,12 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @return          ArrayList of all matching synonyms
      */
     @Override
-    public ArrayList<Synonym> readAll(String synonym) {
-        Integer group_id = read(synonym).groupId();
+    public ArrayList<Synonym> readAll(int groupId) {
         String statementFormat = "SELECT * FROM twoway_synonym WHERE group_id = ?";
-        ArrayList<Object> args = new ArrayList<>(){{add(group_id);}};
+        ArrayList<Object> args = new ArrayList<>(){{add(groupId);}};
         PreparedStatement stmt = getPreparedStatement(statementFormat, args);
         ResultSet rs = readDatabase(stmt);
-        ArrayList<Synonym> synonymList = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                synonymList.add(new Synonym(rs.getString(1),
-                        rs.getString(2),
-                        rs.getInt(3)));
-            }
-            return synonymList;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return synonymList;
+        return getSynonyms(rs);
     }
 
     /**
@@ -209,6 +197,21 @@ public class TwoWaySynonym implements DatabaseOperator {
             System.out.println("Query could not be executed");
             return null;
         }
+    }
+
+    private ArrayList<Synonym> getSynonyms(ResultSet rs, ) {
+        ArrayList<Synonym> synonymList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                synonymList.add(new Synonym(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3)));
+            }
+            return synonymList;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     /**

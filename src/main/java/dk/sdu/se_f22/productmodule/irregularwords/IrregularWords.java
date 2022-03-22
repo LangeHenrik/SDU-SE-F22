@@ -1,8 +1,11 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class IrregularWords implements IIrregularWords{
 
@@ -171,13 +174,23 @@ return false;
     public List<String> searchForIrregularWords(List<String> arrayList) {
         return arrayList;
     }
+    private void insertValues(){
+        try (Scanner scan = new Scanner(new File("src/main/java/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
+            while(scan.hasNextLine()){
+                String line = scan.nextLine();
+                String[] data = line.split(",");
+                createIRWord(Integer.parseInt(data[0]),data[1]);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static void main(String[] args) {
         irregularWords.initialize();
-        ArrayList<String> ord = new ArrayList<>(irregularWords.getIRWord("test1"));
-        for (String strig : ord){
-            System.out.println(strig);
-        }
+        irregularWords.insertValues();
 
     }
 }

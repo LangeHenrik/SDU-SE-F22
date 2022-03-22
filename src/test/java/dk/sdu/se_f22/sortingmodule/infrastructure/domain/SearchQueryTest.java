@@ -29,15 +29,40 @@ class SearchQueryTest {
 
     @Test
     void clearCategoryTest() {
+        SearchQuery s = new SearchQuery();
+        ArrayList<Integer> a = new ArrayList<>();
+        s.addCategory(1);
+        s.addCategory(2);
+        s.clearCategory();
+        assertEquals(a, s.category);
     }
 
     @Test
     void addRangeTest() {
+        SearchQuery s = new SearchQuery();
+        ArrayList<Integer> a = new ArrayList<>();
 
+        fail();
+
+        s.addRange(1, 2, 3);
+        s.addRange(2,4,1);
+        s.clearRange();
+
+        // TODO: Add ranges to a, for testing that a and s is the same
+
+        assertEquals(a, s.range);
     }
 
     @Test
     void clearRangeTest() {
+        SearchQuery s = new SearchQuery();
+        ArrayList<Integer> a = new ArrayList<>();
+
+        s.addRange(1, 2, 3);
+        s.addRange(2,4,1);
+        s.clearRange();
+
+        assertEquals(a, s.range);
     }
 
     @Test

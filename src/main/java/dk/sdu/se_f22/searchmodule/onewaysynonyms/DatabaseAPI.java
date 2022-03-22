@@ -6,20 +6,11 @@ import java.sql.*;
 
 public class DatabaseAPI {
 
-<<<<<<< HEAD
     static Connection connection = DBConnection.getConnection();
 
     //for adding superItem
-    public static void addItem(String itemName){
-=======
-    static Connection connection = null;
 
-    public DatabaseAPI() {
-        this.connection = DBConnection.getConnection();
-    }
-
-    public static void addItem(String itemName) throws SQLException {
->>>>>>> f73e42ceb4fc099a104f567c15f0996e07809d8c
+        public static void addItem(String itemName) throws SQLException {
         PreparedStatement insertStatement = null;
         insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
         insertStatement.setString(1, itemName);
@@ -27,12 +18,7 @@ public class DatabaseAPI {
         insertStatement.execute();
     }
 
-<<<<<<< HEAD
-    //for adding subItem
-    public static void addItem(String itemName, int superId){
-=======
     public static void addItem(String itemName, int superId) throws SQLException {
->>>>>>> f73e42ceb4fc099a104f567c15f0996e07809d8c
         PreparedStatement insertStatement = null;
         insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
         insertStatement.setString(1, itemName);

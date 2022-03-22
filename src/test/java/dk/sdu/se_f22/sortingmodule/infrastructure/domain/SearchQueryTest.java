@@ -15,7 +15,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(7);
         s.setCategory(a);
-        assertEquals(a, s);
+        assertEquals(a, s.category);
     }
 
     @Test
@@ -24,7 +24,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(2);
         s.addCategory(2);
-        assertEquals(a, s);
+        assertEquals(a, s.category);
     }
 
     @Test

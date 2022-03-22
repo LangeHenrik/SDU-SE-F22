@@ -4,12 +4,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DatabaseOperator extends Filterable{
-    public void addMisspelling(); //console
-    public void addMisspelling(String wrong, String correct); //parameter input
-    public void deleteMisspelling(); //console
-    public void deleteMisspelling(String missspelling); //parameter input
-    public void updateMisspelling(); //console
-    public void updateMisspelling(String correction, String oldMisspelling); //parameter input
+    public boolean addMisspelling(); //console
+    public boolean addMisspelling(String wrong, String correct); //parameter input
+    public boolean deleteMisspelling(); //console
+    public boolean deleteMisspelling(String missspelling); //parameter input
+    public boolean updateMisspelling(); //console
+    public boolean updateMisspelling(String oldMisspelling, String newMisspelling); //parameter input
 }
 
 //Temporary

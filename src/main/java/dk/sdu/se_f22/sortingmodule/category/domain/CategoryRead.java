@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sortingmodule.category.Category;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,23 +14,19 @@ public class CategoryRead {
     public List getAllCategories(){
         List<Category> tmpList = new ArrayList();
         Category tmpCategory;
+        String sql = "SELECT * FROM categories";
 
-        try {
-            PreparedStatement queryStatement = db.connect().prepareStatement("SELECT * FROM categories");
+        try(PreparedStatement queryStatement = db.connect().prepareStatement(sql)) {
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             while(queryResultSet.next()){
-                int id = Integer.parseInt(queryResultSet.getString("id"));
+                int id = queryResultSet.getInt("id");
+                int parentId = queryResultSet.getInt("parent_id");
                 String name = queryResultSet.getString("name");
                 String description = queryResultSet.getString("description");
-                if(queryResultSet.getString("parent_id") != null){
-                    int parentId = Integer.parseInt(queryResultSet.getString("parent_id"));
-                    tmpCategory = new Category(id, name, description, parentId);
-                    tmpList.add(tmpCategory);
-                } else {
-                    tmpCategory = new Category(id, name, description);
-                    tmpList.add(tmpCategory);
-                }
+
+                tmpCategory = new Category(id, name, description, parentId);
+                tmpList.add(tmpCategory);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,24 +39,17 @@ public class CategoryRead {
 
     public Category getCategoryById(int queryId){
         Category tmpCategory = null;
+        String sql = "SELECT * FROM categories WHERE id = ?";
 
-        try {
-            PreparedStatement queryStatement = db.connect().prepareStatement("SELECT * FROM categories WHERE id = ?");
+        try(PreparedStatement queryStatement = db.connect().prepareStatement(sql)) {
             queryStatement.setInt(1, queryId);
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             while(queryResultSet.next()){
-                // int id = Integer.parseInt(queryResultSet.getString("id"));
                 int id = queryResultSet.getInt("id");
                 int parentId = queryResultSet.getInt("parent_id");
                 String name = queryResultSet.getString("name");
                 String description = queryResultSet.getString("description");
-                /*if(queryResultSet.getString("parent_id") != null){
-                    int parentId = Integer.parseInt(queryResultSet.getString("parent_id"));
-                    tmpCategory = new Category(id, name, description, parentId);
-                } else {
-                    tmpCategory = new Category(id, name, description);
-                }*/
                 tmpCategory = new Category(id, name, description, parentId);
             }
             if(tmpCategory == null){

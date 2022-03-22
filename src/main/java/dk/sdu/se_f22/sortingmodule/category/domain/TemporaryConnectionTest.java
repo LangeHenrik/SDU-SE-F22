@@ -1,52 +1,36 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
-<<<<<<< HEAD
-public class TemporaryConnectionTest {
-
-    public static void main(String[] args) {
-        UpdateCategory updater = new UpdateCategory();
-
-
-        System.out.println(updater.updateParentID(2,3));
-        /*updater.updateName(31,"Kevin");
-        updater.updateDescription(31,"Kevin spiller WoW");*/
-
-=======
 import dk.sdu.se_f22.sortingmodule.category.Category;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TemporaryConnectionTest {
 
     public static void main(String[] args) {
-        /*
-        CategoryDBConnection db = CategoryDBConnection.shared;
-        CategoryDBConnection.shared.connect();
 
-        try {
-            PreparedStatement instertStatement = CategoryDBConnection.shared.getConnie().prepareStatement(
-                    "INSERT INTO Categories(name, description) VALUES (?,?)"
-            );
-            instertStatement.setString(1, "test");
-            instertStatement.setString(2, "En lang test da dette er en beskrivelse");
-            instertStatement.execute();
+        CategoryDBConnection.shared.createCategory("Storageeee", "Beskrivelse", "Storageeee", 3);
+        CategoryDBConnection.shared.createCategory("Laptopeee", "Beskrivelse", "Laptopeee", 1, 2);
+        //CategoryDBConnection.createCategory("PC", "Beskrivelse", "PC", 2, 2);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        CategoryDBConnection.shared.closeConnection();
-         */
-
-
-        List<Category> categoryList = CategoryRead.shared.getAllCategories();
+        List<Category> categoryList = CategoryDBConnection.shared.getAllCategories();
         for (Category category : categoryList) {
             System.out.println(category);
         }
-        System.out.println(CategoryRead.shared.getCategoryById(10));
-        System.out.println(CategoryRead.shared.getCategoryById(8));
->>>>>>> dev
+
+        CategoryDBConnection.shared.updateName(1, "Storagee");
+        CategoryDBConnection.shared.updateDescription(2, "Beskrivelse 2");
+        CategoryDBConnection.shared.updateParentID(3,1);
+
+        System.out.println("AFTER UPDATE");
+        List<Category> categoryList2 = CategoryDBConnection.shared.getAllCategories();
+        for (Category category : categoryList2) {
+            System.out.println(category);
+        }
+
+        System.out.println("AFTER DELETE");
+        CategoryDBConnection.shared.deleteCategory(3);
+        List<Category> categoryList3 = CategoryDBConnection.shared.getAllCategories();
+        for (Category category : categoryList3) {
+            System.out.println(category);
+        }
     }
 }

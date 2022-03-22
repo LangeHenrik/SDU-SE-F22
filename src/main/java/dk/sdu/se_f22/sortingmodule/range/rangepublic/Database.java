@@ -26,9 +26,6 @@ public class Database implements DatabaseInterface {
         Connection connection = DBConnection.getConnection();
         RangeFilter dbRangeFilter = null;
         try {
-            //Change the table queried to reflect the actual type.
-            //The current plan is that we will create a stored function, which can retrieve the filter from the correct table/view
-
             // Scratch the comment above, the plan has changed to this:
             // First get the type of the filter by calling the stored function:
             // "SELECT get_type_of_filter(filter_id);"
@@ -92,44 +89,12 @@ public class Database implements DatabaseInterface {
 //                throw up;
                     //commented because: pseudocode
                 }
-                //commented because compile error
             }
-
-
-/* Commented because it is an olf implementation, which is getting yeeted
-// It is kept in as a comment to give the group a chance to compare the old vs the new implementation
-// Will get deleted ASAP
-
-            // old
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM SortingRangeDoubleView WHERE FilterId = ?");
-            ps.setInt(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()){
-                dbRangeFilter = new DBRangeFilter(
-                        resultSet.getInt("FilterId"),
-                        resultSet.getString("Description"),
-                        resultSet.getString("Name"),
-                        resultSet.getString("ProductAttribute"),
-                        //The below two lines assume the filter read is a Double filter
-                        resultSet.getDouble("Min"),
-                        resultSet.getDouble("Max")
-                );
-            }
-
-            if (resultSet.next()){
-//                throw up;
-            //uncommented because: pseudocode
-            }
-            */
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-//        if(dbRangeFilter == null){
-//            throw new InvalidFilterIdException("invalid id when reading from the database");
-//        }
-        //uncommented because it may not actually be the desired behaviour
         return dbRangeFilter;
     }
 

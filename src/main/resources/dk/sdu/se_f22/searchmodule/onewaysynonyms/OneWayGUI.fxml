@@ -1,53 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="GUIAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TabPane prefHeight="473.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="GUITabPane" prefHeight="473.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Untitled Tab 1">
+          <Tab fx:id="SearchTab1" text="SearchTab1">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane fx:id="SearchTab1AnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Accordion layoutX="46.0" layoutY="112.0" prefHeight="181.0" prefWidth="206.0">
-                          <panes>
-                            <TitledPane animated="false" text="untitled 1">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </TitledPane>
-                            <TitledPane animated="false" text="untitled 2">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </TitledPane>
-                            <TitledPane animated="false" text="untitled 3">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </TitledPane>
-                          </panes>
-                        </Accordion>
-                        <HBox layoutX="40.0" layoutY="253.0" prefHeight="100.0" prefWidth="332.0">
+                        <Button fx:id="SearchButton" layoutX="447.0" layoutY="94.0" mnemonicParsing="false" text="Search" />
+                        <Text fx:id="SearchTextField" layoutX="94.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What do you want to search for?" wrappingWidth="133.81292724609375" />
+                        <TextField fx:id="SearchBar" layoutX="87.0" layoutY="94.0" />
+                        <VBox fx:id="SearchTab1GUIVBox" layoutX="101.0" layoutY="181.0" prefHeight="137.0" prefWidth="328.0">
                            <children>
-                              <ListView prefHeight="100.0" prefWidth="105.0" />
-                              <ListView prefHeight="100.0" prefWidth="111.0" />
-                              <ListView prefHeight="100.0" prefWidth="111.0" />
+                              <HBox fx:id="SearchTab1HBox" prefHeight="18.0" prefWidth="328.0">
+                                 <children>
+                                    <Label fx:id="IDLabel" prefHeight="18.0" prefWidth="109.0" text="ID" />
+                                    <Label fx:id="ItemNameLabel" prefHeight="18.0" prefWidth="110.0" text="Item name" />
+                                    <Label fx:id="SuperIDLabel" prefHeight="18.0" prefWidth="87.0" text="SuperID" />
+                                 </children>
+                              </HBox>
+                              <HBox fx:id="SearchTab1HBoxListViews" prefHeight="100.0" prefWidth="332.0">
+                                 <children>
+                                    <ListView fx:id="IDListView" prefHeight="100.0" prefWidth="105.0" />
+                                    <ListView fx:id="ItemNameListView" prefHeight="100.0" prefWidth="111.0" />
+                                    <ListView fx:id="SuperIDListView" prefHeight="100.0" prefWidth="111.0" />
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
+                        </VBox>
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
+          <Tab text="SearchTab2">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>

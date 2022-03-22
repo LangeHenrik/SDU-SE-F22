@@ -9,7 +9,9 @@ import java.util.Set;
 
 public class ReplaceForbiddenChars {
 
-    private List<String> illegalChars = new ArrayList<String>(List.of(new String[]{"@", "´", "|", "*"}));
+    IllegalChars illegalCharsClass = new IllegalChars();
+
+    private List<String> illegalChars = illegalCharsClass.illegalCharsFromDB();
 
 
     public String removeForbiddenChars(String toSort) {

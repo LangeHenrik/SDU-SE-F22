@@ -42,14 +42,15 @@ class SearchModuleImpl implements SearchModule {
 }
 
 class SearchModuleUtils {
-    + convertDelimitersToRegex(stringList: List<String>): String
-    - addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+    + {static}convertDelimitersToRegex(stringList: List<String>): String
+    - {static}addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
 }
 
-class SearchSettings {
-    - delimiters: ArrayList<String>
-    + getDelimiters(): ArrayList<String>
-    + appendDelimiters(delimitier: String): void
+class DelimiterSettings {
+    - delimiters: List<String>
+    + getDelimiters(): List<String>
+    + addDelimiters(String): void
+    + removeDelimiter(String): boolean
 }
 
 class TokenFiltration {
@@ -85,10 +86,9 @@ class DatabaseConnectionException extends Exception {
 }
 
 
-
 Tokenization -> SearchModuleUtils
-Tokenization --> SearchSettings
-SearchResult <- SearchModule
+Tokenization --> DelimiterSettings
+SearchHits <- SearchModule
 Filterable <- SearchModuleImpl
 SearchModuleImpl -> DBConnection
 DatabaseConnectionException <-- DBConnection: //<<throws>>//

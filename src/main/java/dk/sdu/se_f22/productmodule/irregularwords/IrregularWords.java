@@ -1,9 +1,7 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class IrregularWords implements IIrregularWords{
@@ -12,7 +10,7 @@ public class IrregularWords implements IIrregularWords{
 
     private Connection connection = null;
     private boolean canConnect = false;
-    private String dbName = "postgres";
+    private String dbName = "Irregularwords";
 
     public void initialize(){
         try {
@@ -25,12 +23,13 @@ public class IrregularWords implements IIrregularWords{
             e.printStackTrace();
             canConnect = false;
         }
-        if(!canConnect){
+        /*if(!canConnect){
             createDB();
             createTable();
             canConnect = true;
+
+         }*/
         }
-    }
     private void createDB(){
         try {
             PreparedStatement stmt = connection.prepareStatement("CREATE DATABASE Irregulawords");
@@ -55,9 +54,10 @@ public class IrregularWords implements IIrregularWords{
     @Override
     public boolean createIRWord(int ID, String Word) {
         try {
-            PreparedStatement insertStatement = connection.prepareStatement(
-                    "INSERT INTO irwords (ID, Word) VALUES (?,?)");
-            return true;
+            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO irwords (id, word) VALUES (?,?)");
+            insertStatement.setInt(1,ID);
+            insertStatement.setString(2,Word);
+            return insertStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -79,9 +79,19 @@ public class IrregularWords implements IIrregularWords{
     }
 
     @Override
-    public boolean updateIRWord() {
-return false;
-    }
+        public boolean updateIRWord(String word1, String word2) {
+            try{
+                PreparedStatement stmt = connection.prepareStatement(
+                        "UPDATE irwords SET word = ? WHERE word = ?");
+                stmt.setString(1, word2);
+                stmt.setString(2, word1);
+                return stmt.execute();
+            }catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
 
     @Override
     public void readIRWord() {
@@ -89,7 +99,25 @@ return false;
     }
 
     @Override
-    public void getIRWord(String word) {
+    public ArrayList<String> getIRWord(String word) {
+        try {
+            ArrayList<String> words = new ArrayList<>();
+            PreparedStatement findIdStmt = connection.prepareStatement("SELECT id FROM irwords WHERE word = ?");
+            findIdStmt.setString(1,word);
+            ResultSet findIdStmtResult = findIdStmt.executeQuery();
+            PreparedStatement findIdMatchStmt = connection.prepareStatement("SELECT word FROM irwords WHERE id =?");
+            while(findIdStmtResult.next()){
+                findIdMatchStmt.setInt(1,findIdStmtResult.getInt("id"));
+            }
+            ResultSet findIdMatchStmtResult = findIdMatchStmt.executeQuery();
+            while(findIdMatchStmtResult.next()){
+                words.add(findIdMatchStmtResult.getString("word"));
+            }
+            return words;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
     }
 
@@ -146,5 +174,10 @@ return false;
 
     public static void main(String[] args) {
         irregularWords.initialize();
+        ArrayList<String> ord = new ArrayList<>(irregularWords.getIRWord("test1"));
+        for (String strig : ord){
+            System.out.println(strig);
+        }
+
     }
 }

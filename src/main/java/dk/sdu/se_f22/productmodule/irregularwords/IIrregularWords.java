@@ -7,11 +7,11 @@ public interface IIrregularWords {
 
         boolean deleteIRWord(String theWord);
 
-        boolean updateIRWord();
+        boolean updateIRWord(String Word1, String Word2);
 
         void readIRWord();
 
-        void getIRWord(String word);
+        ArrayList<String> getIRWord(String word);
 
         boolean createIRColumn(String Cname, String dataType, String constraints);
 

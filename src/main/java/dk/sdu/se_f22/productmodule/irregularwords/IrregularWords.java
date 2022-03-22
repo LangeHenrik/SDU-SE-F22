@@ -29,6 +29,7 @@ public class IrregularWords implements IIrregularWords{
         try {
             PreparedStatement insertStatement = connection.prepareStatement(
                     "INSERT INTO irwords (ID, Word) VALUES (?,?)");
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

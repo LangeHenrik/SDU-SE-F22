@@ -147,7 +147,6 @@ public class Persistence implements IPersistence {
         setAutoCommit(false);
         try {
             /* ------ Insert all products ------ */
-
             // Keep no duplicate products
             Set<String> products = new HashSet<>();
             for (var brand : brands) {
@@ -176,22 +175,24 @@ public class Persistence implements IPersistence {
 
             /* ------ Insert into junction table ------ */
             for (Brand brand : brands){
-                for(String product : brand.getProducts()){
-                    int brandID = 0;
-                    int productID = 0;
-                    PreparedStatement selectBrandID = c.prepareStatement("SELECT id FROM brand WHERE name = ?");
-                    selectBrandID.setString(1,brand.getName());
-                    ResultSet resultsBrand = selectBrandID.executeQuery();
+                int brandID = 0;
 
-                    while(resultsBrand.next()) {
-                        brandID = resultsBrand.getInt("id");
-                    }
+                PreparedStatement selectBrandID = c.prepareStatement("SELECT id FROM brand WHERE name = ?");
+                selectBrandID.setString(1,brand.getName());
+                ResultSet resultsBrand = selectBrandID.executeQuery();
+
+                if (resultsBrand.next()) {
+                    brandID = resultsBrand.getInt("id");
+                }
+
+                for(String product : brand.getProducts()){
+                    int productID = 0;
 
                     PreparedStatement selectProductID = c.prepareStatement("SELECT id FROM producttype WHERE name = ?");
                     selectProductID.setString(1,product);
                     ResultSet resultsProduct = selectProductID.executeQuery();
 
-                    while(resultsProduct.next()){
+                    if (resultsProduct.next()){
                         productID = resultsProduct.getInt("id");
                     }
 

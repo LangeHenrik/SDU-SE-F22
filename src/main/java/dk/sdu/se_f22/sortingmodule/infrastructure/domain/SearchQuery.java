@@ -84,7 +84,7 @@ public class SearchQuery {
     /**
      * Set the pagination information
      * 
-     * @param page Current page to quert
+     * @param page Current page to query
      * @param pageSize The amount of hits to return
      */
     public void setPagination(int page, int pageSize) {

@@ -1,17 +1,22 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
+import dk.sdu.se_f22.sortingmodule.category.Category;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TemporaryConnectionTest {
 
     public static void main(String[] args) {
+        /*
         CategoryDBConnection db = CategoryDBConnection.shared;
         CategoryDBConnection.shared.connect();
 
         try {
             PreparedStatement instertStatement = CategoryDBConnection.shared.getConnie().prepareStatement(
-                    "INSERT INTO Categories(name, description) VALUES (?,?) "
+                    "INSERT INTO Categories(name, description) VALUES (?,?)"
             );
             instertStatement.setString(1, "test");
             instertStatement.setString(2, "En lang test da dette er en beskrivelse");
@@ -21,5 +26,14 @@ public class TemporaryConnectionTest {
             e.printStackTrace();
         }
         CategoryDBConnection.shared.closeConnection();
+         */
+
+
+        List<Category> categoryList = CategoryRead.shared.getAllCategories();
+        for (Category category : categoryList) {
+            System.out.println(category);
+        }
+        System.out.println(CategoryRead.shared.getCategoryById(10));
+        System.out.println(CategoryRead.shared.getCategoryById(8));
     }
 }

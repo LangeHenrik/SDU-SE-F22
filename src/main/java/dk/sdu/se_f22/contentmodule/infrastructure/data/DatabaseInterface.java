@@ -7,11 +7,7 @@ public interface DatabaseInterface {
 
     void createTable(String table_name);
 
-    void saveTokens(ArrayList<String> tokens);
+    void saveTokens(String table_name, ArrayList<String> tokens);
 
-    ArrayList<String> loadTokens();
-
-    void saveFilteredTokens(ArrayList<String> tokens);
-
-    ArrayList<String> loadFilteredTokens();
+    ArrayList<String> loadTokens(String table_name);
 }

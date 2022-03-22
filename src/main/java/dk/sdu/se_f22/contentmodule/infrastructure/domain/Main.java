@@ -17,10 +17,12 @@ public class Main {
 
         Database database = new Database();
         database.setupDatabase();
-        database.createTable("tokens");
-        database.saveTokens(tokens);
+        database.createTable("filtered_tokens");
 
-        tokens = database.loadTokens();
+        database.createTable("unfiltered_tokens");
+        database.saveTokens("unfiltered_tokens", tokens);
+
+        tokens = database.loadTokens("unfiltered_tokens");
         database.printTokens(tokens);
     }
 }

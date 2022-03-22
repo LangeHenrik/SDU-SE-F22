@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
+import java.util.ArrayList;
+
 public class TokenAccess {
     private iToken unfilteredTokens;
     private iToken filteredTokens;
@@ -11,27 +13,25 @@ public class TokenAccess {
         searchTokens = new SearchTokens();
     }
 
-    public void getUnfilteredTokens(){
-        unfilteredTokens.getTokens();
+    public ArrayList<String>  getUnfilteredTokens(){
+        return unfilteredTokens.getTokens();
     }
 
-    public void setUnfilteredTokens(){
-        unfilteredTokens.setTokens();
+    public void setUnfilteredTokens(ArrayList<String> tokens){
+        unfilteredTokens.setTokens(tokens);
     }
 
-    public void getFilteredTokens(){
-        filteredTokens.getTokens();
+    public ArrayList<String>  getFilteredTokens(){
+        return filteredTokens.getTokens();
     }
 
-    public void setFilteredTokens(){
-        filteredTokens.setTokens();
+    public void setFilteredTokens(ArrayList<String> tokens){
+        filteredTokens.setTokens(tokens);
     }
 
-    public void getSearchTokens(){
-        searchTokens.getTokens();
-    }
+    public ArrayList<String> getSearchTokens(){ return searchTokens.getTokens(); }
 
-    public void setSearchTokens(){
-        searchTokens.setTokens();
+    public void setSearchTokens(ArrayList<String> tokens){
+        searchTokens.setTokens(tokens);
     }
 }

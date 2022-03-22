@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public interface iToken {
     ArrayList<String> getTokens();
-    void setTokens();
+    void setTokens(ArrayList<String> tokenslist);
 }

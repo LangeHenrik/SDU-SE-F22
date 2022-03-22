@@ -39,7 +39,7 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    public void saveTokens(ArrayList<String> tokens) {
+    public void saveTokens(String table_name, ArrayList<String> tokens) {
         Statement statement;
         String token;
         try {
@@ -47,7 +47,7 @@ public class Database implements DatabaseInterface {
             statement.addBatch("delete from tokens");
             for (int i = 0; i < tokens.toArray().length; i++) {
                 token = tokens.get(i);
-                statement.addBatch(String.format("insert into %s(token) values('%s');", "tokens", token));
+                statement.addBatch(String.format("insert into %s(token) values('%s');", table_name, token));
             }
             statement.executeBatch();
             statement.close();
@@ -56,11 +56,11 @@ public class Database implements DatabaseInterface {
         }
     }
 
-    public ArrayList<String> loadTokens() {
+    public ArrayList<String> loadTokens(String table_name) {
         Statement statement;
         ArrayList<String> tokens = new ArrayList<>();
         try {
-            String query = String.format("select * from tokens");
+            String query = String.format("select * from %s", table_name);
             statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {

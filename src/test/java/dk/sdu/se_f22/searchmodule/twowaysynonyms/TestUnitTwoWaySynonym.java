@@ -137,7 +137,7 @@ public class TestUnitTwoWaySynonym {
     private static void TruncateDB() {
         try {
             Statement stmt = conn.createStatement();
-            stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY ");
+            stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY");
         } catch (SQLException e) {
             e.printStackTrace();
         }

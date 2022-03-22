@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
+import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 
 /**
  * Implemented version of SortingModule
@@ -73,6 +74,6 @@ public class SortingModuleImpl implements SortingModule {
     }
     
     private void saveSearch() {
-        // TODO Create save to database
+        SaveSearchQuery.saveSearch(this.query);
     }
 }

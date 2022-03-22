@@ -37,12 +37,12 @@ class TokenParameterStore  {
 			if(queryResultSet.next()){
 				return new TokenParameter(queryResultSet.getString("delimiter"),queryResultSet.getString("ignoredChars"));
 			}
-			return new TokenParameter(" ", "('./?!')");
 		}
 		catch (SQLException ex) {
 			ex.printStackTrace();
-			return new TokenParameter(" ", "('./?!')");
 		}
+
+		return new TokenParameter(" ", "('./?!')");
 	}
 
 

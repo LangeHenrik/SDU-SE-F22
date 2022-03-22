@@ -77,4 +77,6 @@ public class SearchModuleImpl implements SearchModule {
 
         return searchHits;
     }
+
+
 }

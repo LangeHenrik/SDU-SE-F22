@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Misspellings implements DatabaseOperator{
-    private String wrongSpelling;
-    private String correctSpelling;
+    private String wrongSpelling; //skal måske slettes
+    private String correctSpelling; //skal måske slettes
     private final String url = "jdbc:postgresql://abul.db.elephantsql.com/hzajyqbo";
     private final String user = "hzajyqbo";
     private final String password = "K8664qtGojuBvQczzv66EhaqkUNbXLj0";
     private static final String QUERY = "SELECT wrong, correct FROM misspellings WHERE wrong =?";
-    private static final String SELECT = "SELECT * FROM misspellings";
+    private static final String SELECT = "SELECT * FROM misspellings"; //skal måske slettes
     private static final String INSERT_misspellings = "INSERT INTO misspellings (wrong, correct) VALUES (?,?);";
     private static final String UPDATE_misspellings = "UPDATE misspellings misspellings SET wrong=? WHERE wrong=?";
 
@@ -129,7 +129,7 @@ public class Misspellings implements DatabaseOperator{
             e.printStackTrace();
         }
     }
-    
+
 
     public static void main(String[] args) throws SQLException {
         Misspellings mis = new Misspellings();

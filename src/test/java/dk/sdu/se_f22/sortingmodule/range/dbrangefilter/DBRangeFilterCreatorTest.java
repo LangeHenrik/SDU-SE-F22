@@ -1,8 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterReader;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import org.junit.jupiter.api.*;
@@ -17,12 +15,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DBRangeFilterCreatorTest {
     private DBRangeFilterCreator dbRangeFilterCreator;
-    private DBRangeFilterReader dbRangeFilterReader;
+    private RangeFilterReader dbRangeFilterReader;
 
     @BeforeEach
     void setUp() {
         dbRangeFilterCreator = new DBRangeFilterCreator();
-        dbRangeFilterReader = new DBRangeFilterReader();
+        dbRangeFilterReader = new RangeFilterReader();
     }
 
     @Nested

@@ -1,11 +1,11 @@
 package dk.sdu.se_f22.sortingmodule.range.rangefilter;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.ReadRangeFilterInterface;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.ReadRangeFilterInterface;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.CreateRangeFilterInterface;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterReader;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 
@@ -29,7 +29,7 @@ public class RangeFilterCreator implements RangeFilterInterface {
             System.out.println(e.getMessage());
         }
 
-        dbReader = new DBRangeFilterReader();
+        dbReader = new RangeFilterReader();
     }
 
     private boolean validateFilter() {

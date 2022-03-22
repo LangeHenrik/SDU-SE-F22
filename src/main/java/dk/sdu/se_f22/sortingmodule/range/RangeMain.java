@@ -3,16 +3,11 @@ package dk.sdu.se_f22.sortingmodule.range;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
-import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.ReadRangeFilterInterface;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterInterface;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * 1. Filter(id, min, max) bliver sendt fra SOM-1

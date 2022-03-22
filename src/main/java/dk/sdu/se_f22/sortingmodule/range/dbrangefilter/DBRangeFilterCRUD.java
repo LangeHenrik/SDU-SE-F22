@@ -2,18 +2,21 @@ package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterDeleter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 
 import java.util.List;
 
 public class DBRangeFilterCRUD implements IDBRangeFilterCRUD{
     DBRangeFilterCreator creator;
-    DBRangeFilterReader reader;
-    DBRangeFilterDeleter deleter;
+    RangeFilterReader reader;
+    RangeFilterDeleter deleter;
 
     public DBRangeFilterCRUD(){
         creator = new DBRangeFilterCreator();
-        reader = new DBRangeFilterReader();
-        deleter = new DBRangeFilterDeleter();
+        reader = new RangeFilterReader();
+        deleter = new RangeFilterDeleter();
     }
 
     @Override
@@ -22,7 +25,7 @@ public class DBRangeFilterCRUD implements IDBRangeFilterCRUD{
     }
 
     @Override
-    public DBRangeFilter read(int id) throws InvalidFilterIdException {
+    public RangeFilter read(int id) throws InvalidFilterIdException {
         return reader.getRangeFilter(id);
     }
 
@@ -32,12 +35,12 @@ public class DBRangeFilterCRUD implements IDBRangeFilterCRUD{
     }
 
     @Override
-    public DBRangeFilter delete(int id) throws InvalidFilterIdException {
+    public RangeFilter delete(int id) throws InvalidFilterIdException {
         return deleter.deleteRangeFilter(id);
     }
 
     @Override
-    public List<DBRangeFilter> readAll() {
+    public List<RangeFilter> readAll() {
         return reader.getRangeFilters();
     }
 }

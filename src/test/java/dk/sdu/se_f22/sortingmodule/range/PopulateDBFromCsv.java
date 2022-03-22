@@ -3,6 +3,8 @@ package dk.sdu.se_f22.sortingmodule.range;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.dbrangefilter.DBRangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +15,18 @@ public class PopulateDBFromCsv {
      * The first line will be ignored. Assuming these are headers.
      *
      * @param fileName the file is assumed to be located in the range folder of the resources folder
-     * @return A list of the {@link DBRangeFilter}s stored in the csv file
+     * @return A list of the {@link RangeFilter}s stored in the csv file
      */
-    public static List<DBRangeFilter> readDBFiltersFromCSV(String fileName){
+    public static List<RangeFilter> readDBFiltersFromCSV(String fileName){
         List<String> lines = Helpers.readFromCSV(fileName);
 
         // remove headers from the file
         lines.remove(0);
 
-        List<DBRangeFilter> out = new ArrayList<>();
+        List<RangeFilter> out = new ArrayList<>();
 
         for(String line: lines){
-            DBRangeFilter parsed = ParseSingleLine(line);
+            RangeFilter parsed = ParseSingleLine(line);
             if (parsed == null){
                 continue;
             }
@@ -34,11 +36,11 @@ public class PopulateDBFromCsv {
         return out;
     }
 
-    public static DBRangeFilter ParseSingleLine(String line) {
+    public static RangeFilter ParseSingleLine(String line) {
         String[] lineSplit = line.split(",");
-        DBRangeFilter filter;
+        RangeFilter filter;
         try{
-            filter = DBRangeFilterCreator.createAndCheckFilter(lineSplit[0], lineSplit[1], lineSplit[2], Double.parseDouble(lineSplit[3]), Double.parseDouble(lineSplit[4]));
+            filter = RangeFilterCreator.createAndCheckFilter(lineSplit[0], lineSplit[1], lineSplit[2], Double.parseDouble(lineSplit[3]), Double.parseDouble(lineSplit[4]));
             return filter;
         }catch (InvalidFilterException e){
             System.out.println("you fucked up, invalid filter" + e.getMessage());

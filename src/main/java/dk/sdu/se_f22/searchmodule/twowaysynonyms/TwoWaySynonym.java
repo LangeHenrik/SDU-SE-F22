@@ -4,6 +4,8 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
 public class TwoWaySynonym implements DatabaseOperator {
@@ -212,7 +214,7 @@ public class TwoWaySynonym implements DatabaseOperator {
         }
     }
 
-    private ArrayList<Synonym> getSynonyms(ResultSet rs, ) {
+    private ArrayList<Synonym> getSynonyms(ResultSet rs) {
         ArrayList<Synonym> synonymList = new ArrayList<>();
         try {
             while (rs.next()) {

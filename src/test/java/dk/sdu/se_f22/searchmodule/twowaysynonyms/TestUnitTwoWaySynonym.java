@@ -94,7 +94,8 @@ public class TestUnitTwoWaySynonym {
         operator.create("Computer");
         operator.create("PC", "Computer");
         // ACT
-        ArrayList<Synonym> actualResult = operator.readAll(_defaultSynonym);
+        int groupId = operator.read(("PC")).groupId();
+        ArrayList<Synonym> actualResult = operator.readAll(groupId);
         // ASSERT
         assertEquals(_defaultRelatedSynonymCollection.size(), actualResult.size());
     }

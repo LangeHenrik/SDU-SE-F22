@@ -23,7 +23,7 @@ public class Database implements DatabaseInterface {
      */
     @Override
     public DBRangeFilter read(int id) {
-        // currently only works for a Double Filter
+        // currently only works for a Double Filter and long filter
         Connection connection = DBConnection.getConnection();
         DBRangeFilter dbRangeFilter = null;
         try {
@@ -38,6 +38,9 @@ public class Database implements DatabaseInterface {
             typeStatement.setInt(1, id);
             ResultSet typeResult = typeStatement.executeQuery();
             if (typeResult.next()){
+                if(typeResult.getString(1) == null){
+                    return dbRangeFilter;
+                }
                 // Then get the filter from the correct view by using the now known data type
                 // This can be done by calling the stored function: (e.g. for type double)
                 // "SELECT * from get_double_filter(filter_id);"

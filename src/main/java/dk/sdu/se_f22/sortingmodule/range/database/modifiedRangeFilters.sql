@@ -278,6 +278,6 @@ $$
 
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);
-SELECT * FROM get_double_filter(3);
+SELECT * FROM get_double_filter(1);
 
 

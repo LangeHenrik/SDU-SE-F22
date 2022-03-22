@@ -60,6 +60,7 @@ class DatabaseTest {
         // Uncommented because it may not be the desired functionality
         // The mock database simply returns null, so that is the functionality described in the interface
         // The exception is then subsequently thrown by another method
+
         assertNull(database.read(inputId));
     }
 

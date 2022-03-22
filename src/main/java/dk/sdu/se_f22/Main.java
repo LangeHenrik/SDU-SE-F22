@@ -12,9 +12,15 @@ public class Main {
         operator.create("Software");
         operator.create("PC", "Computer");
         System.out.println(operator.read("Software").toString());
-        ArrayList<Synonym> synonyms = operator.readAll("Computer");
-        for (Synonym s : synonyms) {
-            System.out.println(s.toString());
-        }
+
+        ArrayList<String> asd = new ArrayList<>();
+
+        asd.add("Computer");
+        asd.add("Computer");
+        asd.add("Computer");
+        asd.add("Computer");
+        asd.add("Software");
+
+        operator.filter(asd);
     }
 }

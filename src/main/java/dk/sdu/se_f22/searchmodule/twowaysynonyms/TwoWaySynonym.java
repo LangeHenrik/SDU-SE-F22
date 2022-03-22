@@ -147,7 +147,20 @@ public class TwoWaySynonym implements DatabaseOperator {
      */
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) {
-        return null;
+        ArrayList<String> args = new ArrayList<>();
+        Set<Integer> unique = new TreeSet<>();
+
+        for(String token : tokens){
+            int groupId = read(token).groupId();
+
+            var statement = unique.contains(groupId) ?  null : unique.add(groupId);
+        }
+
+        for(Integer groupId : unique){
+            readAll(groupId).forEach(s -> args.add(s.synonym()));
+        }
+
+        return args;
     }
 
     /**

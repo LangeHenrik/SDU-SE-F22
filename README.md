@@ -110,6 +110,9 @@ All files, that end in .sql will be runned, as if it was a migration.<br>
 The system automaticly keeps track of which files has been runned.<br>
 **Please note, when changing the names of a migration file, the system will treat this as a new migration.**
 
+The files may be named as followed (naming is only used for sorting - Very important for the order the migrations should be done in):<br>
+\<version>.\<minor_version>_\<descriptive name>.sql
+
 Take a look int the existing migrations, to see examples, of how they are build.
 
 The system also has a batch tracker, so that you can look up, in which batch, which migrations was runned.

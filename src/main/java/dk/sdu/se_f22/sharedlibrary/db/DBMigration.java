@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import dk.sdu.se_f22.sharedlibrary.Color;
+import dk.sdu.se_f22.sharedlibrary.utils.NaturalOrderComparator;
 
 /**
  * Migrate database to the newest version
@@ -29,7 +30,7 @@ public class DBMigration {
 
     public static void main(String[] args) {
         DBMigration databaseSeeder = new DBMigration();
-        databaseSeeder.migrate();
+        databaseSeeder.migrateFresh();
     }
 
     /**
@@ -53,14 +54,22 @@ public class DBMigration {
      * Migrate the current databse to the newest version
      */
     public void migrate() {
-        String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations";
+        String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/";
+
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        this.connection = DBConnection.getConnection();
 
         // creates a file object
         File file = new File(migrationsPath);
 
         // returns an array of all files, sorted alphabetically
         String[] fileList = file.list();
-        Arrays.sort(fileList);
+        Arrays.sort(fileList, new NaturalOrderComparator());
 
         // Get known migrations
         List migrations = this.getMigrations();
@@ -134,6 +143,12 @@ public class DBMigration {
      * @author Mikkel Albrechtsen (The0mikkel)
      */
     private boolean runSQLFromFile(Connection connection, String SQLFileName) {
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         try (
             FileReader fr = new FileReader(SQLFileName);
             BufferedReader br = new BufferedReader(fr);
@@ -179,7 +194,6 @@ public class DBMigration {
 
             // Commit the current file, if no errors was encountered
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException|IOException error) {
             // Printing stack trace for better debugging
             error.printStackTrace();
@@ -200,6 +214,12 @@ public class DBMigration {
             }
 
             return false;
+        }
+        
+        try {
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return true;
     }

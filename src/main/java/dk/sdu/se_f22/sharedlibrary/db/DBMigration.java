@@ -29,7 +29,6 @@ public class DBMigration {
 
     public static void main(String[] args) {
         DBMigration databaseSeeder = new DBMigration();
-        // databaseSeeder.migrate();
         databaseSeeder.migrate();
     }
 
@@ -54,8 +53,10 @@ public class DBMigration {
      * Migrate the current databse to the newest version
      */
     public void migrate() {
+        String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations";
+
         // creates a file object
-        File file = new File("src/main/java/dk/sdu/se_f22/sharedlibrary/db/migrations");
+        File file = new File(migrationsPath);
 
         // returns an array of all files, sorted alphabetically
         String[] fileList = file.list();
@@ -64,6 +65,8 @@ public class DBMigration {
         // Get known migrations
         List migrations = this.getMigrations();
         this.batch++;
+
+        boolean migrationStatus;
 
         for (String fileName : fileList) {
             // Ensure the file is a sql file
@@ -79,7 +82,7 @@ public class DBMigration {
 
             // Run all files
             this.println("Migrating: " + fileName, Color.YELLOW);
-            boolean migrationStatus = runSQLFromFile(this.connection, "src/main/java/dk/sdu/se_f22/sharedlibrary/db/migrations/"+fileName);
+            migrationStatus = runSQLFromFile(this.connection, migrationsPath + fileName);
 
             // Add migration to migration list
             if (migrationStatus) {
@@ -90,6 +93,7 @@ public class DBMigration {
                 }
             } else {
                 this.println("Migration failed!", Color.RED);
+                return;
             }
         }
 

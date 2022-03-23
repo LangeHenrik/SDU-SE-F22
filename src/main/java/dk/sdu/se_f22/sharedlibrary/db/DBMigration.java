@@ -30,7 +30,7 @@ public class DBMigration {
 
     public static void main(String[] args) {
         DBMigration databaseSeeder = new DBMigration();
-        databaseSeeder.migrateFresh();
+        databaseSeeder.migrate();
     }
 
     /**

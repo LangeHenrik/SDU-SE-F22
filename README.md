@@ -82,7 +82,7 @@ For more information:
 
 #### Run migrations
 
-To run the migration, the system needs to be connected to the databse. Please see [Connect to databse](Connect-to-database)
+To run the migration, the system needs to be connected to the databse. Please see [Connect to databse](#connect-to-databse)
 
 The migration itself, can be runned, by runnning the `.migrate()` method:
 ```java

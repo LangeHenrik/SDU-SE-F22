@@ -5,6 +5,7 @@ import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class RangeFilterReaderTest {
     void testGetRangeFilterWithValidId() {
         try {
             Assertions.assertEquals(db.read(id1),rangeFilterReader.getRangeFilter(id1));
-        } catch (InvalidFilterIdException e) {
+        } catch (InvalidFilterIdException | UnknownFilterTypeException e) {
             fail("Id didnt exist");
         }
     }

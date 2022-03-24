@@ -37,7 +37,6 @@ abstract class RangeFilterClass implements RangeFilter{
         if(!(other instanceof RangeFilterClass casted)){
             return false;
         }
-
         if (this.ID != casted.getId()) {
             return false;
         }

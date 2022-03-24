@@ -11,15 +11,8 @@ public class JSONReader {
     private final String filepath;
     private int currentLineNumber = 1;
 
-    private final File writeProfFile;
-    private final File readProfFile;
-
-
     public JSONReader(String filepath){
         this.filepath = filepath;
-        writeProfFile = new File("resources/JSONReaderProfiling/writeSpeed.txt");
-        readProfFile = new File("resources/JSONReaderProfiling/readSpeed.txt");
-
     }
 
     public ArrayList<Product> read() throws IOException{

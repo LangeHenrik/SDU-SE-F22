@@ -13,14 +13,17 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
+
+// Currently, the tests involving instants fail,
+// since the string format of instants are not known at the moment,
+// and should be researched
 public class RangeFilterCRUDTest {
 
     private RangeFilterCRUD rangeFilterCRUD;
 
-    @BeforeAll
+    @BeforeEach
     public void setup () {
         rangeFilterCRUD = new RangeFilterCRUD();
     }
@@ -37,6 +40,10 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             try {
@@ -60,6 +67,10 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             try {
@@ -83,6 +94,10 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             try {
@@ -115,6 +130,9 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             // This deletes the RangeFilter from the database, and make sure it does not throw an exception
@@ -135,6 +153,10 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             // This deletes the RangeFilter from the database, and make sure it does not throw an exception
@@ -149,12 +171,17 @@ public class RangeFilterCRUDTest {
         @DisplayName("Delete time filter twice")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
         void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) {
+            //expected fail until database.create has been implemented
+
             RangeFilter rangeFilterFromDataBase = null;
             try {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
+
+            assertNotNull(rangeFilterFromDataBase);
+
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             // This deletes the RangeFilter from the database, and make sure it does not throw an exception

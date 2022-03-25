@@ -13,7 +13,7 @@ public class RangeFilterFilterResults {
      * This is the method that filters the products in the searchHits based on the filters given.
      * <p>
      * You are nto allowed to extend {@link RangeFilter} and pass your own instances in the list.
-     * You will get an {@link IllegalImplementationException} if you try.
+     * You will get an {@link IllegalImplementationException} when using the filters if you try.
      *
      * @param rangeFilters The rangefilters to use for filtering the search hits, they must be in accordance with the filters stored in our DB.
      *                     See {@link RangeFilterCRUDInterface} for details on getting active/valid filters.

@@ -115,7 +115,7 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
-            RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+            RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, (long) min, (long)max);
 
             // This deletes the RangeFilter from the database, and make sure it does not throw an exception
             assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));

@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.OldRangeFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,7 +55,7 @@ public class Helpers {
         }
         return attributeMap;
     }
-
+    /*
     public static List<OldRangeFilter> readRangeFiltersFromFile(String fileName){
         List<OldRangeFilter> mockResults = new ArrayList<>();
 
@@ -80,5 +79,5 @@ public class Helpers {
     public static String formatArrays(Object[] expected, Object[] actual){
         return "\nexpected\n" + Arrays.toString(expected) + "\n" +
                 "actual:\n" + Arrays.toString(actual) + "\n";
-    }
+    }*/
 }

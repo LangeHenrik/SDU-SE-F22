@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.DoubleFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,9 +57,9 @@ public class Helpers {
         }
         return attributeMap;
     }
-    /*
-    public static List<OldRangeFilter> readRangeFiltersFromFile(String fileName){
-        List<OldRangeFilter> mockResults = new ArrayList<>();
+
+    public static List<RangeFilter> readRangeFiltersFromFile(String fileName){
+        List<RangeFilter> rangeFilters = new ArrayList<>();
 
         List<String> filters = Helpers.readFromCSV(fileName);
 
@@ -70,14 +72,14 @@ public class Helpers {
                 continue;
             }
 
-            mockResults.add(new OldRangeFilter(Integer.parseInt(filterSplit[0]), Double.parseDouble(filterSplit[1]), Double.parseDouble(filterSplit[2])));
+            rangeFilters.add(new DoubleFilter(filterSplit[0], filterSplit[1], filterSplit[2], Double.parseDouble(filterSplit[3]), Double.parseDouble(filterSplit[4])));
         }
 
-        return mockResults;
+        return rangeFilters;
     }
 
     public static String formatArrays(Object[] expected, Object[] actual){
         return "\nexpected\n" + Arrays.toString(expected) + "\n" +
                 "actual:\n" + Arrays.toString(actual) + "\n";
-    }*/
+    }
 }

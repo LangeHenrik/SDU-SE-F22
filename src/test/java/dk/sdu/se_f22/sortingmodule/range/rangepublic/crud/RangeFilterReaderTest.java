@@ -42,8 +42,11 @@ public class RangeFilterReaderTest {
     void testGetRangeFilterWithValidId() {
         try {
             Assertions.assertEquals(db.read(id1),rangeFilterReader.getRangeFilter(id1));
-        } catch (InvalidFilterIdException | UnknownFilterTypeException e) {
+        } catch (InvalidFilterIdException e) {
             fail("Id didnt exist");
+        }catch (UnknownFilterTypeException e){
+            e.printStackTrace();
+            fail("Unknown filter type exception thrown");
         }
     }
 

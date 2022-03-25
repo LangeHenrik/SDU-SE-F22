@@ -4,8 +4,6 @@ import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterCreator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

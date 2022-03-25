@@ -1,10 +1,10 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 
@@ -42,7 +42,7 @@ public class RangeFilterReaderTest {
     void testGetRangeFilterWithValidId() {
         try {
             Assertions.assertEquals(db.read(id1),rangeFilterReader.getRangeFilter(id1));
-        } catch (InvalidFilterIdException e) {
+        } catch (IdNotFoundException e) {
             fail("Id didnt exist");
         }catch (UnknownFilterTypeException e){
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class RangeFilterReaderTest {
     @Test
     @DisplayName("Test getRangeFilter with invalid id")
     void testGetRangeFilterWithInvalidId() {
-        Assertions.assertThrows(InvalidFilterIdException.class,
+        Assertions.assertThrows(IdNotFoundException.class,
                 () -> rangeFilterReader
                         .getRangeFilter(-1)
         );

@@ -22,7 +22,7 @@ class DBRangeFilterCreatorTest {
         dbRangeFilterCreator = new DBRangeFilterCreator();
         dbRangeFilterReader = new RangeFilterReader();
     }
-
+    
     @Nested
     @DisplayName("Create Db filters")
     class createDbFilters {

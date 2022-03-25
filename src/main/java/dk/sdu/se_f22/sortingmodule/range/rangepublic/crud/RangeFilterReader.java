@@ -4,7 +4,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.UnknownFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import java.util.List;
 

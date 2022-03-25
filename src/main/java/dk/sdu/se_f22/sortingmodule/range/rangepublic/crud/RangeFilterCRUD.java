@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
@@ -52,23 +52,23 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface{
     }
 
     @Override
-    public RangeFilter read(int id) throws InvalidFilterIdException, UnknownFilterTypeException {
+    public RangeFilter read(int id) throws IdNotFoundException, UnknownFilterTypeException {
         // Refactor needed
         // In this implementation, you make the same call to the database twice,
         // you should use a local variable instead, like:
 //        RangeFilter result = database.read(id);
         RangeFilter result = database.read(id);
         if (result == null) {
-            throw new InvalidFilterIdException("Invalid id");
+            throw new IdNotFoundException("Invalid id");
         }
         return result;
     }
 
     @Override
-    public RangeFilter delete(int id) throws InvalidFilterIdException {
+    public RangeFilter delete(int id) throws IdNotFoundException {
         RangeFilter result = database.delete(id);
         if (result==null) {
-            throw new InvalidFilterIdException("Invalid id");
+            throw new IdNotFoundException("Invalid id");
         }
         return result;
     }

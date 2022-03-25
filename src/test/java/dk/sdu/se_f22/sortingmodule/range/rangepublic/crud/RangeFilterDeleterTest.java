@@ -1,10 +1,10 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.PopulateDBFromCsv;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.Database;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.DatabaseInterface;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,18 +51,18 @@ public class RangeFilterDeleterTest {
         );
 
         assertAll(
-                () -> Assertions.assertThrows(InvalidFilterIdException.class,
+                () -> Assertions.assertThrows(IdNotFoundException.class,
                         () -> rangeFilterReader.getRangeFilter(id1)
                 ),
-                () -> Assertions.assertThrows(InvalidFilterIdException.class,
+                () -> Assertions.assertThrows(IdNotFoundException.class,
                         () -> rangeFilterReader.getRangeFilter(id2)
                 ),
-                () -> Assertions.assertThrows(InvalidFilterIdException.class,
+                () -> Assertions.assertThrows(IdNotFoundException.class,
                         () -> rangeFilterReader.getRangeFilter(id3)
                 )
         );
 
-//        Assertions.assertThrows(InvalidFilterIdException.class,
+//        Assertions.assertThrows(IdNotFoundException.class,
 //                () -> RangeFilterReader.getRangeFilter(id1)
 //        );
     }
@@ -77,7 +77,7 @@ public class RangeFilterDeleterTest {
 
         final int testInput = input;
 
-        Assertions.assertThrows(InvalidFilterIdException.class,
+        Assertions.assertThrows(IdNotFoundException.class,
                 () -> rangeFilterDeleter.deleteRangeFilter(testInput)
         );
     }
@@ -87,11 +87,11 @@ public class RangeFilterDeleterTest {
     void deleteFilterTwice() {
         try {
             rangeFilterDeleter.deleteRangeFilter(id1);
-        } catch (InvalidFilterIdException | UnknownFilterTypeException e) {
+        } catch (IdNotFoundException | UnknownFilterTypeException e) {
             fail();
         }
 
-        Assertions.assertThrows(InvalidFilterIdException.class,
+        Assertions.assertThrows(IdNotFoundException.class,
                 () -> rangeFilterDeleter.deleteRangeFilter(id1)
         );
     }

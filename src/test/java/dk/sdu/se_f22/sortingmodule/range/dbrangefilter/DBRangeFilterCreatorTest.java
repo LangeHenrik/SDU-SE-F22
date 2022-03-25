@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.dbrangefilter;
 
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterReader;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -163,7 +163,7 @@ class DBRangeFilterCreatorTest {
         DBRangeFilter retrievedFilter = null;
         try {
             retrievedFilter = dbRangeFilterReader.getRangeFilter(id[0]);
-        } catch (InvalidFilterIdException e) {
+        } catch (IdNotFoundException e) {
             fail("Id does not exist");
         }
 

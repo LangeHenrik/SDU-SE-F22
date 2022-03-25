@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
@@ -21,5 +21,5 @@ public interface ReadRangeFilterInterface {
      * @param id
      * @return RangeFilter
      */
-    RangeFilter getRangeFilter(int id) throws InvalidFilterIdException, UnknownFilterTypeException;
+    RangeFilter getRangeFilter(int id) throws IdNotFoundException, UnknownFilterTypeException;
 }

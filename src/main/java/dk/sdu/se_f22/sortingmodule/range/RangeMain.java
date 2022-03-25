@@ -17,11 +17,6 @@ import java.util.ArrayList;
 **/
 
 public class RangeMain{
-    private IRangeFilterCreator rangeFilterCreator;
-
-    public RangeMain() {
-        this.rangeFilterCreator = new RangeFilterCreator();
-    }
 
     public static void main(String[] args) {
         Product product = new Product();

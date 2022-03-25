@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 
 import java.time.Instant;
 import java.util.Collection;

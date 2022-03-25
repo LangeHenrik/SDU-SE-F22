@@ -191,7 +191,7 @@ class RangeFilterCreatorTest {
                 }
 
                 @ParameterizedTest(name = "filter min negative {0}")
-                @DisplayName("Negative min double")
+                @DisplayName("Negative min time")
                 @ValueSource(ints = {-1, -3})
                 void negativeMinTime(int epochSec) {
                     Instant instant = Instant.ofEpochSecond(epochSec); // Format from epochSec. MIGHT BE A BETTER WAY?
@@ -268,14 +268,13 @@ class RangeFilterCreatorTest {
                             () -> rangeFilterCRUD.create("negative min", "name", "price", minInstant, maxInstant)
                     );
                 }
-            }
-
-            // Provides multiple parameters for the max less than min test
-            static Stream<Arguments> integerProvider() {
-                return Stream.of(
-                        arguments(3, 1),
-                        arguments(15, 13)
-                );
+                // Provides multiple parameters for the max less than min test
+                static Stream<Arguments> integerProvider() {
+                    return Stream.of(
+                            arguments(3, 1),
+                            arguments(15, 13)
+                    );
+                }
             }
         }
     }

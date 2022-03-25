@@ -115,16 +115,54 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
-            RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, (long) min, (long)max);
+            RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             // This deletes the RangeFilter from the database, and make sure it does not throw an exception
             assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));
 
+            // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> rangeFilterCRUD.delete(rangeFilter.getId()));
+        }
+
+        @ParameterizedTest
+        @DisplayName("Delete time filter twice")
+        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        void deleteTimeFilterTwice(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            RangeFilter rangeFilterFromDataBase = null;
+            try {
+                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+            } catch (InvalidFilterException e) {
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }
+            RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            // This deletes the RangeFilter from the database, and make sure it does not throw an exception
+            assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));
 
             // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
             Assertions.assertThrows(IdNotFoundException.class,
                     () -> rangeFilterCRUD.delete(rangeFilter.getId()));
-            org.junit.jupiter.api.Assertions.fail("not yet implemented");
+        }
+
+        @ParameterizedTest
+        @DisplayName("Delete time filter twice")
+        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) {
+            RangeFilter rangeFilterFromDataBase = null;
+            try {
+                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+            } catch (InvalidFilterException e) {
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }
+            RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            // This deletes the RangeFilter from the database, and make sure it does not throw an exception
+            assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));
+
+            // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> rangeFilterCRUD.delete(rangeFilter.getId()));
         }
     }
 

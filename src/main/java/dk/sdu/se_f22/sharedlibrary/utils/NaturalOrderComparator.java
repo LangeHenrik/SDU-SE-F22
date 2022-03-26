@@ -25,6 +25,8 @@ import java.util.*;
 /**
  * Natural order String comparator
  * 
+ * Used to order string in a natural way, so that "10 this is a string" comes after "2 this is a string"
+ * 
  * @author https://github.com/paour/natorder/blob/master/NaturalOrderComparator.java
  */
 public class NaturalOrderComparator implements Comparator

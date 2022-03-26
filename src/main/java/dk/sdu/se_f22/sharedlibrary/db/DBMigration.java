@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import dk.sdu.se_f22.sharedlibrary.Color;
+import dk.sdu.se_f22.sharedlibrary.utils.Color;
 import dk.sdu.se_f22.sharedlibrary.utils.NaturalOrderComparator;
 
 /**

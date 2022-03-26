@@ -1,7 +1,8 @@
-package dk.sdu.se_f22.sharedlibrary;
+package dk.sdu.se_f22.sharedlibrary.utils;
 
 /**
- * Commandline color palette
+ * Command-line color palette.
+ * Can be used with System.out.print() to color the text in the command prompt.
  *
  * @author https://stackoverflow.com/a/51944613/10604028
  */

@@ -59,8 +59,9 @@ public class DBMigration {
 
         try {
             this.connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException error) {
+            
+            this.println(error, error.getStackTrace());
         }
 
         this.connection = DBConnection.getConnection();
@@ -129,7 +130,7 @@ public class DBMigration {
             stmt.execute();
             stmt.close();
         } catch (SQLException error) {
-            this.println(error.getStackTrace());
+            this.println(error, error.getStackTrace());
         }
 
         this.println("Database flushed", Color.GREEN);
@@ -151,7 +152,7 @@ public class DBMigration {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException error) {
-            this.println(error.getStackTrace());
+            this.println(error, error.getStackTrace());
         }
 
         try (
@@ -198,7 +199,7 @@ public class DBMigration {
             connection.commit();
         } catch (SQLException|IOException error) {
             // Printing stack trace for better debugging
-            this.println(error.getStackTrace());
+            this.println(error, error.getStackTrace());
 
             // Dev friendly error messages
             if (error instanceof FileNotFoundException) {
@@ -212,7 +213,7 @@ public class DBMigration {
                 connection.rollback();
             } catch (SQLException rollbackError) {
                 this.println("Could not rollback update", Color.RED_BOLD_BRIGHT);
-                this.println(rollbackError.getStackTrace());
+                this.println(rollbackError, rollbackError.getStackTrace());
             }
 
             return false;
@@ -221,7 +222,7 @@ public class DBMigration {
         try {
             connection.setAutoCommit(true);
         } catch (SQLException error) {
-            this.println(error.getStackTrace());
+            this.println(error, error.getStackTrace());
         }
         return true;
     }
@@ -242,7 +243,7 @@ public class DBMigration {
 
             return returnValue;
         } catch (SQLException error) {
-            // this.println(error.getStackTrace()); -- No stacktrace should be printed. If an error occurs, it may be due to no migration has been run, and the system will then do all migrations
+            // this.println(error, error.getStackTrace()); -- No stacktrace should be printed. If an error occurs, it may be due to no migration has been run, and the system will then do all migrations
             return new ArrayList<String>();
         }
     }
@@ -255,7 +256,7 @@ public class DBMigration {
             stmt.execute();
             stmt.close();
         } catch (SQLException error) {
-            this.println(error.getStackTrace());
+            this.println(error, error.getStackTrace());
             return false;
         }
         return true;
@@ -288,8 +289,9 @@ public class DBMigration {
      * 
      * @param stackTrace as StackTraceElement array
      */
-    private void println(StackTraceElement[] stackTrace) {
+    private void println(Throwable error, StackTraceElement[] stackTrace) {
         this.println("Error occurred!", Color.RED_BOLD);
+        this.println(error.getClass().getName() + " " + error.getMessage(), Color.RED_BOLD);
         this.println("Stack trace:", Color.RED);
         for (StackTraceElement stackTraceElement : stackTrace) {
             this.println(stackTraceElement.toString(), Color.RED);

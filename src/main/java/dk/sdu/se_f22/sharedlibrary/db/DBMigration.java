@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,15 +73,16 @@ public class DBMigration {
         Arrays.sort(fileList, new NaturalOrderComparator());
 
         // Get known migrations
-        List migrations = this.getMigrations();
+        List<String> migrations = this.getMigrations();
         this.batch++;
 
         boolean migrationStatus;
 
         for (String fileName : fileList) {
+            fileName = fileName.toLowerCase();
+
             // Ensure the file is a sql file
-            String lowercaseFileName = fileName.toLowerCase(); 
-            if (!lowercaseFileName.endsWith(".sql")) {
+            if (!this.validateFile(fileName)) {
                 continue;
             }
 
@@ -101,7 +103,7 @@ public class DBMigration {
                     this.println("Migration completed", Color.GREEN);
                 }
             } else {
-                this.println("Migration failed!", Color.RED);
+                this.println("Migration failed!", Color.RED_BOLD_BRIGHT);
                 return;
             }
         }
@@ -117,6 +119,7 @@ public class DBMigration {
 
         try {
             PreparedStatement stmt;
+
             // Drop schema to delete all tables
             stmt = connection.prepareStatement("DROP SCHEMA public CASCADE;");
             stmt.execute();
@@ -124,8 +127,9 @@ public class DBMigration {
             // Recreate schema
             stmt = connection.prepareStatement("CREATE SCHEMA public;");
             stmt.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            stmt.close();
+        } catch (SQLException error) {
+            this.println(error.getStackTrace());
         }
 
         this.println("Database flushed", Color.GREEN);
@@ -139,14 +143,15 @@ public class DBMigration {
      * @param SQLFileName The name of the file to execute sql from
      * @return True on success, false on error - See console for more details about the error.
      * 
-     * @author v-nementh
+     * @author v-nemeth
      * @author Mikkel Albrechtsen (The0mikkel)
      */
     private boolean runSQLFromFile(Connection connection, String SQLFileName) {
+        // Begin transaction
         try {
             connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException error) {
+            this.println(error.getStackTrace());
         }
 
         try (
@@ -154,9 +159,6 @@ public class DBMigration {
             BufferedReader br = new BufferedReader(fr);
             Statement stmt = connection.createStatement();
         ) {
-            // Begin a transaction
-            connection.setAutoCommit(false);
-
             String currentLine;
             String sqlCode = "";
 
@@ -196,7 +198,7 @@ public class DBMigration {
             connection.commit();
         } catch (SQLException|IOException error) {
             // Printing stack trace for better debugging
-            error.printStackTrace();
+            this.println(error.getStackTrace());
 
             // Dev friendly error messages
             if (error instanceof FileNotFoundException) {
@@ -209,8 +211,8 @@ public class DBMigration {
             try {
                 connection.rollback();
             } catch (SQLException rollbackError) {
-                this.println("Could not rollback update");
-                rollbackError.printStackTrace();
+                this.println("Could not rollback update", Color.RED_BOLD_BRIGHT);
+                this.println(rollbackError.getStackTrace());
             }
 
             return false;
@@ -218,8 +220,8 @@ public class DBMigration {
         
         try {
             connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException error) {
+            this.println(error.getStackTrace());
         }
         return true;
     }
@@ -235,9 +237,12 @@ public class DBMigration {
                 topBatch = sqlReturnValues.getInt(2);
             }
             this.batch = topBatch;
+            stmt.close();
+            sqlReturnValues.close();
+
             return returnValue;
-        } catch (SQLException ex) {
-            // ex.printStackTrace();
+        } catch (SQLException error) {
+            // this.println(error.getStackTrace()); -- No stacktrace should be printed. If an error occurs, it may be due to no migration has been run, and the system will then do all migrations
             return new ArrayList<String>();
         }
     }
@@ -248,17 +253,55 @@ public class DBMigration {
             stmt.setString(1, fileName);
             stmt.setInt(2, this.batch);
             stmt.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            stmt.close();
+        } catch (SQLException error) {
+            this.println(error.getStackTrace());
             return false;
         }
         return true;
     }
 
+    /**
+     * Check if file is valid, to be used as a migration
+     * @param filename
+     * @return boolean - True if file is valid
+     */
+    private boolean validateFile(String filename) {
+        String lowercaseFileName = filename.toLowerCase(); 
+        if (!lowercaseFileName.endsWith(".sql")) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Print text to console
+     * 
+     * @param text
+     */
     private void println(String text) {
         this.println(text, Color.RESET);
     }
 
+    /**
+     * Print stacktrace to console
+     * 
+     * @param stackTrace as StackTraceElement array
+     */
+    private void println(StackTraceElement[] stackTrace) {
+        this.println("Error occurred!", Color.RED_BOLD);
+        this.println("Stack trace:", Color.RED);
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            this.println(stackTraceElement.toString(), Color.RED);
+        }
+    }
+
+    /**
+     * Print text to command-line with color. This will only print, if printing is set for object
+     * 
+     * @param text String to print
+     * @param color as enum from Color
+     */
     private void println(String text, Color color) {
         if (this.printText) {
             System.out.println(color + text + Color.RESET);

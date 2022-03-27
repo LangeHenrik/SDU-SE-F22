@@ -1,11 +1,10 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class OneWayFrame extends JFrame {
 
-    private OneWayPanel panel;
+    private JPanel panel;
 
     public OneWayFrame(Item item){
         this.panel = new OneWayPanel(item);

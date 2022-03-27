@@ -2,36 +2,33 @@ package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class OneWayPanel extends JPanel {
 
     private Item root;
     private int width;
-    private int length;
-    private HashMap<Integer,Integer> numberInGeneration;
+    private int height;
+    private HashMap<Integer,LinkedList<Item>> tree;
 
     public OneWayPanel(Item item){
-        HashMap<Integer, Integer> numberInEachGeneration = fillNumberInEachGeneration(item);
-        int width = numberInEachGeneration.size()*200;
-        int length = imageLength(numberInEachGeneration.values());
-        this.setPreferredSize(new Dimension(width,length));
+        HashMap<Integer, LinkedList<Item>> tree = fillNumberInEachGeneration(item);
+        int height = tree.size()*100;
+        int width = imageLength(tree);
 
         this.root = item;
-        this.length = length;
+        this.height = height;
         this.width = width;
-        this.numberInGeneration = numberInEachGeneration;
+        this.tree = tree;
     }
 
-    private HashMap<Integer, Integer> fillNumberInEachGeneration(Item root){
-        HashMap<Integer, Integer> map = new HashMap<>();
+    private HashMap<Integer, LinkedList<Item>> fillNumberInEachGeneration(Item root){
+        HashMap<Integer, LinkedList<Item>> map = new HashMap<>();
 
-        map.put(0,1);
+
         LinkedList<Item> childrenInGeneration = new LinkedList<>();
         childrenInGeneration.add(root);
+        map.put(0, (LinkedList<Item>) childrenInGeneration.clone());
         LinkedList<Item> nextGeneration = new LinkedList<>();
         int cycle = 1;
         while (true){
@@ -43,23 +40,23 @@ public class OneWayPanel extends JPanel {
             if(nextGeneration.size() == 0){
                 break;
             }
-            map.put(cycle,nextGeneration.size());
+            map.put(cycle, (LinkedList<Item>) nextGeneration.clone());
             cycle++;
             childrenInGeneration.clear();
-            childrenInGeneration.addAll(nextGeneration);
+            childrenInGeneration.addAll((Collection<? extends Item>) nextGeneration.clone());
             nextGeneration.clear();
         }
         return map;
     }
 
-    private int imageLength(Collection<Integer> collection){
+    private int imageLength(HashMap<Integer, LinkedList<Item>> list){
         int biggest = 0;
-        for(int i : collection){
-            if(i > biggest){
-                biggest = i;
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).size() > biggest){
+                biggest = list.get(i).size();
             }
         }
-        return biggest * 110;
+        return biggest*150;
     }
 
     @Override
@@ -67,16 +64,41 @@ public class OneWayPanel extends JPanel {
         Graphics2D g2D = (Graphics2D) g;
 
         g2D.setStroke(new BasicStroke(3));
-        g2D.drawRoundRect(this.width/2,10,100,50,20,20);
-        g2D.drawString(root.getName(),this.width/2-100,60);
+        g2D.setColor(Color.getHSBColor(342, 100, (float) 67.45));
         int number = 0;
-
-        for(int i = 1; i<numberInGeneration.size(); i++){
-           number = numberInGeneration.get(i);
-           for(int j = 0; j<number; j++){
-               g2D.drawRoundRect(this.width/number+110*j,i*150,100,50,20,20);
-           }
+        HashMap<String,Integer[]> log = new HashMap<>();
+        int x2 = 0;
+        int y2 = 0;
+        for(int i = 0; i< tree.size(); i++){
+            for(Item item : tree.get(number)){
+                log.put(item.getName(), new Integer[]{getX(number,item)+10,i*100});
+                if(log.containsKey(getSuperName(item))){
+                    x2 = log.get(getSuperName(item))[0]+50;
+                    y2 = log.get(getSuperName(item))[1]+50;
+                    g2D.drawLine(getX(number,item)+60,i*100+25,x2,y2);
+                }
+                g2D.fillRoundRect(getX(number, item)+10,i*100,100,50,20,20);
+                g2D.setColor(Color.black);
+                g2D.drawString(item.getName(),getX(number, item)+15,i*100+25);
+                g2D.setColor(Color.getHSBColor(342, 100, (float) 67.45));
+            }
+           number++;
         }
+    }
 
+    private String getSuperName(Item item) {
+        if(item.getSuperItem() == null){
+            return "tehe";
+        }
+        return item.getSuperItem().getName();
+    }
+
+    private int getX(int number, Item item) {
+        return this.width / tree.get(number).size() * tree.get(number).indexOf(item);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(width, height);
     }
 }

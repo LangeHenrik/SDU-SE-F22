@@ -1,2 +1,2 @@
 id,name,description,productAtrribute,min,max
-1,test name double,test description,price,0,10
+1,test name double,test description for double filter,price,0,10

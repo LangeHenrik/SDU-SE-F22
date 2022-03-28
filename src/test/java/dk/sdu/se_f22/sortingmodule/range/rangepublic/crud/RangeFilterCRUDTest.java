@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.EmptyDatabaseException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
@@ -194,7 +195,7 @@ public class RangeFilterCRUDTest {
         }
     }
 
-    //Tests may have to clean up the database after, since we create a lot of 
+    //Tests may have to clean up the database after, since we create a lot of rangefilters in the db
     @Nested
     class CRUDReaderTest {
 
@@ -272,13 +273,55 @@ public class RangeFilterCRUDTest {
                 fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
         }
-        
+
+        @ParameterizedTest
+        @DisplayName("Read filter that does not exist")
+        @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE, Integer.MAX_VALUE, 0})
+        void readFilterThatDoesNotExist(int input) {
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> rangeFilterCRUD.read(input), "See 'read' under 'RangeFilterCRUD' or check if test input id's exist in database"
+            );
+        }
+
         @Test
-        @DisplayName("Test name")
-        void testName() {
-            
-            org.junit.jupiter.api.Assertions.fail("not yet implemented");
+        @DisplayName("Read all existing range filters")
+        void readAllExistingRangeFilters() {
+            RangeFilter doubleRangeFilterFromDataBase = null;
+            RangeFilter timeRangeFilterFromDataBase = null;
+            RangeFilter longRangeFilterFromDataBase = null;
+            try {
+                doubleRangeFilterFromDataBase = rangeFilterCRUD.create("test name double","test description for double","price",0,10);
+                timeRangeFilterFromDataBase = rangeFilterCRUD.create("test name time","test description for time","expirationDate",Instant.parse("2018-11-30T18:35:24.00Z"),Instant.parse("2018-11-30T18:35:24.00Z"));
+                longRangeFilterFromDataBase = rangeFilterCRUD.create("test name ean","test description for ean","ean",2,100);
+
+            } catch (InvalidFilterException e) {
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }
+
+            //This fails until database.create has been implemented
+            assertNotNull(doubleRangeFilterFromDataBase);
+            assertNotNull(timeRangeFilterFromDataBase);
+            assertNotNull(longRangeFilterFromDataBase);
+
+            RangeFilter doubleRangeFilter = new DoubleFilter(doubleRangeFilterFromDataBase.getId(),"test name double","test description for double","price",0,10);
+            RangeFilter timeRangeFilter = new TimeFilter(timeRangeFilterFromDataBase.getId(),"test name time","test description for time","expirationDate",Instant.parse("2018-11-30T18:35:24.00Z"),Instant.parse("2018-11-30T18:35:24.00Z"));
+            RangeFilter longRangeFilter = new LongFilter(longRangeFilterFromDataBase.getId(),"test name ean","test description for ean","ean",2,100);
+
+
+            Assertions.assertAll(
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(0),doubleRangeFilter),
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(1),timeRangeFilter),
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2),longRangeFilter, "See 'read' under 'RangeFilterCRUD' or check if test input id's exist in database")
+            );
+        }
+
+        @Test
+        @DisplayName("Read from an empty database")
+        void readFromAnEmptyDatabase() {
+            //Database have to be empty for the test to pass
+            Assertions.assertThrows(EmptyDatabaseException.class,
+                    () -> rangeFilterCRUD.readAll(),"Database not empty"
+            );
         }
     }
-
 }

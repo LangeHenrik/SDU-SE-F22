@@ -39,12 +39,8 @@ public class DBConnection {
     }
 
     public static Connection getConnection(){
-        try {
-            if (dbConnection == null || conn.isClosed() ){
-                dbConnection = new DBConnection();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (dbConnection == null){
+            dbConnection = new DBConnection();
         }
         return conn;
     }

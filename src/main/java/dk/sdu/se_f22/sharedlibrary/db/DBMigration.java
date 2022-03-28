@@ -108,7 +108,7 @@ public class DBMigration {
             }
         }
 
-        this.println("Database up to date", Color.GREEN_UNDERLINED);
+        this.println("Database is up to date", Color.GREEN_UNDERLINED);
     }
 
     /**

@@ -101,4 +101,19 @@ public class SearchQuery {
         this.scoring = scoring;
     }
 
+    public ArrayList<Integer> getCategory() {
+        return this.category;
+    }
+
+    public ArrayList<Object> getRange() {
+        return this.range;
+    }
+
+    public int getScoring() {
+        return this.scoring;
+    }
+
+    public int[] getPagination() {
+        return this.pagination;
+    }
 }

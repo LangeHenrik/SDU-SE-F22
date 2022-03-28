@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.DoubleFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.LongFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
@@ -190,6 +191,93 @@ public class RangeFilterCRUDTest {
             // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
             Assertions.assertThrows(IdNotFoundException.class,
                     () -> rangeFilterCRUD.delete(rangeFilter.getId()));
+        }
+    }
+
+    //Tests may have to clean up the database after, since we create a lot of 
+    @Nested
+    class CRUDReaderTest {
+
+        @ParameterizedTest
+        @DisplayName("Read valid double filter")
+        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        void readValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
+            RangeFilter rangeFilterFromDataBase = null;
+            try {
+                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+            } catch (InvalidFilterException e) {
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
+            RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            try {
+                Assertions.assertEquals(rangeFilterCRUD.read(rangeFilterFromDataBase.getId()),rangeFilter);
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
+
+        @ParameterizedTest
+        @DisplayName("Read valid time filter")
+        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        void readValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            RangeFilter rangeFilterFromDataBase = null;
+            try {
+                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+            } catch (InvalidFilterException e) {
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
+            RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            try {
+                Assertions.assertEquals(rangeFilterCRUD.read(rangeFilterFromDataBase.getId()), rangeFilter);
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
+
+        @ParameterizedTest
+        @DisplayName("Read valid long filter")
+        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        void readValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) {
+            RangeFilter rangeFilterFromDataBase = null;
+            try {
+                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+            } catch (InvalidFilterException e) {
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }
+
+            //This fails until database.create has been implemented
+            assertNotNull(rangeFilterFromDataBase);
+
+            RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            try {
+                Assertions.assertEquals(rangeFilterCRUD.read(rangeFilterFromDataBase.getId()), rangeFilter);
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
+        
+        @Test
+        @DisplayName("Test name")
+        void testName() {
+            
+            org.junit.jupiter.api.Assertions.fail("not yet implemented");
         }
     }
 

@@ -19,7 +19,7 @@ public class Database implements DatabaseInterface {
     /** This method will search the database for a filter matching the id given, and will return a representation of this filter.
      *
      * @param id The id to query for in the database
-     * @return an instance of {@link RangeFilter} if succesful otherwise null, if the result contained either no filter with this id or contained more than 1 (black magic, it can't)
+     * @return an instance of {@link RangeFilter} if successful otherwise null, if the result contained either no filter with this id or contained more than 1 (black magic, it can't)
      */
     @Override
     public RangeFilter read(int id) throws UnknownFilterTypeException {

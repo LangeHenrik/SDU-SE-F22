@@ -24,6 +24,7 @@ class TokenParameterStore  {
 			stmt.setString(3, "Product");
 
 			stmt.execute();
+			stmt.close();
 		}
 		catch (SQLException ex) {
 			ex.printStackTrace();
@@ -37,6 +38,8 @@ class TokenParameterStore  {
 			if(queryResultSet.next()){
 				return new TokenParameter(queryResultSet.getString("delimiter"),queryResultSet.getString("ignoredChars"));
 			}
+			queryResultSet.close();
+			stmt.close();
 		}
 		catch (SQLException ex) {
 			ex.printStackTrace();

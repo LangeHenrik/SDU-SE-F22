@@ -23,8 +23,6 @@ import dk.sdu.se_f22.sharedlibrary.utils.NaturalOrderComparator;
  * @author Mikkel Albrechtsen (The0mikkel)
  */
 public class DBMigration {
-
-    private Connection connection;
     private int batch;
     private boolean printText;
 
@@ -45,7 +43,6 @@ public class DBMigration {
      * @param printText Enable or disable printing of text to console
      */
     public DBMigration (boolean printText) {
-        this.connection = DBConnection.getConnection();
         this.batch = 0;
         this.printText = printText;
     }
@@ -56,59 +53,58 @@ public class DBMigration {
     public void migrate() {
         String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/";
 
-        try {
-            this.connection.close();
-        } catch (SQLException error) {
-            
-            this.println(error, error.getStackTrace());
-        }
+        try (
+            Connection connection = DBConnection.getPooledConnection();
+        ) {
+            // creates a file object
+            File file = new File(migrationsPath);
 
-        this.connection = DBConnection.getConnection();
+            // returns an array of all files, sorted alphabetically
+            String[] fileList = file.list();
+            Arrays.sort(fileList, new NaturalOrderComparator());
 
-        // creates a file object
-        File file = new File(migrationsPath);
+            // Get known migrations
+            List<String> migrations = this.getMigrations();
+            this.batch++;
 
-        // returns an array of all files, sorted alphabetically
-        String[] fileList = file.list();
-        Arrays.sort(fileList, new NaturalOrderComparator());
+            boolean migrationStatus;
 
-        // Get known migrations
-        List<String> migrations = this.getMigrations();
-        this.batch++;
+            for (String fileName : fileList) {
+                fileName = fileName.toLowerCase();
 
-        boolean migrationStatus;
-
-        for (String fileName : fileList) {
-            fileName = fileName.toLowerCase();
-
-            // Ensure the file is a sql file
-            if (!this.validateFile(fileName)) {
-                continue;
-            }
-
-            // Ensure the file has not yet been runned in any migrations
-            if (migrations.contains(fileName)) {
-                continue;
-            }
-
-            // Run all files
-            this.println("Migrating: " + fileName, Color.YELLOW);
-            migrationStatus = runSQLFromFile(this.connection, migrationsPath + fileName);
-
-            // Add migration to migration list
-            if (migrationStatus) {
-                if (!this.addMigration(fileName)) {
-                    this.println("Migration completed but could not add migration to migrations table", Color.RED_UNDERLINED);
-                } else {
-                    this.println("Migration completed", Color.GREEN);
+                // Ensure the file is a sql file
+                if (!this.validateFile(fileName)) {
+                    continue;
                 }
-            } else {
-                this.println("Migration failed!", Color.RED_BOLD_BRIGHT);
-                return;
-            }
-        }
 
-        this.println("Database is up to date", Color.GREEN_UNDERLINED);
+                // Ensure the file has not yet been runned in any migrations
+                if (migrations.contains(fileName)) {
+                    continue;
+                }
+
+                // Run all files
+                this.println("Migrating: " + fileName, Color.YELLOW);
+                migrationStatus = runSQLFromFile(connection, migrationsPath + fileName);
+
+                // Add migration to migration list
+                if (migrationStatus) {
+                    if (!this.addMigration(fileName)) {
+                        this.println("Migration completed but could not add migration to migrations table", Color.RED_UNDERLINED);
+                    } else {
+                        this.println("Migration completed", Color.GREEN);
+                    }
+                } else {
+                    this.println("Migration failed!", Color.RED_BOLD_BRIGHT);
+                    return;
+                }
+            }
+
+            this.println("Database is up to date", Color.GREEN_UNDERLINED);
+        } catch (Exception error) {
+            this.println(error, error.getStackTrace());
+
+            this.println("Migration failed!", Color.RED_BOLD_BRIGHT);
+        }
     }
 
     /**
@@ -117,7 +113,9 @@ public class DBMigration {
     public void migrateFresh() {
         this.println("Flushing database", Color.YELLOW);
 
-        try {
+        try (
+            Connection connection = DBConnection.getPooledConnection();
+        ) {
             PreparedStatement stmt;
 
             // Drop schema to delete all tables
@@ -227,7 +225,9 @@ public class DBMigration {
     }
 
     private List<String> getMigrations() {
-        try {
+        try (
+            Connection connection = DBConnection.getPooledConnection();
+        ) {
             PreparedStatement stmt = connection.prepareStatement("SELECT file_name, batch FROM migrations ORDER BY batch");
             ResultSet sqlReturnValues = stmt.executeQuery();
             List<String> returnValue = new ArrayList<String>();
@@ -248,7 +248,9 @@ public class DBMigration {
     }
 
     private boolean addMigration(String fileName) {
-        try {
+        try (
+            Connection connection = DBConnection.getPooledConnection();
+        ) {
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO migrations (file_name, batch) VALUES (?, ?)");
             stmt.setString(1, fileName);
             stmt.setInt(2, this.batch);

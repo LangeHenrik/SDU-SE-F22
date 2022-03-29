@@ -12,13 +12,15 @@ public class CategoryDBConnection {
     private static String password = "CategoryAdmin";
     private static Connection connie = null;
 
-    public void connect(){
+    public Connection connect(){
         try{
             DriverManager.registerDriver(new org.postgresql.Driver());
             connie = DriverManager.getConnection(this.URL,this.username,this.password);
+            return connie;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public void closeConnection(){

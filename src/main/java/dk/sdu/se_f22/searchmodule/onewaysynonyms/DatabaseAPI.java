@@ -7,8 +7,9 @@ import java.sql.*;
 public class DatabaseAPI {
 
     static Connection connection = DBConnection.getConnection();
+    //for adding superItem
 
-    public static void addItem(String itemName) throws SQLException {
+        public static void addItem(String itemName) throws SQLException {
         PreparedStatement insertStatement = null;
         insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
         insertStatement.setString(1, itemName);

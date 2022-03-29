@@ -4,6 +4,7 @@ package dk.sdu.se_f22.productmodule.index;
 // Requires ProductHit from group 4.4 and works it gets approved and merged
 
 import java.util.*;
+import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 
 public class ProductIndex implements IProductIndex{
 

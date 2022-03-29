@@ -32,7 +32,7 @@ class TokenParameterStore  {
 	}
 
 	public static TokenParameter loadTokenParameter() {
-		try{
+		/*try{
 			PreparedStatement stmt = DBConnection.getConnection().prepareStatement("SELECT delimiter, ignoredChars FROM TokenParameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1");
 			ResultSet queryResultSet = stmt.executeQuery();
 			if(queryResultSet.next()){
@@ -44,7 +44,7 @@ class TokenParameterStore  {
 		catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-
+*/
 		return new TokenParameter(" ", "('./?!')");
 	}
 

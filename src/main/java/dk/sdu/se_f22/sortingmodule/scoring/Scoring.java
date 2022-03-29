@@ -98,7 +98,7 @@ public class Scoring implements IScoring {
         }
     }
 
-    private void releaseDate(List<ProductScore> input) {
+    private void date(List<ProductScore> input) {
         for (ProductScore product : input) {
             Date newDate = new Date();
             int date = (int)(((newDate.getTime()-product.getProduct().getReleaseDate().getTime())/31556736)/1000);
@@ -121,7 +121,7 @@ public class Scoring implements IScoring {
         }
     }
 
-    public List<ProductScore> wrapProduct (List<Product> input) {
+    public List<ProductScore> wrapProduct (List<TestProduct> input) {
         List<ProductScore> products = new ArrayList<>();
         for (int i = 0; i < input.size(); i++) {
             ProductScore productScore = new ProductScore(input.get(i));
@@ -130,8 +130,8 @@ public class Scoring implements IScoring {
         return products;
     }
 
-    public List<Product> unWrapProduct (List<ProductScore> input) {
-        List<Product> products = new ArrayList<>();
+    public List<TestProduct> unWrapProduct (List<ProductScore> input) {
+        List<TestProduct> products = new ArrayList<>();
         for (int i = 0; i < input.size(); i++) {
             products.add(input.get(i).getProduct());
         }
@@ -139,38 +139,51 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<Product> scoreSort(List<Product> input) {
+    public List<TestProduct> scoreSort(List<TestProduct> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         price(products);
         review(products);
         stock(products);
-        releaseDate(products);
+        date(products);
         Collections.sort(products);
 
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println(products.get(i));
-        }
         return unWrapProduct(products);
     }
 
     @Override
-    public List<Object> scoreSortPrice(List<Object> input) {
-        throw new UnsupportedOperationException("Unsupported");
+    public List<TestProduct> scoreSortPrice(List<TestProduct> input) {
+        List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+        price(products);
+        Collections.sort(products);
+
+        return unWrapProduct(products);
     }
 
     @Override
-    public List<Object> scoreSortReview(List<Object> input) {
-        throw new UnsupportedOperationException("Unsupported");
+    public List<TestProduct> scoreSortReview(List<TestProduct> input) {
+        List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+        review(products);
+        Collections.sort(products);
+
+        return unWrapProduct(products);
     }
 
     @Override
-    public List<Object> scoreSortStock(List<Object> input) {
-        throw new UnsupportedOperationException("Unsupported");
+    public List<TestProduct> scoreSortStock(List<TestProduct> input) {
+        List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+        stock(products);
+        Collections.sort(products);
+
+        return unWrapProduct(products);
     }
 
     @Override
-    public List<Object> scoreSortReleaseDate(List<Object> input) {
-        throw new UnsupportedOperationException("Unsupported");
+    public List<TestProduct> scoreSortDate(List<TestProduct> input) {
+        List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+        date(products);
+        Collections.sort(products);
+
+        return unWrapProduct(products);
     }
 
     @Override

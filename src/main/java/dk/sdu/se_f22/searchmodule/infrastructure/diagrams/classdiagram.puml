@@ -30,10 +30,8 @@ class ReplaceForbbidenChars {
 
 class SearchModuleImpl implements SearchModule {
     - indexingModules: Set<IndexingModule<?>>
-    - delimiters: String[]
-    - ignoredCharacters: Character[]
-    - databaseConnection: DatabaseConnection
-    - logger: Logger
+    - filteringModules: Set<Filterable>
+    - ss: Delimiter
     - addIndexingModule(index: T): void
     - removeIndexingmModule(index: T): void
     + queryIndexOfType(clazz: Class<T>, tokens: List<String>): List<T>
@@ -44,14 +42,15 @@ class SearchModuleImpl implements SearchModule {
 }
 
 class SearchModuleUtils {
-    + convertDelimitersToRegex(stringList: List<String>): String
-    - addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+    + {static}convertDelimitersToRegex(stringList: List<String>): String
+    - {static}addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
 }
 
-class SearchSettings {
-    - delimiters: ArrayList<String>
-    + getDelimiters(): ArrayList<String>
-    + appendDelimiters(delimitier: String): void
+class DelimiterSettings {
+    - delimiters: List<String>
+    + getDelimiters(): List<String>
+    + addDelimiters(String): void
+    + removeDelimiter(String): boolean
 }
 
 class TokenFiltration {
@@ -65,19 +64,17 @@ class Tokenization {
     +tokenize(s: String): list<String>
 }
 
-class DatabaseConnection {
+class DBConnection {
     - url: String
-    - username: String
+    - user: String
     - password: String
-    - hasSSL: boolean
-    - connection: Connection
+    - {static} conn: Connection
+    - {static} dbConnection: DBConnection
 
-    + isConnected(): boolean
-    + connect(): boolean
-    + disconnect()
-    + makeQuery(statement: PreparedStatement): ResultSet
+    - DBConnection()
+    - loadConfig(): void
+    + {static} getConnection(): Connection
     ' see https://stackoverflow.com/a/36710057
-    + getLogger(moduleName): Logger
 }
 
 class Exception {
@@ -89,40 +86,13 @@ class DatabaseConnectionException extends Exception {
 }
 
 
-class Connection {
-    // from postgresql jdbc //
-}
-
-class PreparedStatement {
-    // from postgresql jdbc //
-}
-
-class ResultSet {
-    // from postgresql jdbc //
-}
-
-class Logger {
-    // from log4j //
-}
-
 Tokenization -> SearchModuleUtils
-Tokenization --> SearchSettings
-SearchResult <- SearchModule
+Tokenization --> DelimiterSettings
+SearchHits <- SearchModule
 Filterable <- SearchModuleImpl
-SearchModuleImpl -> DatabaseConnection
-DatabaseConnectionException <-- DatabaseConnection: //<<throws>>//
+SearchModuleImpl -> DBConnection
+DatabaseConnectionException <-- DBConnection: //<<throws>>//
 DatabaseConnectionException <-- SearchModuleImpl: //<<throws>>//
-
-SearchModuleImpl --> Logger
-DatabaseConnection -> Logger
-
-DatabaseConnection -> ResultSet
-DatabaseConnection -> PreparedStatement
-DatabaseConnection -> Connection
-
-ResultSet --[hidden]> PreparedStatement
-PreparedStatement -[hidden]> Connection
-
 
 
 @enduml

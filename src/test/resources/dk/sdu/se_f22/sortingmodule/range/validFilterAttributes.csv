@@ -1,0 +1,3 @@
+id;description;name;productAttribute;min;max
+0;a valid description;a valid name;price;0.0;2000
+1;another valid description;another valid name;weight;0;2000.0

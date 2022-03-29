@@ -43,7 +43,7 @@ public class TokenParameter {
     }
 
     public void save() {
-
+        TokenParameterStore.saveTokenParameter(this);
     }
 
     public static TokenParameter load() {

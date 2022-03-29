@@ -8,8 +8,10 @@ module dk.sdu.se_f22 {
 	requires validatorfx;
 	requires json.simple;
 	requires java.sql;
-	requires org.postgresql.jdbc;
+	requires java.desktop;
     requires com.google.gson;
     opens dk.sdu.se_f22 to javafx.fxml;
 	exports dk.sdu.se_f22;
+	exports dk.sdu.se_f22.searchmodule.onewaysynonyms;
+
 }

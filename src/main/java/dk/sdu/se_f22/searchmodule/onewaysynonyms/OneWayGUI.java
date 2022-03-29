@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class OneWayGUI extends Application {
 
@@ -19,6 +20,10 @@ public class OneWayGUI extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        try {
+            DatabaseAPI.updateSuperId("Peter grimme Bukser",2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

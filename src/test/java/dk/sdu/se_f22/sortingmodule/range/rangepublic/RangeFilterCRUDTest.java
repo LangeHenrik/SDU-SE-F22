@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -583,6 +584,7 @@ public class RangeFilterCRUDTest {
         @DisplayName("Read from an empty database")
         void readFromAnEmptyDatabase() {
             //Database have to be empty for the test to pass
+            //TODO: Fix this test, so that it expects an empty list of filters.
             Assertions.assertThrows(EmptyDatabaseException.class,
                     () -> rangeFilterCRUD.readAll(),"Database not empty"
             );

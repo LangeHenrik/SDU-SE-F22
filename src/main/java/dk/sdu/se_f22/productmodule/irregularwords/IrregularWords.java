@@ -15,6 +15,7 @@ public class IrregularWords implements IIrregularWords{
     private boolean canConnect = false;
     private String dbName = "Irregularwords";
 
+    //Initialize method to create a connection to the local database (password might not be the same for all user).
     public void initialize(){
         try {
             DriverManager.registerDriver(new org.postgresql.Driver());
@@ -31,22 +32,25 @@ public class IrregularWords implements IIrregularWords{
             createTable();
             canConnect = true;
 
-         }*/
-        }
+        }*/
+    }
+
+    //Temporary method used for creating a database with the name "irregularwords".
     private void createDB(){
         try {
-            PreparedStatement stmt = connection.prepareStatement("CREATE DATABASE Irregulawords");
+            PreparedStatement stmt = connection.prepareStatement("CREATE DATABASE irregularwords");
             stmt.execute();
-            dbName = "Irregularwords";
+            dbName = "irregularwords";
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
+    //Temporary method used for creating a table "irwords" with 2 attributes "id & word".
     public void createTable(){
         try {
-            PreparedStatement tableStmt = connection.prepareStatement("CREATE TABLE irwords(id INTEGER NOT NULL, word VARCHAR PRIMARY KEY);");
+            PreparedStatement tableStmt = connection.prepareStatement(
+                    "CREATE TABLE irwords(id INTEGER NOT NULL, word VARCHAR PRIMARY KEY);");
             tableStmt.execute();
 
         } catch (SQLException e) {
@@ -54,10 +58,14 @@ public class IrregularWords implements IIrregularWords{
         }
     }
 
+    //Method used for inserting new words with an id into the database.
     @Override
     public boolean createIRWord(int ID, String Word) {
         try {
-            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO irwords (id, word) VALUES (?,?)");
+            //Preparing a statement with the needed SQL language, thereafter putting the method signature
+            //into the statement and executing.
+            PreparedStatement insertStatement = connection.prepareStatement(
+                    "INSERT INTO irwords (id, word) VALUES (?,?)");
             insertStatement.setInt(1,ID);
             insertStatement.setString(2,Word);
             return insertStatement.execute();
@@ -67,6 +75,7 @@ public class IrregularWords implements IIrregularWords{
         }
     }
 
+    //Method for deleting a specific word from the database table.
     @Override
     public boolean deleteIRWord(String theWord) {
         try {
@@ -77,17 +86,16 @@ public class IrregularWords implements IIrregularWords{
             e.printStackTrace();
             return false;
         }
-
-
     }
 
+    //Method for updating words in the database table.
     @Override
-        public boolean updateIRWord(String word1, String word2) {
+        public boolean updateIRWord(String originalWord, String updatedWord) {
             try{
                 PreparedStatement stmt = connection.prepareStatement(
                         "UPDATE irwords SET word = ? WHERE word = ?");
-                stmt.setString(1, word2);
-                stmt.setString(2, word1);
+                stmt.setString(1, updatedWord);
+                stmt.setString(2, originalWord);
                 return stmt.execute();
             }catch (SQLException e) {
                 e.printStackTrace();
@@ -95,12 +103,22 @@ public class IrregularWords implements IIrregularWords{
             }
         }
 
-
+    //Method for printing out the database table.
     @Override
     public void readIRWord() {
-
+        try {
+            PreparedStatement db = connection.prepareStatement("SELECT * FROM irwords");
+            ResultSet list = db.executeQuery();
+            System.out.println(" Id: Word");
+            while(list.next()){
+                System.out.println(" " + list.getInt("id") + " :  " + list.getString("word"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-//the getIRWord takes a word looks it up in the table and return the matching irregularwords in an arraylist
+
+    //the getIRWord takes a word looks it up in the table and return the matching irregularwords in an arraylist
     @Override
     public ArrayList<String> getIRWord(String word) {
         ArrayList<String> words = new ArrayList<>();
@@ -134,12 +152,12 @@ public class IrregularWords implements IIrregularWords{
 
     @Override
     public boolean createBackup() {
-return false;
+    return false;
     }
 
     @Override
     public boolean loadBackup() {
-return false;
+    return false;
     }
 
     //searchForIrregularWords takes a list and check and adds the matching missing irregular words to the list and returns it
@@ -158,19 +176,19 @@ return false;
       //returns the list
         return irwords;
     }
-    // insertValues is a method used once per pc to get the some values into the table to perform test from so all have same values,
+
+    // insertValues is a method used once per pc to get some values into the table to perform test from so all have same values,
     private void insertValues(){
-        try (Scanner scan = new Scanner(new File("src/main/java/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
+        try (Scanner scan = new Scanner(new File
+                ("src/main/java/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
                 createIRWord(Integer.parseInt(data[0]),data[1]);
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {

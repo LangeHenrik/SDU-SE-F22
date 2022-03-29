@@ -7,7 +7,7 @@ public interface IIrregularWords {
 
         boolean deleteIRWord(String theWord);
 
-        boolean updateIRWord(String Word1, String Word2);
+        boolean updateIRWord(String originalWord, String updatedWord);
 
         void readIRWord();
 

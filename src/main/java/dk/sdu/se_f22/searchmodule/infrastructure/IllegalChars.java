@@ -13,16 +13,13 @@ import java.util.List;
 public class IllegalChars {
 
 
-    ReplaceForbiddenChars replaceForbiddenChars = new ReplaceForbiddenChars();
-
     public void addChar(String character) {
-        replaceForbiddenChars.addIllegalChars(character);
-
         //Adds illegal characters to database
         try {
             PreparedStatement insertStatement = DBConnection.getConnection().prepareStatement(
-                    "INSERT INTO illegalChars (chars) VALUES (?)");
+                    "INSERT INTO illegalChars (characters) VALUES (?)");
             insertStatement.setString(1, character);
+            insertStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,7 +34,7 @@ public class IllegalChars {
 
             List<String> strings = new ArrayList<String>();
             while (queryResultSet.next()) {
-                String em = queryResultSet.getString("chars");
+                String em = queryResultSet.getString("characters");
                 strings.add(em);
 
             }
@@ -50,13 +47,7 @@ public class IllegalChars {
 
 
     public void removeChar(String character) {
-        replaceForbiddenChars.removeIllegalCharSetting(character);
 
-    }
-
-
-
-    public List<String> getChars() {
-        return replaceForbiddenChars.getIllegalChars();
     }
 }
+

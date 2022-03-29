@@ -42,7 +42,7 @@ CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL
 );
-CREATE TABLE StemmingException (
+CREATE TABLE illegalChars (
     id SERIAL PRIMARY KEY,
-    exceptionName varchar(50) UNIQUE NOT NULL
+    chars varchar(50) UNIQUE NOT NULL
 );

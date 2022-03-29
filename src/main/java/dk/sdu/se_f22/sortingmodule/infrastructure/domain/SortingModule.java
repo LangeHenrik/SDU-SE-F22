@@ -4,7 +4,17 @@ import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
+/**
+ * Search product, brand and content with range- and category filtering and scoring as well as pagination
+ */
 public interface SortingModule {
+    /**
+     * Set the search string the users enters, when searching
+     *
+     * @param searchString A text string from user
+     */
+    public void setSearchString(String searchString);
+
     /**
      * Set the categories for the search filter
      * 
@@ -31,7 +41,7 @@ public interface SortingModule {
      * @param startRange The start of the range - Formattet as a string, but should align with the data type the range require
      * @param endRange   The start of the range - Formattet as a string, but should align with the data type the range require
      */
-    public void addRange(int rangeId, String startRange, String endRange);
+    public void addRange(int rangeId, double startRange, double endRange);
 
     /**
      * Remove all range filters from the search
@@ -51,7 +61,7 @@ public interface SortingModule {
      * 
      * @param scoring Scoring method
      */
-    public void setScoring(String scoring);
+    public void setScoring(int scoring);
 
     /**
      * Run search, and get the hits the search creates.

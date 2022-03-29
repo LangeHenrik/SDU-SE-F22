@@ -13,10 +13,6 @@ public interface IIrregularWords {
 
         ArrayList<String> getIRWord(String word);
 
-        boolean createIRColumn(String Cname, String dataType, String constraints);
-
-        boolean deleteColumnIR(String CName);
-
         boolean createBackup();
 
         boolean loadBackup();

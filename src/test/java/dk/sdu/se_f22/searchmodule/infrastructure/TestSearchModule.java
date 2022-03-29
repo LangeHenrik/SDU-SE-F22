@@ -87,6 +87,7 @@ public class TestSearchModule {
                 } else if (clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
+                    brand.setId(123);
                     brand.setName("Test brand");
                     brandPages.add(brand);
                     return (List<T>) brandPages;

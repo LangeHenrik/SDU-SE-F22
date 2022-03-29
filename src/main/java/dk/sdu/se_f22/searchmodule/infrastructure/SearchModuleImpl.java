@@ -100,6 +100,8 @@ public class SearchModuleImpl implements SearchModule {
         searchHits.setBrands(queryIndexOfType(Brand.class, tokens));
         //searchHits.setContents(queryIndexOfType(Content.class, tokens));
 
+        SearchLogging.loggingSearch(query, searchHits, tokens);
+
         return searchHits;
     }
 

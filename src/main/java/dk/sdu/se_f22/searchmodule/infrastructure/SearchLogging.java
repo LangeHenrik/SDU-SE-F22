@@ -6,41 +6,57 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchLogging {
-
-    static Connection connection = null;
-
-    public SearchLogging() {
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        connection = DBConnection.getConnection();
-    }
-
-
-    public void loggingSearch(String search, SearchHits searchHits, List<String> filterTokens) {
+    public static void loggingSearch(String search, SearchHits searchHits, List<String> filterTokens) {
         List<Product> products = (List<Product>) searchHits.getProducts();
         List<Brand> brands = (List<Brand>) searchHits.getBrands();
         //List<Content> contents = (List<Content>) searchHits.getContents();
 
-        try {
-            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO searches(searchString) VALUES (?);");
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            System.out.println(connection.getClass().getName());
+            // Log products
+            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO searches(searchString) VALUES (?);", Statement.RETURN_GENERATED_KEYS);
             insertStatement.setString(1, search);
+            insertStatement.execute();
 
-            for (Product p : products) {
-                insertStatement = connection.prepareStatement("INSERT INTO productsearches(productid, searchid) VALUES (?, ?);")
+            Integer id = null;
+            try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    id = generatedKeys.getInt(1);
+                }
+                else {
+                    throw new SQLException("Creating search failed, no ID obtained.");
+                }
             }
 
+            // Products
+            for (Product p : products) {
+                PreparedStatement productInsertStatement = connection.prepareStatement("INSERT INTO productsearches(productid, searchid) VALUES (?, ?);");
+                productInsertStatement.setString(1, p.toString());
+                productInsertStatement.setInt(2, id);
+            }
+
+            // Brands
+            for (Brand b : brands) {
+                PreparedStatement brandInsertStatement = connection.prepareStatement("INSERT INTO brandsearches(brandid, searchid) VALUES (?, ?);");
+                brandInsertStatement.setString(1, String.valueOf(b.getId()));
+                brandInsertStatement.setInt(2, id);
+            }
+
+            // Content
+            // for (Content c : contents) {
+            //     PreparedStatement contentInsertStatement = connection.prepareStatement("INSERT INTO contentsearches(contentid, searchid) VALUES (?, ?);");
+            //     contentInsertStatement.setString(1, c.getId());
+            //     contentInsertStatement.setInt(2, id);
+            // }
+
             insertStatement.execute();
+            insertStatement.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

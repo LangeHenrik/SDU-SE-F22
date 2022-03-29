@@ -63,6 +63,11 @@ CREATE TABLE Config(
     brandIndexInterval INTEGER NOT NULL
 );
 
+DROP TABLE IF EXISTS SearchTokenDelimiters;
+
+CREATE TABLE SearchTokenDelimiters (
+    delimiter VARCHAR PRIMARY KEY
+);
 CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL

@@ -14,6 +14,7 @@ import java.util.*;
 public class SearchModuleImpl implements SearchModule {
     private final Set<Filterable> filteringModules;
     private final Set<IndexingModule<?>> indexingModules;
+    private DelimiterSettings delimiterSettings = new DelimiterSettings();
 
     public SearchModuleImpl() {
         this.indexingModules = new HashSet<>();
@@ -101,4 +102,20 @@ public class SearchModuleImpl implements SearchModule {
 
         return searchHits;
     }
+
+    @Override
+    public List<String> getDelimiters() {
+        return delimiterSettings.getDelimiters();
+    }
+
+    @Override
+    public void addDelimiter(String delimiter) {
+        delimiterSettings.addDelimiter(delimiter);
+    }
+
+    @Override
+    public boolean removeDelimiter(String delim) {
+        return delimiterSettings.removeDelimiter(delim);
+    }
+
 }

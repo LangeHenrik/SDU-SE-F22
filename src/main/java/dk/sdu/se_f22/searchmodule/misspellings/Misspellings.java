@@ -52,6 +52,16 @@ public class Misspellings implements DatabaseOperator {
     @Override
     public boolean addMisspelling(String wrong, String correct) {
 
+        if(wrong.contains(" ") || correct.contains(" ")){
+            System.out.println("The misspelling and correction must be one word.");
+            return false;
+        }
+
+        if(wrong.isEmpty()||correct.isEmpty()) {
+            System.out.println("The misspelling cannot be blank");
+            return false;
+        }
+
         // Step 1: Establishing a Connection
         try (Connection connection = DriverManager.getConnection(url, user, password);
 
@@ -73,6 +83,12 @@ public class Misspellings implements DatabaseOperator {
 
     @Override
     public boolean deleteMisspelling(String misspelling) {
+
+        if(misspelling.isEmpty()){
+            System.out.println("The misspelling to delete must not be blank.");
+            return false;
+        }
+
         try {
             Connection con = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = con.prepareStatement(QUERY);
@@ -109,6 +125,18 @@ public class Misspellings implements DatabaseOperator {
 
     @Override
     public boolean updateMisspelling(String oldMisspelling, String newMisspelling) {
+
+        if(newMisspelling.contains(" ")){
+            System.out.println("New misspelling must not contain spaces.");
+            return false;
+        }
+
+        if(oldMisspelling.isEmpty() || newMisspelling.isEmpty()){
+            System.out.println("The misspelling to delete must not be blank.");
+            return false;
+        }
+
+
         try {
             Connection con = DriverManager.getConnection(url, user, password);
             PreparedStatement statement = con.prepareStatement(QUERY);
@@ -147,14 +175,8 @@ public class Misspellings implements DatabaseOperator {
     }
 
 
-
-
-
     public static void main(String[] args)  {
         Misspellings mis = new Misspellings();
-        mis.addMisspelling("JAGA","JAVA");
-        mis.addMisspelling("JAGA","JARA");
-
 
         //mis.addMisspelling("JARA","JAVA");
         //mis.addMisspelling();

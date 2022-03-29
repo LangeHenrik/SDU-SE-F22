@@ -1,18 +1,19 @@
 CREATE TABLE sorting_queries (
 	id SERIAL PRIMARY KEY,
 	text VARCHAR(512) NOT NULL,
-	date_stamp TIMESTAMP NOT NULL
+	date_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sorting_query_settings (
-	queries_id INT REFERENCES sorting_queries(id),
-	key VARCHAR(255) NOT NULL,
-	value VARCHAR(255) NOT NULL,
-	PRIMARY KEY (queries_id, key)
+CREATE TABLE sorting_query_ranges (
+	query_id INT REFERENCES sorting_queries(id),
+	range_id VARCHAR(255) NOT NULL,
+	start_value DECIMAL NOT NULL,
+	end_value DECIMAL NOT NULL,
+	PRIMARY KEY (query_id, range_id)
 );
 
-CREATE TABLE sorting_query_category(
-	queries_id INT REFERENCES sorting_queries(id),
+CREATE TABLE sorting_query_categories (
+	query_id INT REFERENCES sorting_queries(id),
 	catergory_id INT NOT NULL,
-	PRIMARY KEY (queries_id, catergory_id)
+	PRIMARY KEY (query_id, catergory_id)
 );

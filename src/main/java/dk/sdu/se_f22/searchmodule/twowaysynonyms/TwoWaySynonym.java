@@ -154,7 +154,10 @@ public class TwoWaySynonym implements DatabaseOperator {
 
         for(String token : tokens){
             Synonym synonymTemp = read(token);
-            if(synonymTemp == null) continue;
+            if(synonymTemp == null) {
+                args.add(token);
+                continue;
+            }
             var statement = unique.add(synonymTemp.groupId());
         }
 

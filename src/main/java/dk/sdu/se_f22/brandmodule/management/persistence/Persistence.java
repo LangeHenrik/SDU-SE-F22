@@ -210,6 +210,7 @@ public class Persistence implements IPersistence {
         }
     }
 
+    @Override
     public void databaseIndexer() {
         setAutoCommit(false);
         try {

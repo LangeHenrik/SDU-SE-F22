@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.productmodule.persistance;
 
-import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import javafx.event.ActionEvent;
@@ -19,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ProductListController {
 
@@ -39,17 +39,18 @@ public class ProductListController {
 
     @FXML
     void initialize() {
-        //hijack get from source method in product module management from product manager class.
-        for (int i = 0; i < 5; i++) {
-            createProductListing(i);
+        ArrayList<Product> products = App.productManager != null ? App.productManager.getAllProducts() : new ArrayList<>();
+
+        for (Product p : products) {
+            createProductListing(p);
         }
     }
 
-    void createProductListing(int number){
+    void createProductListing(Product product){
         AnchorPane listing = new AnchorPane();
         Label titel = new Label("product");
         listing.setOnMouseClicked((event) ->{
-            updateProductDetailsView(number);
+            updateProductDetailsView(product);
         });
         listing.getChildren().add(titel);
         AnchorPane.setLeftAnchor(titel,20.0);
@@ -57,7 +58,7 @@ public class ProductListController {
         productList.getChildren().add(listing);
     }
 
-    void updateProductDetailsView(int number){
+    void updateProductDetailsView(Product product){
         productDetails.getChildren().clear();
         VBox vBox = new VBox();
         vBox.setSpacing(20.0);
@@ -72,7 +73,7 @@ public class ProductListController {
             Node element = vBox.getChildren().get(i/3);
             if(element instanceof Pane){
                 Pane parent = (Pane)element;
-                parent.getChildren().add(new Label(attribute.alias + ": " + number));
+                parent.getChildren().add(new Label(attribute.alias + ": " + product.get(attribute)));
             }
         }
         productDetails.getChildren().add(vBox);
@@ -83,6 +84,18 @@ public class ProductListController {
         Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
         try {
             Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("home.fxml"));
+            Scene scene = new Scene(fxmlLoader, 800,600);
+            ((Stage)window).setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleProceed(ActionEvent actionEvent) {
+        Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
+        try {
+            Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("producttokenization.fxml"));
             Scene scene = new Scene(fxmlLoader, 800,600);
             ((Stage)window).setScene(scene);
         } catch (IOException e) {

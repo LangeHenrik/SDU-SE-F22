@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import org.apache.logging.log4j.core.config.plugins.convert.TypeConverters;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,5 +49,15 @@ public class HomeController {
         List<String> ignoredChars = Arrays.asList(ignoredInput.getText().split(","));
         TokenParameter tokenParameter = new TokenParameter(deliInput.getText(),ignoredChars);
         ProductIndexInfrastructure.getInstance().setTokenParameter(tokenParameter);
+    }
+
+    @FXML
+    public void handleChooseFile(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        fileChooser.showOpenDialog(main.getScene().getWindow());
     }
 }

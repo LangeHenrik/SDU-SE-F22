@@ -12,7 +12,7 @@ public class IndexingServiceTest {
         indexingService = new IndexingService();
     }
 
-    @Test
+/*    @Test
     void getBrandIndex() {
 
     }
@@ -20,5 +20,5 @@ public class IndexingServiceTest {
     @Test
     void updateIndexInterval() {
 
-    }
+    }*/
 }

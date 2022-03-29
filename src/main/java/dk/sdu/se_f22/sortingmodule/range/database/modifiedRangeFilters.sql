@@ -199,16 +199,6 @@ VALUES ('test description', 'test name time', 'expirationDate');
 -- INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (3, 0, 10);
 */
 
--- Inserting directly to the views
-INSERT INTO SortingRangeDoubleView (description, name, productAttribute, min, max)
-VALUES ('test description', 'test name double', 'price', 0, 10);
-
-INSERT INTO SortingRangeLongView (description, name, productAttribute, min, max)
-VALUES ('test description', 'test name ean', 'ean', 2, 100);
-
--- INSERT INTO SortingRangeTimeView (description, name, productAttribute, min, max)
--- VALUES ('test description', 'test name time', 'expirationDate', 0, 10);
-
 select *
 from SortingRangeDoubleView;
 
@@ -275,6 +265,16 @@ BEGIN
 end;
 $$
     language plpgsql;
+
+-- Inserting directly to the views
+INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
+VALUES ('test name double', 'test description', 'price', 0, 10);
+
+INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max)
+VALUES ('test name ean', 'test description', 'ean', 2, 100);
+
+INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max)
+VALUES ('test name time', 'test description', 'expirationDate', '2018-10-18 05:30:57', '2019-10-18 05:30:57');
 
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);

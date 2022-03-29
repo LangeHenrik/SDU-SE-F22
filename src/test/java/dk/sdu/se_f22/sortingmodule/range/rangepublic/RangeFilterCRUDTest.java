@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.checkerframework.checker.units.UnitsTools.min;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -464,24 +465,11 @@ public class RangeFilterCRUDTest {
     @Nested
     class CRUDReaderTest {
 
-        @ParameterizedTest
+        @Test
         @DisplayName("Read valid double filter")
-        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-        void readValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
-            RangeFilter rangeFilterFromDataBase = null;
+        void readValidDoubleFilter() {
             try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            }
-
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
-
-            RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
-
-            try {
-                Assertions.assertEquals(rangeFilterCRUD.read(rangeFilterFromDataBase.getId()),rangeFilter);
+                Assertions.assertEquals(rangeFilterCRUD.read(1),new DoubleFilter(1, "test name double", "test description", "price", 0, 10));
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
@@ -489,49 +477,23 @@ public class RangeFilterCRUDTest {
             }
         }
 
-        @ParameterizedTest
-        @DisplayName("Read valid time filter")
-        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-        void readValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
-            RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            }
-
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
-
-            RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
-
-            try {
-                Assertions.assertEquals(rangeFilterCRUD.read(rangeFilterFromDataBase.getId()), rangeFilter);
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e) {
-                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-            }
-        }
-
-        @ParameterizedTest
+        @Test
         @DisplayName("Read valid long filter")
-        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-        void readValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) {
-            RangeFilter rangeFilterFromDataBase = null;
+        void readValidLongFilter() {
             try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+                Assertions.assertEquals(rangeFilterCRUD.read(2),new DoubleFilter(2, "test name ean", "test description", "ean", 2, 100));
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
+        }
 
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
-
-            RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
-
+        @Test
+        @DisplayName("Read valid time filter")
+        void readValidTimeFilter() {
             try {
-                Assertions.assertEquals(rangeFilterCRUD.read(rangeFilterFromDataBase.getId()), rangeFilter);
+                Assertions.assertEquals(rangeFilterCRUD.read(3),new DoubleFilter(3, "test name time", "test description", "expirationDate", 0, 10));
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
@@ -551,43 +513,22 @@ public class RangeFilterCRUDTest {
         @Test
         @DisplayName("Read all existing range filters")
         void readAllExistingRangeFilters() {
-            RangeFilter doubleRangeFilterFromDataBase = null;
-            RangeFilter timeRangeFilterFromDataBase = null;
-            RangeFilter longRangeFilterFromDataBase = null;
-            try {
-                doubleRangeFilterFromDataBase = rangeFilterCRUD.create("test name double","test description for double","price",0,10);
-                timeRangeFilterFromDataBase = rangeFilterCRUD.create("test name time","test description for time","expirationDate",Instant.parse("2018-11-30T18:35:24.00Z"),Instant.parse("2018-11-30T18:35:24.00Z"));
-                longRangeFilterFromDataBase = rangeFilterCRUD.create("test name ean","test description for ean","ean",2,100);
-
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            }
-
-            //This fails until database.create has been implemented
-            assertNotNull(doubleRangeFilterFromDataBase);
-            assertNotNull(timeRangeFilterFromDataBase);
-            assertNotNull(longRangeFilterFromDataBase);
-
-            RangeFilter doubleRangeFilter = new DoubleFilter(doubleRangeFilterFromDataBase.getId(),"test name double","test description for double","price",0,10);
-            RangeFilter timeRangeFilter = new TimeFilter(timeRangeFilterFromDataBase.getId(),"test name time","test description for time","expirationDate",Instant.parse("2018-11-30T18:35:24.00Z"),Instant.parse("2018-11-30T18:35:24.00Z"));
-            RangeFilter longRangeFilter = new LongFilter(longRangeFilterFromDataBase.getId(),"test name ean","test description for ean","ean",2,100);
-
-
-            Assertions.assertAll(
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(0),doubleRangeFilter),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(1),timeRangeFilter),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2),longRangeFilter, "See 'read' under 'RangeFilterCRUD' or check if test input id's exist in database")
+            Assertions.assertAll("Read all filters from database and check if the values match",
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(0), new DoubleFilter(1, "test name double", "test description", "price", 0, 10)),
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(1), new LongFilter(2, "test name ean", "test description", "ean", 2, 100)),
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2), new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T00:00:57Z"), Instant.parse("2019-10-18T00:00:57Z")))
             );
         }
 
-        @Test
-        @DisplayName("Read from an empty database")
-        void readFromAnEmptyDatabase() {
-            //Database have to be empty for the test to pass
-            //TODO: Fix this test, so that it expects an empty list of filters.
-            Assertions.assertThrows(EmptyDatabaseException.class,
-                    () -> rangeFilterCRUD.readAll(),"Database not empty"
-            );
-        }
+//        @Test
+//        @DisplayName("Read from an empty database")
+//        void readFromAnEmptyDatabase() {
+//            //Database have to be empty for the test to pass
+//            List<RangeFilter>
+//            //Fix this test, so that it expects an empty list of filters.
+//            Assertions.assertThrows(EmptyDatabaseException.class,
+//                    () -> rangeFilterCRUD.readAll(),"Database not empty"
+//            );
+//        }
     }
 }

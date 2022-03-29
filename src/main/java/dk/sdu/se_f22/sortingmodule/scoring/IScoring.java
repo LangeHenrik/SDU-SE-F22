@@ -13,22 +13,22 @@ public interface IScoring {
      <p> Returns weight value for price </p>
      * @return
      */
-    List<Object> scoreSortPrice(List<Object> input);
+    List<Product> scoreSortPrice(List<Product> input);
 
     /**
      <p> Returns weight value for review </p>
      */
-    List<Object> scoreSortReview(List<Object> input);
+    List<Product> scoreSortReview(List<Product> input);
 
     /**
      <p> Returns weight value for stock </p>
      */
-    List<Object> scoreSortStock(List<Object> input);
+    List<Product> scoreSortStock(List<Product> input);
 
     /**
      <p> Returns weight value for release date </p>
      */
-    List<Object> scoreSortReleaseDate(List<Object> input);
+    List<Product> scoreSortDate(List<Product> input);
 
     /**
      <p> Returns the scores table </p>

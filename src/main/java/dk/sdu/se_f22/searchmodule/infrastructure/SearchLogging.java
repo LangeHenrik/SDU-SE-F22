@@ -3,14 +3,18 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchLogging {
+    private static final Logger logger = LoggingProvider.getLogger(SearchLogging.class);
+
     public static void loggingSearch(String search, SearchHits searchHits, List<String> filterTokens) {
         List<Product> products = (List<Product>) searchHits.getProducts();
         List<Brand> brands = (List<Brand>) searchHits.getBrands();
@@ -34,6 +38,8 @@ public class SearchLogging {
                 PreparedStatement productInsertStatement = connection.prepareStatement("INSERT INTO productsearches(productid, searchid) VALUES (?, ?);");
                 productInsertStatement.setString(1, p.toString());
                 productInsertStatement.setInt(2, id);
+                productInsertStatement.execute();
+                productInsertStatement.close();
             }
 
             // Brands
@@ -41,6 +47,8 @@ public class SearchLogging {
                 PreparedStatement brandInsertStatement = connection.prepareStatement("INSERT INTO brandsearches(brandid, searchid) VALUES (?, ?);");
                 brandInsertStatement.setString(1, String.valueOf(b.getId()));
                 brandInsertStatement.setInt(2, id);
+                brandInsertStatement.execute();
+                brandInsertStatement.close();
             }
 
             // Content
@@ -48,6 +56,8 @@ public class SearchLogging {
             //     PreparedStatement contentInsertStatement = connection.prepareStatement("INSERT INTO contentsearches(contentid, searchid) VALUES (?, ?);");
             //     contentInsertStatement.setString(1, c.getId());
             //     contentInsertStatement.setInt(2, id);
+            //     contentInsertStatement.execute();
+            //     contentInsertStatement.close();
             // }
 
             insertStatement.execute();
@@ -59,7 +69,7 @@ public class SearchLogging {
 
 
     }
-    public List<Searches> getSearches() {
+    public static List<Searches> getSearches() {
         List<String> brands = new ArrayList<>();
         List<String> products = new ArrayList<>();
         List<String> contents = new ArrayList<>();
@@ -84,9 +94,9 @@ public class SearchLogging {
                 products.add(queryProductSearchesResultSet.getString("productID"));
             }
 
-            while(queryContentSearchesResultSet.next()) {
+            /*while(queryContentSearchesResultSet.next()) {
                 contents.add(queryContentSearchesResultSet.getString("contentID"));
-            }
+            }*/
 
             while(querySearchesResultSet.next()) {
                 Searches search = new Searches(

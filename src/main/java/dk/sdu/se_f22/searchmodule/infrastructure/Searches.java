@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Searches {
-    private int id;
-    private String searchString;
-    private String timeSearched;
+    private final String searchString;
 
-    private int brandsCounter;
-    private int productCounter;
-    private int contentCounter;
+    private final String timeSearched;
 
-    private List<String> brands;
-    private List<String> products;
-    private List<String> contents;
+    private final int brandsCounter;
+    private final int productCounter;
+    private final int contentCounter;
+
+    private final List<String> brands;
+    private final List<String> products;
+    private final List<String> contents;
 
     public Searches(int id, String searchString, String timeSearched, List<String> brands, List<String> products, List<String> contents) {
-        this.id = id;
         this.searchString = searchString;
         this.timeSearched = timeSearched;
 
@@ -41,5 +40,21 @@ public class Searches {
                 + "ProductIDs: " + products.toString()
                 + "ContentIDs: " + contents.toString();
 
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public String getTimeSearched() {
+        return timeSearched;
+    }
+
+    public int getBrandsCounter() {
+        return brandsCounter;
+    }
+
+    public int getProductCounter() {
+        return productCounter;
     }
 }

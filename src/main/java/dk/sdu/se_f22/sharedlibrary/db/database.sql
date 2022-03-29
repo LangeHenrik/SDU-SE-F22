@@ -6,16 +6,20 @@
 */
 -- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
+DROP TABLE IF EXISTS TokenBrandMap;
 
 -- Drop all other tables
 DROP TABLE IF EXISTS BrandSearches;
 DROP TABLE IF EXISTS ProductSearches;
 DROP TABLE IF EXISTS ContentSearches;
 DROP TABLE IF EXISTS Searches;
+DROP TABLE IF EXISTS Tokens;
 DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
 DROP TABLE IF EXISTS StemmingException;
+DROP TABLE IF EXISTS TokenParameters;
+DROP TABLE IF EXISTS logs;
 
 DROP TRIGGER IF EXISTS UpdateAllSearchesCountersTrigger ON Searches;
 DROP TRIGGER IF EXISTS UpdateAllSearchesCountersProductTrigger ON Searches;
@@ -24,6 +28,16 @@ DROP TRIGGER IF EXISTS UpdateAllSearchesCountersContentTrigger ON Searches;
 
 --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
 --og kalder hver gruppes seedDatabase()-metode
+
+CREATE TABLE IF NOT EXISTS logs
+(
+    log_id TEXT PRIMARY KEY,
+    entry_date TIMESTAMP,
+    logger TEXT,
+    log_level TEXT,
+    message TEXT,
+    exception TEXT
+);
 
 CREATE TABLE Searches
 (
@@ -147,6 +161,17 @@ CREATE TABLE ProductType(
     type VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE Tokens(
+    id serial PRIMARY KEY,
+    token VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE TokenBrandMap(
+    id serial PRIMARY KEY,
+    tokenId INTEGER NOT NULL REFERENCES Tokens (id),
+    brandId INTEGER NOT NULL REFERENCES Brand (id)
+);
+
 CREATE TABLE BrandProductTypeJunction(
     brandId   INTEGER REFERENCES Brand (id),
     productId INTEGER REFERENCES ProductType (id)
@@ -160,7 +185,10 @@ CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL
 );
-CREATE TABLE StemmingException (
-    id SERIAL PRIMARY KEY,
-    exceptionName varchar(50) UNIQUE NOT NULL
+
+CREATE TABLE TokenParameters(
+    id serial PRIMARY KEY,
+    delimiter varchar(5) NOT NULL,
+    ignoredChars varchar(64) NOT NULL,
+    type varchar(50) NOT NULL
 );

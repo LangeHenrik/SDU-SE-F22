@@ -6,14 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseAPITest {
-
     @BeforeEach
     void setUp() {
-        Connection connection = DBConnection.getConnection();
     }
 
     @AfterEach
@@ -22,26 +21,43 @@ class DatabaseAPITest {
 
     @Test
     void addItem() {
-        String item = "Peters grimme Bukser";
 
+        String item = "Peters pæne Bukser";
 
-
-
-    }
-    @Test
-    void testAddItem() {
+        try {
+            DatabaseAPI.addItem(item);
+            DatabaseAPI.addItem(item,2);
+        } catch (SQLException e) {
+            fail("Create query couldn't be accomplished");
+            e.printStackTrace();
+        }
     }
 
     @Test
     void updateSuperId() {
+        String item = "Peters grimme Bukser";
+
+        try {
+            DatabaseAPI.updateSuperId(item,2);
+        } catch (Exception e) {
+            fail("Update query couldn't be accomplished");
+        }
     }
 
     @Test
     void updateName() {
+        String item = "Peters pæne Bukser";
+        try {
+            DatabaseAPI.updateName(2,item);
+        } catch (SQLException e) {
+            fail("Update query couldn't be accomplished");
+            e.printStackTrace();
+        }
     }
 
     @Test
     void read() {
+
 
     }
 }

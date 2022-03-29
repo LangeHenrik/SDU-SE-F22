@@ -6,11 +6,7 @@ import java.sql.*;
 
 public class DatabaseAPI {
 
-    static Connection connection = null;
-
-    public DatabaseAPI() {
-        this.connection = DBConnection.getConnection();
-    }
+    static Connection connection = DBConnection.getConnection();
 
     public static void addItem(String itemName) throws SQLException {
         PreparedStatement insertStatement = null;
@@ -40,7 +36,7 @@ public class DatabaseAPI {
         PreparedStatement updateStatement = null;
         updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
         updateStatement.setString(1, String.valueOf(name));
-        updateStatement.setString(2, String.valueOf(id));
+        updateStatement.setInt(2, id);
         updateStatement.execute();
     }
 

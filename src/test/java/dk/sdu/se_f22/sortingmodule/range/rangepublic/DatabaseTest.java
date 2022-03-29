@@ -28,7 +28,7 @@ class DatabaseTest {
 
     @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
     @DisplayName("Test read double filter from range filter database")
-    @CsvFileSource(resources = "DatabaseFilters.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
     void testReadFromRangeFilterDatabase(int id, String name, String description, String productAttribute, double min, double max) {
         // todo recreate this test for each type of filter, so it is not only double
         // Shooting for 3 filters of each type should be fine

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class LongFilter extends RangeFilterClass{
+class LongFilter extends RangeFilterClass{
     private final long DB_MIN;
     private final long DB_MAX;
     private long userMin;

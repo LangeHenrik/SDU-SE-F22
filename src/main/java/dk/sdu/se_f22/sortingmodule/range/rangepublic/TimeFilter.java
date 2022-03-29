@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TimeFilter extends RangeFilterClass{
+class TimeFilter extends RangeFilterClass{
     private final Instant DB_MIN;
     private final Instant DB_MAX;
     private Instant userMin;
@@ -18,12 +18,15 @@ public class TimeFilter extends RangeFilterClass{
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }
+
+
     public TimeFilter(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super( NAME, DESCRIPTION, PRODUCT_ATTRIBUTE);
         DB_MIN = dbMin;
         DB_MAX = dbMax;
-
     }
+
+
     @Override
     public FilterTypes getType() {
         return FilterTypes.INSTANT;

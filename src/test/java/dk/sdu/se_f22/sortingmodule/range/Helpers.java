@@ -1,8 +1,5 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.DoubleFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -58,25 +55,6 @@ public class Helpers {
         return attributeMap;
     }
 
-    public static List<RangeFilter> readRangeFiltersFromFile(String fileName){
-        List<RangeFilter> rangeFilters = new ArrayList<>();
-
-        List<String> filters = Helpers.readFromCSV(fileName);
-
-        String[] attributeNames = filters.get(0).split(",");
-
-
-        for (String filter : filters) {
-            String[] filterSplit = filter.split(",");
-            if (Objects.equals(attributeNames[0], filterSplit[0])) {
-                continue;
-            }
-
-            rangeFilters.add(new DoubleFilter(filterSplit[0], filterSplit[1], filterSplit[2], Double.parseDouble(filterSplit[3]), Double.parseDouble(filterSplit[4])));
-        }
-
-        return rangeFilters;
-    }
 
     public static String formatArrays(Object[] expected, Object[] actual){
         return "\nexpected\n" + Arrays.toString(expected) + "\n" +

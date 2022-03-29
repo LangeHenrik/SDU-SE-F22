@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;

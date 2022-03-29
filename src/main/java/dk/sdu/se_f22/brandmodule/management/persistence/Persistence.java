@@ -18,8 +18,6 @@ public class Persistence implements IPersistence {
         //Connect to database
         jsonService = new JsonService();
         c = DBConnection.getConnection();
-
-        // Seed database
     }
 
     @Override
@@ -51,7 +49,7 @@ public class Persistence implements IPersistence {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
 
         return brandList;
@@ -60,67 +58,64 @@ public class Persistence implements IPersistence {
     private Brand brandGetter(String name, Integer id) {
         setAutoCommit(true);
 
-        Brand b = null;
+        Brand brand = null;
         try {
             var stmt = c.createStatement();
 
             ResultSet r;
+            PreparedStatement getBrand;
             if(name == null) {
-                PreparedStatement getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
-                        "inner join brand on bpj.brandid = brand.id " +
-                        "inner join producttype on bpj.productid = producttype.id " +
+                getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
+                        "right join brand on bpj.brandid = brand.id " +
+                        "left join producttype on bpj.productid = producttype.id " +
                         "where brandid = ?;");
+
                 getBrand.setInt(1,id);
-
-
                 r = getBrand.executeQuery();
             } else{
-                PreparedStatement getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
-                        "inner join brand on bpj.brandid = brand.id " +
-                        "inner join producttype on bpj.productid = producttype.id " +
+                getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
+                        "right join brand on bpj.brandid = brand.id " +
+                        "left join producttype on bpj.productid = producttype.id " +
                         "where brand.name = ?");
-                getBrand.setString(1,"name");
+
+                getBrand.setString(1,name);
                 r = getBrand.executeQuery();
             }
+
             Set<String> productSet = new HashSet<>();
 
-            int counter = 0;
-            while(r.next() && r != null){
-                if (counter == 0){
-                    b = new Brand(
-                            r.getInt("id"),
-                            r.getString("name"),
-                            r.getString("description"),
-                            r.getString("founded"),
-                            r.getString("headquarters")
-                    );
-                }
+            while (r.next()){
+                brand = new Brand(
+                        r.getInt("id"),
+                        r.getString("name"),
+                        r.getString("description"),
+                        r.getString("founded"),
+                        r.getString("headquarters")
+                );
 
                 productSet.add(r.getString(6));
-                counter++;
             }
 
-            // Parse to arraylist
             ArrayList<String> productList = new ArrayList<String>(productSet);
 
             if (!productList.isEmpty())
-                b.setProducts(productList);
+                brand.setProducts(productList);
 
             stmt.close();
         } catch (SQLException e) {
             rollback();
-            e.printStackTrace();
         }
 
-        return b;
+        return brand;
     }
 
     @Override
-    public void deleteBrand(Brand brand) {deleteBrand(brand.getId());
+    public boolean deleteBrand(Brand brand) {
+        return deleteBrand(brand.getId());
     }
 
     @Override
-    public void deleteBrand(int id) {
+    public boolean deleteBrand(int id) {
         setAutoCommit(false);
         try {
             // Delete from both Brand and Junction table
@@ -134,16 +129,17 @@ public class Persistence implements IPersistence {
             deleteBrand.setInt(1,id);
             deleteBrand.execute();
 
-
             c.commit();
         } catch (SQLException e) {
             rollback();
-            e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
     @Override
-    public void addOrUpdateBrands(List<Brand> brands) {
+    public boolean addOrUpdateBrands(List<Brand> brands) {
         setAutoCommit(false);
         try {
             /* ------ Insert all products ------ */
@@ -155,7 +151,7 @@ public class Persistence implements IPersistence {
 
             // Insert products into database
             for (var product : products) {
-                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO ProductType (name) VALUES (?) ON CONFLICT DO NOTHING;");
+                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO ProductType (name) VALUES (?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name;");
 
                 insertAllProducts.setString(1, product);
                 insertAllProducts.execute();
@@ -163,7 +159,16 @@ public class Persistence implements IPersistence {
 
             /* ------ Insert all brands ------ */
             for (var brand : brands) {
-                PreparedStatement insertAllBrands = c.prepareStatement("INSERT INTO Brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT DO NOTHING;");
+                PreparedStatement insertAllBrands;
+
+                // If id is set, update the brand in the database
+                if (brand.getId() == null) {
+                    insertAllBrands = c.prepareStatement("INSERT INTO Brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
+                }
+                else {
+                    insertAllBrands = c.prepareStatement("INSERT INTO Brand (name, description, founded, headquarters) VALUES (?,?,?,?) WHERE id = ? ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
+                    insertAllBrands.setString(5, String.valueOf(brand.getId()));
+                }
 
                 insertAllBrands.setString(1, brand.getName());
                 insertAllBrands.setString(2,brand.getDescription().replaceAll("'", "''"));
@@ -206,12 +211,14 @@ public class Persistence implements IPersistence {
         }
         catch (Exception e) {
             rollback();
-            System.out.println(e);
+            return false;
         }
+
+        return true;
     }
 
     @Override
-    public void databaseIndexer() {
+    public boolean databaseIndexer() {
         setAutoCommit(false);
         try {
             PreparedStatement indexDatabase = c.prepareStatement("create index on producttype(name); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);");
@@ -219,10 +226,11 @@ public class Persistence implements IPersistence {
             c.commit();
         }  catch (SQLException e) {
             rollback();
-            e.printStackTrace();
+            return false;
         }
-    }
 
+        return true;
+    }
 
     @Override
     public void seedDatabase() {
@@ -236,7 +244,7 @@ public class Persistence implements IPersistence {
         try {
             c.rollback();
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -244,7 +252,7 @@ public class Persistence implements IPersistence {
         try {
             c.setAutoCommit(set);
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
     }
 }

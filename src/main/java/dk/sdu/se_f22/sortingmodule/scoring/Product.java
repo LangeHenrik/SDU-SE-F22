@@ -45,6 +45,7 @@ public class Product {
                 ", review=" + getReview() +
                 ", stock=" + getStock() +
                 ", releaseDate=" + getReleaseDate() +
-                '}';
+                '}'+"\n";
     }
 }
+

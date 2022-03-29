@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.sharedlibrary.db;
 
-import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,6 +11,7 @@ import java.sql.Statement;
 
 public class SeedDatabase {
     public static void main(String[] args) {
+
         //Get the connection
         Connection connection = DBConnection.getConnection();
 
@@ -66,6 +66,7 @@ public class SeedDatabase {
         } catch (FileNotFoundException e) {e.printStackTrace();
         } catch (SQLException e) {e.printStackTrace();
         } catch (IOException e) {e.printStackTrace();
+
         }
     }
 }

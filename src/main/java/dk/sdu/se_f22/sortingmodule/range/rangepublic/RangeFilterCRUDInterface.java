@@ -9,9 +9,39 @@ import java.time.Instant;
 import java.util.List;
 
 public interface RangeFilterCRUDInterface {
-    RangeFilter create(String description, String name, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException;
-    RangeFilter create(String description, String name, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException;
-    RangeFilter create(String description, String name, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException;
+    /**
+     * Creates a filter and saves it to the database using double values for dbMinToSave and dbMinToMax
+     * Returns a DoubleFilter
+     * @param name
+     * @param description
+     * @param productAttribute
+     * @param dbMinToSave
+     * @param dbMaxToSave
+     * @return DobuleFilter
+     */
+    RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException;
+    /**
+     * Creates a filter and saves it to the database using long values for dbMinToSave and dbMinToMax
+     * Returns a LongFilter
+     * @param name
+     * @param description
+     * @param productAttribute
+     * @param dbMinToSave
+     * @param dbMaxToSave
+     * @return LongFilter
+     */
+    RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException;
+    /**
+     * Creates a filter and saves it to the database using long values for dbMinToSave and dbMinToMax
+     * Returns a LongFilter
+     * @param name
+     * @param description
+     * @param productAttribute
+     * @param dbMinToSave
+     * @param dbMaxToSave
+     * @return InstantFilter
+     */
+    RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException;
 
     /**
      * Method first reads a filter from the database.

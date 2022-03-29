@@ -11,7 +11,7 @@ import java.util.List;
 public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     Database database = new Database();
     @Override
-    public RangeFilter create(String description, String name, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException {
+    public RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException {
         Validator.NoNegativeValue(dbMinToSave);
         Validator.NoNegativeValue(dbMaxToSave);
 
@@ -21,11 +21,11 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         Validator.MaxLessThanMin(dbMinToSave,dbMaxToSave);
 
-        return database.create(new DoubleFilter(description, name, productAttribute, dbMinToSave, dbMaxToSave));
+        return database.create(new DoubleFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
     }
 
     @Override
-    public RangeFilter create(String description, String name, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException {
+    public RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException {
         Validator.NoNegativeValue(dbMinToSave);
         Validator.NoNegativeValue(dbMaxToSave);
 
@@ -35,11 +35,11 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         Validator.MaxLessThanMin(dbMinToSave,dbMaxToSave);
 
-        return database.create(new LongFilter(description, name, productAttribute, dbMinToSave, dbMaxToSave));
+        return database.create(new LongFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
     }
 
     @Override
-    public RangeFilter create(String description, String name, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException {
+    public RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException {
 
         Validator.NoSpecialCharacters(description);
         Validator.NoSpecialCharacters(name);
@@ -47,7 +47,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         Validator.MaxLessThanMin(dbMinToSave,dbMaxToSave);
 
-        return database.create(new TimeFilter(description, name, productAttribute, dbMinToSave, dbMaxToSave));
+        return database.create(new TimeFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
     }
 
     @Override

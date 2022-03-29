@@ -33,6 +33,12 @@ public class ProductIndexInfrastructure {
         this.tokenParameter.save();
     }
 
+    public void setTokenParameter(TokenParameter tp){
+        this.tokenParameter.setDelimiter(tp.getDelimiter());
+        this.tokenParameter.setIgnoredChars(tp.getIgnoredChars());
+        this.tokenParameter.save();
+    }
+
     public TokenParameter getTokenParameter() {
         return tokenParameter;
     }

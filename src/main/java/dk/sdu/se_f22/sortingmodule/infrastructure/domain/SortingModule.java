@@ -64,7 +64,7 @@ public interface SortingModule {
     public void setScoring(int scoring);
 
     /**
-     * Run search, and get the hits the search creates.
+     * Run search, and get the hits the search creates, that is filtered and paginated
      */
     public SearchHits search();
 }

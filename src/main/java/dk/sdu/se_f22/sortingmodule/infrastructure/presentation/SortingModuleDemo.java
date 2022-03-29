@@ -8,7 +8,7 @@ public class SortingModuleDemo {
 
         // TODO: Wait for search module infrastructure to finish there "queryIndexOfType" and
         //  "search" metode, before using below:
-        // module.searchString("Hello, World!");
+        // module.setSearchString("Hello, World!");
         // module.search();
     }
 }

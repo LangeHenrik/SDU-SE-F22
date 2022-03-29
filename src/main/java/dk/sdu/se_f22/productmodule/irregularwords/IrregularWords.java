@@ -1,8 +1,5 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
-import org.postgresql.util.PSQLException;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -13,7 +10,7 @@ public class IrregularWords implements IIrregularWords{
    static public IrregularWords irregularWords = new IrregularWords();
 
     private Connection connection = null;
-    private String dbName = "Irregularwords";
+    private String dbName = "irregularwords";
 
     //Initialize method to create a connection to the local database (password might not be the same for all user).
     public void initialize(){
@@ -21,7 +18,7 @@ public class IrregularWords implements IIrregularWords{
             DriverManager.registerDriver(new org.postgresql.Driver());
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbName,
                     "postgres",
-                    "aaaa1234");
+                    "123");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,6 +62,11 @@ public class IrregularWords implements IIrregularWords{
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean createIRWord(String tableWord, String insertionWord){
+        return false;
     }
 
     //Method for deleting a specific word from the database table.
@@ -139,7 +141,23 @@ public class IrregularWords implements IIrregularWords{
             e.printStackTrace();
             return null;
         }
+    }
 
+    @Override
+    public int getID(String word){
+        int id = 0;
+        try {
+            PreparedStatement findID = connection.prepareStatement(("SELECT id FROM irwords WHERE word = ?"));
+            findID.setString(1, word);
+            ResultSet idHolder = findID.executeQuery();
+            while(idHolder.next()){
+                id = idHolder.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(id);
+        return id;
     }
 
     @Override
@@ -182,12 +200,13 @@ public class IrregularWords implements IIrregularWords{
     }
     private String getHelp(){
         return "Type the method you want to use:\n"
-                +"- inservalues"
+                +"- inservalues\n"
                 +"- createirword\n"
                 +"- deleteirword\n"
                 +"- updateirword\n"
                 +"- readirword\n"
                 +"- getirword\n"
+                +"- getid\n"
                 +"- searchforirregularwords\n"
                 +"- exit\n"
                 +"- help";
@@ -200,6 +219,7 @@ public class IrregularWords implements IIrregularWords{
                         + "Please input your command or type \"help\"\n"
                         + "------------------------------------------\n"
         );
+
         boolean running = true;
         try (Scanner s = new Scanner(System.in)) {
             while (running) {
@@ -224,6 +244,10 @@ public class IrregularWords implements IIrregularWords{
                         System.out.println("write the word");
                         System.out.println(irregularWords.getIRWord(s.next()));
                         break;
+                    case "getid":
+                        System.out.println("Write the word that you want to find the ID from");
+                        irregularWords.getID(s.next());
+                        break;
                     case "searchforirregularwords":
                         System.out.println("Write the words you want to check seperated by, as follows \"word1,word2\"");
                         String string = s.nextLine();
@@ -239,8 +263,8 @@ public class IrregularWords implements IIrregularWords{
                         break;
                     default:
                         System.out.println(irregularWords.getHelp());
+                        break;
                 }
-
             }
         }
     }

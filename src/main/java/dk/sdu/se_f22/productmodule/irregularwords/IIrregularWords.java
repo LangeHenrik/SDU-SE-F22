@@ -5,6 +5,8 @@ public interface IIrregularWords {
 
         boolean createIRWord(int ID, String Word);
 
+        boolean createIRWord(String tableWord, String insertionWord);
+
         boolean deleteIRWord(String theWord);
 
         boolean updateIRWord(String originalWord, String updatedWord);
@@ -12,6 +14,8 @@ public interface IIrregularWords {
         void readIRWord();
 
         ArrayList<String> getIRWord(String word);
+
+        int getID(String word);
 
         boolean createBackup();
 

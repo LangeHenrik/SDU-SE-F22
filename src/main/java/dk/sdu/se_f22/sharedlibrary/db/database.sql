@@ -1,4 +1,3 @@
-
 /*
  -Drop alle tabellerne i starten af dokumentet.
     -  Drop tabeller som refererer til andre tabeller
@@ -56,3 +55,4 @@ CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL
 );
+

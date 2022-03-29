@@ -79,7 +79,12 @@ public class CategoryDBConnection {
 
     public Category getCategoryById(int queryId){
         Category tmpCategory = null;
-        String sql = "SELECT * FROM categories WHERE id = ?";
+        String sql = "SELECT categories.id, parent_id, name, description, value, condition FROM categories\n" +
+                "INNER JOIN requirements\n" +
+                "on categories.requirements_id = requirements.id\n" +
+                "INNER JOIN requirements_status \n" +
+                "on requirements.status_id = requirements_status.id\n" +
+                "WHERE categories.id = ?";
 
         try(PreparedStatement queryStatement = this.shared.connect().prepareStatement(sql)) {
             queryStatement.setInt(1, queryId);
@@ -90,7 +95,9 @@ public class CategoryDBConnection {
                 int parentId = queryResultSet.getInt("parent_id");
                 String name = queryResultSet.getString("name");
                 String description = queryResultSet.getString("description");
-                tmpCategory = new Category(id, name, description, parentId);
+                String status = queryResultSet.getString("condition");
+                String value = queryResultSet.getString("value");
+                tmpCategory = new Category(id, name, description, parentId, status, value);
             }
             if(tmpCategory == null){
                 System.out.println("Category with the id " + queryId + " wasnt found");

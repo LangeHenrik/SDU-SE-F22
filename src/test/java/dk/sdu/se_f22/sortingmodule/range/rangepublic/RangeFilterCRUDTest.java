@@ -1,13 +1,10 @@
-package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.EmptyDatabaseException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.DoubleFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.LongFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.TimeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;

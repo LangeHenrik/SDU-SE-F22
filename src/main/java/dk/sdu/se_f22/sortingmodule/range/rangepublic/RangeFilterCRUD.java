@@ -1,15 +1,16 @@
-package dk.sdu.se_f22.sortingmodule.range.rangepublic.crud;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.crud.RangeFilterCRUDInterface;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
 
 import java.time.Instant;
 import java.util.List;
 
-public class RangeFilterCRUD implements RangeFilterCRUDInterface{
+public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     Database database = new Database();
     @Override
     public RangeFilter create(String description, String name, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException {

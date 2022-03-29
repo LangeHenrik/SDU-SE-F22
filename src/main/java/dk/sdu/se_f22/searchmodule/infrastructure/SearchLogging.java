@@ -56,5 +56,54 @@ public class SearchLogging {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+    }
+    public List<Searches> getSearches() {
+        List<String> brands = new ArrayList<>();
+        List<String> products = new ArrayList<>();
+        List<String> contents = new ArrayList<>();
+        List<Searches> searchList = new ArrayList<>();
+
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement queryBrandSearches = connection.prepareStatement("SELECT * FROM BrandSearches");
+            PreparedStatement queryProductSearches = connection.prepareStatement("SELECT * FROM ProductSearches");
+            PreparedStatement queryContentSearches = connection.prepareStatement("SELECT * FROM ContentSearches");
+            PreparedStatement querySearches = connection.prepareStatement("SELECT * FROM Searches");
+
+            ResultSet queryBrandSearchesResultSet = queryBrandSearches.executeQuery();
+            ResultSet queryProductSearchesResultSet = queryProductSearches.executeQuery();
+            ResultSet queryContentSearchesResultSet = queryContentSearches.executeQuery();
+            ResultSet querySearchesResultSet = querySearches.executeQuery();
+
+            while (queryBrandSearchesResultSet.next()) {
+                brands.add(queryBrandSearchesResultSet.getString("brandID"));
+            }
+
+            while(queryProductSearchesResultSet.next()) {
+                products.add(queryProductSearchesResultSet.getString("productID"));
+            }
+
+            while(queryContentSearchesResultSet.next()) {
+                contents.add(queryContentSearchesResultSet.getString("contentID"));
+            }
+
+            while(querySearchesResultSet.next()) {
+                Searches search = new Searches(
+                        querySearchesResultSet.getInt("id"),
+                        querySearchesResultSet.getString("searchString"),
+                        querySearchesResultSet.getString("timeSearched"),
+                        brands,
+                        products,
+                        contents
+                );
+                searchList.add(search);
+            }
+
+        }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return searchList;
     }
 }

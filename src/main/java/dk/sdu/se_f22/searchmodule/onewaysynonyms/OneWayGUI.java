@@ -20,10 +20,6 @@ public class OneWayGUI extends Application {
     }
 
     public static void main(String[] args) {
-        try {
-            DatabaseAPI.updateSuperId("Peter grimme Bukser",2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        launch(args);
     }
 }

@@ -58,7 +58,7 @@ public class TwoWaySynonym implements DatabaseOperator {
 
     /**
      * Retrieve the data from the database related to the given synonym
-     * @param synonym   Word to receive synonyms for
+     * @param groupId   Word to receive synonyms for
      * @return          ArrayList of all matching synonyms
      */
     @Override
@@ -153,9 +153,9 @@ public class TwoWaySynonym implements DatabaseOperator {
         Set<Integer> unique = new TreeSet<>();
 
         for(String token : tokens){
-            int groupId = read(token).groupId();
-
-            var statement = unique.contains(groupId) ?  null : unique.add(groupId);
+            Synonym synonymTemp = read(token);
+            if(synonymTemp == null) continue;
+            var statement = unique.add(synonymTemp.groupId());
         }
 
         for(Integer groupId : unique){

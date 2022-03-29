@@ -18,6 +18,7 @@ public class CategoryDBConnection {
         try{
             DriverManager.registerDriver(new org.postgresql.Driver());
             connie = DriverManager.getConnection(this.URL,this.username,this.password);
+            return connie;
         } catch (SQLException e) {
             e.printStackTrace();
         }

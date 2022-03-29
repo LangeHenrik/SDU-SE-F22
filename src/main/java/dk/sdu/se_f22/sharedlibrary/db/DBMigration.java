@@ -27,8 +27,8 @@ public class DBMigration {
     private boolean printText;
 
     public static void main(String[] args) {
-        DBMigration databaseSeeder = new DBMigration();
-        databaseSeeder.migrate();
+        DBMigration migrator = new DBMigration();
+        migrator.migrate();
     }
 
     /**

@@ -162,35 +162,11 @@ public class DBMigration {
 
             // Read the file one line at a time
             while ((currentLine = br.readLine()) != null) {
-                // Safeguards commented code in -- format
-                if (currentLine.contains("--"))
-                    continue;
-
-                // Safeguards commented code in /* comment /n */ format
-                if (currentLine.contains("/*")) {
-                    // Safeguards /* */ in same line
-                    if (currentLine.contains("*/"))
-                        break;
-
-                    String commentedLine;
-                    while ((commentedLine = br.readLine()) != null) {
-                        if (commentedLine.contains("*/"))
-                            break;
-                    }
-                    continue;
-                }
-
-                // Execute the sql-code
-                if (currentLine.contains(";")) {
-                    sqlCode += currentLine + " ";
-                    // System.out.println("Printing sql code...");
-                    // System.out.println(sqlCode);
-                    stmt.execute(sqlCode);
-                    sqlCode = "";
-                    continue;
-                }
-                sqlCode += currentLine + " ";
+                sqlCode += currentLine + "\n ";
             }
+
+            // Execute the sql
+            stmt.execute(sqlCode);
 
             // Commit the current file, if no errors was encountered
             connection.commit();

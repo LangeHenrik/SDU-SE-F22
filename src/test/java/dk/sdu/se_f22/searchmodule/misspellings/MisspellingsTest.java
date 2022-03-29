@@ -13,8 +13,8 @@ class MisspellingsTest {
     private static final String user = "hzajyqbo";
     private static final String password = "K8664qtGojuBvQczzv66EhaqkUNbXLj0";
 
-    ArrayList<String> listWrong = new ArrayList<String>();
-    ArrayList<String> listCorrect = new ArrayList<String>();
+    ArrayList<String> listWrong = new ArrayList<>();
+    ArrayList<String> listCorrect = new ArrayList<>();
 
 
 
@@ -52,12 +52,18 @@ class MisspellingsTest {
     void tearDown() {
         listWrong.clear();
         listCorrect.clear();
+        try (Connection connection = DriverManager.getConnection(url, user, password)){
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("DELETE FROM misspellings");
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-
-    @DisplayName("Tests the filter method my comparing two ArrayLists, to misspellings saved in the database during setup.")
+    @DisplayName("Tests the filter method by comparing two ArrayLists, to misspellings saved in the database during setup.")
     @Test
-    void filter() {
+    void filterTest() {
        assertEquals(listCorrect, misspelling.filter(listWrong));
    }
 
@@ -73,29 +79,67 @@ class MisspellingsTest {
         assertFalse(misspelling.addMisspelling("TestMisspelling","MisspellingTest"));
     }
 
+    @DisplayName("Tries adding misspeling with spaces")
+    @Test
+    void addMisspellingWithSpaces() {
+        assertFalse(misspelling.addMisspelling("Two Words","OneWord"));
+        assertFalse(misspelling.addMisspelling("OneWord","Two Words"));
+    }
+
+    @DisplayName("Tries adding a blank misspelling")
+    @Test
+    void addingBlankMisspellings() {
+        assertFalse(misspelling.addMisspelling("blank",""));
+        assertFalse(misspelling.addMisspelling("","blank"));
+    }
+
     @DisplayName("Tries deleting the testMisspelling from the setUp.")
     @Test
     void deleteMisspelling() {
         assertTrue(misspelling.deleteMisspelling("TestMisspelling"));
     }
 
-    @DisplayName("Tries to delete a non existant misspelling.")
+    @DisplayName("Tries to delete a non-existent misspelling.")
     @Test
-    void deleteNonExistantMisspelling() {
+    void deleteNonExistentMisspelling() {
         assertFalse(misspelling.deleteMisspelling("HRRJRJRJJ"));
     }
 
-    @DisplayName("Updates the testMisspelling from setUp.")
+    @DisplayName("Attempts to delete a misspelling with spaces.")
+    @Test
+    void deleteMisspellingWithSpaces() {
+        assertFalse(misspelling.deleteMisspelling(" "));
+    }
+
+    @DisplayName("Tries deleting with an empty string.")
+    @Test
+    void emptyDeleteString() {
+        assertFalse(misspelling.deleteMisspelling(""));
+    }
+
+    @DisplayName("Tries updating the testMisspelling from setUp.")
     @Test
     void updateMisspellings() {
         assertTrue(misspelling.updateMisspelling("TestMisspelling","TestOfMisspelling"));
     }
 
-    @DisplayName("Tries updating a non existant misspelling.")
+    @DisplayName("Tries updating a non-existent misspelling.")
     @Test
-    void updateNonExistantMisspelling() {
+    void updateNonExistentMisspelling() {
         assertFalse(misspelling.updateMisspelling("nonExistant","Test"));
     }
 
+    @DisplayName("Tries updating a misspelling into a misspelling with spaces")
+    @Test
+    void updateWithSpaces() {
+        assertFalse(misspelling.updateMisspelling("TestMisspelling","Two words"));
+    }
+
+    @DisplayName("Tries updating to and from a blank misspelling")
+    @Test
+    void updateWithBlanks() {
+        assertFalse(misspelling.updateMisspelling("TestMisspelling",""));
+        assertFalse(misspelling.updateMisspelling("","TestMisspelling"));
+    }
 
 }

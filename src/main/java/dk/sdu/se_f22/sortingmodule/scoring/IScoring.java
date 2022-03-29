@@ -31,14 +31,23 @@ public interface IScoring {
     List<Object> scoreSortReleaseDate(List<Object> input);
 
     /**
-     <p> ??? </p>
+     <p> Returns the scores table </p>
      */
     List<String> readTable();
 
+    /**
+     <p> Updates the row with the new data </p>
+     */
     void updateRow(int id, Object newValue, String column);
 
+    /**
+     <p> Deletes the row from the database </p>
+     */
     void deleteRow(int id);
 
+    /**
+     <p> Creates a new row in the database </p>
+     */
     void createRow(String type, double bracket, int weight);
 
 

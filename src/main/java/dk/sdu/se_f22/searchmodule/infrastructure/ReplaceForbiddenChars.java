@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ReplaceForbiddenChars {
 
-    IllegalChars illegalCharsClass = new IllegalChars();
+    private IllegalChars illegalCharsClass = new IllegalChars();
 
     private List<String> illegalChars = illegalCharsClass.illegalCharsFromDB();
 
@@ -30,11 +30,6 @@ public class ReplaceForbiddenChars {
     public void addIllegalChars(String illegalChar) {
         this.illegalChars.add(illegalChar);
 
-    }
-
-    public List<String> removeIllegalCharSetting(String toRemove) {
-        illegalChars.remove(toRemove);
-        return illegalChars;
     }
 
 

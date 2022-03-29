@@ -6,11 +6,19 @@ public class Item {
     //Attributes
     private String name;
     private Item superItem;
+    private int id;
+    private int superId;
     private LinkedList<Item> subItems;
 
     //Constructor
     public Item(String name){
         this.name = name;
+        this.subItems = new LinkedList<>();
+    }
+    public Item(int id,String name, int superId){
+        this.name = name;
+        this.id = id;
+        this.superId = superId;
         this.subItems = new LinkedList<>();
     }
     public Item(String name, Item superItem){
@@ -36,5 +44,13 @@ public class Item {
     }
     public Item getSuperItem() {
         return superItem;
+    }
+
+    public int getSuperId() {
+        return superId;
+    }
+
+    public int getId() {
+        return id;
     }
 }

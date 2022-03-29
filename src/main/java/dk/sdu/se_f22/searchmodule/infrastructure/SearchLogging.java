@@ -17,19 +17,15 @@ public class SearchLogging {
         //List<Content> contents = (List<Content>) searchHits.getContents();
 
         try(Connection connection = DBConnection.getPooledConnection()) {
-            System.out.println(connection.getClass().getName());
-            // Log products
             PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO searches(searchString) VALUES (?);", Statement.RETURN_GENERATED_KEYS);
             insertStatement.setString(1, search);
             insertStatement.execute();
 
-            Integer id = null;
+            // Get id of search
+            int id = -1;
             try (ResultSet generatedKeys = insertStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     id = generatedKeys.getInt(1);
-                }
-                else {
-                    throw new SQLException("Creating search failed, no ID obtained.");
                 }
             }
 

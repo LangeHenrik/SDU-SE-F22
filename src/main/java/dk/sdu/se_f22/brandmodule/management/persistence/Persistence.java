@@ -17,7 +17,12 @@ public class Persistence implements IPersistence {
     public Persistence() {
         //Connect to database
         jsonService = new JsonService();
-        c = DBConnection.getConnection();
+        try {
+            c = DBConnection.getPooledConnection();
+        }
+        catch (SQLException e) {
+
+        }
     }
 
     @Override

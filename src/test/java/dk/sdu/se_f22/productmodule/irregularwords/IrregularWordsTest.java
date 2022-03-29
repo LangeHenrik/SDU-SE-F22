@@ -27,6 +27,10 @@ class IrregularWordsTest {
     }
 
     @Test
+    void getID() {
+    }
+
+    @Test
     void searchForIrregularWords() {
     }
 }

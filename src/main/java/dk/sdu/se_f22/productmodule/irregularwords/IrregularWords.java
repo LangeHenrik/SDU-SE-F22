@@ -73,7 +73,7 @@ public class IrregularWords implements IIrregularWords{
     @Override
     public boolean deleteIRWord(String theWord) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("DROP * FROM irwords WHERE word = ?");
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM irwords WHERE word = ?");
             stmt.setString(1,theWord);
             return stmt.execute();
         } catch (SQLException e) {
@@ -201,13 +201,13 @@ public class IrregularWords implements IIrregularWords{
     private String getHelp(){
         return "Type the method you want to use:\n"
                 +"- inservalues\n"
-                +"- createirword\n"
-                +"- deleteirword\n"
-                +"- updateirword\n"
-                +"- readirword\n"
-                +"- getirword\n"
+                +"- createirword or create\n"
+                +"- deleteirword or delete\n"
+                +"- updateirword or update\n"
+                +"- readirword or read\n"
+                +"- getirword or get\n"
                 +"- getid\n"
-                +"- searchforirregularwords\n"
+                +"- searchforirregularwords or search\n"
                 +"- exit\n"
                 +"- help";
     }
@@ -226,21 +226,26 @@ public class IrregularWords implements IIrregularWords{
                 irregularWords.initialize();
                 switch (s.nextLine().toLowerCase()) {
                     case "createirword":
+                    case "create":
                         System.out.println("First type the id, the type the word you want to add");
                         irregularWords.createIRWord(s.nextInt(), s.next());
                         break;
                     case "deleteirword":
+                    case "delete":
                         System.out.println("Which word do you want to delete");
                         irregularWords.deleteIRWord(s.next());
                         break;
                     case "updateirword":
+                    case "update":
                         System.out.println("First type the word you want to edit, then the corrected word");
                         irregularWords.updateIRWord(s.next(),s.next());
                         break;
                     case "readirword":
+                    case "read":
                         irregularWords.readIRWord();
                         break;
                     case "getirword":
+                    case "get":
                         System.out.println("write the word");
                         System.out.println(irregularWords.getIRWord(s.next()));
                         break;
@@ -249,6 +254,7 @@ public class IrregularWords implements IIrregularWords{
                         irregularWords.getID(s.next());
                         break;
                     case "searchforirregularwords":
+                    case "search":
                         System.out.println("Write the words you want to check seperated by, as follows \"word1,word2\"");
                         String string = s.nextLine();
                         String[] words = string.split(",");

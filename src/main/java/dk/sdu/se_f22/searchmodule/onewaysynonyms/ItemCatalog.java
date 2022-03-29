@@ -35,6 +35,7 @@ public class ItemCatalog {
     }
 
     public LinkedList<Item> oneWaySynonymStrings(String string) throws notFoundException {
+
         for(Item item : catalog) {
             if(item.getName().equals(string)){
                 return item.getSubItems();

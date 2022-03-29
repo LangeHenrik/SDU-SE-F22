@@ -15,10 +15,7 @@ public class SeedDatabase {
         //Get the connection
         Connection connection = DBConnection.getConnection();
 
-        //Ensure that the database is up to date
-        runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/database.sql");
-
-//------Seed the database-----------------------------------------------------------------------------
+        //------Seed the database-----------------------------------------------------------------------------
 
         //BIM-1
 

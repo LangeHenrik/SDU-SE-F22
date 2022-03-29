@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.postgresql.util.PSQLException;
 
 import java.io.File;
@@ -12,7 +13,6 @@ public class IrregularWords implements IIrregularWords{
    static public IrregularWords irregularWords = new IrregularWords();
 
     private Connection connection = null;
-    private boolean canConnect = false;
     private String dbName = "Irregularwords";
 
     //Initialize method to create a connection to the local database (password might not be the same for all user).
@@ -22,17 +22,9 @@ public class IrregularWords implements IIrregularWords{
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbName,
                     "postgres",
                     "aaaa1234");
-            canConnect = true;
         } catch (SQLException e) {
             e.printStackTrace();
-            canConnect = false;
         }
-        /*if(!canConnect){
-            createDB();
-            createTable();
-            canConnect = true;
-
-        }*/
     }
 
     //Temporary method used for creating a database with the name "irregularwords".
@@ -171,8 +163,6 @@ public class IrregularWords implements IIrregularWords{
                   irwords.addAll(getIRWord(string));
           }
       }
-      //print is only to check if the method works correctly
-        System.out.println(irwords);
       //returns the list
         return irwords;
     }
@@ -180,7 +170,7 @@ public class IrregularWords implements IIrregularWords{
     // insertValues is a method used once per pc to get some values into the table to perform test from so all have same values,
     private void insertValues(){
         try (Scanner scan = new Scanner(new File
-                ("src/main/java/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
+                ("dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
@@ -190,15 +180,68 @@ public class IrregularWords implements IIrregularWords{
             e.printStackTrace();
         }
     }
+    private String getHelp(){
+        return "Type the method you want to use:\n"
+                +"- inservalues"
+                +"- createirword\n"
+                +"- deleteirword\n"
+                +"- updateirword\n"
+                +"- readirword\n"
+                +"- getirword\n"
+                +"- searchforirregularwords\n"
+                +"- exit\n"
+                +"- help";
+    }
 
     public static void main(String[] args) {
-        irregularWords.initialize();
-        List<String> test = new ArrayList<>();
-        test.add("Gustav1");
-        test.add("hej");
-        test.add("Oliver3");
-        test.add("Gustav2");
-        irregularWords.searchForIrregularWords(test);
+        System.out.println(
+                "------------------------------------------\n"
+                        + "WELCOME TO IrregularWords\n"
+                        + "Please input your command or type \"help\"\n"
+                        + "------------------------------------------\n"
+        );
+        boolean running = true;
+        try (Scanner s = new Scanner(System.in)) {
+            while (running) {
+                irregularWords.initialize();
+                switch (s.nextLine().toLowerCase()) {
+                    case "createirword":
+                        System.out.println("First type the id, the type the word you want to add");
+                        irregularWords.createIRWord(s.nextInt(), s.next());
+                        break;
+                    case "deleteirword":
+                        System.out.println("Which word do you want to delete");
+                        irregularWords.deleteIRWord(s.next());
+                        break;
+                    case "updateirword":
+                        System.out.println("First type the word you want to edit, then the corrected word");
+                        irregularWords.updateIRWord(s.next(),s.next());
+                        break;
+                    case "readirword":
+                        irregularWords.readIRWord();
+                        break;
+                    case "getirword":
+                        System.out.println("write the word");
+                        System.out.println(irregularWords.getIRWord(s.next()));
+                        break;
+                    case "searchforirregularwords":
+                        System.out.println("Write the words you want to check seperated by, as follows \"word1,word2\"");
+                        String string = s.nextLine();
+                        String[] words = string.split(",");
+                        System.out.println(irregularWords.searchForIrregularWords(new ArrayList<String>(List.of(words))));
+                        break;
+                    case "insertvalues":
+                        System.out.println("You should only use this method one time");
+                        irregularWords.insertValues();
+                        break;
+                    case "exit":
+                        running=false;
+                        break;
+                    default:
+                        System.out.println(irregularWords.getHelp());
+                }
 
+            }
+        }
     }
 }

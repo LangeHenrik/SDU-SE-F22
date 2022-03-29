@@ -25,4 +25,3 @@ public class CategoryDBDelete {
         return affectedrows;
     }
 }
-

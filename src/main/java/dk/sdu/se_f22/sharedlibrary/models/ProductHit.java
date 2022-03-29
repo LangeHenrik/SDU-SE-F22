@@ -12,7 +12,7 @@ import java.util.UUID;
  * It includes a constructor {@link ProductHit#ProductHit(Product)}, which simply takes a {@link Product} as its input,
  * and then parses it into the correct attribute values.
  */
-public class ProductHit {
+public class ProductHit implements Comparable<ProductHit>{
     UUID uuid;
     double averageUserReview;
     double price;
@@ -26,6 +26,7 @@ public class ProductHit {
     Instant publishedDate;
     Instant expirationDate;
     List<String> inStock;
+    int hitNum;
 
     /** The constructor for setting all attributes at once including those that are optional
      */
@@ -51,6 +52,7 @@ public class ProductHit {
         this.category = category;
         this.name = name;
         this.description = description;
+        hitNum = 0;
     }
 
     /** This parses the hard to use Product into a much more user friendly ProductHit.<br>
@@ -153,10 +155,33 @@ public class ProductHit {
         return weight;
     }
 
+    public int getHitNum(){
+        return hitNum;
+    }
+    public void setHitNum(int num){
+        hitNum = num;
+    }
+
     public long getLongValue(String productAttribute) {
         if(productAttribute.equals("ean")){
             return this.getEan();
         }
         throw new IllegalArgumentException(productAttribute + "does not exist as a double attribute: ");
+    }
+    @Override
+    public int compareTo(ProductHit o) {
+        if (this.getHitNum() < o.getHitNum()){
+            return 1;
+        }
+        else if (this.getHitNum() > o.getHitNum()){
+            return -1;
+        }
+        else{
+            return 0;
+        }
+    }
+    @Override
+    public String toString(){
+        return "Name : "+ getName()+ " Hits : "+getHitNum() +"\n";
     }
 }

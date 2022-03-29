@@ -17,7 +17,7 @@ public interface RangeFilterCRUDInterface {
      * @param productAttribute
      * @param dbMinToSave
      * @param dbMaxToSave
-     * @return DobuleFilter
+     * @return DoubleFilter
      */
     RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException;
     /**

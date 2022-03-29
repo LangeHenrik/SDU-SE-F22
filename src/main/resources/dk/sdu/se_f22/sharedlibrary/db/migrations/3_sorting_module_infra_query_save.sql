@@ -5,14 +5,14 @@ CREATE TABLE sorting_queries (
 );
 
 CREATE TABLE sorting_query_settings (
-	queries_id INT REFERENCES queries(id),
+	queries_id INT REFERENCES sorting_queries(id),
 	key VARCHAR(255) NOT NULL,
 	value VARCHAR(255) NOT NULL,
 	PRIMARY KEY (queries_id, key)
 );
 
 CREATE TABLE sorting_query_category(
-	queries_id INT REFERENCES queries(id),
+	queries_id INT REFERENCES sorting_queries(id),
 	catergory_id INT NOT NULL,
 	PRIMARY KEY (queries_id, catergory_id)
 );

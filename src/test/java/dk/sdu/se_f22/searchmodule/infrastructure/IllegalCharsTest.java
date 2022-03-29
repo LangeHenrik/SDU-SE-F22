@@ -3,6 +3,7 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.postgresql.util.PSQLException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,6 +60,16 @@ class IllegalCharsTest {
     }
 
     @Test
-    void removeChar() {
+    void removeChar() throws SQLException {
+        illegalChars.addChar("a");
+        illegalChars.removeChar("a");
+        PreparedStatement queryStatement = DBConnection.getConnection().prepareStatement(
+                "SELECT * FROM illegalChars where (id=1)");
+        ResultSet queryResultSet = queryStatement.executeQuery();
+        queryResultSet.next();
+        assertThrows(PSQLException.class,() -> queryResultSet.getString("characters"));
     }
+
+
+
 }

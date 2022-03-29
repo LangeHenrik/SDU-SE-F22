@@ -26,28 +26,24 @@ public class IllegalChars {
     }
 
     public List<String> illegalCharsFromDB() {
-
         try {
-            PreparedStatement queryStatement = DBConnection.getConnection().prepareStatement(
-                    "SELECT * FROM illegalChars");
+            PreparedStatement queryStatement = DBConnection.getConnection().prepareStatement("SELECT * FROM illegalChars");
             ResultSet queryResultSet = queryStatement.executeQuery();
-
             List<String> strings = new ArrayList<String>();
             while (queryResultSet.next()) {
                 String em = queryResultSet.getString("characters");
                 strings.add(em);
-
             }
-            return strings;
-        } catch (SQLException e) {
+            return strings; } catch (SQLException e) {
             e.printStackTrace();
-        }
-        return null;
+        } return null;
     }
-
 
     public void removeChar(String character) {
-
+        try {
+            PreparedStatement deleteStatement = DBConnection.getConnection().prepareStatement("DELETE FROM illegalChars WHERE characters=(?)");
+            deleteStatement.setString(1,character);
+            deleteStatement.execute();
+        } catch (SQLException e) {e.printStackTrace();}
     }
 }
-

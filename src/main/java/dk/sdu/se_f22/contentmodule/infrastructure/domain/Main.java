@@ -10,7 +10,7 @@ public class Main {
         HTMLParser parser = new HTMLParser("src/index.html");
         String parsedHTML = parser.parseHTML();
 
-        ArrayList<String> tokens = Tokenizer.tokenizeString(parsedHTML);
+        /*ArrayList<String> tokens = Tokenizer.tokenizeString(parsedHTML);
 
         Database database = new Database();
         database.setupDatabase();
@@ -20,6 +20,6 @@ public class Main {
         database.saveTokens("unfiltered_tokens", tokens);
 
         tokens = database.loadTokens("unfiltered_tokens");
-        database.printTokens(tokens);
+        database.printTokens(tokens);*/
     }
 }

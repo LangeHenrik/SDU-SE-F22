@@ -72,4 +72,16 @@ public class DatabaseAPI {
         }
         return null;
     }
+
+    public static void deleteItem(int id, String name){
+        PreparedStatement deleteStatement = null;
+        try {
+            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
+            deleteStatement.setString(1, String.valueOf(name));
+            deleteStatement.setString(2, String.valueOf(id));
+            deleteStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

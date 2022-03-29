@@ -6,6 +6,23 @@ public class Category {
     private String description;
     private int parentId;
 
+    private String requirementStatus;
+    private String requirementValue;
+
+    public Category(int id, String name, String description, int parentId, String requirementStatus, String requirementValue){
+        this(id, name, description);
+        this.parentId = parentId;
+        this.requirementStatus = requirementStatus;
+        this.requirementValue = requirementValue;
+    }
+
+    public Category(int id, String name, String description, String requirementStatus, String requirementValue){
+        this(name, description);
+        this.id = id;
+        this.requirementStatus = requirementStatus;
+        this.requirementValue = requirementValue;
+    }
+
     public Category(int id, String name, String description, int parentId){
         this(id, name, description);
         this.parentId = parentId;
@@ -36,6 +53,14 @@ public class Category {
 
     public int getParentId() {
         return parentId;
+    }
+
+    public String getRequirementStatus() {
+        return requirementStatus;
+    }
+
+    public String getRequirementValue() {
+        return requirementValue;
     }
 
     @Override

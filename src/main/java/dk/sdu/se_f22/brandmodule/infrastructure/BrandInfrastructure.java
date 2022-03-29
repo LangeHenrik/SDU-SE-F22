@@ -1,27 +1,19 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
-import com.google.gson.GsonBuilder;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import com.google.gson.*;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Collections;
-import java.util.List;
-import com.google.gson.Gson;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
 
     private TokenizationParameters tokenizationParameters;
-    private Gson gson;
-    private File file;
+    private final Gson gson;
+    private final File file;
 
     public BrandInfrastructure() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(TokenizationParameters.class, new TokenizationParametersAdapter());
         builder.setPrettyPrinting();
         gson = builder.create();
         file = new File("src/main/resources/dk/sdu/se_f22/brandmodule/infrastructure/TokenizationParameters.json");
@@ -36,11 +28,17 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
             e.printStackTrace();
             return;
         }
-        this.tokenizationParameters = gson.fromJson(jsonString,TokenizationParameters.class);
+        JsonObject object = gson.fromJson(jsonString, JsonObject.class);
+        String delimiter = object.get("delimiterRegex").getAsString();
+        String ignore = object.get("ignoreRegex").getAsString();
+        this.tokenizationParameters = new TokenizationParameters(delimiter, ignore);
     }
 
     public void saveTokenizationParameters() {
-        String jsonString = gson.toJson(tokenizationParameters);
+        JsonObject object = new JsonObject();
+        object.addProperty("delimiterRegex", tokenizationParameters.delimiterRegex);
+        object.addProperty("ignoreRegex", tokenizationParameters.ignoreRegex);
+        String jsonString = gson.toJson(object);
         try {
             Files.write(file.toPath(), jsonString.getBytes());
         } catch (IOException e) {

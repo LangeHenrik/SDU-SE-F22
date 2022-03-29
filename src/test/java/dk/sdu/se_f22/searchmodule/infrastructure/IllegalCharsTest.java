@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.postgresql.util.PSQLException;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,14 +20,14 @@ class IllegalCharsTest {
 
     @BeforeEach
     void beforeEach()  {
-        try {
-            PreparedStatement delete = DBConnection.getConnection().prepareStatement("DROP TABLE illegalChars");
+        try (Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement delete = connection.prepareStatement("DROP TABLE illegalChars");
             delete.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        try {
-            PreparedStatement create = DBConnection.getConnection().prepareStatement("CREATE TABLE illegalChars( id SERIAL PRIMARY KEY, " +
+        try (Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement create = connection.prepareStatement("CREATE TABLE illegalChars( id SERIAL PRIMARY KEY, " +
                     "characters VARCHAR(50) NOT NULL)");
             create.execute();
         } catch (SQLException e) {
@@ -39,11 +40,13 @@ class IllegalCharsTest {
     @Test
     void addChar() throws SQLException {
         illegalChars.addChar("a");
-        PreparedStatement queryStatement = DBConnection.getConnection().prepareStatement(
-                "SELECT * FROM illegalChars where (id=1)");
-        ResultSet queryResultSet = queryStatement.executeQuery();
-        queryResultSet.next();
-        assertEquals("a", queryResultSet.getString("characters"));
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement queryStatement = connection.prepareStatement(
+                    "SELECT * FROM illegalChars where (id=1)");
+            ResultSet queryResultSet = queryStatement.executeQuery();
+            queryResultSet.next();
+            assertEquals("a", queryResultSet.getString("characters"));
+        }
 
     }
 
@@ -63,11 +66,13 @@ class IllegalCharsTest {
     void removeChar() throws SQLException {
         illegalChars.addChar("a");
         illegalChars.removeChar("a");
-        PreparedStatement queryStatement = DBConnection.getConnection().prepareStatement(
-                "SELECT * FROM illegalChars where (id=1)");
-        ResultSet queryResultSet = queryStatement.executeQuery();
-        queryResultSet.next();
-        assertThrows(PSQLException.class,() -> queryResultSet.getString("characters"));
+        try (Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement queryStatement = connection.prepareStatement(
+                    "SELECT * FROM illegalChars where (id=1)");
+            ResultSet queryResultSet = queryStatement.executeQuery();
+            queryResultSet.next();
+            assertThrows(PSQLException.class, () -> queryResultSet.getString("characters"));
+        }
     }
 
 

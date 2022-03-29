@@ -4,6 +4,7 @@ import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,8 +16,8 @@ public class IllegalChars {
 
     public void addChar(String character) {
         //Adds illegal characters to database
-        try {
-            PreparedStatement insertStatement = DBConnection.getConnection().prepareStatement(
+        try (Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement insertStatement = connection.prepareStatement(
                     "INSERT INTO illegalChars (characters) VALUES (?)");
             insertStatement.setString(1, character);
             insertStatement.execute();
@@ -26,8 +27,8 @@ public class IllegalChars {
     }
 
     public List<String> illegalCharsFromDB() {
-        try {
-            PreparedStatement queryStatement = DBConnection.getConnection().prepareStatement("SELECT * FROM illegalChars");
+        try (Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement queryStatement = connection.prepareStatement("SELECT * FROM illegalChars");
             ResultSet queryResultSet = queryStatement.executeQuery();
             List<String> strings = new ArrayList<String>();
             while (queryResultSet.next()) {
@@ -40,8 +41,8 @@ public class IllegalChars {
     }
 
     public void removeChar(String character) {
-        try {
-            PreparedStatement deleteStatement = DBConnection.getConnection().prepareStatement("DELETE FROM illegalChars WHERE characters=(?)");
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM illegalChars WHERE characters=(?)");
             deleteStatement.setString(1,character);
             deleteStatement.execute();
         } catch (SQLException e) {e.printStackTrace();}

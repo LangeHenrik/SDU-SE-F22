@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.productmodule.persistance.ProductListController">
    <children>
       <AnchorPane fx:id="productDetails" layoutX="307.0" layoutY="35.0" prefHeight="515.0" prefWidth="460.0" />
-      <Button fx:id="cancelButton" layoutX="14.0" layoutY="561.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="cancelButton" layoutX="14.0" layoutY="561.0" mnemonicParsing="false" text="Cancel" onAction="#handleCancel" />
       <Button fx:id="proceedBtn" layoutX="726.0" layoutY="561.0" mnemonicParsing="false" text="Proceed" />
       <VBox fx:id="productList" layoutX="59.0" layoutY="35.0" prefHeight="515.0" prefWidth="223.0" />
       <Label layoutX="344.0" layoutY="14.0" text="Product View" />

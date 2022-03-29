@@ -17,6 +17,10 @@ public class CategoryFilter {
         Collection<ProductHit> newProducts = new ArrayList<>();
         List<Category> categories = new ArrayList<>();
 
+        if(categoryIDs.isEmpty()){
+            return searchHits;
+        }
+
         for (Integer categoryID : categoryIDs) {
             Category tmpCategory = CategoryDBConnection.shared.getCategoryById(categoryID);
             categories.add(tmpCategory);

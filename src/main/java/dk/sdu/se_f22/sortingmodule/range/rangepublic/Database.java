@@ -3,10 +3,8 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.util.List;
 
 public class Database implements DatabaseInterface {

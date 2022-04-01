@@ -66,7 +66,19 @@ public class IrregularWords implements IIrregularWords{
 
     @Override
     public boolean createIRWord(String tableWord, String insertionWord){
-        return false;
+        try {
+            //Get the ID from the first word
+            int id = irregularWords.getID(tableWord);
+
+            //Statement for inserting the insertionWord with the ID of the tableWord
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO irwords (id, word) VALUES (?,?)");
+            stmt.setInt(1,id);
+            stmt.setString(2,insertionWord);
+            return stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //Method for deleting a specific word from the database table.
@@ -84,18 +96,18 @@ public class IrregularWords implements IIrregularWords{
 
     //Method for updating words in the database table.
     @Override
-        public boolean updateIRWord(String originalWord, String updatedWord) {
-            try{
-                PreparedStatement stmt = connection.prepareStatement(
-                        "UPDATE irwords SET word = ? WHERE word = ?");
-                stmt.setString(1, updatedWord);
-                stmt.setString(2, originalWord);
-                return stmt.execute();
-            }catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
+    public boolean updateIRWord(String originalWord, String updatedWord) {
+        try{
+            PreparedStatement stmt = connection.prepareStatement(
+                    "UPDATE irwords SET word = ? WHERE word = ?");
+            stmt.setString(1, updatedWord);
+            stmt.setString(2, originalWord);
+            return stmt.execute();
+        }catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
+    }
 
     //Method for printing out the database table.
     @Override
@@ -126,7 +138,6 @@ public class IrregularWords implements IIrregularWords{
                 while (findIdStmtResult.next()) {
                     findIdMatchStmt.setInt(1, findIdStmtResult.getInt("id"));
                 }
-
                 ResultSet findIdMatchStmtResult = findIdMatchStmt.executeQuery();
                 while (findIdMatchStmtResult.next()) {
                     words.add(findIdMatchStmtResult.getString("word"));
@@ -198,6 +209,7 @@ public class IrregularWords implements IIrregularWords{
             e.printStackTrace();
         }
     }
+
     private String getHelp(){
         return "Type the method you want to use:\n"
                 +"- inservalues\n"
@@ -227,8 +239,13 @@ public class IrregularWords implements IIrregularWords{
                 switch (s.nextLine().toLowerCase()) {
                     case "createirword":
                     case "create":
-                        System.out.println("First type the id, the type the word you want to add");
-                        irregularWords.createIRWord(s.nextInt(), s.next());
+                        System.out.println("First type the id, then type the word you want to add");
+                        System.out.println("or you can type a word from the table, followed by the word you want to add");
+                        if(s.hasNextInt()) {
+                            irregularWords.createIRWord(s.nextInt(), s.next());
+                        }else{
+                            irregularWords.createIRWord(s.next(), s.next());
+                        }
                         break;
                     case "deleteirword":
                     case "delete":

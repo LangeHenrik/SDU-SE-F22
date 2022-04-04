@@ -25,7 +25,7 @@ public class SearchQuery {
     /**
      * Scoring method id
      */
-    int scoring;
+    int scoring = 0;
 
     public SearchQuery() {
         this.pagination = new int[2];

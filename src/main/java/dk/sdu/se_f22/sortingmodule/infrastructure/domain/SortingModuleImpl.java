@@ -73,7 +73,8 @@ public class SortingModuleImpl implements SortingModule {
 
         // Search
         SearchModuleImpl searchModule = new SearchModuleImpl();
-        return searchModule.search(this.searchString);
+        return new SearchHits();
+        // return searchModule.search(this.searchString);
 
         // Filters
 
@@ -85,6 +86,6 @@ public class SortingModuleImpl implements SortingModule {
     }
     
     private void saveSearch() {
-        SaveSearchQuery.saveSearch(this.query);
+        SaveSearchQuery.saveSearch(this.query, this.searchString);
     }
 }

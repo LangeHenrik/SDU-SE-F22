@@ -66,4 +66,23 @@ public class DatabaseAPI {
             e.printStackTrace();
         }
     }
+
+    public static int searchBasedOnName(String name){
+        int id = -1;
+        if(name == null){
+            return id;
+        }
+        PreparedStatement statement = null;
+        ResultSet result;
+        try {
+            statement = connection.prepareStatement("SELECT id FROM items WHERE name=?");
+            statement.setString(1,name);
+            result = statement.executeQuery();
+            id = result.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
 }

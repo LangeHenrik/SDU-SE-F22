@@ -88,7 +88,30 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Button fx:id="GenerateImage" layoutX="249.0" layoutY="14.0" mnemonicParsing="false" onAction="#GenerateImage" text="Generate Image" />
-                        <ImageView fx:id="image" fitHeight="402.0" fitWidth="600.0" layoutX="1.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="image" fitHeight="300.0" fitWidth="482.0" layoutX="58.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" />
+                        <TabPane fx:id="TP_images" layoutX="14.0" layoutY="340.0" prefHeight="90.0" prefWidth="570.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Change Name">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="348.0">
+                                       <children>
+                                          <Label layoutX="13.0" layoutY="11.0" text="Old Name" />
+                                          <Label layoutX="192.0" layoutY="11.0" text="New name" />
+                                          <TextField fx:id="CN_oldName" layoutX="13.0" layoutY="26.0" />
+                                          <TextField fx:id="CN_newName" layoutX="192.0" layoutY="26.0" />
+                                          <Button fx:id="CN_enter" layoutX="354.0" layoutY="26.0" mnemonicParsing="false" onAction="#changeName" text="Enter" />
+                                          <Label fx:id="CN_status" layoutX="415.0" layoutY="30.0" prefHeight="18.0" prefWidth="135.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Untitled Tab 2">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
                      </children>
                   </AnchorPane>
               </content>

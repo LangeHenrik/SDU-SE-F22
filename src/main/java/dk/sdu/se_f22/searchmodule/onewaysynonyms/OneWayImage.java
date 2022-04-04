@@ -1,17 +1,19 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
-import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 
-public class OneWayPanel extends JPanel {
+public class OneWayImage {
 
     private Item root;
     private int width;
     private int height;
     private HashMap<Integer,LinkedList<Item>> tree;
+    private BufferedImage image;
+    private Graphics2D g;
 
-    public OneWayPanel(Item item){
+    public OneWayImage(Item item){
         HashMap<Integer, LinkedList<Item>> tree = fillNumberInEachGeneration(item);
         int height = tree.size()*100;
         int width = imageLength(tree);
@@ -20,6 +22,9 @@ public class OneWayPanel extends JPanel {
         this.height = height;
         this.width = width;
         this.tree = tree;
+        this.image = new BufferedImage(this.width,this.height,BufferedImage.TYPE_3BYTE_BGR);
+        this.g = this.image.createGraphics();
+        paint(g);
     }
 
     private HashMap<Integer, LinkedList<Item>> fillNumberInEachGeneration(Item root){
@@ -59,9 +64,7 @@ public class OneWayPanel extends JPanel {
         return biggest*150;
     }
 
-    @Override
-    public void paint(Graphics g){
-        Graphics2D g2D = (Graphics2D) g;
+    public void paint(Graphics2D g2D){
 
         g2D.setStroke(new BasicStroke(3));
         g2D.setColor(Color.getHSBColor(342, 100, (float) 67.45));
@@ -97,8 +100,7 @@ public class OneWayPanel extends JPanel {
         return this.width / tree.get(number).size() * tree.get(number).indexOf(item);
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(width, height);
+    public BufferedImage getImage() {
+        return image;
     }
 }

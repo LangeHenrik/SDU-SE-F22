@@ -1,26 +1,49 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.control.Label;
 
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class OneWayController {
+public class OneWayController implements Initializable {
 
     @FXML
-    public TextField insertSuperIDAddItemTextfield,insertNameAddItemTextfield;
+    public TextField insertSuperIDAddItemTextfield,insertNameAddItemTextfield, CN_oldName, CN_newName;
 
     @FXML
     public ImageView image;
 
     @FXML
+    public Button CN_enter;
+
+    @FXML
+    public Label CN_status;
+
+    @FXML
+    public TabPane TP_images;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        TP_images.setDisable(true);
+        TP_images.setVisible(false);
+    }
+
+
     public void addItemButtonHandler(ActionEvent actionEvent) {
         if (insertSuperIDAddItemTextfield.getText() == null) {
             try {
@@ -61,7 +84,8 @@ public class OneWayController {
         OneWayImage owi = new OneWayImage(i1);
 
         image.setImage(convertToFxImage(owi.getImage()));
-
+        TP_images.setDisable(false);
+        TP_images.setVisible(true);
     }
 
     private static Image convertToFxImage(BufferedImage image) {
@@ -78,4 +102,20 @@ public class OneWayController {
 
         return new ImageView(wr).getImage();
     }
+
+    public void changeName(ActionEvent actionEvent) {
+        int id;
+        id = DatabaseAPI.searchBasedOnName(CN_oldName.getText());
+        if(id == -1){
+            CN_status.setText("Invalid name");
+            return;
+        }
+        try {
+            DatabaseAPI.updateName(id,CN_newName.getText());
+        } catch (SQLException e) {
+            CN_status.setText("Something went Wrong, try again");
+        }
+    }
+
+
 }

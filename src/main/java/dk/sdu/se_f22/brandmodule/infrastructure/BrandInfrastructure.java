@@ -68,6 +68,8 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 
     private List<String> filterTokens(List<String> tokens) {
         tokens = stemming.stem(tokens);
+        //tokens = irregularWords.searchForIrregularWords(tokens);
+        // tokens = stopwords.
         return tokens;
     }
 

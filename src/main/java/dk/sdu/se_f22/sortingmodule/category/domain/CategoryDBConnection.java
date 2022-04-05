@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.category.Category;
 import dk.sdu.se_f22.sortingmodule.category.CategoryCRUDInterface;
 import dk.sdu.se_f22.sortingmodule.category.CategoryReadConfig;
@@ -19,17 +20,18 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
     private static Connection connie = null;
 
     public Connection connect() throws SQLException, IOException {
-        CategoryReadConfig readConfig = new CategoryReadConfig();
-        HashMap<String, String> credentials = readConfig.getPropValues();
+        // CategoryReadConfig readConfig = new CategoryReadConfig();
+        // HashMap<String, String> credentials = readConfig.getPropValues();
 
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-            connie = DriverManager.getConnection(credentials.get("db_url"),credentials.get("db_username"),credentials.get("db_password"));
-            return connie;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return connie;
+        // try {
+        //     DriverManager.registerDriver(new org.postgresql.Driver());
+        //     connie = DriverManager.getConnection(credentials.get("db_url"),credentials.get("db_username"),credentials.get("db_password"));
+        //     return connie;
+        // } catch (SQLException e) {
+        //     e.printStackTrace();
+        // }
+        // return connie;
+        return DBConnection.getPooledConnection();
     }
 
     public void closeConnection(){

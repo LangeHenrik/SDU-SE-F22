@@ -1,4 +1,6 @@
 package dk.sdu.se_f22.brandmodule.management.persistence;
+import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
+import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructureInterface;
 import dk.sdu.se_f22.brandmodule.management.services.IJsonService;
 import dk.sdu.se_f22.brandmodule.management.services.JsonService;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
@@ -13,10 +15,13 @@ import java.util.Set;
 public class Persistence implements IPersistence {
     private Connection c = null;
     private IJsonService jsonService = null;
+    public BrandInfrastructureInterface BIM2 = null;
 
     public Persistence() {
         //Connect to database
         jsonService = new JsonService();
+        BIM2 = new BrandInfrastructure();
+
         try {
             c = DBConnection.getPooledConnection();
         }
@@ -218,6 +223,9 @@ public class Persistence implements IPersistence {
             rollback();
             return false;
         }
+
+        //Ensure that brands are indexed when loaded or changed
+        BIM2.indexBrands(getAllBrands());
 
         return true;
     }

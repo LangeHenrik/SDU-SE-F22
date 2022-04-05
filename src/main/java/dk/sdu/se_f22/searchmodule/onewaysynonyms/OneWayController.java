@@ -44,7 +44,8 @@ public class OneWayController implements Initializable {
     }
 
 
-    public void addItemButtonHandler(ActionEvent actionEvent) {
+
+    public void addItemButtonHandler(ActionEvent actionEvent) {/*
         if (insertSuperIDAddItemTextfield.getText() == null) {
             try {
                 DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));
@@ -59,7 +60,7 @@ public class OneWayController implements Initializable {
                 e.printStackTrace();
             }
         }
-
+    */
     }
 
 

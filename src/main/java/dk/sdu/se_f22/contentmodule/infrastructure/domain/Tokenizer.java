@@ -18,33 +18,20 @@ class Tokenizer {
 
 
     public static ArrayList<String> tokenizeHTMLBodyText(ArrayList<HTMLSite> webSites) {
-
         ArrayList<String> tokens = new ArrayList<>();
-
-        String[] splittedString;
-//
-//
-//        for (HTMLSite site: webSites){
-//            bodyText.add(site.getDocumentText());
-//        }
+        String [] splitString;
 
         for (int i = 0; i < webSites.size(); i++) {
-            splittedString = webSites.get(i).getDocumentText().split("[-.,;:_!?]");
-            for (String s: splittedString){
-                tokens.add(s.toLowerCase(Locale.ROOT));
+            splitString = webSites.get(i).getDocumentText().split(" ");
+
+            for (String s: splitString){
+                if (! tokens.contains(s.toLowerCase(Locale.ROOT))){
+                    tokens.add(s.toLowerCase(Locale.ROOT));
+                }
+
             }
+
         }
-//
-//
-//        for (int i = 0; i < bodyText.size(); i++) {
-//            splittedString = bodyText.get(i).split("[-.,;:_!?]");
-//            for (String s : splittedString) {
-//                if (s != "") {
-//                    String string = s.toLowerCase(Locale.ROOT);
-//                    tokens.add(string);
-//                }
-//            }
-//        }
 //
 //
         return tokens;

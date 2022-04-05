@@ -8,14 +8,16 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        HTMLSite site1 = new HTMLSite(1, "This is the text of document, one, for test?");
-        HTMLSite site2 = new HTMLSite(2, "This is the text of document, two, for test!");
+        HTMLSite site1 = new HTMLSite(1, "This is the text of document one for test");
+        HTMLSite site2 = new HTMLSite(2, "This is the text of document two !for test");
 
         ArrayList<HTMLSite> webSites = new ArrayList<>();
         webSites.add(site1);
         webSites.add(site2);
 
-        System.out.println(Tokenizer.tokenizeHTMLBodyText(webSites));
+        Tokenizer.tokenizeHTMLBodyText(webSites);
+
+        System.out.println(Tokenizer.tokenizeHTMLBodyText(webSites).toString());
 
 
 

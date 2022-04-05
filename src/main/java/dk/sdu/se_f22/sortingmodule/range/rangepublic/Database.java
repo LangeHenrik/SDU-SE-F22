@@ -4,6 +4,7 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.time.Instant;
 import java.util.List;
@@ -19,42 +20,58 @@ public class Database implements DatabaseInterface {
      */
     @Override
     public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException, SQLException {
-        switch (filter.getType()){
-            case DOUBLE:
+        ResultSet queryResult;
+        int ID;
+
+        switch (filter.getType()) {
+            case DOUBLE -> {
                 PreparedStatement doubleStatement = connection.prepareStatement(
-                        "INSERT INTO SortingRangeDoubleView VALUES (?, ?, ?, ?, ?)"
+                        "INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?);",
+                        Statement.RETURN_GENERATED_KEYS
                 );
                 doubleStatement.setString(1, filter.getName());
                 doubleStatement.setString(2, filter.getDescription());
                 doubleStatement.setString(3, filter.getProductAttribute());
                 doubleStatement.setDouble(4, filter.getDbMinDouble());
                 doubleStatement.setDouble(5, filter.getDbMaxDouble());
-                break;
-            case LONG:
+                doubleStatement.executeQuery();
+                queryResult = doubleStatement.getGeneratedKeys();
+            }
+            case LONG -> {
                 PreparedStatement longStatement = connection.prepareStatement(
-                        "INSERT INTO SortingRangeLongView VALUES (?, ?, ?, ?, ?)"
+                        "INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS
                 );
                 longStatement.setString(1, filter.getName());
                 longStatement.setString(2, filter.getDescription());
                 longStatement.setString(3, filter.getProductAttribute());
                 longStatement.setLong(4, filter.getDbMinLong());
                 longStatement.setLong(5, filter.getDbMaxLong());
-              
-                break;
-            case INSTANT:
+                longStatement.executeQuery();
+                queryResult = longStatement.getGeneratedKeys();
+            }
+            case INSTANT -> {
                 PreparedStatement timeStatement = connection.prepareStatement(
-                        "INSERT INTO SortingRangeInstantView VALUES (?, ?, ?, ?, ?)"
+                        "INSERT INTO SortingRangeInstantView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS
                 );
                 timeStatement.setString(1, filter.getName());
                 timeStatement.setString(2, filter.getDescription());
                 timeStatement.setString(3, filter.getProductAttribute());
                 timeStatement.setString(4, filter.getDbMinInstant().toString());
                 timeStatement.setString(5, filter.getDbMaxInstant().toString());
-                break;
-            default:
-                throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
+                timeStatement.executeQuery();
+                queryResult = timeStatement.getGeneratedKeys();
+            }
+            default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
         }
-        return filter;
+        if (!queryResult.next()){
+            throw new SQLException("No ID to return.");
+        }
+        ID = queryResult.getInt(1);
+
+        return createFilterWithID(filter, ID);
+
     }
 
 
@@ -163,4 +180,22 @@ public class Database implements DatabaseInterface {
     public List<RangeFilter> readAllFilters() {
         return null;
     }
+
+    RangeFilter createFilterWithID(RangeFilter filter, int id) throws InvalidFilterTypeException {
+        switch (filter.getType()){
+            case DOUBLE -> {
+                return new DoubleFilter(id, filter.getName(), filter.getDescription(), filter.getProductAttribute(), filter.getDbMinDouble(), filter.getDbMaxDouble());
+            }
+            case LONG -> {
+                return new LongFilter(id, filter.getName(), filter.getDescription(), filter.getProductAttribute(), filter.getDbMinLong(), filter.getDbMaxLong());
+            }
+            case INSTANT -> {
+                return new TimeFilter(id, filter.getName(), filter.getDescription(), filter.getProductAttribute(), filter.getDbMinInstant(), filter.getDbMaxInstant());
+            }
+            default -> {
+                throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
+            }
+        }
+    }
+
 }

@@ -40,6 +40,7 @@ class DatabaseTest {
                             max)
                     );
                     RangeFilter readFilter = database.read(createdFilter.getId());
+
                     Assertions.assertEquals(createdFilter, readFilter);
                 } catch (InvalidFilterTypeException | SQLException e) {
                     fail(e);
@@ -81,14 +82,14 @@ class DatabaseTest {
         void testCreateLongFilter(int id, String name, String description, String productAttribute, long min, long max){
             try {
                 try {
-                    RangeFilter createdFilter = database.create(
-                        new LongFilter(
+                    RangeFilter longFilter = new LongFilter(
                             name,
                             description,
                             productAttribute,
                             min,
-                            max)
-                    );
+                            max);
+                    RangeFilter createdFilter = database.create(longFilter);
+
                     RangeFilter readFilter = database.read(createdFilter.getId());
                     Assertions.assertEquals(createdFilter, readFilter);
                 } catch (InvalidFilterTypeException | SQLException e) {

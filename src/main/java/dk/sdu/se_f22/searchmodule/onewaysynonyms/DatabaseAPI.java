@@ -7,7 +7,15 @@ import java.util.ArrayList;
 
 public class DatabaseAPI {
 
-    static Connection connection = DBConnection.getConnection();
+    static Connection connection;
+
+    static {
+        try {
+            connection = DBConnection.getPooledConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     //for adding superItem
 

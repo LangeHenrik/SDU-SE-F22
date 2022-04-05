@@ -14,7 +14,11 @@ class DatabaseAPITest {
 
     @BeforeEach
     void setUp() {
-        Connection connection = DBConnection.getConnection();
+        try {
+            Connection connection = DBConnection.getPooledConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterEach

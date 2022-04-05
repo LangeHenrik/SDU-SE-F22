@@ -4,11 +4,18 @@ import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockFilteringModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -87,6 +94,7 @@ public class TestSearchModule {
                 } else if (clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
+                    brand.setId(123);
                     brand.setName("Test brand");
                     brandPages.add(brand);
                     return (List<T>) brandPages;
@@ -95,6 +103,8 @@ public class TestSearchModule {
                 }
             }
         };
+
+
 
         SearchHits searchResult = searchModule.search("Hello world");
 

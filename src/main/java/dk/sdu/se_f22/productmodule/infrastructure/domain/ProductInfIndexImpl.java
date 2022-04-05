@@ -1,8 +1,11 @@
 package dk.sdu.se_f22.productmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.brandmodule.stemming.Stemmer;
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
-import dk.sdu.se_f22.SharedLibrary.models.Product;
+import dk.sdu.se_f22.productmodule.irregularwords.IrregularWords;
+import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +23,9 @@ public class ProductInfIndexImpl implements ProductInfIndex{
     }
 
     private List<String> tokenFilter(List<String> tokens){
-        //tokens = BIM4.filter(tokens);
+        tokens = new Stemmer().stem(tokens);
+        tokens = IrregularWords.irregularWords.searchForIrregularWords(tokens);
         //tokens = CMS.filter(tokens);
-        //tokens = PIM4.filter(tokens);
         return tokens;
     }
 
@@ -40,8 +43,14 @@ public class ProductInfIndexImpl implements ProductInfIndex{
     }
 
     private List<String> extractData(Product product, String delimiter) {
-        return new ArrayList<>(
-            //Arrays.asList(product.description.split(delimiter))
-        );
+        List<String> productData = new ArrayList<>();
+        for (ProductAttribute attr : ProductAttribute.values()) {
+            String data = product.get(attr);
+            if (!data.equalsIgnoreCase("unavailable")) {
+                productData.addAll(List.of(product.get(attr).split(delimiter)));
+            }
+        }
+        productData.addAll(product.getLocations());
+        return productData;
     }
 }

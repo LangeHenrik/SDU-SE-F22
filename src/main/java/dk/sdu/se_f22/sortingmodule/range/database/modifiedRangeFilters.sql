@@ -181,6 +181,71 @@ EXECUTE procedure long_filter_view_insert();
 
 
 
+create or replace function time_filter_view_delete()
+    RETURNS trigger
+AS
+$$
+
+BEGIN
+    DELETE FROM SortingRangeTimeFilters WHERE filterId= old.filterId;
+    DELETE FROM SortingRangeFilters WHERE  filterId = old.filterId;
+
+
+    return old;
+END;
+$$
+    language plpgsql;
+
+
+CREATE TRIGGER  trg_time_view_delete_trigger
+    INSTEAD OF DELETE
+    ON SortingRangeTimeView
+    FOR EACH ROW
+EXECUTE PROCEDURE time_filter_view_delete();
+
+
+create or replace function double_filter_view_delete()
+    RETURNS trigger
+AS
+$$
+BEGIN
+
+    DELETE FROM SortingRangeDoubleFilters WHERE filterId= old.filterId;
+    DELETE FROM SortingRangeFilters WHERE  filterId = old.filterId;
+
+
+    return old;
+END;
+$$
+    language plpgsql;
+
+
+CREATE TRIGGER  trg_double_view_delete_trigger
+    INSTEAD OF DELETE
+    ON SortingRangeDoubleView
+    FOR EACH ROW
+EXECUTE PROCEDURE double_filter_view_delete();
+
+
+create or replace function long_filter_view_delete()
+    RETURNS trigger
+AS
+$$
+BEGIN
+    DELETE FROM SortingRangeLongFilters WHERE filterId = old.filterId;
+    DELETE FROM SortingRangeFilters WHERE  filterId = old.filterId;
+
+
+    return old;
+END;
+$$
+    language plpgsql;
+
+CREATE TRIGGER  trg_long_view_delete_trigger
+    INSTEAD OF DELETE
+    ON SortingRangeLongView
+    FOR EACH ROW
+EXECUTE PROCEDURE long_filter_view_delete();
 -- the below insert is necessary to have as the first inserts in order to pass our unit-tests
 /*
 INSERT INTO SortingRangeFilters (description, name, productAttribute)
@@ -273,6 +338,9 @@ $$
 INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
 VALUES ('test name double', 'test description', 'price', 0, 10);
 
+INSERT INTO SortingRangeDoubleView (name, description,productAttribute,min,max)
+VALUES ('test delete double','test description','price',3,100);
+
 INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max)
 VALUES ('test name ean', 'test description for long filter', 'ean', 2, 100);
 
@@ -301,9 +369,15 @@ INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, ma
 VALUES ('test double ix', 'test description nine', 'weight', 2, 100);
 
 
+
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);
 SELECT *
 FROM get_double_filter(1);
 
+
+DELETE FROM SortingRangeDoubleView WHERE filterId = 2;
+
+
+SELECT * FROM sortingrangetimeview;
 

@@ -83,8 +83,9 @@ public class DatabaseAPI {
         }
     }
 */
-    public static void deleteItem(int id, String name) {
-        PreparedStatement deleteStatement = null;
+public static void deleteItems(boolean version, int id, String name) {
+    PreparedStatement deleteStatement = null;
+    if (version) {
         try {
             deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
             deleteStatement.setString(1, String.valueOf(name));
@@ -94,6 +95,16 @@ public class DatabaseAPI {
             e.printStackTrace();
         }
     }
+    else {
+        try {
+            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
+            deleteStatement.setString(1, String.valueOf(id));
+            deleteStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
     public static int searchBasedOnName(String name){
         int id = -1;

@@ -28,7 +28,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a double filter")
         @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreateDoubleFilter(int id, String name, String description, String productAttribute, double min, double max){
+        void testCreateDoubleFilter(String name, String description, String productAttribute, double min, double max){
             try {
                 try {
                     RangeFilter createdFilter = database.create(
@@ -54,7 +54,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a time filter")
         @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreateTimeFilter(int id, String name, String description, String productAttribute, String min, String max){
+        void testCreateTimeFilter(String name, String description, String productAttribute, String min, String max){
             try {
                 try {
                     RangeFilter createdFilter = database.create(
@@ -79,7 +79,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a long filter")
         @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreateLongFilter(int id, String name, String description, String productAttribute, long min, long max){
+        void testCreateLongFilter(String name, String description, String productAttribute, long min, long max){
             try {
                 try {
                     RangeFilter longFilter = new LongFilter(
@@ -104,7 +104,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating two filters with the same name")
         @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreatingTwoFiltersWithTheSameName(int id, String name, String description, String productAttribute, double min, double max){
+        void testCreatingTwoFiltersWithTheSameName(String name, String description, String productAttribute, double min, double max){
             try {
                 RangeFilter createdFilter =
                         new DoubleFilter(

@@ -74,14 +74,17 @@ public class DelimiterSettings {
         for (String s : getDelimiters()) {
             if (s.equals(delim)) {
                 stmt.execute();
+                stmt.close();
                 return true;
             }
         }
+        stmt.close();
         return false;
     }
 
     private PreparedStatement prepareDeleteStatement(String sql, String delim) throws SQLException {
-        PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql);
+        Connection dbConnection = DBConnection.getPooledConnection();
+        PreparedStatement stmt = dbConnection.prepareStatement(sql);
         stmt.setString(1, delim);
         return stmt;
     }

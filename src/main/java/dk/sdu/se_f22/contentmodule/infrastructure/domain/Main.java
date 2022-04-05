@@ -8,29 +8,11 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        HTMLSite site1 = new HTMLSite(1, "This is the text of document one for test");
-        HTMLSite site2 = new HTMLSite(2, "This is the text of document two !for test");
+        HTMLSite site2 = new HTMLSite(2,"This is the the text of two");
+        HTMLSite site3 = new HTMLSite(3,"This is the text of three");
 
-        ArrayList<HTMLSite> webSites = new ArrayList<>();
-        webSites.add(site1);
-        webSites.add(site2);
+        System.out.println(Tokenizer.tokenizeHTMLBodyText(site2).toString());
+        System.out.println(Tokenizer.tokenizeHTMLBodyText(site3).toString());
 
-        Tokenizer.tokenizeHTMLBodyText(webSites);
-
-        System.out.println(Tokenizer.tokenizeHTMLBodyText(webSites).toString());
-
-
-
-        /*ArrayList<String> tokens = Tokenizer.tokenizeString(parsedHTML);
-
-        Database database = new Database();
-        database.setupDatabase();
-        database.createTable("filtered_tokens");
-
-        database.createTable("unfiltered_tokens");
-        database.saveTokens("unfiltered_tokens", tokens);
-
-        tokens = database.loadTokens("unfiltered_tokens");
-        database.printTokens(tokens);*/
     }
 }

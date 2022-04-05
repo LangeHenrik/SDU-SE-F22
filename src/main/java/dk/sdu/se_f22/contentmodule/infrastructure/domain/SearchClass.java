@@ -14,10 +14,10 @@ public class SearchClass implements IndexingModule, IMockCMSSearch{
     public List queryIndex(List tokens) {
         ArrayList<Integer> matchingIDs;
 
-        matchingIDs = MockCMSIndex.mockSearch((ArrayList<String>) tokens);
 
 
-        return matchingIDs;
+
+        return null;
     }
 
 }

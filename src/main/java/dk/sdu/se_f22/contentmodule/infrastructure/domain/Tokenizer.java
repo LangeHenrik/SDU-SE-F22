@@ -8,34 +8,20 @@ import java.util.Locale;
 
 class Tokenizer {
 
-    ArrayList<HTMLSite> webSites;
 
-
-    public Tokenizer(ArrayList<HTMLSite> webSites) {
-        this.webSites = webSites;
-
-    }
-
-
-    public static ArrayList<String> tokenizeHTMLBodyText(ArrayList<HTMLSite> webSites) {
+    public static ArrayList<String> tokenizeHTMLBodyText(HTMLSite site) {
         ArrayList<String> tokens = new ArrayList<>();
-        String [] splitString;
 
-        for (int i = 0; i < webSites.size(); i++) {
-            splitString = webSites.get(i).getDocumentText().split(" ");
+        String [] splittedStrings = site.getDocumentText().split(" ");
 
-            for (String s: splitString){
-                if (! tokens.contains(s.toLowerCase(Locale.ROOT))){
-                    tokens.add(s.toLowerCase(Locale.ROOT));
-                }
 
+        for (String s: splittedStrings){
+
+            if (!tokens.contains(s.toLowerCase(Locale.ROOT))){
+               tokens.add(new Token(s, site.getId()).documentText.toLowerCase(Locale.ROOT));
             }
 
         }
-//
-//
         return tokens;
     }
-
-
 }

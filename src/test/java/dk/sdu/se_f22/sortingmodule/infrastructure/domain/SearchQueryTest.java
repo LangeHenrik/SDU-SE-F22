@@ -3,7 +3,6 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,29 +39,31 @@ class SearchQueryTest {
     @Test
     void addRangeTest() {
         SearchQuery s = new SearchQuery();
-        ArrayList<Integer> a = new ArrayList<>();
+        ArrayList<String[]> a = new ArrayList<>();
+        a.add(new String[]{"1", "3", "8"});
+        a.add(new String[]{"2", "19.4", "52.7"});
 
-        fail();
+        s.addRange("1", "3", "8");
+        s.addRange("2", "19.4", "52.7");
 
-        s.addRange(1, 2, 3);
-        s.addRange(2,4,1);
-        s.clearRange();
+        for (int i = 0; i < a.size(); i++) {
+            if (a.get(i).toString().equals(s.getRange().get(i).toString())) {
+                fail();
+            }
+        }
 
-        // TODO: Add ranges to a, for testing that a and s is the same
-
-        assertEquals(a, s.range);
     }
 
     @Test
     void clearRangeTest() {
         SearchQuery s = new SearchQuery();
-        ArrayList<Integer> a = new ArrayList<>();
+        ArrayList<String[]> a = new ArrayList<>();
 
-        s.addRange(1, 2, 3);
-        s.addRange(2,4,1);
+        s.addRange("1", "3", "8");
+        s.addRange("2", "19.4", "52.7");
         s.clearRange();
 
-        assertEquals(a, s.range);
+        assertEquals(a, s.getRange());
     }
 
     @Test

@@ -258,6 +258,7 @@ public class RangeFilterCRUDTest {
                         );
                     }
 
+
                     @ParameterizedTest(name = "filter max less than min {0}")
                     @DisplayName("Max less than min long")
                     @MethodSource("integerProvider")
@@ -304,7 +305,10 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
             }
+
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
@@ -328,6 +332,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -352,6 +358,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -385,6 +393,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }  catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -405,7 +415,9 @@ public class RangeFilterCRUDTest {
             try {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
+            }  catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -428,7 +440,9 @@ public class RangeFilterCRUDTest {
             try {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
+            }  catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -446,56 +460,43 @@ public class RangeFilterCRUDTest {
     @Nested
     class CRUDReaderTest {
 
-        @Nested
-        @DisplayName("Read valid filter")
-        class readValidFilter {
-
-            @ParameterizedTest
-            @DisplayName("Double filter")
-            @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void readValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
-                try {
-                    RangeFilter result = rangeFilterCRUD.read(id);
-                    RangeFilter expected = new DoubleFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(expected, result);
-                } catch (IdNotFoundException e) {
-                    fail("Fail because id did not exist");
-                } catch (UnknownFilterTypeException e) {
-                    fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-                }
-            }
-
-            @ParameterizedTest
-            @DisplayName("Long filter")
-            @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-            void readValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) {
-                try {
-                    RangeFilter result = rangeFilterCRUD.read(id);
-                    RangeFilter expected = new LongFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(expected, result);
-                } catch (IdNotFoundException e) {
-                    fail("Fail because id did not exist");
-                } catch (UnknownFilterTypeException e) {
-                    fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-                }
-            }
-
-            @ParameterizedTest
-            @DisplayName("Time filter")
-            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-            void readValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
-                try {
-                    RangeFilter result = rangeFilterCRUD.read(id);
-                    RangeFilter expected = new TimeFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(expected, result);
-                } catch (IdNotFoundException e) {
-                    fail("Fail because id did not exist");
-                } catch (UnknownFilterTypeException e) {
-                    fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-                }
+        @Test
+        @DisplayName("Read valid double filter")
+        void readValidDoubleFilter() {
+            try {
+                RangeFilter result = rangeFilterCRUD.read(1);
+                RangeFilter expected = new DoubleFilter(1, "test name double", "test description", "price", 0, 10);
+                Assertions.assertEquals(expected, result);
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
         }
 
+        @Test
+        @DisplayName("Read valid long filter")
+        void readValidLongFilter() {
+            try {
+                Assertions.assertEquals(new LongFilter(2, "test name ean", "test description", "ean", 2, 100), rangeFilterCRUD.read(2));
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
+
+        @Test
+        @DisplayName("Read valid time filter")
+        void readValidTimeFilter() {
+            try {
+                Assertions.assertEquals(new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T03:30:57Z"), Instant.parse("2019-10-18T03:30:57Z")), rangeFilterCRUD.read(3));
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
 
         @ParameterizedTest
         @DisplayName("Read filter that does not exist")

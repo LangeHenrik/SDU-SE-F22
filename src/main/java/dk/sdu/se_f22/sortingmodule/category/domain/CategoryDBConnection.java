@@ -1,12 +1,13 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sortingmodule.category.Category;
+import dk.sdu.se_f22.sortingmodule.category.CategoryCRUDInterface;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDBConnection {
+public class CategoryDBConnection implements CategoryCRUDInterface {
 
     public static CategoryDBConnection shared = new CategoryDBConnection();
     private static String URL = "jdbc:postgresql://localhost:5432/SOM3";

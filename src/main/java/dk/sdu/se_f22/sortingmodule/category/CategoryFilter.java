@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class CategoryFilter {
+public class CategoryFilter implements CategoryFilterInterface {
 
-    public static SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
+    public SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
         SearchHits newHits = new SearchHits();
         Collection<ProductHit> newProducts = new ArrayList<>();
         List<Category> categories = new ArrayList<>();

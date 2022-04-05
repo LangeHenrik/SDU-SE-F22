@@ -11,6 +11,8 @@ import java.util.List;
 public class TemporaryConnectionTest {
 
     public static void main(String[] args) {
+        testMethod();
+
         // USED FOR OWN GOODS AND TESTING
         /*
         CategoryDBConnection.shared.createCategory("Storageeee", "Beskrivelse", "Storageeee", 3);
@@ -97,8 +99,13 @@ public class TemporaryConnectionTest {
             }
         }
          */
+    }
 
+    public static void testMethod() {
+        CategoryFilter categoryFilter = new CategoryFilter();
+        CategoryDBConnection categoryDB = new CategoryDBConnection();
 
-
+        // categoryFilter.filterProductsByCategory();
+        // categoryDB.getAllCategories();
     }
 }

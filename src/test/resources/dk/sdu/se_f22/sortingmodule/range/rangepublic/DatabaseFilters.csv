@@ -1,4 +1,4 @@
 id,name,description,productAtrribute,min,max
-test name double,test description double,price,0,10
-test name ean,test description ean,ean,2,100
-test name time,test description time,expirationDate,2018-10-18T00:00:57Z, 2019-10-18T00:00:57Z
+1,test name double,test description,price,0,10
+2,test name ean,test description,ean,2,100
+3,test name time,test description,expirationDate,toBeDecided,toBeDecided

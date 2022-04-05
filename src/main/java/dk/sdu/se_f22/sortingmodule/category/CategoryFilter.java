@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CategoryFilter {
+public class CategoryFilter implements CategoryFilterInterface {
 
     public static SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
         Collection<ProductHit> newProducts = new ArrayList<>();

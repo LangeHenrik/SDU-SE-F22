@@ -5,6 +5,7 @@
     -   Drop resten af tabellerne
 */
 -- Drop dependent tables
+
 DROP TABLE IF EXISTS BrandProductTypeJunction;
 
 -- Drop all other tables

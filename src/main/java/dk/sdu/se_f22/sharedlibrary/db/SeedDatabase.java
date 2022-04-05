@@ -1,6 +1,8 @@
 package dk.sdu.se_f22.sharedlibrary.db;
 
 
+import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,6 +20,7 @@ public class SeedDatabase {
         //------Seed the database-----------------------------------------------------------------------------
 
         //BIM-1
+        Persistence bim1 = new Persistence(); bim1.seedDatabase();
 
 
     }

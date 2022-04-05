@@ -13,10 +13,10 @@ public class Scoring implements IScoring {
     private String password = "postgres582";
     private Connection connection = null;
 
-    /*private Scoring(){
+    private Scoring(){
         initializePostgresqlDatabase();
     }
-
+    
     public static Scoring getInstance(){
         if (instance == null) {
             instance = new Scoring();

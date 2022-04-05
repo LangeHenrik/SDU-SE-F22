@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
 DROP TABLE IF EXISTS StemmingException;
 DROP TABLE IF EXISTS irregularwords;
+DROP TABLE IF EXISTS Misspellings;
+
 
  --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
  --og kalder hver gruppes seedDatabase()-metode

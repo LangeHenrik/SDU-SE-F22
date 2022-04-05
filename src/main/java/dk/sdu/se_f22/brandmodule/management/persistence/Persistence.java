@@ -260,4 +260,41 @@ public class Persistence implements IPersistence {
 
         }
     }
+
+
+    public void setIndexingInterval(int indexingInterval)  {
+
+        ResultSet r = null;
+        PreparedStatement indexInterval = null;
+        try {
+            indexInterval = c.prepareStatement("update config set brandindexinterval = ? ");
+            indexInterval.setInt(1,indexingInterval);
+            indexInterval.execute();
+        } catch (SQLException e) {
+            System.out.println("you done goofed");
+            e.printStackTrace();
+        }
+
+
+
+    }
+    public int getIndexingInterval(){
+        ResultSet r = null;
+        PreparedStatement indexInterval = null;
+        try {
+            indexInterval = c.prepareStatement("select brandindexinterval from config where properties = 60");
+            r = indexInterval.executeQuery();
+            r.next();
+            return r.getInt("brandindexinterval");
+
+        } catch (SQLException e) {
+            System.out.println("you fucked up");
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
+
+
 }

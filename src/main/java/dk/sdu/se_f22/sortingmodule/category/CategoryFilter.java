@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CategoryFilter implements CategoryFilterInterface {
 
-    public static SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
+    public SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
         Collection<ProductHit> newProducts = new ArrayList<>();
         List<Category> categories = new ArrayList<>();
 

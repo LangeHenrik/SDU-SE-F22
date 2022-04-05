@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.category.Category;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
 
@@ -12,6 +13,8 @@ public class TemporaryConnectionTest {
 
     public static void main(String[] args) {
         testMethod();
+
+        System.out.println(CategoryDBConnection.shared.getAllCategories());
 
         // USED FOR OWN GOODS AND TESTING
         /*

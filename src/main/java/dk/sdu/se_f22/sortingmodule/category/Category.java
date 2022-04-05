@@ -10,15 +10,13 @@ public class Category {
     private String requirementValue;
 
     public Category(int id, String name, String description, int parentId, String requirementStatus, String requirementValue){
-        this(id, name, description);
-        this.parentId = parentId;
+        this(id, name, description, parentId);
         this.requirementStatus = requirementStatus;
         this.requirementValue = requirementValue;
     }
 
     public Category(int id, String name, String description, String requirementStatus, String requirementValue){
-        this(name, description);
-        this.id = id;
+        this(id, name, description);
         this.requirementStatus = requirementStatus;
         this.requirementValue = requirementValue;
     }

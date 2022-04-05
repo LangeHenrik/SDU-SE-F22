@@ -9,6 +9,7 @@ public class DatabaseAPI {
 
     static Connection connection = DBConnection.getConnection();
 
+
     //for adding superItem
     public static void addItem(String itemName) throws SQLException {
         PreparedStatement insertStatement = null;

@@ -16,7 +16,7 @@
    <children>
       <TabPane fx:id="GUITabPane" prefHeight="473.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab fx:id="SearchTab" text="SearchTab">
+          <Tab fx:id="SearchTab" text="SearchTab" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
             <content>
               <AnchorPane fx:id="SearchTabAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -52,8 +52,8 @@
                         <Button fx:id="addItemButton" layoutX="234.0" layoutY="85.0" mnemonicParsing="false" onAction="#addItemButtonHandler" text="Add Item" />
                         <TextField fx:id="insertSuperIDAddItemTextfield" layoutX="54.0" layoutY="127.0" promptText="Insert" />
                         <TextField fx:id="insertNameAddItemTextfield" layoutX="337.0" layoutY="127.0" />
-                        <Label layoutX="379.0" layoutY="102.0" text="Insert Name" />
-                        <Label layoutX="91.0" layoutY="102.0" text="Insert superID" />
+                        <Label fx:id="insertNameLabel" layoutX="379.0" layoutY="102.0" text="Insert Name" />
+                        <Label fx:id="insertSuperIDLabel" layoutX="91.0" layoutY="102.0" text="Insert superID" />
                      </children></AnchorPane>
             </content>
           </Tab>

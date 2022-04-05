@@ -12,8 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.control.Label;
-
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -46,9 +44,9 @@ public class OneWayController implements Initializable {
 
 
     public void addItemButtonHandler(ActionEvent actionEvent) {/*
-        if (insertSuperIDAddItemTextfield.getText() == null) {
+        if (insertSuperIDAddItemTextfield.getText()=="") {
             try {
-                DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));
+                DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield.getText()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -102,6 +100,24 @@ public class OneWayController implements Initializable {
         }
 
         return new ImageView(wr).getImage();
+    }
+
+    @FXML
+    public void insertItemReadItemTextField(ActionEvent actionEvent) {
+        if (insertNameAddItemTextfield.getText() == null ) {
+            try {
+                DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                int superId = Integer.parseInt(insertNameAddItemTextfield.getText());
+                DatabaseAPI.addItem(insertNameAddItemTextfield.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void changeName(ActionEvent actionEvent) {

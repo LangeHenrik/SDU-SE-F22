@@ -33,7 +33,7 @@ public class Scoring implements IScoring {
         } finally {
             if (connection == null) System.exit(-1);
         }
-    }*/
+    }
 
     private void price(List<ProductScore> input) {
         for (ProductScore product : input) {

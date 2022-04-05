@@ -15,7 +15,7 @@ public class sem1CustomerApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(sem1CustomerApp.class.getResource("SEM1customerGUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SEM1customerGUI.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("Customer Search");
         primaryStage.setScene(scene);

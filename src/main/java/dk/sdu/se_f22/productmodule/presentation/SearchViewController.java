@@ -53,5 +53,9 @@ public class SearchViewController {
                 parent.getChildren().add(new Label(product.get(ProductAttribute.NAME)));
             }
         }
+
+        if (products.size() == 0) {
+            productView.getChildren().add(new Label("No results found!"));
+        }
     }
 }

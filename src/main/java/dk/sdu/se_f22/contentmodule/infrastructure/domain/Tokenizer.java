@@ -2,46 +2,52 @@ package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 
 class Tokenizer {
-   // static ArrayList<String> tokenizeString(String text) {
-    //    String[] splittedString = text.split("[-.,;:_ ]");
+
+    ArrayList<HTMLSite> webSites;
 
 
-    static HashMap<Integer, String> HTMLSites;
+    public Tokenizer(ArrayList<HTMLSite> webSites) {
+        this.webSites = webSites;
 
-    public Tokenizer(HashMap<Integer, String> HTMLSites) {
-        this.HTMLSites = HTMLSites;
     }
 
 
-    public static ArrayList<String> tokenizeHTMLBodyText(HashMap HTMLSites) {
+    public static ArrayList<String> tokenizeHTMLBodyText(ArrayList<HTMLSite> webSites) {
 
+        ArrayList<String> tokens = new ArrayList<>();
 
-        ArrayList<String> bodyText = new ArrayList<>();
         String[] splittedString;
+//
+//
+//        for (HTMLSite site: webSites){
+//            bodyText.add(site.getDocumentText());
+//        }
 
-        ArrayList<String> tokens = new ArrayList();
-
-        for (Object theValues : HTMLSites.values()) {
-            bodyText.add((String) theValues);
-        }
-
-        for (int i = 0; i < bodyText.size(); i++) {
-            splittedString = bodyText.get(i).split("[-.,;:_!?]");
-            for (String s : splittedString) {
-                if (s != "") {
-                    String string = s.toLowerCase(Locale.ROOT);
-                    tokens.add(string);
-                }
+        for (int i = 0; i < webSites.size(); i++) {
+            splittedString = webSites.get(i).getDocumentText().split("[-.,;:_!?]");
+            for (String s: splittedString){
+                tokens.add(s.toLowerCase(Locale.ROOT));
             }
         }
-
-
+//
+//
+//        for (int i = 0; i < bodyText.size(); i++) {
+//            splittedString = bodyText.get(i).split("[-.,;:_!?]");
+//            for (String s : splittedString) {
+//                if (s != "") {
+//                    String string = s.toLowerCase(Locale.ROOT);
+//                    tokens.add(string);
+//                }
+//            }
+//        }
+//
+//
         return tokens;
-        //filterStopwords(tokens); //preparation for chain reaction, change method to void, remove return statement
     }
 
 

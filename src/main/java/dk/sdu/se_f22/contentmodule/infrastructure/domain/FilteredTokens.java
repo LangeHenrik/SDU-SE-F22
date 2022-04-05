@@ -3,7 +3,7 @@ package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 import java.util.ArrayList;
 import java.util.Date;
 
-class FilteredTokens {
+class  FilteredTokens {
     private static ArrayList<String> tokens;
     private int htmlId;
     private int idToken;

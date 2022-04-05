@@ -2,65 +2,89 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
 
-import dk.sdu.se_f22.sortingmodule.infrastructure.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
+import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 
+/**
+ * Implemented version of SortingModule
+ */
 public class SortingModuleImpl implements SortingModule {
-
+    /**
+     * The search query object, that holds query information
+     */
     private SearchQuery query;
+    /**
+     * Search text
+     */
+    private String searchString;
 
     public SortingModuleImpl() {
+        this.query = new SearchQuery();
+    }
 
+    @Override
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override
     public void setCategory(ArrayList<Integer> categories) {
-        // TODO Auto-generated method stub
+        this.query.setCategory(categories);
         
     }
 
     @Override
     public void addCategory(int category) {
-        // TODO Auto-generated method stub
+        this.query.addCategory(category);
         
     }
 
     @Override
     public void clearCategory() {
-        // TODO Auto-generated method stub
-        
+        this.query.clearCategory();
     }
 
     @Override
-    public void addRange(int rangeId, String startRange, String endRange) {
-        // TODO Auto-generated method stub
-        
+    public void addRange(int rangeId, double startRange, double endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
     public void clearRange() {
-        // TODO Auto-generated method stub
-        
+        this.query.clearRange();
     }
 
     @Override
     public void setPagination(int page, int pageSize) {
-        // TODO Auto-generated method stub
-        
+        this.query.setPagination(page, pageSize);
     }
 
     @Override
-    public void setScoring(String scoring) {
-        // TODO Auto-generated method stub
+    public void setScoring(int scoring) {
+        this.query.setScoring(scoring);
         
     }
 
     @Override
     public SearchHits search() {
-        // TODO Auto-generated method stub
-        return null;
+        // Save the query
+        this.saveSearch();
+
+        // Search
+        SearchModuleImpl searchModule = new SearchModuleImpl();
+        return searchModule.search(this.searchString);
+
+        // Filters
+
+        // Scoring
+
+        // Pagination
+
+        // Return paginated SearchHits
     }
     
     private void saveSearch() {
-        // TODO Create save to database
+        SaveSearchQuery.saveSearch(this.query);
     }
 }

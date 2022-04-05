@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-class FilteredTokens {
+class  FilteredTokens {
     private static ArrayList<String> tokens;
     private int htmlId;
     private int idToken;

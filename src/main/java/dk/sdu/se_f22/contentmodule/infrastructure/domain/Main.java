@@ -7,8 +7,19 @@ import java.util.ArrayList;
 //klasser i domain og data
 public class Main {
     public static void main(String[] args) throws IOException {
-        HTMLParser parser = new HTMLParser("src/index.html");
-        String parsedHTML = parser.parseHTML();
+
+        HTMLSite site1 = new HTMLSite(1, "This is the text of document one for test");
+        HTMLSite site2 = new HTMLSite(2, "This is the text of document two !for test");
+
+        ArrayList<HTMLSite> webSites = new ArrayList<>();
+        webSites.add(site1);
+        webSites.add(site2);
+
+        Tokenizer.tokenizeHTMLBodyText(webSites);
+
+        System.out.println(Tokenizer.tokenizeHTMLBodyText(webSites).toString());
+
+
 
         /*ArrayList<String> tokens = Tokenizer.tokenizeString(parsedHTML);
 

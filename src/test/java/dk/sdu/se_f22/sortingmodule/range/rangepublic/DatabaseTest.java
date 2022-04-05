@@ -27,7 +27,7 @@ class DatabaseTest {
     class create {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a double filter")
-        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
         void testCreateDoubleFilter(int id, String name, String description, String productAttribute, double min, double max){
             try {
                 try {
@@ -53,7 +53,7 @@ class DatabaseTest {
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a time filter")
-        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
         void testCreateTimeFilter(int id, String name, String description, String productAttribute, String min, String max){
             try {
                 try {
@@ -78,7 +78,7 @@ class DatabaseTest {
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a long filter")
-        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
         void testCreateLongFilter(int id, String name, String description, String productAttribute, long min, long max){
             try {
                 try {
@@ -103,7 +103,7 @@ class DatabaseTest {
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating two filters with the same name")
-        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
         void testCreatingTwoFiltersWithTheSameName(int id, String name, String description, String productAttribute, double min, double max){
             try {
                 RangeFilter createdFilter =

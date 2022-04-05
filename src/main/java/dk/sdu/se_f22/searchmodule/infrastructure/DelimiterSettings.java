@@ -30,7 +30,6 @@ public class DelimiterSettings {
     private ResultSet getAllDelimitersFromDatabase() throws SQLException {
         Connection dbConnection = DBConnection.getPooledConnection();
         PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM searchtokendelimiters");
-        dbConnection.close();
         return stmt.executeQuery();
     }
 

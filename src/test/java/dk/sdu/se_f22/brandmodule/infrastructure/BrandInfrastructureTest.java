@@ -1,6 +1,8 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
@@ -16,17 +18,7 @@ class BrandInfrastructureTest extends BrandInfrastructure {
 
     }
 
-    @Test
-    void testTokenizationParameters() {
-        brandInfrastructure.setTokenizationParameters(",",".");
-        brandInfrastructure = new BrandInfrastructure();
-        TokenizationParameters tokenizationParameters = brandInfrastructure.tokenizationParameters;
-        assertEquals(",", tokenizationParameters.delimiterRegex);
-        assertEquals(".", tokenizationParameters.ignoreRegex);
-    }
-
-
-    @RepeatedTest(1000)
+    @RepeatedTest(20)
     void testTokenizationParametersAtRandom(){
         Random r = new Random();
         char c1 = (char)(r.nextInt(26) + 'a');
@@ -73,6 +65,13 @@ class BrandInfrastructureTest extends BrandInfrastructure {
         assertNotEquals(expected,actual);
     }
 
-
+    @AfterEach
+    void testTokenizationParameters() {
+        brandInfrastructure.setTokenizationParameters(",",".");
+        brandInfrastructure = new BrandInfrastructure();
+        TokenizationParameters tokenizationParameters = brandInfrastructure.tokenizationParameters;
+        assertEquals(",", tokenizationParameters.delimiterRegex);
+        assertEquals(".", tokenizationParameters.ignoreRegex);
+    }
 
 }

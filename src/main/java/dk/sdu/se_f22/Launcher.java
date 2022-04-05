@@ -14,7 +14,7 @@ public class Launcher extends Application {
 
 	@Override
 	public void start(Stage stage) throws IOException {
-		scene = new Scene(loadFXML("launcher"), 500, 150);
+		scene = new Scene(loadFXML("launcher"), 550, 150);
 		stage.setScene(scene);
 		stage.setMinHeight(200);
 		stage.setMinWidth(340);

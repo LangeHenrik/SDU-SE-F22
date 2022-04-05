@@ -1,5 +1,7 @@
 package dk.sdu.se_f22;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,6 +59,7 @@ public class LauncherController {
 	}
 
 	@FXML ChoiceBox<File> guiSelector;
+	ObservableList<File> selectorItems;
 
 	@FXML
 	public void initialize() {
@@ -75,9 +78,9 @@ public class LauncherController {
 		}
 		List<File> guis = guisInFolder(folder);
 
-		for (File gui : guis) {
-			guiSelector.setValue(gui);
-		}
+		selectorItems = FXCollections.observableList(guis);
+		guiSelector.setItems(selectorItems);
+		guiSelector.setValue(selectorItems.get(0));
 	}
 
 

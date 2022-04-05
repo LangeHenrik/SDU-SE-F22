@@ -1,0 +1,1 @@
+ALTER TABLE producttype RENAME COLUMN type TO name;

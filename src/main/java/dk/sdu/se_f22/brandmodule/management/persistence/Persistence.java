@@ -282,7 +282,7 @@ public class Persistence implements IPersistence {
         ResultSet r = null;
         PreparedStatement indexInterval = null;
         try {
-            indexInterval = c.prepareStatement("select brandindexinterval from config where properties = 60");
+            indexInterval = c.prepareStatement("select brandindexinterval from config where id = 60");
             r = indexInterval.executeQuery();
             r.next();
             return r.getInt("brandindexinterval");

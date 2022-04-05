@@ -35,9 +35,9 @@ CREATE TABLE BrandProductTypeJunction(
 );
 
 CREATE TABLE Config(
-    properties Integer not null,
     brandIndexInterval INTEGER NOT NULL
 );
+
 
 CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,

@@ -13,7 +13,7 @@ public class Scoring implements IScoring {
     private String password = "postgres582";
     private Connection connection = null;
 
-    private Scoring(){
+    /*private Scoring(){
         initializePostgresqlDatabase();
     }
 
@@ -33,7 +33,7 @@ public class Scoring implements IScoring {
         } finally {
             if (connection == null) System.exit(-1);
         }
-    }
+    }*/
 
     private void price(List<ProductScore> input) {
         for (ProductScore product : input) {

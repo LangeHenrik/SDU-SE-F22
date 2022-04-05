@@ -6,5 +6,6 @@ import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 public interface IProductIndex {
 
     public List<ProductHit> indexProductsByToken(List<ProductHit> products, List<String> token);
-
+    void updateProduct(String id, ProductHit product);
+    void deleteProduct(String id);
 }

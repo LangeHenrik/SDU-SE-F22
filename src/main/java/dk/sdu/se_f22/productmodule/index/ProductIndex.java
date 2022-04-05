@@ -3,6 +3,10 @@ package dk.sdu.se_f22.productmodule.index;
 
 // Requires ProductHit from group 4.4 and works it gets approved and merged
 
+import java.sql.*;
+import java.sql.Array;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 
@@ -59,5 +63,37 @@ public class ProductIndex implements IProductIndex{
             descriptionHits = 0;
         }
         return sortedList;
+    }
+    public void updateProduct(String id, ProductHit product){
+        try {
+            PreparedStatement updateStatement = connection.prepareStatement(
+                    "UPDATE product set averageUserReview = ?, instock = ?, ean = ?, price = ?, publisheddate = ?, expirationdate = ?, category = ?, name = ?, description = ?, weight = ? WHERE id = ?");
+            updateStatement.setDouble(1, product.getAverageUserReview());
+            updateStatement.setArray(2, (Array) product.getInStock());
+            updateStatement.setLong(3, product.getEan());
+            updateStatement.setDouble(4, product.getPrice());
+            updateStatement.setString(5, String.valueOf(product.getPublishedDate()));
+            updateStatement.setString(6, String.valueOf(product.getExpirationDate()));
+            updateStatement.setString(7, product.getCategory());
+            updateStatement.setString(8, product.getName());
+            updateStatement.setString(9, product.getDescription());
+            updateStatement.setDouble(10, product.getWeight());
+            updateStatement.setString(11, String.valueOf(id));
+            updateStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteProduct(String id){
+        try {
+            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM product WHERE id = ?");
+            deleteStatement.setString(1, id);
+            deleteStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

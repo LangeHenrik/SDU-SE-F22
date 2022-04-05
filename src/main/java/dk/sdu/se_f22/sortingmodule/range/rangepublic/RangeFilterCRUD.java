@@ -2,16 +2,18 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
 
 public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     Database database = new Database();
     @Override
-    public RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException {
+    public RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException{
         Validator.NoNegativeValue(dbMinToSave);
         Validator.NoNegativeValue(dbMaxToSave);
 
@@ -21,11 +23,16 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         Validator.MaxLessThanMin(dbMinToSave,dbMaxToSave);
 
-        return database.create(new DoubleFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
+        try {
+            return database.create(new DoubleFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException {
+    public RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException{
         Validator.NoNegativeValue(dbMinToSave);
         Validator.NoNegativeValue(dbMaxToSave);
 
@@ -35,11 +42,16 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         Validator.MaxLessThanMin(dbMinToSave,dbMaxToSave);
 
-        return database.create(new LongFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
+        try {
+            return database.create(new LongFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException {
+    public RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException {
 
         Validator.NoSpecialCharacters(description);
         Validator.NoSpecialCharacters(name);
@@ -47,7 +59,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         Validator.MaxLessThanMin(dbMinToSave,dbMaxToSave);
 
-        return database.create(new TimeFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
+        try {
+            return database.create(new TimeFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

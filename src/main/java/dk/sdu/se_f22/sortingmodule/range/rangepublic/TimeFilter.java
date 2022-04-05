@@ -36,31 +36,60 @@ class TimeFilter extends RangeFilterClass{
     @Override
     public boolean equals(Object other) {
         if(! super.equals(other)) {
+            System.out.println("super");
             return false;
         }
 
         if(! (other instanceof TimeFilter otherFilter)){
+            System.out.println("non time");
             return false;
         }
 
-        if(otherFilter.getDbMinInstant() != this.getDbMinInstant()){
+
+
+        if(!instantsEqualsNullSafe(otherFilter.getDbMinInstant(), this.getDbMinInstant())){
+            System.out.println("dbmin");
             return false;
         }
 
-        if(otherFilter.getDbMaxInstant() != this.getDbMaxInstant()){
+        if(!instantsEqualsNullSafe(otherFilter.getDbMaxInstant(), this.getDbMaxInstant())){
+            System.out.println("dbmax");
             return false;
         }
 
-        if(otherFilter.getUserMinInstant() != this.getUserMinInstant()){
+        if(!instantsEqualsNullSafe(otherFilter.getUserMinInstant(), this.getUserMinInstant())){
+            System.out.println("usermin");
             return false;
         }
 
-        if(otherFilter.getUserMaxInstant() != this.getUserMaxInstant()){
+        if(!instantsEqualsNullSafe(otherFilter.getUserMaxInstant(), this.getUserMaxInstant())){
+            System.out.println("usermax");
             return false;
         }
 
         return true;
 
+    }
+
+    private boolean instantsEqualsNullSafe(Instant otherInstant, Instant thisInstant) {
+        if(otherInstant == null && thisInstant == null){
+            return true;
+        }else if(otherInstant == null || thisInstant == null){
+            return false;
+        }else{
+            System.out.println("regular comparison");
+            return otherInstant.equals(thisInstant);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "TimeFilter{" + super.toString() + ", " +
+                "DB_MIN=" + DB_MIN +
+                ", DB_MAX=" + DB_MAX +
+                ", userMin=" + userMin +
+                ", userMax=" + userMax +
+                '}';
     }
 
     @Override

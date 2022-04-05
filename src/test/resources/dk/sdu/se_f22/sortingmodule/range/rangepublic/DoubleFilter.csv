@@ -1,2 +1,4 @@
 id,name,description,productAtrribute,min,max
-1,test name double,test description for double filter,price,0,10
+1,test name double,test description,price,0,10
+4,double numero 4,test description for double quattro,clockspeed,1,14
+9,test double ix,test description nine,weight,2,100

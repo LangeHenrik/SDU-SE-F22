@@ -1,7 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /** This interface is deliberately default modifier, since it is not going to be used outside our package.
@@ -9,7 +11,7 @@ import java.util.List;
  * It defines the mthods, that our daatabase class must implement to allow for performing CRUD
  */
 public interface DatabaseInterface {
-    RangeFilter create(RangeFilter filterToSaveInDB);
+    RangeFilter create(RangeFilter filterToSaveInDB) throws InvalidFilterTypeException, SQLException;
 
     RangeFilter read(int id) throws UnknownFilterTypeException;
     RangeFilter delete(int id);
@@ -17,6 +19,8 @@ public interface DatabaseInterface {
     // below mess could be avoided by changing name and Description, to not be final in RangeFilterClass
     // Along with using userMin and userMax as the variables where we store what we should update the database values to
     RangeFilter update(RangeFilter filter);
+
+
 
     List<RangeFilter> readAllFilters();
 }

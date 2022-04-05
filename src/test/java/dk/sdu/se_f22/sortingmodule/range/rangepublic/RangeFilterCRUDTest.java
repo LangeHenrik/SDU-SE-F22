@@ -1,10 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sortingmodule.range.exceptions.EmptyDatabaseException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,10 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.stream.Stream;
 
-import static org.checkerframework.checker.units.UnitsTools.min;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -309,9 +306,6 @@ public class RangeFilterCRUDTest {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
 
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
-
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             try {
@@ -336,9 +330,6 @@ public class RangeFilterCRUDTest {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
 
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
-
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             try {
@@ -362,9 +353,6 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
-
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
@@ -398,8 +386,6 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
@@ -421,9 +407,6 @@ public class RangeFilterCRUDTest {
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
-
-            //This fails until database.create has been implemented
-            assertNotNull(rangeFilterFromDataBase);
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
@@ -448,8 +431,6 @@ public class RangeFilterCRUDTest {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             }
 
-            assertNotNull(rangeFilterFromDataBase);
-
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             // This deletes the RangeFilter from the database, and make sure it does not throw an exception
@@ -469,7 +450,9 @@ public class RangeFilterCRUDTest {
         @DisplayName("Read valid double filter")
         void readValidDoubleFilter() {
             try {
-                Assertions.assertEquals(rangeFilterCRUD.read(1),new DoubleFilter(1, "test name double", "test description", "price", 0, 10));
+                RangeFilter result = rangeFilterCRUD.read(1);
+                RangeFilter expected = new DoubleFilter(1, "test name double", "test description", "price", 0, 10);
+                Assertions.assertEquals(expected, result);
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
@@ -481,7 +464,7 @@ public class RangeFilterCRUDTest {
         @DisplayName("Read valid long filter")
         void readValidLongFilter() {
             try {
-                Assertions.assertEquals(rangeFilterCRUD.read(2),new DoubleFilter(2, "test name ean", "test description", "ean", 2, 100));
+                Assertions.assertEquals(new LongFilter(2, "test name ean", "test description", "ean", 2, 100), rangeFilterCRUD.read(2));
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
@@ -493,7 +476,7 @@ public class RangeFilterCRUDTest {
         @DisplayName("Read valid time filter")
         void readValidTimeFilter() {
             try {
-                Assertions.assertEquals(rangeFilterCRUD.read(3),new DoubleFilter(3, "test name time", "test description", "expirationDate", 0, 10));
+                Assertions.assertEquals(new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T03:30:57Z"), Instant.parse("2019-10-18T03:30:57Z")), rangeFilterCRUD.read(3));
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
@@ -519,6 +502,9 @@ public class RangeFilterCRUDTest {
                     () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2), new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T00:00:57Z"), Instant.parse("2019-10-18T00:00:57Z")))
             );
         }
+
+        // Commented out because it is very hard for us to make the database empty
+        // At least if we want robust tests of the other parts to the system
 
 //        @Test
 //        @DisplayName("Read from an empty database")

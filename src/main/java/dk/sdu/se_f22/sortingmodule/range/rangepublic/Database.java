@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import java.sql.*;
@@ -8,9 +9,52 @@ import java.time.Instant;
 import java.util.List;
 
 public class Database implements DatabaseInterface {
+
+    Connection connection = DBConnection.getConnection();
+
+    /** This method will take a filter of type RangeFilter and create one of the 3 LongFilter, DoubleFilter, TimeFilter
+     *
+     * @param filter The filter that needs to be saved in the database
+     * @return An instance of the filter created, else if the saving to the database fails it returns an exception
+     */
     @Override
-    public RangeFilter create(RangeFilter filter) {
-        return null;
+    public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException, SQLException {
+        switch (filter.getType()){
+            case DOUBLE:
+                PreparedStatement doubleStatement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeDoubleView VALUES (?, ?, ?, ?, ?)"
+                );
+                doubleStatement.setString(1, filter.getName());
+                doubleStatement.setString(2, filter.getDescription());
+                doubleStatement.setString(3, filter.getProductAttribute());
+                doubleStatement.setDouble(4, filter.getDbMinDouble());
+                doubleStatement.setDouble(5, filter.getDbMaxDouble());
+                break;
+            case LONG:
+                PreparedStatement longStatement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeLongView VALUES (?, ?, ?, ?, ?)"
+                );
+                longStatement.setString(1, filter.getName());
+                longStatement.setString(2, filter.getDescription());
+                longStatement.setString(3, filter.getProductAttribute());
+                longStatement.setLong(4, filter.getDbMinLong());
+                longStatement.setLong(5, filter.getDbMaxLong());
+              
+                break;
+            case INSTANT:
+                PreparedStatement timeStatement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeInstantView VALUES (?, ?, ?, ?, ?)"
+                );
+                timeStatement.setString(1, filter.getName());
+                timeStatement.setString(2, filter.getDescription());
+                timeStatement.setString(3, filter.getProductAttribute());
+                timeStatement.setString(4, filter.getDbMinInstant().toString());
+                timeStatement.setString(5, filter.getDbMaxInstant().toString());
+                break;
+            default:
+                throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
+        }
+        return filter;
     }
 
 
@@ -21,7 +65,6 @@ public class Database implements DatabaseInterface {
      */
     @Override
     public RangeFilter read(int id) throws UnknownFilterTypeException {
-        Connection connection = DBConnection.getConnection();
         RangeFilter dbRangeFilter = null;
         try {
             // Scratch the comment above, the plan has changed to this:
@@ -37,6 +80,7 @@ public class Database implements DatabaseInterface {
                 }
                 // Then get the filter from the correct view by using the now known data type
                 ResultSet filterResultSet;
+                System.out.println(typeResult.getString(1));
                 //noinspection EnhancedSwitchMigration
                 switch (typeResult.getString(1)){
                     case "Double":
@@ -44,8 +88,8 @@ public class Database implements DatabaseInterface {
                         if (filterResultSet.next()){
                             dbRangeFilter = new DoubleFilter(
                                     filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
+                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("ProductAttribute"),
                                     //The below two lines assume the filter read is a Double filter
                                     filterResultSet.getDouble("Min"),
@@ -58,8 +102,8 @@ public class Database implements DatabaseInterface {
                         if (filterResultSet.next()){
                             dbRangeFilter = new LongFilter(
                                     filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
+                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("ProductAttribute"),
                                     filterResultSet.getLong("Min"),
                                     filterResultSet.getLong("Max")
@@ -71,8 +115,8 @@ public class Database implements DatabaseInterface {
                         if (filterResultSet.next()){
                             dbRangeFilter = new TimeFilter(
                                     filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
+                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("ProductAttribute"),
                                     filterResultSet.getTimestamp("Min").toInstant(),
                                     filterResultSet.getTimestamp("Max").toInstant()

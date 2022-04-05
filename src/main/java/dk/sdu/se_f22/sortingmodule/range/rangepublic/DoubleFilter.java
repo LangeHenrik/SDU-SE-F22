@@ -60,6 +60,16 @@ class DoubleFilter extends RangeFilterClass{
     }
 
     @Override
+    public String toString() {
+        return "DoubleFilter{" + super.toString() + ", " +
+                "DB_MIN=" + DB_MIN +
+                ", DB_MAX=" + DB_MAX +
+                ", userMin=" + userMin +
+                ", userMax=" + userMax +
+                '}';
+    }
+
+    @Override
     public Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max

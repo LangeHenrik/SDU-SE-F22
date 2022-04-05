@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.control.Label;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.sql.SQLException;
@@ -28,7 +26,6 @@ public class OneWayController implements Initializable {
 
     @FXML
     public Button CN_enter;
-
     @FXML
     public Label CN_status;
 
@@ -64,7 +61,7 @@ public class OneWayController implements Initializable {
 
     public void GenerateImage(ActionEvent actionEvent) {
         Item i1 = new Item("køretøjer");
-        Item i2 = new Item("motordrevet",i1);
+        Item i2 = new Item("motordrexvet",i1);
         Item i3 = new Item("menneskedrevet",i1);
         Item i4 = new Item("racerbil",i2);
         Item i5 = new Item("personbil",i2);

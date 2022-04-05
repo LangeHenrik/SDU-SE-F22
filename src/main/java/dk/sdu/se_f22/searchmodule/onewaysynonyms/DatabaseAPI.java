@@ -66,7 +66,7 @@ public class DatabaseAPI {
         }
         return null;
     }
-
+/*
     public static ResultSet readDB(String name) {
         try {
             PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items WHERE name = ?");
@@ -81,7 +81,7 @@ public class DatabaseAPI {
             e.printStackTrace();
         }
     }
-
+*/
     public static void deleteItem(int id, String name) {
         PreparedStatement deleteStatement = null;
         try {

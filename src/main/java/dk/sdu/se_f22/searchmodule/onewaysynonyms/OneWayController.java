@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class OneWayController {
 
     @FXML
-    private void addItemButtonHandler(ActionEvent actionEvent) {/*
+    public void addItemButtonHandler(ActionEvent actionEvent) {/*
         if (insertSuperIDAddItemTextfield.getText() == null) {
             try {
                 DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));

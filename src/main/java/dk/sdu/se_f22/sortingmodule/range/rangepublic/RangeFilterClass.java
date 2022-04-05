@@ -55,6 +55,16 @@ abstract class RangeFilterClass implements RangeFilter{
     }
 
     @Override
+    public String toString() {
+        return "RangeFilterClass{" +
+                "ID=" + ID +
+                ", NAME='" + NAME + '\'' +
+                ", DESCRIPTION='" + DESCRIPTION + '\'' +
+                ", PRODUCT_ATTRIBUTE='" + PRODUCT_ATTRIBUTE + '\'' +
+                '}';
+    }
+
+    @Override
     public int getId() {
         return ID;
     }

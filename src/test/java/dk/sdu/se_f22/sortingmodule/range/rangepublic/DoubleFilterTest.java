@@ -59,6 +59,9 @@ class DoubleFilterTest {
             assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults);
         }
 
+
+        
+
         @Test
         @DisplayName("Filtering an empty list of results")
         void filteringAnEmptyListOfResults() {

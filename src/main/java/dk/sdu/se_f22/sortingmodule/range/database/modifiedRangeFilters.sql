@@ -228,7 +228,8 @@ create or replace function get_double_filter(filter_id_input integer)
     returns SortingRangeDoubleView
 as
 $$
-    DECLARE result record;
+DECLARE
+    result record;
 BEGIN
     SELECT * from SortingRangeDoubleView where filter_id_input = SortingRangeDoubleView.filterId into result;
     RETURN result;
@@ -243,7 +244,8 @@ create or replace function get_long_filter(filter_id_input integer)
     returns SortingRangeLongView
 as
 $$
-DECLARE result record;
+DECLARE
+    result record;
 BEGIN
     SELECT * from SortingRangeLongView where filter_id_input = SortingRangeLongView.filterId into result;
     RETURN result;
@@ -257,7 +259,8 @@ create or replace function get_time_filter(filter_id_input integer)
     returns SortingRangeTimeView
 as
 $$
-DECLARE result record;
+DECLARE
+    result record;
 BEGIN
     SELECT * from SortingRangeTimeView where filter_id_input = SortingRangeTimeView.filterId into result;
     RETURN result;
@@ -271,13 +274,36 @@ INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, ma
 VALUES ('test name double', 'test description', 'price', 0, 10);
 
 INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max)
-VALUES ('test name ean', 'test description', 'ean', 2, 100);
+VALUES ('test name ean', 'test description for long filter', 'ean', 2, 100);
 
 INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max)
-VALUES ('test name time', 'test description', 'expirationDate', '2018-10-18 05:30:57', '2019-10-18 05:30:57');
+VALUES ('test name time', 'test description for time filter', 'expirationDate', '2018-11-30 16:35:24.00',
+        '2022-11-30 16:35:24.00');
+
+INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
+VALUES ('double numero 4', 'test description for double quattro', 'clockspeed', 1, 14);
+
+INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max)
+VALUES ('test name ean funf', 'five test description for long filter', 'longnumber', 1, 10);
+
+INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max)
+VALUES ('test name time six', 'sechs test description for time filter', 'publishedDate', '2011-11-30 19:35:24.00',
+        '2019-11-30 19:35:24.00');
+
+INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max)
+VALUES ('test name time sieben', 'seven test description for time filter', 'someDate', '2020-11-30 19:35:24.00',
+        '2030-11-30 19:35:24.00');
+
+INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max)
+VALUES ('test name ean acht', 'eight test description for long filter', 'longattribute', 200, 100000);
+
+INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
+VALUES ('test double ix', 'test description nine', 'weight', 2, 100);
+
 
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);
-SELECT * FROM get_double_filter(1);
+SELECT *
+FROM get_double_filter(1);
 
 

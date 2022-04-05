@@ -18,5 +18,7 @@ public interface DatabaseInterface {
     // Along with using userMin and userMax as the variables where we store what we should update the database values to
     RangeFilter update(RangeFilter filter);
 
+
+
     List<RangeFilter> readAllFilters();
 }

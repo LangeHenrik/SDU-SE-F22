@@ -37,6 +37,7 @@ public class Database implements DatabaseInterface {
                 }
                 // Then get the filter from the correct view by using the now known data type
                 ResultSet filterResultSet;
+                System.out.println(typeResult.getString(1));
                 //noinspection EnhancedSwitchMigration
                 switch (typeResult.getString(1)){
                     case "Double":
@@ -44,8 +45,8 @@ public class Database implements DatabaseInterface {
                         if (filterResultSet.next()){
                             dbRangeFilter = new DoubleFilter(
                                     filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
+                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("ProductAttribute"),
                                     //The below two lines assume the filter read is a Double filter
                                     filterResultSet.getDouble("Min"),
@@ -58,8 +59,8 @@ public class Database implements DatabaseInterface {
                         if (filterResultSet.next()){
                             dbRangeFilter = new LongFilter(
                                     filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
+                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("ProductAttribute"),
                                     filterResultSet.getLong("Min"),
                                     filterResultSet.getLong("Max")
@@ -71,8 +72,8 @@ public class Database implements DatabaseInterface {
                         if (filterResultSet.next()){
                             dbRangeFilter = new TimeFilter(
                                     filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("Name"),
+                                    filterResultSet.getString("Description"),
                                     filterResultSet.getString("ProductAttribute"),
                                     filterResultSet.getTimestamp("Min").toInstant(),
                                     filterResultSet.getTimestamp("Max").toInstant()

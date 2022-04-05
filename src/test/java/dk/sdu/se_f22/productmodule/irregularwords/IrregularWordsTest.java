@@ -5,26 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.*;
 import java.util.ArrayList;
+import org.junit.jupiter.api.*;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class IrregularWordsTest {
-
-    private Connection connection = null;
-    private String dbName = "irregularwords";
-
     //Connecting the test class to the database before each test.
-    @BeforeEach
-    void setup(){
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbName,
-                    "postgres",
-                    "123");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    @BeforeAll
+    static void start() {
+    IrregularWords.irregularWords.initialize();
+    IrregularWords.irregularWords.insertValues();
     }
-
     @Test
     void createIRWord() {
         IrregularWords wordCreator = new IrregularWords();
@@ -100,10 +91,32 @@ class IrregularWordsTest {
 
     @Test
     void getID() {
+
     }
 
     @Test
     void searchForIrregularWords() {
+        List<String> tester = new ArrayList<>();
+        tester.add("Gustav1");
+        tester.add("Hassan1");
+        tester.add("tester");
+        tester.add("Gustav2");
+        tester.add("Hassan2");
+        List<String> answer = new ArrayList<>();
+        answer.add("Gustav1");
+        answer.add("Gustav2");
+        answer.add("Gustav3");
+        answer.add("Hassan1");
+        answer.add("Hassan2");
+        answer.add("Hassan3");
+        answer.add("tester");
+        assertLinesMatch(answer,IrregularWords.irregularWords.searchForIrregularWords(tester));
+
+    }
+    @AfterAll
+    static void end(){
+        IrregularWords.irregularWords.removeValues();
+
     }
     
 }

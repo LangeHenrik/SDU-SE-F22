@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,13 +58,21 @@ class DelimiterSettingsTest {
     }
 
     @Test
-    void removeDelimiter(){
+    void removeDelimiterCanRemove(){
         ss.addDelimiter("hello");
         var expectedDelimiters = List.of("hello");
 
         assertArrayEquals(expectedDelimiters.toArray(), ss.getDelimiters().toArray());
 
-        ss.removeDelimiter("hello");
+        assertTrue(ss.removeDelimiter("hello"));
+        assertArrayEquals(new String[0], ss.getDelimiters().toArray());
+    }
+    @Test
+    void removeDelimiterCantRemove(){
+        assertArrayEquals(new String[0], ss.getDelimiters().toArray());
+
+        assertFalse(ss.removeDelimiter("hello"));
+
         assertArrayEquals(new String[0], ss.getDelimiters().toArray());
     }
 }

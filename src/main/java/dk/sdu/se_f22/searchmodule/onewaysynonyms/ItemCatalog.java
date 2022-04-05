@@ -2,6 +2,7 @@ package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import javax.swing.*;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
@@ -48,7 +49,17 @@ public class ItemCatalog{
         throw new notFoundException("Item not found in database.");
     }
 
+    public Item getRoot(){
+        for (Item item:catalog) {
+            if (item.getSuperId()==0){
+                return item;
+            }
+        }
+        return catalog.get(0);
+    }
+
     public static void main(String[] args) {
+/*
         Item i1 = new Item("køretøjer");
         Item i2 = new Item("motordrevet",i1);
         Item i3 = new Item("menneskedrevet",i1);
@@ -66,9 +77,8 @@ public class ItemCatalog{
 
         Item[] list = new Item[]{i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14};
         ItemCatalog test = new ItemCatalog(list);
-        
-
-
+        OneWayFrame owf = new OneWayFrame(i1);
+*/
     }
 
 }

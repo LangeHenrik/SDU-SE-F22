@@ -5,17 +5,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class OneWayImplementation implements OneWayInterface {
-    DatabaseAPI db = new DatabaseAPI();
 
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) {
         return null;
     }
 
+    public Item[] createItemCatalog() {
+        return DatabaseAPI.readEntireDB();
+    }
+
+
     @Override
     public void createItem() {
         try {
-            db.addItem("Cake");
+            DatabaseAPI.addItem("Cake");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -24,7 +28,7 @@ public class OneWayImplementation implements OneWayInterface {
     @Override
     public void changeItemPlacement() {
         try {
-            db.updateSuperId("Cake", 2);
+            DatabaseAPI.updateSuperId("Cake", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,20 +36,16 @@ public class OneWayImplementation implements OneWayInterface {
 
     @Override
     public void showCatalog() {
-        ResultSet content = db.read();
-        try {
-            while (content.next()) {
-                System.out.println(content.getInt(1) + "-" + content.getString(2) + "-" + content.getString(3));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Item[] content = DatabaseAPI.readEntireDB();
+        for (Item item:content) {
+            System.out.println(item);
         }
     }
 
     @Override
     public void changeItemName() {
         try {
-            db.updateName(1, "Football");
+            DatabaseAPI.updateName(1, "Football");
         } catch (SQLException e) {
             e.printStackTrace();
         }

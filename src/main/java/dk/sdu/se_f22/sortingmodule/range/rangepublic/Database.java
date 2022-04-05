@@ -18,52 +18,41 @@ public class Database implements DatabaseInterface {
      * @return An instance of the filter created, else if the saving to the database fails it returns an exception
      */
     @Override
-    public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException {
+    public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException, SQLException {
         switch (filter.getType()){
             case DOUBLE:
-                try{
-                    PreparedStatement typeStatement = connection.prepareStatement(
-                            "INSERT INTO SortingRangeDoubleView VALUES (?, ?, ?, ?, ?)"
-                    );
-                    typeStatement.setString(1, filter.getName());
-                    typeStatement.setString(2, filter.getDescription());
-                    typeStatement.setString(3, filter.getProductAttribute());
-                    typeStatement.setDouble(4, filter.getDbMinDouble());
-                    typeStatement.setDouble(5, filter.getDbMaxDouble());
-                } catch (SQLException e) {
-                    throw new InvalidFilterTypeException("Wrong parameter type for prepared statement");
-                }
+                PreparedStatement doubleStatement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeDoubleView VALUES (?, ?, ?, ?, ?)"
+                );
+                doubleStatement.setString(1, filter.getName());
+                doubleStatement.setString(2, filter.getDescription());
+                doubleStatement.setString(3, filter.getProductAttribute());
+                doubleStatement.setDouble(4, filter.getDbMinDouble());
+                doubleStatement.setDouble(5, filter.getDbMaxDouble());
                 break;
             case LONG:
-                try{
-                    PreparedStatement typeStatement = connection.prepareStatement(
-                            "INSERT INTO SortingRangeLongView VALUES (?, ?, ?, ?, ?)"
-                    );
-                    typeStatement.setString(1, filter.getName());
-                    typeStatement.setString(2, filter.getDescription());
-                    typeStatement.setString(3, filter.getProductAttribute());
-                    typeStatement.setLong(4, filter.getDbMinLong());
-                    typeStatement.setLong(5, filter.getDbMaxLong());
-                } catch (SQLException e) {
-                    throw new InvalidFilterTypeException("Wrong parameter type for prepared statement");
-                }
+                PreparedStatement longStatement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeLongView VALUES (?, ?, ?, ?, ?)"
+                );
+                longStatement.setString(1, filter.getName());
+                longStatement.setString(2, filter.getDescription());
+                longStatement.setString(3, filter.getProductAttribute());
+                longStatement.setLong(4, filter.getDbMinLong());
+                longStatement.setLong(5, filter.getDbMaxLong());
+              
                 break;
             case INSTANT:
-                try{
-                    PreparedStatement typeStatement = connection.prepareStatement(
-                            "INSERT INTO SortingRangeInstantView VALUES (?, ?, ?, ?, ?)"
-                    );
-                    typeStatement.setString(1, filter.getName());
-                    typeStatement.setString(2, filter.getDescription());
-                    typeStatement.setString(3, filter.getProductAttribute());
-                    typeStatement.setString(4, filter.getDbMinInstant().toString());
-                    typeStatement.setString(5, filter.getDbMaxInstant().toString());
-                } catch (SQLException e) {
-                    throw new InvalidFilterTypeException("Wrong parameter type for prepared statement");
-                }
+                PreparedStatement timeStatement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeInstantView VALUES (?, ?, ?, ?, ?)"
+                );
+                timeStatement.setString(1, filter.getName());
+                timeStatement.setString(2, filter.getDescription());
+                timeStatement.setString(3, filter.getProductAttribute());
+                timeStatement.setString(4, filter.getDbMinInstant().toString());
+                timeStatement.setString(5, filter.getDbMaxInstant().toString());
                 break;
             default:
-                throw new InvalidFilterTypeException("Didn't match any of our build in types.");
+                throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
         }
         return filter;
     }

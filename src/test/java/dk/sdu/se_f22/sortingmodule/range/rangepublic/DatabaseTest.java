@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 
@@ -40,7 +41,7 @@ class DatabaseTest {
                     );
                     RangeFilter readFilter = database.read(createdFilter.getId());
                     Assertions.assertEquals(createdFilter, readFilter);
-                } catch (InvalidFilterTypeException e) {
+                } catch (InvalidFilterTypeException | SQLException e) {
                     fail(e);
                 }
 
@@ -65,8 +66,8 @@ class DatabaseTest {
                     );
                     RangeFilter readFilter = database.read(createdFilter.getId());
                     Assertions.assertEquals(createdFilter, readFilter);
-                } catch (InvalidFilterTypeException e) {
-                     fail(e);
+                } catch (InvalidFilterTypeException | SQLException e) {
+                    fail(e);
                 }
 
             } catch (UnknownFilterTypeException e) {
@@ -90,7 +91,7 @@ class DatabaseTest {
                     );
                     RangeFilter readFilter = database.read(createdFilter.getId());
                     Assertions.assertEquals(createdFilter, readFilter);
-                } catch (InvalidFilterTypeException e) {
+                } catch (InvalidFilterTypeException | SQLException e) {
                     fail(e);
                 }
 
@@ -115,7 +116,7 @@ class DatabaseTest {
                 Assertions.assertThrows(SQLIntegrityConstraintViolationException.class,
                         () -> database.create(createdFilter)
                 );
-            } catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException | SQLException e) {
                 fail(e);
             }
         }

@@ -1,10 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sortingmodule.range.exceptions.EmptyDatabaseException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,10 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.stream.Stream;
 
-import static org.checkerframework.checker.units.UnitsTools.min;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -307,6 +304,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -331,6 +330,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -355,6 +356,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -388,6 +391,8 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+            }  catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -408,7 +413,9 @@ public class RangeFilterCRUDTest {
             try {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
+            }  catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
@@ -431,7 +438,9 @@ public class RangeFilterCRUDTest {
             try {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
+                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
+            }  catch (InvalidFilterTypeException e) {
+                fail(e);
             }
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);

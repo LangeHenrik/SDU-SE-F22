@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.mockCMSInfra;
 
+import dk.sdu.se_f22.contentmodule.infrastructure.domain.HTMLSite;
+
 import java.util.ArrayList;
 
 public class MockCMSIndex implements IMockCMSIndex {
@@ -13,11 +15,17 @@ public class MockCMSIndex implements IMockCMSIndex {
     }
 
     @Override
-    public int[] mockSearch(ArrayList<String> searchtokens) {
+    public static ArrayList<Integer> mockSearch(ArrayList<String> searchtokens) {
+        ArrayList<HTMLSite> sites = new ArrayList<>();
+        ArrayList<Integer> numbers = new ArrayList<>();
         for(String s: searchtokens){
             System.out.println("Token: " + searchtokens + " is recieved");
         }
-        int[] mockId = {1, 3, 5};
-        return mockId;
+
+        for (HTMLSite site: sites){
+            numbers.add(site.getId());
+        }
+
+        return numbers;
     }
 }

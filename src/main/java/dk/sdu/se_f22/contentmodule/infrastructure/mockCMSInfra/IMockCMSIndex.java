@@ -6,5 +6,5 @@ public interface IMockCMSIndex {
 
     void mockIndex(ArrayList<String> mocktokens);
 
-    int[] mockSearch(ArrayList<String> searchtokens);
+     public ArrayList<Integer> mockSearch(ArrayList<String> searchtokens);
 }

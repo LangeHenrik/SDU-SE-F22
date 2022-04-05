@@ -9,7 +9,7 @@ public class IndexingService implements IIndexingService {
 
     IJsonService service = new JsonService();
     Persistence p = new Persistence();
-    public IndexingService() {;
+    public IndexingService() {
     }
 
     public List<Brand> getBrandIndex(){;
@@ -23,6 +23,9 @@ public class IndexingService implements IIndexingService {
             @Override
             public void run() {
                 System.out.println(p.getIndexingInterval());
+                
+                //Ensure that brands are indexed in regular intervals
+                p.BIM2.indexBrands(p.getAllBrands());
             }
         },0,p.getIndexingInterval());
     }

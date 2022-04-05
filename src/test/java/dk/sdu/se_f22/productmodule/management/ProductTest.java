@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
-    private static JSONReader reader = new JSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
+    private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
 
     @BeforeAll
     static void initialize(){

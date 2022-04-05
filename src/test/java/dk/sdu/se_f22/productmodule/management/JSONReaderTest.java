@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JSONReaderTest {
 
-    private static JSONReader reader = new JSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
+    private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
 
     public void runAllTests(){
         read();

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class ProductManager implements IProductManager, Runnable{
 
-    private final JSONReader jsonReader;
+    private final ProductJSONReader jsonReader;
 
     public ArrayList<Product> productArray;
     private ArrayList<Product> updatedProductArray;
@@ -24,7 +24,7 @@ public class ProductManager implements IProductManager, Runnable{
         //When you create a new object of this class, the background thread is started automatically.
         //If you want to alter an attribute on a product, you MUST do this through the C.U.D. functions in this class.
 
-        jsonReader = new JSONReader(sourcePath);
+        jsonReader = new ProductJSONReader(sourcePath);
         productArray = getFromSource();
         updatedProductArray = null;
 

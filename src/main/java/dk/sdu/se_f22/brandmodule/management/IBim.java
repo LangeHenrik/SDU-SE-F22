@@ -13,6 +13,7 @@ public interface IBim {
     //get a brand from database
     Brand getBrand(int id);
     Brand getBrand(String name);
+    List<Brand> getAllBrands();
 
     //remove a brand from the database
     void removeBrand(Brand brand);

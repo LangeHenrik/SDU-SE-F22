@@ -32,6 +32,11 @@ public class Bim implements IBim {
     }
 
     @Override
+    public List<Brand> getAllBrands(){
+        return persistence.getAllBrands();
+    }
+
+    @Override
     public void removeBrand(Brand brand) {
         persistence.deleteBrand(brand);
     }

@@ -2,23 +2,29 @@ package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sortingmodule.category.Category;
 import dk.sdu.se_f22.sortingmodule.category.CategoryCRUDInterface;
+import dk.sdu.se_f22.sortingmodule.category.CategoryReadConfig;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CategoryDBConnection implements CategoryCRUDInterface {
 
     public static CategoryDBConnection shared = new CategoryDBConnection();
-    private static String URL = "jdbc:postgresql://localhost:5432/SOM3";
-    private static String username = "CategoryAdmin";
-    private static String password = "CategoryAdmin";
+    // private static String URL = "jdbc:postgresql://localhost:5432/SOM3";
+    // private static String username = "CategoryAdmin";
+    // private static String password = "CategoryAdmin";
     private static Connection connie = null;
 
-    public Connection connect(){
-        try{
+    public Connection connect() throws SQLException, IOException {
+        CategoryReadConfig readConfig = new CategoryReadConfig();
+        HashMap<String, String> credentials = readConfig.getPropValues();
+
+        try {
             DriverManager.registerDriver(new org.postgresql.Driver());
-            connie = DriverManager.getConnection(this.URL,this.username,this.password);
+            connie = DriverManager.getConnection(credentials.get("db_url"),credentials.get("db_username"),credentials.get("db_password"));
             return connie;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -34,7 +40,6 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         }
     }
 
-
     public int deleteCategory(int id) {
         String SQL = "DELETE FROM categories WHERE id = ?";
 
@@ -49,6 +54,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         }
         return affectedrows;
     }
@@ -72,6 +79,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } finally {
             this.shared.closeConnection();
         }
@@ -106,6 +115,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } finally {
             this.shared.closeConnection();
         }
@@ -133,6 +144,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
             }
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -159,6 +172,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
             }
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -185,6 +200,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
             }
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -225,6 +242,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } else {
                 System.out.println("There is no requirement status with ID: " + requirementsStatus);
             }
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -264,6 +283,8 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } else {
                 System.out.println("There is no requirement status with ID: " + requirementsStatus);
             }
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
         }

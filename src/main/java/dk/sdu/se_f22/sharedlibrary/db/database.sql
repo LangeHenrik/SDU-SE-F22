@@ -35,10 +35,10 @@ CREATE TABLE BrandProductTypeJunction(
 );
 
 CREATE TABLE Config(
-    properties Integer not null,
+    id Integer not null,
     brandIndexInterval INTEGER NOT NULL
 );
-insert into config(properties,brandindexinterval) values (60,100);
+insert into config(id,brandindexinterval) values (60,100);
 
 CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,

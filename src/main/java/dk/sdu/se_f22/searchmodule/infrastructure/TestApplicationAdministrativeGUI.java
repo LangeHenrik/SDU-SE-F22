@@ -10,9 +10,9 @@ import java.io.IOException;
 public class TestApplicationAdministrativeGUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        System.out.println(TestApplicationAdministrativeGUI.class.getResource("SEM1_Infrastructure_AdministrativeGUI.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(TestApplicationAdministrativeGUI.class.getResource("SEM1_Infrastructure_AdministrativeGUI.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        System.out.println(getClass().getResource("SEM1_Infrastructure_AdministrativeGUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SEM1_Infrastructure_AdministrativeGUI.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

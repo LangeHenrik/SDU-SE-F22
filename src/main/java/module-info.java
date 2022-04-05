@@ -17,6 +17,8 @@ module dk.sdu.se_f22 {
     requires org.apache.commons.pool2;
 
     opens dk.sdu.se_f22 to javafx.fxml;
+    opens dk.sdu.se_f22.searchmodule.infrastructure to javafx.fxml;
+
     exports dk.sdu.se_f22;
     exports dk.sdu.se_f22.searchmodule.infrastructure;
 }

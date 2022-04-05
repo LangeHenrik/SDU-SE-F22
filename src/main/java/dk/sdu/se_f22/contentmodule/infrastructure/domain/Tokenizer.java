@@ -9,19 +9,28 @@ import java.util.Locale;
 class Tokenizer {
 
 
-    public static ArrayList<String> tokenizeHTMLBodyText(HTMLSite site) {
-        ArrayList<String> tokens = new ArrayList<>();
+    public static ArrayList<Token> tokenizeHTMLBodyText(HTMLSite site) {
+        ArrayList<Token> tokens = new ArrayList<>();
 
         String [] splittedStrings = site.getDocumentText().split(" ");
 
 
         for (String s: splittedStrings){
 
-            if (!tokens.contains(s.toLowerCase(Locale.ROOT))){
-               tokens.add(new Token(s, site.getId()).documentText.toLowerCase(Locale.ROOT));
-            }
+           {
 
+               tokens.add(new Token(s.toLowerCase(Locale.ROOT), site.getId()));
+            }
         }
+
+
+
+
+
+
         return tokens;
     }
+
+
+
 }

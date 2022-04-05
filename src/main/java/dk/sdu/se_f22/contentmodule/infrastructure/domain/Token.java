@@ -8,4 +8,22 @@ public class Token {
         this.documentText = documentText;
         this.originID = originID;
     }
+
+    public String getDocumentText() {
+        return documentText;
+    }
+
+    public void setDocumentText(String documentText) {
+        this.documentText = documentText;
+    }
+
+    public int getOriginID() {
+        return originID;
+    }
+
+    public void setOriginID(int originID) {
+        this.originID = originID;
+    }
+
+
 }

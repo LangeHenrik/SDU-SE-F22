@@ -8,11 +8,23 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
 
+        String searchToken = "this";
+
         HTMLSite site2 = new HTMLSite(2,"This is the the text of two");
         HTMLSite site3 = new HTMLSite(3,"This is the text of three");
 
-        System.out.println(Tokenizer.tokenizeHTMLBodyText(site2).toString());
-        System.out.println(Tokenizer.tokenizeHTMLBodyText(site3).toString());
+
+        ArrayList<HTMLSite> webSites = new ArrayList<>();
+        webSites.add(site2);
+        webSites.add(site3);
+
+        for (Token token: Tokenizer.tokenizeHTMLBodyText(site2)){
+            System.out.println(token.documentText);
+        }
+
+
+        
+
 
     }
 }

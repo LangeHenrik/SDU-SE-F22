@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TokenizationTest {
-    Tokenization t;
+    Tokenizer t;
     List<String> s;
 
     @BeforeEach
@@ -27,7 +27,7 @@ class TokenizationTest {
         ds.addDelimiter(".");
         ds.addDelimiter("!");
         ds.addDelimiter(" ");
-        t = new Tokenization();
+        t = new Tokenizer();
         s = new ArrayList<>();
         s.add("Hej");
         s.add("hje");
@@ -47,7 +47,7 @@ class TokenizationTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        t = new Tokenization();
+        t = new Tokenizer();
         assertEquals(List.of("Hej. hje  !hej"), t.tokenize("Hej. hje  !hej"));
     }
 

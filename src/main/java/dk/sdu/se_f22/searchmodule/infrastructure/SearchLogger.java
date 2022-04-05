@@ -12,10 +12,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchLogging {
-    private static final Logger logger = LoggingProvider.getLogger(SearchLogging.class);
+public class SearchLogger {
+    private static final Logger logger = LoggingProvider.getLogger(SearchLogger.class);
 
-    public static void loggingSearch(String search, SearchHits searchHits, List<String> filterTokens) {
+    public static void logSearch(String search, SearchHits searchHits, List<String> filterTokens) {
         List<Product> products = (List<Product>) searchHits.getProducts();
         List<Brand> brands = (List<Brand>) searchHits.getBrands();
         //List<Content> contents = (List<Content>) searchHits.getContents();
@@ -62,18 +62,17 @@ public class SearchLogging {
 
             insertStatement.execute();
             insertStatement.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
     }
-    public static List<Searches> getSearches() {
+    public static List<SearchLog> getAllSearchLogs() {
         List<String> brands = new ArrayList<>();
         List<String> products = new ArrayList<>();
         List<String> contents = new ArrayList<>();
-        List<Searches> searchList = new ArrayList<>();
+        List<SearchLog> searchList = new ArrayList<>();
 
         try(Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement queryBrandSearches = connection.prepareStatement("SELECT * FROM BrandSearches");
@@ -99,7 +98,7 @@ public class SearchLogging {
             }*/
 
             while(querySearchesResultSet.next()) {
-                Searches search = new Searches(
+                SearchLog search = new SearchLog(
                         querySearchesResultSet.getInt("id"),
                         querySearchesResultSet.getString("searchString"),
                         querySearchesResultSet.getString("timeSearched"),

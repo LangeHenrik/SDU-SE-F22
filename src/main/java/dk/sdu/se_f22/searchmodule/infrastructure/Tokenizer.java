@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Tokenization {
+public class Tokenizer {
     private SearchModuleUtils searchModuleUtils = new SearchModuleUtils();
     private DelimiterSettings delimiterSettings = new DelimiterSettings();
     private List<String> stringList = delimiterSettings.getDelimiters();

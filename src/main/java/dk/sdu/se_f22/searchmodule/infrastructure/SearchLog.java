@@ -1,9 +1,8 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Searches {
+public class SearchLog {
     private final String searchString;
 
     private final String timeSearched;
@@ -16,7 +15,7 @@ public class Searches {
     private final List<String> products;
     private final List<String> contents;
 
-    public Searches(int id, String searchString, String timeSearched, List<String> brands, List<String> products, List<String> contents) {
+    public SearchLog(int id, String searchString, String timeSearched, List<String> brands, List<String> products, List<String> contents) {
         this.searchString = searchString;
         this.timeSearched = timeSearched;
 

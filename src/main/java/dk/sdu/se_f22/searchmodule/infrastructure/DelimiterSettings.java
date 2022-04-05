@@ -9,6 +9,8 @@ import java.util.List;
 
 public class DelimiterSettings {
     private List<String> delimiters;
+    private Connection dbConnection;
+    private PreparedStatement stmt;
 
     public List<String> getDelimiters() {
         try {
@@ -21,13 +23,11 @@ public class DelimiterSettings {
     }
 
     private void updateDelimitersToDatabaseState() throws SQLException {
-        Connection dbConnection = DBConnection.getPooledConnection();
-        PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM searchtokendelimiters");
+        PreparedStatement stmt = makePreparedStatement("SELECT * FROM searchtokendelimiters");
         ResultSet resultSet = stmt.executeQuery();
         resetDelimiterAttribute();
         moveResultsSetToDelimitersAttribute(resultSet);
-        resultSet.close();
-        dbConnection.close();
+        closeAll();
     }
 
     private void resetDelimiterAttribute() {
@@ -43,10 +43,10 @@ public class DelimiterSettings {
     public void addDelimiter(String delimiter) {
         try {
             insertDelimiterIntoDatabase(delimiter);
-            System.out.println("Delimiter added.");
+            customPrinter("Delimiter added (" + delimiter + ")");
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505")){
-                System.out.println("Delimiter already exists");
+                customPrinter("Delimiter already exists (" + delimiter + ")");
                 return;
             }
             e.printStackTrace();
@@ -54,22 +54,23 @@ public class DelimiterSettings {
     }
 
     private void insertDelimiterIntoDatabase(String delimiter) throws SQLException {
-        Connection dbConnection = DBConnection.getPooledConnection();
-        PreparedStatement stmt = dbConnection.prepareStatement("INSERT INTO searchtokendelimiters (delimiter) VALUES (?)");
+        PreparedStatement stmt = makePreparedStatement("INSERT INTO searchtokendelimiters (delimiter) VALUES (?)");
         stmt.setString(1, delimiter);
         stmt.execute();
-        stmt.close();
-        dbConnection.close();
+        closeAll();
     }
 
     public boolean removeDelimiter(String delim) {
         try {
-            Connection dbConnection = DBConnection.getPooledConnection();
-            PreparedStatement stmt = dbConnection.prepareStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?");
+            if (delimiterNotFound(delim)){
+                customPrinter("Delimiter not found: " + delim);
+                return false;
+            }
+            makePreparedStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?");
             stmt.setString(1, delim);
-            stmt.execute();
-            System.out.println("Removed delimiter: " + delim);
-            stmt.close();
+            this.stmt.execute();
+            closeAll();
+            customPrinter("Removed delimiter: " + delim);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,15 +78,40 @@ public class DelimiterSettings {
         }
     }
 
-    private boolean executeStatementIfDelimIsInDelimiters(String delim, PreparedStatement stmt) throws SQLException {
-        for (String s : getDelimiters()) {
-            if (s.equals(delim)) {
-                stmt.execute();
-                stmt.close();
-                return true;
-            }
-        }
-        stmt.close();
-        return false;
+    private boolean delimiterNotFound(String delim) throws SQLException {
+        updateDelimitersToDatabaseState();
+        return !this.delimiters.contains(delim);
     }
+
+    private Connection getDbConnection() throws SQLException {
+        if (this.dbConnection == null || dbConnection.isClosed()) {
+            this.dbConnection = DBConnection.getPooledConnection();
+            return dbConnection;
+        }
+        return dbConnection;
+    }
+
+    private PreparedStatement makePreparedStatement(String SQLStatement) throws SQLException {
+        this.stmt = getDbConnection().prepareStatement(SQLStatement);
+        return this.stmt;
+    }
+
+    private void closeAll(){
+        try {
+            if (this.stmt != null && !this.stmt.isClosed()) {
+                this.stmt.close();
+            }
+            if (this.dbConnection != null && !this.dbConnection.isClosed()){
+                this.dbConnection.close();
+            }
+        } catch (SQLException e) {
+            customPrinter(" Could not close connection and statement");
+            e.printStackTrace();
+        }
+    }
+
+    private void customPrinter(String s){
+        System.out.println("[" + new Timestamp(System.currentTimeMillis()).toString() + "] [SEM-Infra, DelimiterSettings] " + s);
+    }
+
 }

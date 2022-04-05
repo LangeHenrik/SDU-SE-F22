@@ -1,11 +1,11 @@
-package dk.sdu.se_f22.productmodule.irregularwords;
+package dk.sdu.se_f22.productmodule.irregularwords.Data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.*;
 
-public class IrregularWords implements IIrregularWords{
+public class IrregularWords implements IIrregularWords {
     public static IrregularWords irregularWords = new IrregularWords();
 
     private Connection connection = null;

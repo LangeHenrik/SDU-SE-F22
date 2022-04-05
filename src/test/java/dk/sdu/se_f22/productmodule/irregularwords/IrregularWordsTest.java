@@ -1,7 +1,8 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
+
 import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
 import org.junit.jupiter.api.Test;
-import java.sql.*;
+
 import java.util.ArrayList;
 import org.junit.jupiter.api.*;
 
@@ -10,73 +11,47 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class IrregularWordsTest {
+
     //Connecting the test class to the database before each test.
     @BeforeAll
     static void start() {
     IrregularWords.irregularWords.initialize();
     IrregularWords.irregularWords.insertValues();
     }
-    /*
-   @Test
-    void createIRWord() {
-        IrregularWords wordCreator = new IrregularWords();
+
+    @Test
+    void createIRWord(){
+        //Create ArrayList to hold the words that have to be check in assertEquals and to use the searchForIrregularWords method.
         ArrayList<String> list = new ArrayList<>();
-        wordCreator.initialize();
+        list.add("Hans");
+        list.add("Hans2");
 
-        try {
-            //Create words in the table
-            wordCreator.createIRWord(10, "Hans");
+        //Create the two words in the database
+        IrregularWords.irregularWords.createIRWord(10055,"Hans");
+        IrregularWords.irregularWords.createIRWord("Hans", "Hans2");
 
-            //Statement to confirm that word was added to the table
-            PreparedStatement stmt = connection.prepareStatement("SELECT word FROM irwords WHERE word = ?");
-            stmt.setString(1, "Hans");
-            ResultSet result = stmt.executeQuery();
+        //Check that both words have been correctly added to the database
+        assertEquals(list,IrregularWords.irregularWords.searchForIrregularWords(list));
 
-            //Get metadata from ResultSet to get ColumnCount, so While loop can be made that adds ResultSet data to ArrayList
-            ResultSetMetaData rsmd = result.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            while(result.next()){
-                int i = 1;
-                while(i <= columnCount) {
-                    list.add(result.getString(i++));
-                }
-            }
-            //Assert statement to confirm Hans was added
-            assertTrue(list.contains("Hans"));
-
-            //Move to delete test
-            wordCreator.deleteIRWord("Hans");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //Delete the words from the database
+        IrregularWords.irregularWords.deleteIRWord("Hans");
+        IrregularWords.irregularWords.deleteIRWord("Hans2");
     }
 
     @Test
-    void deleteIRWord() {
-        IrregularWords wordDeleter = new IrregularWords();
-        wordDeleter.initialize();
+    void deleteIRWord(){
+        // Word in the database created from insertValues() = Mathias2
         ArrayList<String> list = new ArrayList<>();
+        list.add("Mathias2");
 
-        wordDeleter.deleteIRWord("Hans");
+        // Deleting the word from the database
+        IrregularWords.irregularWords.deleteIRWord("Mathias2");
 
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT word FROM irwords WHERE word = ?");
-            stmt.setString(1,"Hans");
-            ResultSet result = stmt.executeQuery();
-            ResultSetMetaData rsmd = result.getMetaData();
-            int columnCount = rsmd.getColumnCount();
+        assertEquals(0, IrregularWords.irregularWords.getID("Mathias2"));
 
-            while(result.next()){
-                int i = 0;
-                while(i <= columnCount){
-                    list.add(result.getString(i++));
-                }
-            }
-            assertFalse(list.contains("Hans"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }*/
+        //Reinserting the word for future use.
+        IrregularWords.irregularWords.createIRWord("Mathias1", "Mathias2");
+    }
 
     @Test
     void updateIRWord() {
@@ -107,8 +82,6 @@ class IrregularWordsTest {
         }
         assertFalse(Arrays.equals(new String[] {"Gustav1", "Gustav3", "Gustav2"}, words), "One or more words do not match");
     }
-
-
 
     @Test
     void getIDFromAllWordsWithSameID() {
@@ -160,10 +133,9 @@ class IrregularWordsTest {
         assertLinesMatch(answer,IrregularWords.irregularWords.searchForIrregularWords(tester));
 
     }
+
     @AfterAll
     static void end(){
         IrregularWords.irregularWords.removeValues();
-
     }
-    
 }

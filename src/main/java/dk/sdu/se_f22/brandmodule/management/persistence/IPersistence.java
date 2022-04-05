@@ -7,10 +7,10 @@ import java.util.List;
 public interface IPersistence {
     Brand getBrand(int id);
     Brand getBrand(String name);
-    public List<Brand> getAllBrands();
-    void deleteBrand(int id);
-    void deleteBrand(Brand brand);
-    void databaseIndexer();
-    void addOrUpdateBrands(List<Brand> brands);
+    List<Brand> getAllBrands();
+    boolean deleteBrand(int id);
+    boolean deleteBrand(Brand brand);
+    boolean databaseIndexer();
+    boolean addOrUpdateBrands(List<Brand> brands);
     void seedDatabase();
 }

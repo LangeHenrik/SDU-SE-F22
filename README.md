@@ -62,11 +62,11 @@ credentials:
 
 The system has a migration tool built-in, that can be used to keep the database up to date.
 
-This migration system is location in [`dk\sdu\se_f22\sharedlibrary\db\DBMigration.java`](src/main/java/dk/sdu/se_f22/sharedlibrary/db/DBMigration.java).
+This migration system is located in [`dk\sdu\se_f22\sharedlibrary\db\DBMigration.java`](src/main/java/dk/sdu/se_f22/sharedlibrary/db/DBMigration.java).
 
 The migration system has built-in command-line printing, and can be disabled by sending a `false` argument with the constructor:
 ```java
-DBMigration databaseSeeder = new DBMigration(false);
+DBMigration migrator = new DBMigration(false);
 ```
 
 
@@ -80,22 +80,24 @@ For more information:
 - [What are database migrations? - Prisma](https://www.prisma.io/dataguide/types/relational/what-are-database-migrations)
 - [What is Database Migration? - Aloowma](https://www.alooma.com/blog/what-is-database-migration)
 
+Migration is used, so that you don't need to reinstall the database at every update, and this way persist data between updates.
+
 #### Run migrations
 
 To run the migration, the system needs to be connected to the database. Please see [Connect to databse](#connect-to-databse)
 
 The migration itself can be run, by running the `.migrate()` method:
 ```java
-DBMigration databaseSeeder = new DBMigration();
-databaseSeeder.migrate();
+DBMigration migrator = new DBMigration();
+migrator.migrate();
 ```
 
 The system allows for the database to be freshly migrated.<br>
 ***THIS WILL CLEAR ALL OF THE DATA FROM THE DATABASE PUBLIC SCHEMA***<br>
 *Use with caution*
 ```java
-DBMigration databaseSeeder = new DBMigration();
-databaseSeeder.migrateFresh();
+DBMigration migrator = new DBMigration();
+migrator.migrateFresh();
 ```
 
 It is not possible to roll back any migrations, but if a migration fails, the system will halt and automatically roll back to the last stable migration.
@@ -116,3 +118,6 @@ The files may be named as follows (naming is only used for sorting - Very import
 Take a look at the existing migrations, to see examples, of how they are built.
 
 The system also has a batch tracker, so that you can look up, in which batch, which migrations were run.
+
+#### Tl;dr
+This makes it possible to update the database. The only thing you have to do, is write a new .sql file in `src\main\resources\dk\sdu\se_f22\sharedlibrary\db\migrations` that contains the sql code necessary to update the database to the new desired state. As well as run the migration code.

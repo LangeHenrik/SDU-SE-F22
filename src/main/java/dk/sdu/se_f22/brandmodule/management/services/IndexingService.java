@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 public class IndexingService implements IIndexingService {
 
-    JsonService service = new JsonService();
+    IJsonService service = new JsonService();
 
     public IndexingService() {;
     }

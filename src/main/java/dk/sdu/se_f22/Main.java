@@ -1,5 +1,6 @@
 package dk.sdu.se_f22;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import org.apache.logging.log4j.Logger;
 

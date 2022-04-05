@@ -140,6 +140,7 @@ class DatabaseTest {
             );
         } catch (UnknownFilterTypeException e) {
             e.printStackTrace();
+
             fail("The read threw an invalid filter type exception, which means, that the type returned was something weird.");
         }
 

@@ -2,6 +2,8 @@ package dk.sdu.se_f22.sortingmodule.scoring;
 
 import org.junit.jupiter.api.*;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -250,5 +250,29 @@ public class Scoring implements IScoring {
             e.printStackTrace();
         }
     }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }
 

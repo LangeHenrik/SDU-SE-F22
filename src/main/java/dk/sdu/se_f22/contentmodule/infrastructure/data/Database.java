@@ -5,8 +5,18 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class Database implements DatabaseInterface {
-
+    private static Database instance;
     private Connection conn = null;
+
+    private Database(){setupDatabase();}
+
+    public static Database getInstance(){
+        if (instance == null){
+            instance = new Database();
+        }
+        return instance;
+    }
+
 
     public void setupDatabase() {
         //fill in database name and password
@@ -24,6 +34,8 @@ public class Database implements DatabaseInterface {
         } catch (SQLException e) {
             System.out.println("Failed to connect to test database.");
             e.printStackTrace();
+        } finally {
+            if(conn == null){System.exit(-1);}
         }
     }
 

@@ -25,6 +25,8 @@ public class StemmingUtilitiesTest {
         assertEquals("bled", StemmingUtilities.step1b(new Word("bled")).getWordString());
         assertEquals("motor", StemmingUtilities.step1b(new Word("motoring")).getWordString());
         assertEquals("sing", StemmingUtilities.step1b(new Word("sing")).getWordString());
+        assertEquals("si", StemmingUtilities.step1b(new Word("si")).getWordString());
+        assertEquals("yir", StemmingUtilities.step1b(new Word("yir")).getWordString());
     }
 
     @Test

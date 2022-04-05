@@ -202,15 +202,7 @@ public class RangeFilterCRUDTest {
                         );
                     }
 
-                    @ParameterizedTest(name = "filter min negative {0}")
-                    @DisplayName("Negative min time")
-                    @ValueSource(ints = {-1, -3})
-                    void negativeMinTime(int epochSec) {
-                        Instant instant = Instant.ofEpochSecond(epochSec); // Format from epochSec. MIGHT BE A BETTER WAY?
-                        Assertions.assertThrows(InvalidFilterException.class,
-                                () -> rangeFilterCRUD.create("negative min", "name", "price", instant, Instant.ofEpochSecond(500))
-                        );
-                    }
+                    // There is no test for negative min on time filters since, the concept of a negative timestamp is hard to grasp, and does not really make sense
                 }
 
                 @Nested
@@ -459,43 +451,61 @@ public class RangeFilterCRUDTest {
     //Tests may have to clean up the database after, since we create a lot of rangefilters in the db
     @Nested
     class CRUDReaderTest {
-
-        @Test
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid double filter")
-        void readValidDoubleFilter() {
+        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        void testReadFromRangeFilterDatabase(int id, String name, String description, String productAttribute, double min, double max) {
+            // Shooting for 3 filters of each type should be fine
+            // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
             try {
-                RangeFilter result = rangeFilterCRUD.read(1);
-                RangeFilter expected = new DoubleFilter(1, "test name double", "test description", "price", 0, 10);
-                Assertions.assertEquals(expected, result);
+                RangeFilter actual = rangeFilterCRUD.read(id);
+                RangeFilter expected = new DoubleFilter(id, name, description, productAttribute, min, max);
+                assertEquals(expected, actual);
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
                 fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
+
+            // we deliberately choose not to test if the product attributes read correspond to valid productAttributes
         }
 
-        @Test
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid long filter")
-        void readValidLongFilter() {
+        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        void testReadLongFromRangeFilterDatabase(int id, String name, String description, String productAttribute, long min, long max) {
+            // Shooting for 3 filters of each type should be fine
+            // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
             try {
-                Assertions.assertEquals(new LongFilter(2, "test name ean", "test description", "ean", 2, 100), rangeFilterCRUD.read(2));
+                RangeFilter actual = rangeFilterCRUD.read(id);
+                RangeFilter expected = new LongFilter(id, name, description, productAttribute, min, max);
+                assertEquals(expected, actual);
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
                 fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
+
+            // we deliberately choose not to test if the product attributes read correspond to valid productAttributes
         }
 
-        @Test
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid time filter")
-        void readValidTimeFilter() {
+        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        void testReadTimeFromRangeFilterDatabase(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            // Shooting for 3 filters of each type should be fine
+            // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
             try {
-                Assertions.assertEquals(new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T03:30:57Z"), Instant.parse("2019-10-18T03:30:57Z")), rangeFilterCRUD.read(3));
+                RangeFilter actual = rangeFilterCRUD.read(id);
+                RangeFilter expected = new TimeFilter(id, name, description, productAttribute, min, max);
+                assertEquals(expected, actual);
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
             } catch (UnknownFilterTypeException e) {
                 fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
+
+            // we deliberately choose not to test if the product attributes read correspond to valid productAttributes
         }
 
         @ParameterizedTest

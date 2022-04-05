@@ -335,11 +335,10 @@ $$
     language plpgsql;
 
 -- Inserting directly to the views
+-- DO not under any circumstance change the order or the content of these inserts below.
+-- Doing so will break a lot of unit tests
 INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
 VALUES ('test name double', 'test description', 'price', 0, 10);
-
-INSERT INTO SortingRangeDoubleView (name, description,productAttribute,min,max)
-VALUES ('test delete double','test description','price',3,100);
 
 INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max)
 VALUES ('test name ean', 'test description for long filter', 'ean', 2, 100);
@@ -368,7 +367,9 @@ VALUES ('test name ean acht', 'eight test description for long filter', 'longatt
 INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
 VALUES ('test double ix', 'test description nine', 'weight', 2, 100);
 
-
+-- From here on out feel free to fuck it up chief
+INSERT INTO SortingRangeDoubleView (name, description,productAttribute,min,max)
+VALUES ('test delete double','test description','price',3,100);
 
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);

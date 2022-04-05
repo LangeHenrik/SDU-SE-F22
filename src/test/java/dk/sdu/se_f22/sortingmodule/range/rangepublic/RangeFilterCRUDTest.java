@@ -1,11 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sortingmodule.range.exceptions.EmptyDatabaseException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,11 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
-import static org.checkerframework.checker.units.UnitsTools.min;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -450,56 +445,44 @@ public class RangeFilterCRUDTest {
     //Tests may have to clean up the database after, since we create a lot of rangefilters in the db
     @Nested
     class CRUDReaderTest {
-        @Nested
-        @DisplayName("Read valid filter")
-        class readValidFilter {
 
-            @ParameterizedTest
-            @DisplayName("Double filter")
-            @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void readValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
-                try {
-                    RangeFilter actual = rangeFilterCRUD.read(id);
-                    RangeFilter expected = new DoubleFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(expected, actual);
-                } catch (IdNotFoundException e) {
-                    fail("Fail because id did not exist");
-                } catch (UnknownFilterTypeException e) {
-                    fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-                }
-            }
-
-            @ParameterizedTest
-            @DisplayName("Long filter")
-            @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-            void readValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) {
-                try {
-                    RangeFilter actual = rangeFilterCRUD.read(id);
-                    RangeFilter expected = new LongFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(expected, actual);
-                } catch (IdNotFoundException e) {
-                    fail("Fail because id did not exist");
-                } catch (UnknownFilterTypeException e) {
-                    fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-                }
-            }
-
-            @ParameterizedTest
-            @DisplayName("Time filter")
-            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-            void readValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
-                try {
-                    RangeFilter actual = rangeFilterCRUD.read(id);
-                    RangeFilter expected = new TimeFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(expected, actual);
-                } catch (IdNotFoundException e) {
-                    fail("Fail because id did not exist");
-                } catch (UnknownFilterTypeException e) {
-                    fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-                }
+        @Test
+        @DisplayName("Read valid double filter")
+        void readValidDoubleFilter() {
+            try {
+                RangeFilter result = rangeFilterCRUD.read(1);
+                RangeFilter expected = new DoubleFilter(1, "test name double", "test description", "price", 0, 10);
+                Assertions.assertEquals(expected, result);
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
             }
         }
 
+        @Test
+        @DisplayName("Read valid long filter")
+        void readValidLongFilter() {
+            try {
+                Assertions.assertEquals(new LongFilter(2, "test name ean", "test description", "ean", 2, 100), rangeFilterCRUD.read(2));
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
+
+        @Test
+        @DisplayName("Read valid time filter")
+        void readValidTimeFilter() {
+            try {
+                Assertions.assertEquals(new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T03:30:57Z"), Instant.parse("2019-10-18T03:30:57Z")), rangeFilterCRUD.read(3));
+            } catch (IdNotFoundException e) {
+                fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
+            }
+        }
 
         @ParameterizedTest
         @DisplayName("Read filter that does not exist")
@@ -514,15 +497,9 @@ public class RangeFilterCRUDTest {
         @DisplayName("Read all existing range filters")
         void readAllExistingRangeFilters() {
             Assertions.assertAll("Read all filters from database and check if the values match",
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(0), new DoubleFilter(1,"test name double","test description","price",0,10)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(3), new DoubleFilter(4,"double numero 4","test description for double quattro","clockspeed",1,14)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(8), new DoubleFilter(9,"test double ix","test description nine","weight",2,100)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(1), new LongFilter(2,"test name ean","test description for long filter","ean",2,100)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(4), new LongFilter(5,"test name ean funf","five test description for long filter","longnumber",1,10)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(7), new LongFilter(8,"test name ean acht","eight test description for long filter","longattribute",200,100000)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2), new TimeFilter(3,"test name time","test description for time filter","expirationDate",Instant.parse("2018-11-30T15:35:24.00Z"),Instant.parse("2022-11-30T15:35:24.00Z"))),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(5), new TimeFilter(6,"test name time six","sechs test description for time filter","publishedDate", Instant.parse("2011-11-30T18:35:24.00Z"),Instant.parse("2019-11-30T18:35:24.00Z"))),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(6), new TimeFilter(7,"test name time sieben","seven test description for time filter","someDate",Instant.parse("2020-11-30T18:35:24.00Z"),Instant.parse("2030-11-30T18:35:24.00Z")))
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(0), new DoubleFilter(1, "test name double", "test description", "price", 0, 10)),
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(1), new LongFilter(2, "test name ean", "test description", "ean", 2, 100)),
+                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2), new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T00:00:57Z"), Instant.parse("2019-10-18T00:00:57Z")))
             );
         }
 

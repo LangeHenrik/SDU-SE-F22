@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
@@ -19,7 +20,7 @@ public interface RangeFilterCRUDInterface {
      * @param dbMaxToSave
      * @return DoubleFilter
      */
-    RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException;
+    RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException;
     /**
      * Creates a filter and saves it to the database using long values for dbMinToSave and dbMinToMax
      * Returns a LongFilter
@@ -30,7 +31,7 @@ public interface RangeFilterCRUDInterface {
      * @param dbMaxToSave
      * @return LongFilter
      */
-    RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException;
+    RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException;
     /**
      * Creates a filter and saves it to the database using long values for dbMinToSave and dbMinToMax
      * Returns a LongFilter
@@ -41,7 +42,7 @@ public interface RangeFilterCRUDInterface {
      * @param dbMaxToSave
      * @return InstantFilter
      */
-    RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException;
+    RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException;
 
     /**
      * Method first reads a filter from the database.

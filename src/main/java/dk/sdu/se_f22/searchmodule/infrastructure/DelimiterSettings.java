@@ -21,16 +21,13 @@ public class DelimiterSettings {
     }
 
     private void updateDelimitersToDatabaseState() throws SQLException {
-        ResultSet resultSet = getAllDelimitersFromDatabase();
+        Connection dbConnection = DBConnection.getPooledConnection();
+        PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM searchtokendelimiters");
+        ResultSet resultSet = stmt.executeQuery();
         resetDelimiterAttribute();
         moveResultsSetToDelimitersAttribute(resultSet);
         resultSet.close();
-    }
-
-    private ResultSet getAllDelimitersFromDatabase() throws SQLException {
-        Connection dbConnection = DBConnection.getPooledConnection();
-        PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM searchtokendelimiters");
-        return stmt.executeQuery();
+        dbConnection.close();
     }
 
     private void resetDelimiterAttribute() {
@@ -47,22 +44,33 @@ public class DelimiterSettings {
         try {
             insertDelimiterIntoDatabase(delimiter);
             System.out.println("Delimiter added.");
-        } catch (PSQLException ex) {
-            System.out.println("This delimiter already exist");
         } catch (SQLException e) {
+            if (e.getSQLState().equals("23505")){
+                System.out.println("Delimiter already exists");
+                return;
+            }
             e.printStackTrace();
         }
     }
 
     private void insertDelimiterIntoDatabase(String delimiter) throws SQLException {
-        PreparedStatement stmt = prepareDeleteStatement("INSERT INTO searchtokendelimiters (delimiter) VALUES (?)", delimiter);
+        Connection dbConnection = DBConnection.getPooledConnection();
+        PreparedStatement stmt = dbConnection.prepareStatement("INSERT INTO searchtokendelimiters (delimiter) VALUES (?)");
+        stmt.setString(1, delimiter);
         stmt.execute();
+        stmt.close();
+        dbConnection.close();
     }
 
     public boolean removeDelimiter(String delim) {
         try {
-            PreparedStatement stmt = prepareDeleteStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?", delim);
-            return executeStatementIfDelimIsInDelimiters(delim, stmt);
+            Connection dbConnection = DBConnection.getPooledConnection();
+            PreparedStatement stmt = dbConnection.prepareStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?");
+            stmt.setString(1, delim);
+            stmt.execute();
+            System.out.println("Removed delimiter: " + delim);
+            stmt.close();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -79,12 +87,5 @@ public class DelimiterSettings {
         }
         stmt.close();
         return false;
-    }
-
-    private PreparedStatement prepareDeleteStatement(String sql, String delim) throws SQLException {
-        Connection dbConnection = DBConnection.getPooledConnection();
-        PreparedStatement stmt = dbConnection.prepareStatement(sql);
-        stmt.setString(1, delim);
-        return stmt;
     }
 }

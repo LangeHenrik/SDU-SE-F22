@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.productmodule.persistance;
+package dk.sdu.se_f22.productmodule.presentation;
 
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;

@@ -8,4 +8,8 @@ public interface ProductInfIndex {
 
 	void indexProducts(List<Product> products);
 
+	List<String> getFilteredProductTokens(List<String> product);
+
+	List<String> getInitialProductTokens(Product product);
+
 }

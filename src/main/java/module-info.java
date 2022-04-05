@@ -15,7 +15,7 @@ module dk.sdu.se_f22 {
     requires validatorfx;
     requires com.google.gson;
 
-    opens dk.sdu.se_f22.productmodule.persistance to javafx.fxml;
-    exports dk.sdu.se_f22.productmodule.persistance;
+    opens dk.sdu.se_f22.productmodule.presentation to javafx.fxml;
+    exports dk.sdu.se_f22.productmodule.presentation;
 
 }

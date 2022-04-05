@@ -8,6 +8,7 @@ import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProductInfIndexImpl implements ProductInfIndex{
@@ -15,21 +16,23 @@ public class ProductInfIndexImpl implements ProductInfIndex{
     @Override
     public void indexProducts(List<Product> products) {
         for (Product product : products) {
-            List<String> tokenizedProduct = tokenize(product);
-            List<String> filteredTokens = tokenFilter(tokenizedProduct);
+            List<String> tokenizedProduct = getInitialProductTokens(product);
+            tokenizedProduct = getFilteredProductTokens(tokenizedProduct);
 
-            //PIM3.indexProducts(filteredTokens, product)
+            //PIM3.indexProducts(tokenizedProduct, product)
         }
     }
 
-    private List<String> tokenFilter(List<String> tokens){
+    @Override
+    public List<String> getFilteredProductTokens(List<String> tokens){
         tokens = new Stemmer().stem(tokens);
         tokens = IrregularWords.irregularWords.searchForIrregularWords(tokens);
         //tokens = CMS.filter(tokens);
         return tokens;
     }
 
-    private List<String> tokenize(Product product){
+    @Override
+    public List<String> getInitialProductTokens(Product product){
         TokenParameter tokenParameter = ProductIndexInfrastructure.getInstance().getTokenParameter();
         List<String> tokens = this.extractData(product, tokenParameter.getDelimiter());
         for (String token : tokens){

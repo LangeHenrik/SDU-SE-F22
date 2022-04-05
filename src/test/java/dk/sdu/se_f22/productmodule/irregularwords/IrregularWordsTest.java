@@ -20,6 +20,8 @@ class IrregularWordsTest {
 
     @Test
     void readIRWord() {
+        IrregularWords.irregularWords.initialize();
+        assertTrue(IrregularWords.irregularWords.readIRWord());
     }
 
     @Test

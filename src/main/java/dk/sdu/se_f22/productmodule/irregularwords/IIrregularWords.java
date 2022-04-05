@@ -11,7 +11,7 @@ public interface IIrregularWords {
 
         boolean updateIRWord(String originalWord, String updatedWord);
 
-        void readIRWord();
+        Boolean readIRWord();
 
         ArrayList<String> getIRWord(String word);
 

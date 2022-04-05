@@ -18,7 +18,7 @@ public class IrregularWords implements IIrregularWords{
             DriverManager.registerDriver(new org.postgresql.Driver());
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbName,
                     "postgres",
-                    "123");
+                    "pgadmin");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -111,7 +111,8 @@ public class IrregularWords implements IIrregularWords{
 
     //Method for printing out the database table.
     @Override
-    public void readIRWord() {
+    public Boolean readIRWord() {
+
         try {
             PreparedStatement db = connection.prepareStatement("SELECT * FROM irwords");
             ResultSet list = db.executeQuery();
@@ -119,9 +120,11 @@ public class IrregularWords implements IIrregularWords{
             while(list.next()){
                 System.out.println(" " + list.getInt("id") + " :  " + list.getString("word"));
             }
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     //the getIRWord takes a word looks it up in the table and return the matching irregularwords in an arraylist

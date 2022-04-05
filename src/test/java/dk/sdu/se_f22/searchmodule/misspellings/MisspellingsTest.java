@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.misspellings;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
@@ -9,9 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MisspellingsTest {
     Misspellings misspelling = new Misspellings();
-    private static final String url = "jdbc:postgresql://abul.db.elephantsql.com/hzajyqbo";
-    private static final String user = "hzajyqbo";
-    private static final String password = "K8664qtGojuBvQczzv66EhaqkUNbXLj0";
 
     ArrayList<String> listWrong = new ArrayList<>();
     ArrayList<String> listCorrect = new ArrayList<>();
@@ -20,7 +18,7 @@ class MisspellingsTest {
 
     @BeforeEach
     void setUp() {
-        try (Connection connection = DriverManager.getConnection(url, user, password)){
+        try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("DELETE FROM misspellings");
             preparedStatement.execute();
@@ -52,7 +50,7 @@ class MisspellingsTest {
     void tearDown() {
         listWrong.clear();
         listCorrect.clear();
-        try (Connection connection = DriverManager.getConnection(url, user, password)){
+        try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("DELETE FROM misspellings");
             preparedStatement.execute();

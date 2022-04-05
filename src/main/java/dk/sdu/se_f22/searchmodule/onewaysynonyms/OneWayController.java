@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,9 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.control.Label;
-
-
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,7 +26,7 @@ public class OneWayController implements Initializable {
 
     @FXML
     public Button CN_enter;
-
+    
     @FXML
     public Label CN_status;
 
@@ -44,10 +40,12 @@ public class OneWayController implements Initializable {
     }
 
 
+
     public void addItemButtonHandler(ActionEvent actionEvent) {
-        if (insertSuperIDAddItemTextfield.getText() == null) {
+        if (insertSuperIDAddItemTextfield.getText()=="") {
+
             try {
-                DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));
+                DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield.getText()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -59,6 +57,7 @@ public class OneWayController implements Initializable {
                 e.printStackTrace();
             }
         }
+
 
     }
 
@@ -101,6 +100,26 @@ public class OneWayController implements Initializable {
         }
 
         return new ImageView(wr).getImage();
+
+    }
+
+    @FXML
+    public void insertItemReadItemTextField(ActionEvent actionEvent) {
+        if (insertNameAddItemTextfield.getText() == null ) {
+            try {
+                DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                int superId = Integer.parseInt(insertNameAddItemTextfield.getText());
+                DatabaseAPI.addItem(insertNameAddItemTextfield.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void changeName(ActionEvent actionEvent) {

@@ -46,6 +46,6 @@
             <Button fx:id="saveBtn" layoutX="71.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
          </children>
       </AnchorPane>
-      <Button fx:id="indexProductsBtn" layoutX="473.0" layoutY="316.0" mnemonicParsing="false" text="Index Products" />
+      <Button fx:id="indexProductsBtn" layoutX="473.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleChooseFile" text="Index Products" />
    </children>
 </AnchorPane>

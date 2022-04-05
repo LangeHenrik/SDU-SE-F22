@@ -18,4 +18,6 @@ module dk.sdu.se_f22 {
 
     opens dk.sdu.se_f22 to javafx.fxml;
     exports dk.sdu.se_f22;
+    opens dk.sdu.se_f22.searchmodule.infrastructure.GUI to javafx.fxml;
+    exports dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 }

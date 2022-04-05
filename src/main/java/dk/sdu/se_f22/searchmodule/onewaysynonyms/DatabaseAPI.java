@@ -16,7 +16,6 @@ public class DatabaseAPI {
             e.printStackTrace();
         }
     }
-
     //for adding superItem
 
     public static void addItem(String itemName) throws SQLException {

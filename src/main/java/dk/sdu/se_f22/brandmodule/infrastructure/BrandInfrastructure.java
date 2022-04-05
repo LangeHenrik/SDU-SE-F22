@@ -67,7 +67,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 		for (String product : brand.getProducts()) {
 			tokens.addAll(tokenizeString(product));
 		}
-		return tokens.stream().toList();
+		return tokens.stream().map(String::toLowerCase).toList();
 	}
 
 	protected List<String> tokenizeString(String toTokenize) {

@@ -6,11 +6,12 @@ import java.sql.*;
 import java.util.*;
 
 public class IrregularWords implements IIrregularWords{
-
-   static public IrregularWords irregularWords = new IrregularWords();
+    public static IrregularWords irregularWords = new IrregularWords();
 
     private Connection connection = null;
-    private String dbName = "irregularwords";
+    private String dbName = "Irregularwords";
+
+    private IrregularWords (){}
 
     //Initialize method to create a connection to the local database (password might not be the same for all user).
     public void initialize(){
@@ -18,7 +19,11 @@ public class IrregularWords implements IIrregularWords{
             DriverManager.registerDriver(new org.postgresql.Driver());
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbName,
                     "postgres",
+
                     "pgadmin");
+
+            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -200,13 +205,26 @@ public class IrregularWords implements IIrregularWords{
     }
 
     // insertValues is a method used once per pc to get some values into the table to perform test from so all have same values,
-    private void insertValues(){
+    public void insertValues(){
         try (Scanner scan = new Scanner(new File
-                ("dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
+                ("src/main/resources/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
                 createIRWord(Integer.parseInt(data[0]),data[1]);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeValues(){
+        try (Scanner scan = new Scanner(new File
+                ("src/main/resources/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
+            while(scan.hasNextLine()){
+                String line = scan.nextLine();
+                String[] data = line.split(",");
+                deleteIRWord((data[1]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -293,5 +311,8 @@ public class IrregularWords implements IIrregularWords{
                 }
             }
         }
+        irregularWords.initialize();
+    irregularWords.removeValues();
+
     }
 }

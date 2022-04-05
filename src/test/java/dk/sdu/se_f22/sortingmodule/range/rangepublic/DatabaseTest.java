@@ -1,11 +1,13 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,9 +22,103 @@ class DatabaseTest {
     }
 
 
-    @Test
-    void create() {
+    @Nested
+    class create {
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test creating a double filter")
+        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        void testCreateDoubleFilter(int id, String name, String description, String productAttribute, double min, double max){
+            try {
+                try {
+                    RangeFilter createdFilter = database.create(
+                        new DoubleFilter(
+                            name,
+                            description,
+                            productAttribute,
+                            min,
+                            max)
+                    );
+                    RangeFilter readFilter = database.read(createdFilter.getId());
+                    Assertions.assertEquals(createdFilter, readFilter);
+                } catch (InvalidFilterTypeException e) {
+                    fail(e);
+                }
 
+            } catch (UnknownFilterTypeException e) {
+                fail(e + ": an exception from 'read' was thrown");
+            }
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test creating a time filter")
+        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        void testCreateTimeFilter(int id, String name, String description, String productAttribute, String min, String max){
+            try {
+                try {
+                    RangeFilter createdFilter = database.create(
+                            new TimeFilter(
+                                    name,
+                                    description,
+                                    productAttribute,
+                                    Instant.parse(min),
+                                    Instant.parse(max))
+                    );
+                    RangeFilter readFilter = database.read(createdFilter.getId());
+                    Assertions.assertEquals(createdFilter, readFilter);
+                } catch (InvalidFilterTypeException e) {
+                     fail(e);
+                }
+
+            } catch (UnknownFilterTypeException e) {
+                fail(e + ": an exception from 'read' was thrown");
+            }
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test creating a long filter")
+        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        void testCreateLongFilter(int id, String name, String description, String productAttribute, long min, long max){
+            try {
+                try {
+                    RangeFilter createdFilter = database.create(
+                        new LongFilter(
+                            name,
+                            description,
+                            productAttribute,
+                            min,
+                            max)
+                    );
+                    RangeFilter readFilter = database.read(createdFilter.getId());
+                    Assertions.assertEquals(createdFilter, readFilter);
+                } catch (InvalidFilterTypeException e) {
+                    fail(e);
+                }
+
+            } catch (UnknownFilterTypeException e) {
+                fail(e + ": an exception from 'read' was thrown");
+            }
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test creating two filters with the same name")
+        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        void testCreatingTwoFiltersWithTheSameName(int id, String name, String description, String productAttribute, double min, double max){
+            try {
+                RangeFilter createdFilter =
+                        new DoubleFilter(
+                                name,
+                                description,
+                                productAttribute,
+                                min,
+                                max);
+                database.create(createdFilter);
+                Assertions.assertThrows(SQLIntegrityConstraintViolationException.class,
+                        () -> database.create(createdFilter)
+                );
+            } catch (InvalidFilterTypeException e) {
+                fail(e);
+            }
+        }
     }
 
     @Nested

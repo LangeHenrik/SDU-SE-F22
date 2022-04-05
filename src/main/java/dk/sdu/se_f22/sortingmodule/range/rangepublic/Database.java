@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import java.sql.*;
@@ -8,9 +9,63 @@ import java.time.Instant;
 import java.util.List;
 
 public class Database implements DatabaseInterface {
+
+    Connection connection = DBConnection.getConnection();
+
+    /** This method will take a filter of type RangeFilter and create one of the 3 LongFilter, DoubleFilter, TimeFilter
+     *
+     * @param filter The filter that needs to be saved in the database
+     * @return An instance of the filter created, else if the saving to the database fails it returns an exception
+     */
     @Override
-    public RangeFilter create(RangeFilter filter) {
-        return null;
+    public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException {
+        switch (filter.getType()){
+            case DOUBLE:
+                try{
+                    PreparedStatement typeStatement = connection.prepareStatement(
+                            "INSERT INTO SortingRangeDoubleView VALUES (?, ?, ?, ?, ?)"
+                    );
+                    typeStatement.setString(1, filter.getName());
+                    typeStatement.setString(2, filter.getDescription());
+                    typeStatement.setString(3, filter.getProductAttribute());
+                    typeStatement.setDouble(4, filter.getDbMinDouble());
+                    typeStatement.setDouble(5, filter.getDbMaxDouble());
+                } catch (SQLException e) {
+                    throw new InvalidFilterTypeException("Wrong parameter type for prepared statement");
+                }
+                break;
+            case LONG:
+                try{
+                    PreparedStatement typeStatement = connection.prepareStatement(
+                            "INSERT INTO SortingRangeLongView VALUES (?, ?, ?, ?, ?)"
+                    );
+                    typeStatement.setString(1, filter.getName());
+                    typeStatement.setString(2, filter.getDescription());
+                    typeStatement.setString(3, filter.getProductAttribute());
+                    typeStatement.setLong(4, filter.getDbMinLong());
+                    typeStatement.setLong(5, filter.getDbMaxLong());
+                } catch (SQLException e) {
+                    throw new InvalidFilterTypeException("Wrong parameter type for prepared statement");
+                }
+                break;
+            case INSTANT:
+                try{
+                    PreparedStatement typeStatement = connection.prepareStatement(
+                            "INSERT INTO SortingRangeInstantView VALUES (?, ?, ?, ?, ?)"
+                    );
+                    typeStatement.setString(1, filter.getName());
+                    typeStatement.setString(2, filter.getDescription());
+                    typeStatement.setString(3, filter.getProductAttribute());
+                    typeStatement.setString(4, filter.getDbMinInstant().toString());
+                    typeStatement.setString(5, filter.getDbMaxInstant().toString());
+                } catch (SQLException e) {
+                    throw new InvalidFilterTypeException("Wrong parameter type for prepared statement");
+                }
+                break;
+            default:
+                throw new InvalidFilterTypeException("Didn't match any of our build in types.");
+        }
+        return filter;
     }
 
 
@@ -21,7 +76,6 @@ public class Database implements DatabaseInterface {
      */
     @Override
     public RangeFilter read(int id) throws UnknownFilterTypeException {
-        Connection connection = DBConnection.getConnection();
         RangeFilter dbRangeFilter = null;
         try {
             // Scratch the comment above, the plan has changed to this:

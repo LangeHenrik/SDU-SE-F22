@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * It defines the mthods, that our daatabase class must implement to allow for performing CRUD
  */
 public interface DatabaseInterface {
-    RangeFilter create(RangeFilter filterToSaveInDB);
+    RangeFilter create(RangeFilter filterToSaveInDB) throws InvalidFilterTypeException;
 
     RangeFilter read(int id) throws UnknownFilterTypeException;
     RangeFilter delete(int id);

@@ -1,12 +1,13 @@
 package dk.sdu.se_f22.productmodule.management;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductManagerTest {
     
@@ -18,7 +19,6 @@ class ProductManagerTest {
         try {
             FileWriter fw = new FileWriter("src/test/resources/dk/sdu/se_f22/productmodule/management/cheese.txt");
             fw.write("");
-            fw.flush();
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -29,6 +29,9 @@ class ProductManagerTest {
     @BeforeEach
     void setup(){
         product = new Product();
+        for(ProductAttribute pa : ProductAttribute.values()){
+            product.set(pa, "test");
+        }
         productManager = new ProductManager("src/test/resources/dk/sdu/se_f22/productmodule/management/cheese.txt");
         System.out.println("============ INITIALIZING ============");
     }
@@ -47,7 +50,7 @@ class ProductManagerTest {
     void createAll() {
         
         //trying to createAll() using non-initialized, empty List
-        assertFalse(productManager.createAll(new ArrayList<Product>()));
+        assertFalse(productManager.createAll(new ArrayList<>()));
         
         ArrayList<Product> List = new ArrayList<>();
         
@@ -65,7 +68,7 @@ class ProductManagerTest {
     void read() {
         
         //trying to read a productId (UUID) using an empty String
-        assertNull(productManager.read(""));
+        assertNull(productManager.readProduct(""));
         
         //setting product UUID
         product.set(ProductAttribute.UUID, "25");
@@ -129,6 +132,13 @@ class ProductManagerTest {
         Product product2 = new Product();
         Product product3 = new Product();
         Product product4 = new Product();
+        
+        for (ProductAttribute pa : ProductAttribute.values()) {
+            product1.set(pa, "test");
+            product2.set(pa, "test");
+            product3.set(pa, "test");
+            product4.set(pa, "test");
+        }
         
         //trying to removeAll products in empty productArray
         assertFalse(productManager.removeAll(ids));

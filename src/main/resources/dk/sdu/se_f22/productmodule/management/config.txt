@@ -1,1 +1,1 @@
-10
+update_interval_minutes=10

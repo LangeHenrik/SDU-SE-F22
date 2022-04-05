@@ -31,7 +31,9 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         //     e.printStackTrace();
         // }
         // return connie;
-        return DBConnection.getPooledConnection();
+        connie = DBConnection.getPooledConnection();
+
+        return connie;
     }
 
     public void closeConnection(){

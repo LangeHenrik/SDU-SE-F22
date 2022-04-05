@@ -28,7 +28,9 @@ public class DelimiterSettings {
     }
 
     private ResultSet getAllDelimitersFromDatabase() throws SQLException {
-        PreparedStatement stmt = DBConnection.getConnection().prepareStatement("SELECT * FROM searchtokendelimiters");
+        Connection dbConnection = DBConnection.getPooledConnection();
+        PreparedStatement stmt = dbConnection.prepareStatement("SELECT * FROM searchtokendelimiters");
+        dbConnection.close();
         return stmt.executeQuery();
     }
 

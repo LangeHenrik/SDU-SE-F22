@@ -16,7 +16,7 @@ public class Scoring implements IScoring {
     private Scoring(){
         initializePostgresqlDatabase();
     }
-    
+
     public static Scoring getInstance(){
         if (instance == null) {
             instance = new Scoring();
@@ -73,7 +73,6 @@ public class Scoring implements IScoring {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-
         }
     }
 

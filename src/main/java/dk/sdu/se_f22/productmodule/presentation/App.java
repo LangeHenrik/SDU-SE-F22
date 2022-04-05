@@ -11,7 +11,7 @@ public class App extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("productlisttokens.fxml"));
+        Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("searchview.fxml"));
         Scene scene = new Scene(fxmlLoader, 800,600);
         stage.setTitle("Product Module");
         stage.setScene(scene);

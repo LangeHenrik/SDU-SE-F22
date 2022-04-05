@@ -1,7 +1,10 @@
 package dk.sdu.se_f22.sharedlibrary;
 
+import dk.sdu.se_f22.sharedlibrary.models.Product;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Collection of all hits from:<br>
@@ -12,7 +15,7 @@ import java.util.Collection;
  * Designed as singleton
  */
 public final class SearchHits {
-    private Collection products;
+    private List<Product> products;
     private Collection brands;
     private Collection contents;
 
@@ -27,7 +30,7 @@ public final class SearchHits {
      * 
      * @return Collection
      */
-    public Collection getProducts() {
+    public List<Product> getProducts() {
         return this.products;
     }
 
@@ -55,7 +58,7 @@ public final class SearchHits {
      * @param products
      * @throws NullPointerException
      */
-    public void setProducts(Collection products) throws NullPointerException {
+    public void setProducts(List<Product> products) throws NullPointerException {
         if (products == null) {
             throw new NullPointerException();
         }

@@ -2,7 +2,8 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,32 +39,39 @@ class SearchQueryTest {
 
     @Test
     void addRangeTest() {
+        HashMap<Integer, String[]> h = new HashMap<>();
+        h.put(1, new String[]{"3", "8"});
+        h.put(2, new String[]{"19.4", "52.7"});
+
+
         SearchQuery s = new SearchQuery();
-        ArrayList<String[]> a = new ArrayList<>();
-        a.add(new String[]{"1", "3", "8"});
-        a.add(new String[]{"2", "19.4", "52.7"});
+        s.addRange(1, "3", "8");
+        s.addRange(2, "19.4", "52.7");
 
-        s.addRange("1", "3", "8");
-        s.addRange("2", "19.4", "52.7");
+        Iterator<Map.Entry<Integer, String[]>> iteratorH = h.entrySet().iterator();
+        Iterator<Map.Entry<Integer, String[]>> iteratorS = s.getRange().entrySet().iterator();
 
-        for (int i = 0; i < a.size(); i++) {
-            if (a.get(i).toString().equals(s.getRange().get(i).toString())) {
-                fail();
+        while (iteratorH.hasNext()) {
+            Map.Entry<Integer, String[]> temp_H = iteratorH.next();
+            Map.Entry<Integer, String[]> temp_S = iteratorS.next();
+
+            if (!temp_H.getKey().equals(temp_S.getKey()) &&
+                    !Arrays.toString(temp_H.getValue()).equals(Arrays.toString(temp_S.getValue()))) {
+                fail("addRangeTest failure.");
             }
         }
-
     }
 
     @Test
     void clearRangeTest() {
         SearchQuery s = new SearchQuery();
-        ArrayList<String[]> a = new ArrayList<>();
+        HashMap<Integer, String[]> h = new HashMap<>();
 
-        s.addRange("1", "3", "8");
-        s.addRange("2", "19.4", "52.7");
+        s.addRange(1, "3", "8");
+        s.addRange(2, "19.4", "52.7");
         s.clearRange();
 
-        assertEquals(a, s.getRange());
+        assertEquals(h, s.getRange());
     }
 
     @Test

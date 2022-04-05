@@ -41,7 +41,7 @@ public interface SortingModule {
      * @param startRange The start of the range - Formattet as a string, but should align with the data type the range require
      * @param endRange   The start of the range - Formattet as a string, but should align with the data type the range require
      */
-    public void addRange(String rangeId, String startRange, String endRange);
+    public void addRange(int rangeId, String startRange, String endRange);
 
     /**
      * Remove all range filters from the search

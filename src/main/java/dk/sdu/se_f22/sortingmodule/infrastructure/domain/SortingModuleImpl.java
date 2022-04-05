@@ -46,7 +46,7 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void addRange(String rangeId, String startRange, String endRange) {
+    public void addRange(int rangeId, String startRange, String endRange) {
         this.query.addRange(rangeId, startRange, endRange);
     }
 

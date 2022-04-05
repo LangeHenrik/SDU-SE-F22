@@ -9,7 +9,7 @@ public class SaveSearchQuery {
     public static void saveSearch(SearchQuery query) {
         int pageNumber = query.getPagination()[0];
         int pageSize = query.getPagination()[1];
-        ArrayList<String[]> queryRanges = query.getRange();
+        HashMap<Integer, String[]> queryRanges = query.getRange();
         ArrayList<Integer> queryCategories = query.getCategory();
         int queryScoring = query.getScoring();
     }

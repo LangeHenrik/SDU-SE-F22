@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Query class, that holds information about a search query from the user.
@@ -14,7 +15,7 @@ public class SearchQuery {
     /**
      * List of range filters
      */
-    ArrayList<String[]> range;
+    HashMap<Integer, String[]> range;
 
     /**
      * List of categories to filter by
@@ -28,7 +29,7 @@ public class SearchQuery {
 
     public SearchQuery() {
         this.pagination = new int[2];
-        this.range = new ArrayList<>();
+        this.range = new HashMap<>();
         this.category = new ArrayList<>();
         this.scoring = 0;
     }
@@ -65,9 +66,9 @@ public class SearchQuery {
      * @param startRange The start of the range
      * @param endRange The end of the range
      */
-    public void addRange(String rangeId, String startRange, String endRange) {
+    public void addRange(int rangeId, String startRange, String endRange) {
 
-        this.range.add(new String[]{rangeId, startRange, endRange});
+        this.range.put(rangeId, new String[]{startRange, endRange});
 
     }
 
@@ -102,7 +103,7 @@ public class SearchQuery {
         return this.category;
     }
 
-    public ArrayList<String[]> getRange() {
+    public HashMap<Integer, String[]> getRange() {
         return this.range;
     }
 

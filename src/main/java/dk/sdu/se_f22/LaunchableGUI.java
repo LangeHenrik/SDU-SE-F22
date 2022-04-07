@@ -17,8 +17,10 @@ public class LaunchableGUI {
     }
 
     public void launch() throws IOException {
-        URL url = getClass().getResource(file.getPath());
-
+        String fixedPath = file.getPath().replace("\\", "/");
+        String relativePath = fixedPath.split("/dk/sdu/se_f22/")[1];
+        String path = "/dk/sdu/se_f22/" + relativePath;
+        URL url = getClass().getResource(path);
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent parent = fxmlLoader.load();
 

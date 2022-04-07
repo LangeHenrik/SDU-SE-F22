@@ -15,8 +15,26 @@ module dk.sdu.se_f22 {
     requires validatorfx;
     requires com.google.gson;
 
-    opens dk.sdu.se_f22 to javafx.fxml;
     exports dk.sdu.se_f22;
-    exports dk.sdu.se_f22.brandmodule.infrastructure;
-    opens dk.sdu.se_f22.brandmodule.infrastructure to javafx.fxml;
+    opens dk.sdu.se_f22 to javafx.fxml;
+
+    opens dk.sdu.se_f22.brandmodule.index            to javafx.fxml;
+    opens dk.sdu.se_f22.brandmodule.infrastructure   to javafx.fxml;
+    opens dk.sdu.se_f22.brandmodule.management       to javafx.fxml;
+    opens dk.sdu.se_f22.brandmodule.stemming         to javafx.fxml;
+    opens dk.sdu.se_f22.contentmodule.index          to javafx.fxml;
+    opens dk.sdu.se_f22.contentmodule.infrastructure to javafx.fxml;
+    opens dk.sdu.se_f22.contentmodule.management     to javafx.fxml;
+    opens dk.sdu.se_f22.contentmodule.stopwords      to javafx.fxml;
+    opens dk.sdu.se_f22.productmodule.index          to javafx.fxml;
+    opens dk.sdu.se_f22.productmodule.infrastructure to javafx.fxml;
+    opens dk.sdu.se_f22.productmodule.irregularwords to javafx.fxml;
+    opens dk.sdu.se_f22.productmodule.management     to javafx.fxml;
+    opens dk.sdu.se_f22.searchmodule.infrastructure  to javafx.fxml;
+    opens dk.sdu.se_f22.searchmodule.misspellings    to javafx.fxml;
+    opens dk.sdu.se_f22.searchmodule.onewaysynonyms  to javafx.fxml;
+    opens dk.sdu.se_f22.searchmodule.twowaysynonyms  to javafx.fxml;
+    opens dk.sdu.se_f22.sortingmodule.infrastructure to javafx.fxml;
+    opens dk.sdu.se_f22.sortingmodule.range          to javafx.fxml;
+
 }

@@ -20,12 +20,12 @@ import java.util.List;
 
 public class LauncherController {
 
-	private List<File> guisInFolder(File folder) {
+	private List<LaunchableGUI> guisInFolder(File folder) {
 		if(!folder.isDirectory()) {
 			throw new IllegalArgumentException("argument MUST be a directory.");
 		}
 
-		List<File> guis = new ArrayList<>();
+		List<LaunchableGUI> guis = new ArrayList<>();
 
 		for (File containedFile : folder.listFiles()) {
 			if (containedFile.isDirectory()) {
@@ -33,7 +33,7 @@ public class LauncherController {
 			}
 			if (containedFile.isFile()) {
 				if (isGUI(containedFile))
-					guis.add(containedFile);
+					guis.add(new LaunchableGUI(containedFile));
 			}
 		}
 
@@ -46,20 +46,9 @@ public class LauncherController {
 		return extension.equalsIgnoreCase("fxml");
 	}
 
-	private static void loadFXML(URL url) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(url);
-		Parent parent = fxmlLoader.load();
 
-		Scene scene = new Scene(parent, 250, 150);
-		Stage stage = new Stage();
-		stage.setScene(scene);
-		stage.setMinHeight(200);
-		stage.setMinWidth(340);
-		stage.show();
-	}
-
-	@FXML ChoiceBox<File> guiSelector;
-	ObservableList<File> selectorItems;
+	@FXML ChoiceBox<LaunchableGUI> guiSelector;
+	ObservableList<LaunchableGUI> selectorItems;
 
 	@FXML
 	public void initialize() {
@@ -76,7 +65,7 @@ public class LauncherController {
 			e.printStackTrace();
 			return;
 		}
-		List<File> guis = guisInFolder(folder);
+		List<LaunchableGUI> guis = guisInFolder(folder);
 
 		selectorItems = FXCollections.observableList(guis);
 		guiSelector.setItems(selectorItems);
@@ -87,10 +76,10 @@ public class LauncherController {
 	@FXML
 	protected void onLaunchClicked(MouseEvent e) {
 		// Get selected GUI
-		File selectedGUI = guiSelector.getValue();
+		LaunchableGUI selectedGUI = guiSelector.getValue();
 		// Launch GUI
 		try {
-			loadFXML(selectedGUI.toURI().toURL());
+			selectedGUI.launch();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

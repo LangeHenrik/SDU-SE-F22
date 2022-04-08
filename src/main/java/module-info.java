@@ -14,7 +14,7 @@ module dk.sdu.se_f22 {
     requires org.postgresql.jdbc;
     requires validatorfx;
     requires com.google.gson;
-
+    requires org.jetbrains.annotations;
     opens dk.sdu.se_f22 to javafx.fxml;
     exports dk.sdu.se_f22;
 }

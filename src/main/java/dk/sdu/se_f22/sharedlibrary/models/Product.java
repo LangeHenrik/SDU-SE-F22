@@ -20,10 +20,7 @@ public class Product { //initialize class
         return productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
     }
     
-    public double getAsNumeric(ProductAttribute pA){
-        /*if (get(pA).isEmpty()){
-            throw new NullPointerException("No value for " + pA.alias);
-        }*/
+    public double getAsNumeric(ProductAttribute pA) { //returns product attribute as a double
         String pAttr = get(pA).replaceAll("\"","");
         double result;
         result = Double.parseDouble(pAttr);

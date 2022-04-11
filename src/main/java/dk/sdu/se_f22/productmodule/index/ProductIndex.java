@@ -29,9 +29,9 @@ public class ProductIndex implements IProductIndex{
         initializePostgresqlDatabase();
     }
 
-    public static CreateReadClass getInstance(){
+    public static ProductIndex getInstance(){
         if (instance == null) {
-            instance = new CreateReadClass();
+            instance = new ProductIndex();
         }
         return instance;
     }
@@ -132,45 +132,49 @@ public class ProductIndex implements IProductIndex{
     public void createProduct(ProductHit product){
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("INSERT into products (uuid,averageuserreview,price,clockspeed,weight,ean,size,category, name,description,publisheddate,expirationdate,inStock) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            preparedStatement.setObject(1,product.uuid);
-            preparedStatement.setDouble(2,product.averageUserReview);
-            preparedStatement.setDouble(3,product.price);
-            preparedStatement.setDouble(4,product.clockspeed);
-            preparedStatement.setDouble(5,product.weight);
-            preparedStatement.setString(6,product.ean);
-            preparedStatement.setString(7,product.size);
-            preparedStatement.setString(8,product.category);
-            preparedStatement.setString(9,product.name);
-            preparedStatement.setString(10,product.description);
-            preparedStatement.setTimestamp(11,Timestamp.from(product.publishedDate));
-            preparedStatement.setTimestamp(12,Timestamp.from(product.expirationDate));
-            preparedStatement.setArray(13, connection.createArrayOf("VARCHAR",
-                    product.inStock.toArray()));
+                    connection.prepareStatement("INSERT into products (uuid,averageuserreview,instock" +
+                            ",ean,price,publisheddate,expirationdate" +
+                            ",category,name,description,size,clockspeed,weight) " +
+                            "values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            preparedStatement.setObject(1,product.getUuid());
+            preparedStatement.setDouble(2,product.getAverageUserReview());
+            preparedStatement.setArray(3, connection.createArrayOf("VARCHAR",
+                    product.getInStock().toArray()));
+            preparedStatement.setLong(4,product.getEan());
+            preparedStatement.setDouble(5,product.getPrice());
+            preparedStatement.setTimestamp(6,Timestamp.from(product.getPublishedDate()));
+            preparedStatement.setTimestamp(7,Timestamp.from(product.getExpirationDate()));
+            preparedStatement.setString(8,product.getCategory());
+            preparedStatement.setString(9,product.getName());
+            preparedStatement.setString(10,product.getDescription());
+            preparedStatement.setString(11,product.getSize());
+            preparedStatement.setDouble(12,product.getClockspeed());
+            preparedStatement.setDouble(13,product.getWeight());
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     public List<ProductHit> getProducts(){
         List<ProductHit> productHitList = new ArrayList<>();
         try {
             PreparedStatement p = connection.prepareStatement("select * from products");
             ResultSet resultSet = p.executeQuery();
             while(resultSet.next()){
-                productHitList.add(new ProductHit(UUID.fromString(resultSet.getString(2)),
-                        resultSet.getDouble(3),
-                        resultSet.getDouble(4),
+                productHitList.add(new ProductHit(UUID.fromString(resultSet.getString(1)),
+                        resultSet.getDouble(2),
+                        List.of(resultSet.getArray(3).toString()),
+                        resultSet.getLong(4),
                         resultSet.getDouble(5),
-                        resultSet.getDouble(6),
-                        resultSet.getString(7),
+                        resultSet.getTimestamp(6).toInstant(),
+                        resultSet.getTimestamp(7).toInstant(),
                         resultSet.getString(8),
                         resultSet.getString(9),
                         resultSet.getString(10),
                         resultSet.getString(11),
-                        resultSet.getTimestamp(12).toInstant(),
-                        resultSet.getTimestamp(13).toInstant(),
-                        Arrays.asList(resultSet.getArray(14).toString())));
+                        resultSet.getDouble(12),
+                        resultSet.getDouble(13)));
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -30,7 +30,7 @@ public class ProductHit implements Comparable<ProductHit>{
 
     /** The constructor for setting all attributes at once including those that are optional
      */
-    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
         this(uuid, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
         this.size = size;
         this.clockspeed = clockspeed;
@@ -41,7 +41,7 @@ public class ProductHit implements Comparable<ProductHit>{
      * <br>
      * Except for clockspeed and weight, which are doubles and thus not capable of being null.
      */
-    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
         this.uuid = uuid;
         this.averageUserReview = averageUserReview;
         this.inStock = inStock;

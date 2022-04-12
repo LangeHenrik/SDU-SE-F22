@@ -21,10 +21,6 @@ import java.util.List;
 public class LauncherController {
 
 	private List<LaunchableGUI> guisInFolder(File folder) {
-		if(!folder.isDirectory()) {
-			throw new IllegalArgumentException("argument MUST be a directory.");
-		}
-
 		List<LaunchableGUI> guis = new ArrayList<>();
 
 		for (File containedFile : folder.listFiles()) {

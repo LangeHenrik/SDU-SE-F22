@@ -10,12 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SaveSearchQuery {
     public static void saveSearch(SearchQuery query, String searchString) {
         int pageNumber = query.getPagination()[0];
         int pageSize = query.getPagination()[1];
-        ArrayList<Object> queryRanges = query.getRange();
+        HashMap<Integer, String[]> queryRanges = query.getRange();
         ArrayList<Integer> queryCategories = query.getCategory();
         int queryScoring = query.getScoring();
         String queryString = searchString;

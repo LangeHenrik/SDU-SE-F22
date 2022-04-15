@@ -48,17 +48,15 @@ public class SaveSearchQuery {
             stmt.close();
 
             // Range query
-            for (Object range : queryRanges) {
+            for (HashMap.Entry<Integer, String[]> range : queryRanges.entrySet()) {
                 stmt = connection.prepareStatement(
                     "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)" 
                 );
 
-                // TODO: add data from range instead of empty values
-
                 stmt.setInt(1, mainQueryId);
-                stmt.setInt(2, 0);
-                stmt.setDouble(3, 0.0);
-                stmt.setDouble(4, 0.0);
+                stmt.setInt(2, range.getKey());
+                stmt.setString(3, range.getValue()[0]);
+                stmt.setString(4, range.getValue()[1]);
                 stmt.execute();
             }
             

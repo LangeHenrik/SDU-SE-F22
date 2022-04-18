@@ -21,7 +21,7 @@ public class DatabaseAPI {
 
     public static void addItem(String itemName) throws SQLException {
         PreparedStatement insertStatement = null;
-        insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+        insertStatement = connection.prepareStatement("INSERT INTO OneWaySynonyms (name,superId) VALUES (?,?)");
         insertStatement.setString(1, itemName);
         insertStatement.setString(2, "0");
         insertStatement.execute();
@@ -31,7 +31,7 @@ public class DatabaseAPI {
 
     public static void addItem(String itemName, int superId) throws SQLException {
         PreparedStatement insertStatement = null;
-        insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+        insertStatement = connection.prepareStatement("INSERT INTO OneWaySynonyms (name,superId) VALUES (?,?)");
         insertStatement.setString(1, itemName);
         insertStatement.setString(2, String.valueOf(superId));
         insertStatement.execute();
@@ -39,16 +39,16 @@ public class DatabaseAPI {
 
     public static void updateSuperId(String name, int superId) throws SQLException {
         PreparedStatement updateStatement = null;
-        updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE name=?");
-        updateStatement.setString(1, String.valueOf(superId));
+        updateStatement = connection.prepareStatement("UPDATE OneWaySynonyms SET superId=? WHERE name=?");
+        updateStatement.setInt(1, superId);
         updateStatement.setString(2, name);
         updateStatement.execute();
     }
 
     public static void updateName(int id, String name) throws SQLException {
         PreparedStatement updateStatement = null;
-        updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
-        updateStatement.setString(1, String.valueOf(name));
+        updateStatement = connection.prepareStatement("UPDATE OneWaySynonyms SET name=? WHERE id=?");
+        updateStatement.setString(1, name);
         updateStatement.setInt(2, id);
         updateStatement.execute();
     }
@@ -56,7 +56,7 @@ public class DatabaseAPI {
     public static Item[] readEntireDB() {
         try {
             ArrayList<Item> items = new ArrayList<Item>();
-            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items");
+            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM OneWaySynonyms");
             ResultSet quaryResultSet = null;
             quaryResultSet = quaryStatement.executeQuery();
             while (quaryResultSet.next()) {
@@ -97,7 +97,7 @@ public static void deleteItems(boolean version, int id, String name) {
     PreparedStatement deleteStatement = null;
     if (version) {
         try {
-            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
+            deleteStatement = connection.prepareStatement("DELETE FROM OneWaySynonyms WHERE name=? AND id=?");
             deleteStatement.setString(1, String.valueOf(name));
             deleteStatement.setString(2, String.valueOf(id));
             deleteStatement.execute();
@@ -107,7 +107,7 @@ public static void deleteItems(boolean version, int id, String name) {
     }
     else {
         try {
-            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
+            deleteStatement = connection.prepareStatement("DELETE FROM OneWaySynonyms WHERE id=?");
             deleteStatement.setString(1, String.valueOf(id));
             deleteStatement.execute();
         } catch (SQLException e) {
@@ -124,7 +124,7 @@ public static void deleteItems(boolean version, int id, String name) {
         PreparedStatement statement = null;
         ResultSet result;
         try {
-            statement = connection.prepareStatement("SELECT id FROM items WHERE name=?");
+            statement = connection.prepareStatement("SELECT id FROM OneWaySynonyms WHERE name=?");
             statement.setString(1,name);
             result = statement.executeQuery();
             id = result.getInt(1);

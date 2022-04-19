@@ -186,10 +186,7 @@ DROP TABLE IF EXISTS SearchTokenDelimiters;
 CREATE TABLE SearchTokenDelimiters (
     delimiter VARCHAR PRIMARY KEY
 );
-CREATE TABLE StemmingException (
-    id SERIAL PRIMARY KEY,
-    exceptionName varchar(50) UNIQUE NOT NULL
-);
+
 
 CREATE TABLE TokenParameters(
     id serial PRIMARY KEY,

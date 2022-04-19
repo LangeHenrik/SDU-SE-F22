@@ -26,7 +26,7 @@ CREATE TABLE Brand(
 
 CREATE TABLE ProductType(
     id   serial PRIMARY KEY,
-    type VARCHAR(255) UNIQUE NOT NULL
+    name VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE BrandProductTypeJunction(
@@ -37,6 +37,7 @@ CREATE TABLE BrandProductTypeJunction(
 CREATE TABLE Config(
     brandIndexInterval INTEGER NOT NULL
 );
+
 
 CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,

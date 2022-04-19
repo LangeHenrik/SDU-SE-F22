@@ -118,6 +118,7 @@ public class Word {
 
     // *o - the stem ends cvc, where the second c is not W, X or Y (e.g. -WIL, -HOP).
     public boolean endsWithCVC() {
+        if (this.getWordString().length() <= 2) return false;
 
         if (isCons(word.length() - 1) && isVowel(this.getWordString().length() - 2) && isCons(this.getWordString().length() - 3)) {
             switch (this.getWordString().charAt(this.getWordString().length() - 1)) {

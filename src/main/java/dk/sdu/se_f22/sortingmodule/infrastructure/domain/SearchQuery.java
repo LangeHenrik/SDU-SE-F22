@@ -10,7 +10,7 @@ public class SearchQuery {
     /**
      * Pagination information. 2 places. [page, page size]
      */
-    int[] pagination;
+    int[] pagination = {0, 25};
 
     /**
      * List of range filters
@@ -25,10 +25,9 @@ public class SearchQuery {
     /**
      * Scoring method id
      */
-    int scoring;
+    int scoring = 0;
 
     public SearchQuery() {
-        this.pagination = new int[2];
         this.range = new HashMap<>();
         this.category = new ArrayList<>();
         this.scoring = 0;

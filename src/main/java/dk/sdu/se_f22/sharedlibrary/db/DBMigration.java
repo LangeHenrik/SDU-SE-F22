@@ -144,7 +144,7 @@ public class DBMigration {
      * @author v-nemeth
      * @author Mikkel Albrechtsen (The0mikkel)
      */
-    private boolean runSQLFromFile(Connection connection, String SQLFileName) {
+    public boolean runSQLFromFile(Connection connection, String SQLFileName) {
         // Begin transaction
         try {
             connection.setAutoCommit(false);

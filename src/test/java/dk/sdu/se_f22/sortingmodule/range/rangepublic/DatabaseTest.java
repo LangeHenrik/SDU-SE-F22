@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sharedlibrary.db.SeedDatabase;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
@@ -19,10 +20,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
     private Database database;
+    private DBMigration dbMigration = new DBMigration();
 
     @BeforeEach
     void setup() {
         database = new Database();
+        try {
+            dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

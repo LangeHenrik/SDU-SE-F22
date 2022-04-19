@@ -13,9 +13,6 @@ public class Main {
         List<String> str = new ArrayList<>();
         str.add("HP");
 
-        // call searchproduct to find corresponding products
-        List<Product> products = p.searchProducts(str);
-
 
     }
 }

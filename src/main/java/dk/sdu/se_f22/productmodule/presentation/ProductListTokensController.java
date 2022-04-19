@@ -9,15 +9,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -48,10 +48,6 @@ public class ProductListTokensController {
     @FXML
     void initialize() {
         this.allProducts = App.productManager != null ? App.productManager.readAllProducts() : new ArrayList<>();
-        Product product = new Product();
-        product.set(ProductAttribute.NAME, "Wubba");
-        product.set(ProductAttribute.DESCRIPTION, "tre tre tre tre");
-        this.allProducts.add(product);
         indexedProducts.addAll(allProducts);
         for (Product p : this.allProducts) {
             createProductListing(p);
@@ -60,7 +56,7 @@ public class ProductListTokensController {
     }
 
     void createProductListing(Product product){
-        Label titel = new Label("product");
+        Label titel = new Label(product.get(ProductAttribute.NAME));
         HBox listing = new HBox();
         CheckBox checkBox = new CheckBox();
         checkBox.setSelected(true);
@@ -78,7 +74,9 @@ public class ProductListTokensController {
         listing.setOnMouseClicked((event) ->{
             updateProductDetailsView(product);
         });
-        listing.getChildren().addAll(titel,checkBox);
+        Region r = new Region();
+        HBox.setHgrow(r, Priority.ALWAYS);
+        listing.getChildren().addAll(titel,r,checkBox);
         AnchorPane.setLeftAnchor(titel,20.0);
         AnchorPane.setTopAnchor(titel, 20.0);
         productList.getChildren().add(listing);

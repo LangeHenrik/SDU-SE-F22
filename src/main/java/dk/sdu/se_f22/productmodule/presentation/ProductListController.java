@@ -48,7 +48,7 @@ public class ProductListController {
 
     void createProductListing(Product product){
         AnchorPane listing = new AnchorPane();
-        Label titel = new Label("product");
+        Label titel = new Label(product.get(ProductAttribute.NAME));
         listing.setOnMouseClicked((event) ->{
             updateProductDetailsView(product);
         });
@@ -73,6 +73,10 @@ public class ProductListController {
             Node element = vBox.getChildren().get(i/3);
             if(element instanceof Pane){
                 Pane parent = (Pane)element;
+                if (product.get(attribute).equals("")) {
+                    continue;
+                }
+
                 parent.getChildren().add(new Label(attribute.alias + ": " + product.get(attribute)));
             }
         }

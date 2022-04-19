@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.productmodule.presentation.ProductListTokensController">
+<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.productmodule.presentation.ProductListTokensController">
    <children>
       <AnchorPane fx:id="productDetails" layoutX="307.0" layoutY="35.0" prefHeight="515.0" prefWidth="460.0" />
       <Button fx:id="cancelButton" layoutX="14.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
       <Button fx:id="proceedBtn" layoutX="726.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleProceed" text="Proceed" />
-      <VBox fx:id="productList" layoutX="59.0" layoutY="35.0" prefHeight="515.0" prefWidth="223.0" />
       <Label layoutX="344.0" layoutY="14.0" text="Product View" />
+      <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="535.0" prefWidth="239.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0">
+               <children>
+                  <VBox fx:id="productList" prefHeight="524.0" prefWidth="223.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

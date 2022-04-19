@@ -45,6 +45,7 @@ public class DBMigration {
     public DBMigration (boolean printText) {
         this.batch = 0;
         this.printText = printText;
+
     }
 
     /**

@@ -29,8 +29,7 @@ DROP TRIGGER IF EXISTS UpdateAllSearchesCountersContentTrigger ON Searches;
 --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
 --og kalder hver gruppes seedDatabase()-metode
 
-CREATE TABLE IF NOT EXISTS logs
-(
+CREATE TABLE IF NOT EXISTS logs (
     log_id TEXT PRIMARY KEY,
     entry_date TIMESTAMP,
     logger TEXT,
@@ -186,10 +185,7 @@ DROP TABLE IF EXISTS SearchTokenDelimiters;
 CREATE TABLE SearchTokenDelimiters (
     delimiter VARCHAR PRIMARY KEY
 );
-CREATE TABLE StemmingException (
-    id SERIAL PRIMARY KEY,
-    exceptionName varchar(50) UNIQUE NOT NULL
-);
+
 
 CREATE TABLE TokenParameters(
     id serial PRIMARY KEY,

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
@@ -9,27 +10,25 @@ import java.util.List;
 
 public class DelimiterSettings {
     private List<String> delimiters;
+    private Connection dbConnection;
+    private PreparedStatement stmt;
 
     public List<String> getDelimiters() {
         try {
             updateDelimitersToDatabaseState();
             return delimiters;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when getting search delimiters: " + e.getMessage());
             return null;
         }
     }
 
     private void updateDelimitersToDatabaseState() throws SQLException {
-        ResultSet resultSet = getAllDelimitersFromDatabase();
+        PreparedStatement stmt = makePreparedStatement("SELECT * FROM searchtokendelimiters");
+        ResultSet resultSet = stmt.executeQuery();
         resetDelimiterAttribute();
         moveResultsSetToDelimitersAttribute(resultSet);
-        resultSet.close();
-    }
-
-    private ResultSet getAllDelimitersFromDatabase() throws SQLException {
-        PreparedStatement stmt = DBConnection.getConnection().prepareStatement("SELECT * FROM searchtokendelimiters");
-        return stmt.executeQuery();
+        closeAll();
     }
 
     private void resetDelimiterAttribute() {
@@ -45,42 +44,76 @@ public class DelimiterSettings {
     public void addDelimiter(String delimiter) {
         try {
             insertDelimiterIntoDatabase(delimiter);
-            System.out.println("Delimiter added.");
+            LoggingProvider.getLogger(this.getClass()).info("Delimiter added.");
         } catch (PSQLException ex) {
-            System.out.println("This delimiter already exist");
+            if (ex.getSQLState().equals("23505")){
+                LoggingProvider.getLogger(this.getClass()).warn("This delimiter already exist (" + delimiter + ")");
+                return;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when add a search delimiter: " + e.getMessage());
         }
     }
 
     private void insertDelimiterIntoDatabase(String delimiter) throws SQLException {
-        PreparedStatement stmt = prepareDeleteStatement("INSERT INTO searchtokendelimiters (delimiter) VALUES (?)", delimiter);
+        PreparedStatement stmt = makePreparedStatement("INSERT INTO searchtokendelimiters (delimiter) VALUES (?)");
+        stmt.setString(1, delimiter);
         stmt.execute();
+        closeAll();
     }
 
     public boolean removeDelimiter(String delim) {
         try {
-            PreparedStatement stmt = prepareDeleteStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?", delim);
-            return executeStatementIfDelimIsInDelimiters(delim, stmt);
+            if (delimiterNotFound(delim)){
+                customPrinter("Delimiter not found: " + delim);
+                return false;
+            }
+            makePreparedStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?");
+            stmt.setString(1, delim);
+            this.stmt.execute();
+            closeAll();
+            customPrinter("Removed delimiter: " + delim);
+            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when removing a search delimiter: " + e.getMessage());
             return false;
         }
     }
 
-    private boolean executeStatementIfDelimIsInDelimiters(String delim, PreparedStatement stmt) throws SQLException {
-        for (String s : getDelimiters()) {
-            if (s.equals(delim)) {
-                stmt.execute();
-                return true;
-            }
-        }
-        return false;
+    private boolean delimiterNotFound(String delim) throws SQLException {
+        updateDelimitersToDatabaseState();
+        return !this.delimiters.contains(delim);
     }
 
-    private PreparedStatement prepareDeleteStatement(String sql, String delim) throws SQLException {
-        PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql);
-        stmt.setString(1, delim);
-        return stmt;
+    private Connection getDbConnection() throws SQLException {
+        if (this.dbConnection == null || dbConnection.isClosed()) {
+            this.dbConnection = DBConnection.getPooledConnection();
+            return dbConnection;
+        }
+        return dbConnection;
     }
+
+    private PreparedStatement makePreparedStatement(String SQLStatement) throws SQLException {
+        this.stmt = getDbConnection().prepareStatement(SQLStatement);
+        return this.stmt;
+    }
+
+    private void closeAll(){
+        try {
+            if (this.stmt != null && !this.stmt.isClosed()) {
+                this.stmt.close();
+            }
+            if (this.dbConnection != null && !this.dbConnection.isClosed()){
+                this.dbConnection.close();
+            }
+        } catch (SQLException e) {
+            customPrinter(" Could not close connection and statement");
+            e.printStackTrace();
+        }
+    }
+
+    private void customPrinter(String s){
+        System.out.println("[" + new Timestamp(System.currentTimeMillis()).toString() + "] [SEM-Infra, DelimiterSettings] " + s);
+    }
+
 }

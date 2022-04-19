@@ -19,6 +19,7 @@ public class SearchModuleImpl implements SearchModule {
     public SearchModuleImpl() {
         this.indexingModules = new HashSet<>();
         this.filteringModules = new HashSet<>();
+        delimiterSettings.addDelimiter(" ");
     }
 
     public <T extends IndexingModule<?>> void addIndexingModule(T index) {
@@ -91,7 +92,9 @@ public class SearchModuleImpl implements SearchModule {
 
     @Override
     public SearchHits search(String query) {
-        List<String> tokens = List.of();
+        IllegalChars replaceForbiddenChars = new IllegalChars();
+        String cleanedQuery = replaceForbiddenChars.removeForbiddenChars(query);
+        List<String> tokens = new Tokenizer().tokenize(cleanedQuery);
         tokens = filterTokens(tokens);
 
         SearchHits searchHits = new SearchHits();

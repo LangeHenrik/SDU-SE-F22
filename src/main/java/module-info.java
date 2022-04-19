@@ -16,5 +16,5 @@ module dk.sdu.se_f22 {
     requires com.google.gson;
 
     opens dk.sdu.se_f22 to javafx.fxml;
-    exports dk.sdu.se_f22;
+    exports dk.sdu.se_f22.searchmodule.misspellings.presentation;
 }

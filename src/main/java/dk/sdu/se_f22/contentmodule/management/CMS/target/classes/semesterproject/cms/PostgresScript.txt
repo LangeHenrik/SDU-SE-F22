@@ -1,8 +1,0 @@
-create table pages
-(
-    id        serial
-        constraint pages_pk
-            primary key,
-    html      text      not null,
-    timestamp timestamp not null
-);

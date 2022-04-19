@@ -1,13 +1,13 @@
 package dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 
+import dk.sdu.se_f22.searchmodule.infrastructure.GUI.mocks.MockBrandIndexingModule;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,22 +15,28 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.testfx.util.NodeQueryUtils.hasText;
 
 @ExtendWith(ApplicationExtension.class)
-class SEM1customerGUIControllerTest {
+public class SEM1customerGUIControllerTest {
     Scene scene;
 
     @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(SEM1customerGUIController.class.getResource("SEM1customerGUI.fxml"));
-        scene = new Scene(fxmlLoader.load());
+
+        // Insert mock indexing modules
+        Parent root = (Parent) fxmlLoader.load();
+        SEM1customerGUIController controller = fxmlLoader.getController();
+        controller.getSearchModule().addIndexingModule(new MockBrandIndexingModule());
+
+        scene = new Scene(root);
         stage.setScene(scene);
+
         stage.show();
     }
 
@@ -56,6 +62,5 @@ class SEM1customerGUIControllerTest {
         searchHits.setBrands(brands);
 
         robot.clickOn(search);
-        searchHits
     }
 }

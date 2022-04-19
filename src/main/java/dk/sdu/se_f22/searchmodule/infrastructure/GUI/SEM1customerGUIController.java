@@ -22,8 +22,13 @@ public class SEM1customerGUIController {
     private Label brandHitsCounter;
     @FXML
     private Label productHitsCounter;
+
     private SearchModuleImpl searchModule = new SearchModuleImpl();
 
+    @FXML
+    public void initialize() {
+        searchModule = new SearchModuleImpl();
+    }
 
     @FXML
     public void onSem1SearchButton() {
@@ -51,5 +56,9 @@ public class SEM1customerGUIController {
             System.out.println("No elements found");
             SEM1customerText.appendText("No elements found");
         }
+    }
+
+    public SearchModuleImpl getSearchModule() {
+        return searchModule;
     }
 }

@@ -10,8 +10,8 @@ import java.util.*;
 public class IrregularWords implements IIrregularWords {
     public static IrregularWords INSTANCE = new IrregularWords();
     private IrregularWords (){}
-
-    //Initialize method to create a connection to the local database (password might not be the same for all user).
+    //use this url in the config propertise file jdbc:postgresql://testdb.stud-srv.sdu.dk:5432/semesterproject2
+    //Initialize method to create a connection to the database.
     public void initialize(){
         try {
             DBConnection.getPooledConnection();
@@ -41,7 +41,7 @@ public class IrregularWords implements IIrregularWords {
     @Override
     public boolean createIRWord(String tableWord, String insertionWord){
         try {
-            //Get the ID from the first word
+            //Get the index from the first word
             int index = INSTANCE.getIndex(tableWord);
             //Statement for inserting the insertionWord with the ID of the tableWord
             PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement("INSERT INTO irregularwords (index, word) VALUES (?,?)");

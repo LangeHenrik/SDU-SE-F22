@@ -92,7 +92,6 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest(name = "filter description {0}")
                 @DisplayName("Empty description")
                 @ValueSource(strings = {"", " "})
-                    //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
                 void emptyDescription(String input) {
                     double minDouble = 0;
                     double maxDouble = 800;
@@ -124,7 +123,6 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest(name = "filter attribute {0}")
                 @DisplayName("Empty product attribute")
                 @ValueSource(strings = {"", " "})
-                    //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
                 void emptyProductAttribute(String input) {
                     double minDouble = 0;
                     double maxDouble = 800;
@@ -155,7 +153,6 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest(name = "filter name {0}")
                 @DisplayName("Empty filter name")
                 @ValueSource(strings = {"", " "})
-                    //@CsvFileSource(resources= "/dk/sdu/se_f22/SortingModule/Range/emptyStrings.csv", numLinesToSkip = 0)
                 void emptyFilterNameV2(String input) {
                     double minDouble = 0;
                     double maxDouble = 800;

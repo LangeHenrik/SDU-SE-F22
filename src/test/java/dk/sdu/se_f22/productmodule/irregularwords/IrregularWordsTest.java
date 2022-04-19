@@ -56,6 +56,18 @@ class IrregularWordsTest {
     @Test
     void updateIRWord() {
 
+        //it creates a word and id in the table
+        IrregularWords.INSTANCE.createIRWord(2000,"falseUpdateWord");
+        //it updates the word to a different word in the table
+        IrregularWords.INSTANCE.updateIRWord("falseUpdateWord","correctUpdateWord");
+
+        //Finding the word in the table.
+        ArrayList<String> result = IrregularWords.INSTANCE.getIRWord("correctUpdateWord");
+        //the test function compare the words
+        assertEquals("correctUpdateWord", result.get(0));
+        //remove the change in table.
+        IrregularWords.INSTANCE.deleteIRWord("correctUpdateWord");
+
     }
 
     @Test

@@ -13,6 +13,7 @@ public class Stemmer implements IStemmer {
     }
 
     public String stem(String word) {
+        if (word.length() < 3) return word;
         Word stemmingWord = new Word(word);
         stemmingWord = StemmingUtilities.step1a(stemmingWord);
         stemmingWord = StemmingUtilities.step1b(stemmingWord);

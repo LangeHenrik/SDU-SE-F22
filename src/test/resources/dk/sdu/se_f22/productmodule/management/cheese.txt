@@ -1,0 +1,164 @@
+[
+{
+	"id": "test",
+	"pId": "1",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "50",
+	"pId": "2",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "30",
+	"pId": "3",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "30",
+	"pId": "4",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "test",
+	"pId": "5",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "test",
+	"pId": "test",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "test",
+	"pId": "test",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "test",
+	"pId": "test",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+},
+{
+	"id": "test",
+	"pId": "test",
+	"averageUserReview": "test",
+	"inStock": [
+		"test"
+	],
+	"ean": "test",
+	"price": "test",
+	"publishedDate": "test",
+	"expirationDate": "test",
+	"category": "test",
+	"name": "test",
+	"description": "test",
+	"weight": "test",
+	"size": "test",
+	"clockSpeed": "test"
+}
+]

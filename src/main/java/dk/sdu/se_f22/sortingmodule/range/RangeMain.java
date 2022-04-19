@@ -39,7 +39,7 @@ public class RangeMain {
         ArrayList<String> locations = new ArrayList<>();
         locations.add("Charlottenlund");
         locations.add("Herning");
-        product.setLocations(ProductAttribute.IN_STOCK, locations);
+        product.setLocations(locations);
 
         ProductHit productHit = new ProductHit(product);
     }

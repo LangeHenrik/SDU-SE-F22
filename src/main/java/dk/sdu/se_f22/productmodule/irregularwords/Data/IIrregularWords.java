@@ -15,7 +15,7 @@ public interface IIrregularWords {
 
         ArrayList<String> getIRWord(String word);
 
-        int getID(String word);
+        int getIndex(String word);
 
         boolean createBackup();
 

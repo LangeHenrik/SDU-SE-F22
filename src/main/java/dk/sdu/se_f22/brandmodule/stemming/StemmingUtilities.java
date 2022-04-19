@@ -102,6 +102,7 @@ public class StemmingUtilities {
     }
 
     public static Word step4 (Word word) {
+        if (word.getWordString().length() < 2) return word;
             switch (word.getWordString().charAt(word.length() - 2)) {
                 case 'a':
                     word.replaceM1(word,"al", "");

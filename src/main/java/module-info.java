@@ -18,4 +18,6 @@ module dk.sdu.se_f22 {
     opens dk.sdu.se_f22.productmodule.presentation to javafx.fxml;
     exports dk.sdu.se_f22.productmodule.presentation;
 
+
+
 }

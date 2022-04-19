@@ -1,57 +1,29 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
 public class Scoring implements IScoring {
-    private static Scoring instance;
-    private String url = "localhost";
-    private int port = 5432;
-    private String databaseName = "testprojectdb";
-    private String username = "postgres";
-    private String password = "postgres582";
-    private Connection connection = null;
-
-    private Scoring(){
-        initializePostgresqlDatabase();
-    }
-
-    public static Scoring getInstance(){
-        if (instance == null) {
-            instance = new Scoring();
-        }
-        return instance;
-    }
-
-    private void initializePostgresqlDatabase() {
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-            connection = DriverManager.getConnection("jdbc:postgresql://" + url + ":" + port + "/" + databaseName, username, password);
-        } catch (SQLException | IllegalArgumentException ex) {
-            ex.printStackTrace(System.err);
-        } finally {
-            if (connection == null) System.exit(-1);
-        }
-    }
 
     private void price(List<ProductScore> input) {
         for (ProductScore product : input) {
             double price = product.getProduct().getPrice();
-                try {
-                    PreparedStatement stmt = connection.prepareStatement("SELECT * FROM prices ORDER BY bracket");
-                    ResultSet sqlReturnValues = stmt.executeQuery();
-
-                    while (sqlReturnValues.next()){
-                        if (price <= sqlReturnValues.getDouble(2)) {
-                            product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
-                            break;
-                        } else if (sqlReturnValues.isLast()) {
-                            product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
-                        }
+            try (var connection = DBConnection.getPooledConnection();
+                 var statement = connection.prepareStatement("SELECT * FROM prices ORDER BY bracket");
+                 var sqlReturnValues = statement.executeQuery()) {
+                while (sqlReturnValues.next()) {
+                    if (price <= sqlReturnValues.getDouble(2)) {
+                        product.setScore(-sqlReturnValues.getInt(3) + product.getScore());
+                        break;
+                    } else if (sqlReturnValues.isLast()) {
+                        product.setScore(-sqlReturnValues.getInt(3) + product.getScore());
                     }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -59,9 +31,9 @@ public class Scoring implements IScoring {
     private void review(List<ProductScore> input) {
         for (ProductScore product : input) {
             double review = product.getProduct().getReview();
-            try {
-                PreparedStatement stmt = connection.prepareStatement("SELECT * FROM reviews");
-                ResultSet sqlReturnValues = stmt.executeQuery();
+            try (var connection = DBConnection.getPooledConnection();
+                 var statement = connection.prepareStatement("SELECT * FROM reviews");
+                 var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
                     if (review <= sqlReturnValues.getDouble(2)) {
                         product.setScore(sqlReturnValues.getInt(3)+product.getScore());
@@ -79,10 +51,9 @@ public class Scoring implements IScoring {
     private void stock(List<ProductScore> input) {
         for (ProductScore product : input) {
             int stock = product.getProduct().getStock();
-            try {
-                PreparedStatement stmt = connection.prepareStatement("SELECT * FROM stocks");
-                ResultSet sqlReturnValues = stmt.executeQuery();
-
+            try (var connection = DBConnection.getPooledConnection();
+                 var statement = connection.prepareStatement("SELECT * FROM stocks");
+                 var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
                     if (stock <= sqlReturnValues.getInt(2)) {
                         product.setScore(sqlReturnValues.getInt(3)+product.getScore());
@@ -101,11 +72,9 @@ public class Scoring implements IScoring {
         for (ProductScore product : input) {
             Date newDate = new Date();
             int date = (int)(((newDate.getTime()-product.getProduct().getReleaseDate().getTime())/31556736)/1000);
-
-            try {
-                PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dates");
-                ResultSet sqlReturnValues = stmt.executeQuery();
-
+            try (var connection = DBConnection.getPooledConnection();
+                 var statement = connection.prepareStatement("SELECT * FROM dates");
+                 var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
                     if (date <= sqlReturnValues.getInt(2)) {
                         product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
@@ -187,9 +156,9 @@ public class Scoring implements IScoring {
 
     @Override
     public List<String> readTable() {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM scores ORDER BY type,bracket");
-            ResultSet sqlReturnValues = stmt.executeQuery();
+        try (var connection = DBConnection.getPooledConnection();
+             var statement = connection.prepareStatement("SELECT * FROM scores ORDER BY type,bracket");
+             var sqlReturnValues = statement.executeQuery()) {
             List<String> returnValue = new ArrayList<>();
             while (sqlReturnValues.next()){
                 returnValue.add(
@@ -208,6 +177,7 @@ public class Scoring implements IScoring {
     @Override
     public void updateRow(int id, Object newValue, String column) {
         try {
+            var connection = DBConnection.getPooledConnection();
             PreparedStatement stmt;
             switch (column) {
                 case "type" -> stmt = connection.prepareStatement("Update scores SET type = ? WHERE id = ?");
@@ -229,6 +199,7 @@ public class Scoring implements IScoring {
     @Override
     public void deleteRow(int id) {
         try {
+            var connection = DBConnection.getPooledConnection();
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM scores WHERE id = ?");
             stmt.setInt(1, id);
             stmt.execute();
@@ -240,6 +211,7 @@ public class Scoring implements IScoring {
     @Override
     public void createRow(String type, double bracket, int weight) {
         try {
+            var connection = DBConnection.getPooledConnection();
             PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO scores (type, bracket, weight) VALUES(?,?,?)");
             stmt.setString(1,type);
@@ -249,30 +221,6 @@ public class Scoring implements IScoring {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 }
 

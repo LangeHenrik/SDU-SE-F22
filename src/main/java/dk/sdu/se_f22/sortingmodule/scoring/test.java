@@ -7,7 +7,6 @@ import java.util.List;
 
 public class test {
 
-
     public static void main(String[] args) throws ParseException {
         List<TestProduct> products = new ArrayList<>();
 
@@ -25,12 +24,13 @@ public class test {
         products.add(new TestProduct("Cornflakes",2395,2.2,5,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2019")));
         products.add(new TestProduct("Cake",3395,4.7,9,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2017")));
 
-        IScoring scoring = Scoring.getInstance();
+        IScoring scoring = new Scoring();
         //System.out.println(scoring.scoreSort(products));
         //System.out.println(scoring.readTable());
-        //scoring.updateRow(1,"price","type");
-        //scoring.deleteRow(25);
+        scoring.updateRow(16,"date","type");
+        //scoring.deleteRow(28);
         //scoring.createRow("price",2000,2);
         System.out.println(scoring.readTable());
+        //System.out.println(scoring.scoreSortPrice(products));
     }
 }

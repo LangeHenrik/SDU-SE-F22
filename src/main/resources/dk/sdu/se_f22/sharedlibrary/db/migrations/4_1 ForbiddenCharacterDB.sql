@@ -1,4 +1,4 @@
-CREATE TABLE illegalChars (
+CREATE TABLE illegalchars (
     id SERIAL PRIMARY KEY,
-    chars varchar(50) UNIQUE NOT NULL
+    characters varchar(50) UNIQUE NOT NULL
 );

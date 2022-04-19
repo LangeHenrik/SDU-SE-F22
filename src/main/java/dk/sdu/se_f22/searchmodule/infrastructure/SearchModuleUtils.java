@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class SearchModuleUtils {

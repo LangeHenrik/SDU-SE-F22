@@ -68,4 +68,13 @@ class IllegalCharsTest {
             assertThrows(PSQLException.class, () -> queryResultSet.getString("characters"));
         }
     }
+
+    @Test
+    void removeForbiddenCharsTest() {
+        this.illegalChars.addChar("@");
+        this.illegalChars.addChar("´");
+        this.illegalChars.addChar("|");
+        this.illegalChars.addChar("*");
+        assertEquals("Hej med dig123 Test", this.illegalChars.removeForbiddenChars("H@ej m´ed dig|123 Tes*t"));
+    }
 }

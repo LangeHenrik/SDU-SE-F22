@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
@@ -17,7 +18,7 @@ public class DelimiterSettings {
             updateDelimitersToDatabaseState();
             return delimiters;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when getting search delimiters: " + e.getMessage());
             return null;
         }
     }
@@ -43,13 +44,14 @@ public class DelimiterSettings {
     public void addDelimiter(String delimiter) {
         try {
             insertDelimiterIntoDatabase(delimiter);
-            customPrinter("Delimiter added (" + delimiter + ")");
-        } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")){
-                customPrinter("Delimiter already exists (" + delimiter + ")");
+            LoggingProvider.getLogger(this.getClass()).info("Delimiter added.");
+        } catch (PSQLException ex) {
+            if (ex.getSQLState().equals("23505")){
+                LoggingProvider.getLogger(this.getClass()).warn("This delimiter already exist (" + delimiter + ")");
                 return;
             }
-            e.printStackTrace();
+        } catch (SQLException e) {
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when add a search delimiter: " + e.getMessage());
         }
     }
 
@@ -73,7 +75,7 @@ public class DelimiterSettings {
             customPrinter("Removed delimiter: " + delim);
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when removing a search delimiter: " + e.getMessage());
             return false;
         }
     }

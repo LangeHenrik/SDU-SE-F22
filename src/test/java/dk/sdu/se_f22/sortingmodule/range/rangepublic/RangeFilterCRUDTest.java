@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -520,10 +521,11 @@ public class RangeFilterCRUDTest {
         @Test
         @DisplayName("Read all existing range filters")
         void readAllExistingRangeFilters() {
+            List<RangeFilter> result = rangeFilterCRUD.readAll();
             Assertions.assertAll("Read all filters from database and check if the values match",
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(0), new DoubleFilter(1, "test name double", "test description", "price", 0, 10)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(1), new LongFilter(2, "test name ean", "test description", "ean", 2, 100)),
-                    () -> Assertions.assertEquals(rangeFilterCRUD.readAll().get(2), new TimeFilter(3, "test name time", "test description", "expirationDate", Instant.parse("2018-10-18T00:00:57Z"), Instant.parse("2019-10-18T00:00:57Z")))
+                    () -> Assertions.assertEquals(new DoubleFilter(1, "test name double", "test description", "price", 0, 10), result.get(0)),
+                    () -> Assertions.assertEquals(new LongFilter(2, "test name ean", "test description for long filter", "ean", 2, 100), result.get(1)),
+                    () -> Assertions.assertEquals(new TimeFilter(3, "test name time", "test description for time filter", "expirationDate", Instant.parse("2018-11-30T15:35:24Z"), Instant.parse("2022-11-30T15:35:24Z")), result.get(2))
             );
         }
 

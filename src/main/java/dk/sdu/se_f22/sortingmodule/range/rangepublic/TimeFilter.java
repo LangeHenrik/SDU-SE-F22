@@ -29,7 +29,7 @@ class TimeFilter extends RangeFilterClass{
 
     @Override
     public FilterTypes getType() {
-        return FilterTypes.INSTANT;
+        return FilterTypes.TIME;
     }
 
 

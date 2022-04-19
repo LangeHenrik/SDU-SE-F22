@@ -6,7 +6,8 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import javax.xml.transform.Result;
 import java.sql.*;
-import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Database implements DatabaseInterface {
@@ -49,7 +50,7 @@ public class Database implements DatabaseInterface {
                 statement.setLong(4, filter.getDbMinLong());
                 statement.setLong(5, filter.getDbMaxLong());
             }
-            case INSTANT -> {
+            case TIME -> {
                 statement = connection.prepareStatement(
                         "INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
                         new String[] { "filterid", "name", "description", "min", "max"}
@@ -68,12 +69,13 @@ public class Database implements DatabaseInterface {
 
         if (results == 0){
             throw new SQLException("No ID to return.");
-        } else {
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            generatedKeys.next();
-            int created_filter_id = generatedKeys.getInt("filterid");
-            return createFilterWithID(filter, created_filter_id);
         }
+
+        ResultSet generatedKeys = statement.getGeneratedKeys();
+        generatedKeys.next();
+        int created_filter_id = generatedKeys.getInt("filterid");
+        return createFilterWithID(filter, created_filter_id);
+
     }
 
 
@@ -93,53 +95,31 @@ public class Database implements DatabaseInterface {
             PreparedStatement typeStatement = connection.prepareStatement("SELECT get_type_of_filter(?);");
             typeStatement.setInt(1, id);
             ResultSet typeResult = typeStatement.executeQuery();
-            if (typeResult.next()){
-                if(typeResult.getString(1) == null){
+            if (typeResult.next()) {
+                if (typeResult.getString(1) == null) {
                     return dbRangeFilter;
                 }
                 // Then get the filter from the correct view by using the now known data type
                 ResultSet filterResultSet;
                 System.out.println(typeResult.getString(1));
                 //noinspection EnhancedSwitchMigration
-                switch (typeResult.getString(1)){
+                switch (typeResult.getString(1)) {
                     case "Double":
                         filterResultSet = getSpecificFilter(connection, "get_double_filter", id);
-                        if (filterResultSet.next()){
-                            dbRangeFilter = new DoubleFilter(
-                                    filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Name"),
-                                    filterResultSet.getString("Description"),
-                                    filterResultSet.getString("ProductAttribute"),
-                                    //The below two lines assume the filter read is a Double filter
-                                    filterResultSet.getDouble("Min"),
-                                    filterResultSet.getDouble("Max")
-                            );
+                        if (filterResultSet.next()) {
+                            dbRangeFilter = createDoubleFilterFromResultset(filterResultSet);
                         }
                         break;
                     case "Long":
                         filterResultSet = getSpecificFilter(connection, "get_long_filter", id);
-                        if (filterResultSet.next()){
-                            dbRangeFilter = new LongFilter(
-                                    filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Name"),
-                                    filterResultSet.getString("Description"),
-                                    filterResultSet.getString("ProductAttribute"),
-                                    filterResultSet.getLong("Min"),
-                                    filterResultSet.getLong("Max")
-                            );
+                        if (filterResultSet.next()) {
+                            dbRangeFilter = createLongFilterFromResultset(filterResultSet);
                         }
                         break;
                     case "Time":
                         filterResultSet = getSpecificFilter(connection, "get_time_filter", id);
-                        if (filterResultSet.next()){
-                            dbRangeFilter = new TimeFilter(
-                                    filterResultSet.getInt("FilterId"),
-                                    filterResultSet.getString("Name"),
-                                    filterResultSet.getString("Description"),
-                                    filterResultSet.getString("ProductAttribute"),
-                                    filterResultSet.getTimestamp("Min").toInstant(),
-                                    filterResultSet.getTimestamp("Max").toInstant()
-                            );
+                        if (filterResultSet.next()) {
+                            dbRangeFilter = createTimeFilterFromResultset(filterResultSet);
                         }
                         break;
                     default:
@@ -147,7 +127,7 @@ public class Database implements DatabaseInterface {
                 }
 
                 //noinspection StatementWithEmptyBody
-                if (filterResultSet.next()){
+                if (filterResultSet.next()) {
                     // This means we somehow got 2 filters returned
 //                throw up;
                     //commented because: pseudocode
@@ -159,6 +139,41 @@ public class Database implements DatabaseInterface {
         }
 
         return dbRangeFilter;
+    }
+
+    private LongFilter createLongFilterFromResultset(ResultSet filterResultSet) throws SQLException {
+        return new LongFilter(
+                filterResultSet.getInt("FilterId"),
+                filterResultSet.getString("Name"),
+                filterResultSet.getString("Description"),
+                filterResultSet.getString("ProductAttribute"),
+                filterResultSet.getLong("Min"),
+                filterResultSet.getLong("Max")
+        );
+    }
+
+    private TimeFilter createTimeFilterFromResultset(ResultSet filterResultSet) throws SQLException {
+        return new TimeFilter(
+                filterResultSet.getInt("FilterId"),
+                filterResultSet.getString("Name"),
+                filterResultSet.getString("Description"),
+                filterResultSet.getString("ProductAttribute"),
+                filterResultSet.getTimestamp("Min").toInstant(),
+                filterResultSet.getTimestamp("Max").toInstant()
+        );
+    }
+
+    private DoubleFilter createDoubleFilterFromResultset(ResultSet filterResultSet) throws SQLException {
+        System.out.println(filterResultSet.getInt("FilterId") + " " + filterResultSet.getString("Name"));
+        return new DoubleFilter(
+                filterResultSet.getInt("FilterId"),
+                filterResultSet.getString("Name"),
+                filterResultSet.getString("Description"),
+                filterResultSet.getString("ProductAttribute"),
+                //The below two lines assume the filter read is a Double filter
+                filterResultSet.getDouble("Min"),
+                filterResultSet.getDouble("Max")
+        );
     }
 
     private ResultSet getSpecificFilter(Connection conn, String sqlFunction, int id) throws SQLException {
@@ -180,18 +195,50 @@ public class Database implements DatabaseInterface {
 
     @Override
     public List<RangeFilter> readAllFilters() {
-        return null;
+        List<RangeFilter> outList = new ArrayList<>();
+        try {
+            // it is deliberate that they are all in the same try catch block since if one fails, they will all fail.
+            // This is desired behaviour, and also mimicks what would happen for the case where we add the exception to the method signature.
+
+            ResultSet doubleFilters = connection.prepareStatement("SELECT * from sortingrangeDOUBLEview").executeQuery();
+            while (doubleFilters.next()) {
+                outList.add(
+                        createDoubleFilterFromResultset(doubleFilters)
+                );
+            }
+
+            ResultSet longFilters = connection.prepareStatement("SELECT * from sortingrangeLONGview").executeQuery();
+            while (longFilters.next()) {
+                outList.add(
+                        createLongFilterFromResultset(longFilters)
+                );
+            }
+
+            ResultSet timeFilters = connection.prepareStatement("SELECT * from sortingrangeTIMEview").executeQuery();
+            while (timeFilters.next()) {
+                outList.add(
+                        createTimeFilterFromResultset(timeFilters)
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // sort the list by id
+        outList.sort((o1, o2) -> o1.getId() - o2.getId());
+
+        return outList;
     }
 
     RangeFilter createFilterWithID(RangeFilter filter, int id) throws InvalidFilterTypeException {
-        switch (filter.getType()){
+        switch (filter.getType()) {
             case DOUBLE -> {
                 return new DoubleFilter(id, filter.getName(), filter.getDescription(), filter.getProductAttribute(), filter.getDbMinDouble(), filter.getDbMaxDouble());
             }
             case LONG -> {
                 return new LongFilter(id, filter.getName(), filter.getDescription(), filter.getProductAttribute(), filter.getDbMinLong(), filter.getDbMaxLong());
             }
-            case INSTANT -> {
+            case TIME -> {
                 return new TimeFilter(id, filter.getName(), filter.getDescription(), filter.getProductAttribute(), filter.getDbMinInstant(), filter.getDbMaxInstant());
             }
             default -> {

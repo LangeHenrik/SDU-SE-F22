@@ -69,10 +69,6 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
     @Override
     public RangeFilter read(int id) throws IdNotFoundException, UnknownFilterTypeException {
-        // Refactor needed
-        // In this implementation, you make the same call to the database twice,
-        // you should use a local variable instead, like:
-//        RangeFilter result = database.read(id);
         RangeFilter result = database.read(id);
         if (result == null) {
             throw new IdNotFoundException("Invalid id");

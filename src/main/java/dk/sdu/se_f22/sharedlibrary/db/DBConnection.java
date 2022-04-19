@@ -47,9 +47,9 @@ public class DBConnection {
         connectionPool = new BasicDataSource();
 
         // Connections settings
-        connectionPool.setUrl(url);
-        connectionPool.setUsername(user);
-        connectionPool.setPassword(password);
+        connectionPool.setUrl("jdbc:postgresql://abul.db.elephantsql.com/hzajyqbo");
+        connectionPool.setUsername("hzajyqbo");
+        connectionPool.setPassword("K8664qtGojuBvQczzv66EhaqkUNbXLj0");
 
         // Pooling settings
         // There is not any particular reason behind these values,
@@ -121,7 +121,7 @@ public class DBConnection {
     }
 
     private void loadConfig() {
-        try (InputStream inputStream = new FileInputStream("config.properties")) {
+       /*try (InputStream inputStream = new FileInputStream("config.properties")) {
             Properties props = new Properties();
             props.load(inputStream);
 
@@ -130,7 +130,7 @@ public class DBConnection {
             password = props.getProperty("db_password");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public boolean isConnected() {

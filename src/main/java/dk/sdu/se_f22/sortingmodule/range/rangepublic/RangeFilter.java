@@ -11,7 +11,6 @@ public interface RangeFilter {
     String getDescription();
     String getProductAttribute();
 
-    //todo test this
     FilterTypes getType();
 
     double getDbMinDouble() throws InvalidFilterTypeException;

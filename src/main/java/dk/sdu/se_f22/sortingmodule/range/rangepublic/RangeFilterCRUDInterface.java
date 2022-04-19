@@ -13,33 +13,33 @@ public interface RangeFilterCRUDInterface {
     /**
      * Creates a filter and saves it to the database using double values for dbMinToSave and dbMinToMax
      * Returns a DoubleFilter
-     * @param name
-     * @param description
-     * @param productAttribute
-     * @param dbMinToSave
-     * @param dbMaxToSave
+     * @param name String
+     * @param description String
+     * @param productAttribute String
+     * @param dbMinToSave double
+     * @param dbMaxToSave double
      * @return DoubleFilter
      */
     RangeFilter create(String name, String description, String productAttribute, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException;
     /**
      * Creates a filter and saves it to the database using long values for dbMinToSave and dbMinToMax
      * Returns a LongFilter
-     * @param name
-     * @param description
-     * @param productAttribute
-     * @param dbMinToSave
-     * @param dbMaxToSave
+     * @param name String
+     * @param description String
+     * @param productAttribute String
+     * @param dbMinToSave long
+     * @param dbMaxToSave long
      * @return LongFilter
      */
     RangeFilter create(String name, String description, String productAttribute, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException;
     /**
      * Creates a filter and saves it to the database using long values for dbMinToSave and dbMinToMax
      * Returns a LongFilter
-     * @param name
-     * @param description
-     * @param productAttribute
-     * @param dbMinToSave
-     * @param dbMaxToSave
+     * @param name String
+     * @param description String
+     * @param productAttribute String
+     * @param dbMinToSave Instant
+     * @param dbMaxToSave Instant
      * @return InstantFilter
      */
     RangeFilter create(String name, String description, String productAttribute, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException, InvalidFilterTypeException;

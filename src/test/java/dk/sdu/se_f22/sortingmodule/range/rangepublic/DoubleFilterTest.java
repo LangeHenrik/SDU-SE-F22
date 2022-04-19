@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class DoubleFilterTest {
 
     @Test
+    @Disabled
+
     void getType() {
     }
 
     @Test
+    @Disabled
     void testEquals() {
     }
 

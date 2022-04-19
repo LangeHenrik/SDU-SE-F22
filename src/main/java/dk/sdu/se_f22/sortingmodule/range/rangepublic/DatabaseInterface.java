@@ -8,19 +8,16 @@ import java.util.List;
 
 /** This interface is deliberately default modifier, since it is not going to be used outside our package.
  * <br>
- * It defines the mthods, that our daatabase class must implement to allow for performing CRUD
+ * It defines the methods, that our database class must implement to allow for performing CRUD operations.
  */
 public interface DatabaseInterface {
     RangeFilter create(RangeFilter filterToSaveInDB) throws InvalidFilterTypeException, SQLException;
 
     RangeFilter read(int id) throws UnknownFilterTypeException;
+
     RangeFilter delete(int id);
 
-    // below mess could be avoided by changing name and Description, to not be final in RangeFilterClass
-    // Along with using userMin and userMax as the variables where we store what we should update the database values to
     RangeFilter update(RangeFilter filter);
-
-
 
     List<RangeFilter> readAllFilters();
 }

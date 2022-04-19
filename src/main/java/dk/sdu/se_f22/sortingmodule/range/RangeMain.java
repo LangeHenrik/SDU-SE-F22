@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 1. Filter(id, min, max) bliver sendt fra SOM-1
- * 2. Vi bruger InternalFilter til at matche Filter og DBRangeFilter
- * 2.1 InternalFilter(Filter, productAttribute)
- * 3. Internal filter bruges til at validere på
+ * 1. Filter(id, min, max) bliver sendt fra SOM-1 <br>
+ * 2. Vi bruger InternalFilter til at matche Filter og DBRangeFilter <br>
+ * &nbsp 2.1 InternalFilter(Filter, productAttribute)<br>
+ * 3. Internal filter bruges til at validere på<br>
  **/
-
 public class RangeMain {
 
     public static void main(String[] args) {

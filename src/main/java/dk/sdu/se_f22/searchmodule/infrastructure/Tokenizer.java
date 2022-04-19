@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +13,7 @@ public class Tokenizer {
 
     public List<String> tokenize(String s) {
         if (stringList.size() == 0){
-            System.out.println("ERR: There is no delimiters set!");
+            LoggingProvider.getLogger(Tokenizer.class).error("There is no delimiters set!");
             return List.of(s);
         } else {
             String[] string = s.split(searchModuleUtils.convertDelimitersToRegex(stringList));

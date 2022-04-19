@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
@@ -45,9 +46,9 @@ public class DelimiterSettings {
     public void addDelimiter(String delimiter) {
         try {
             insertDelimiterIntoDatabase(delimiter);
-            System.out.println("Delimiter added.");
+            LoggingProvider.getLogger(this.getClass()).info("Delimiter added.");
         } catch (PSQLException ex) {
-            System.out.println("This delimiter already exist");
+            LoggingProvider.getLogger(this.getClass()).warn("This delimiter already exist");
         } catch (SQLException e) {
             e.printStackTrace();
         }

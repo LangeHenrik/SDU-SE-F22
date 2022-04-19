@@ -25,16 +25,20 @@ class DatabaseTest {
     @BeforeEach
     void setup() {
         database = new Database();
-        try {
-            dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 
     @Nested
     class create {
+        @BeforeEach
+        void setup() {
+            try {
+                dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a double filter")
         @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)

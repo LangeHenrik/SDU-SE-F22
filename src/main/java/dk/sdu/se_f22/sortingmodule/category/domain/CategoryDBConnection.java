@@ -196,86 +196,105 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
     }
 
     public void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
-        try {
-            int checkRows = 0;
-            PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
-            checkRowsStatement.setInt(1, requirementsFieldName);
-            ResultSet rsCheckRows = checkRowsStatement.executeQuery();
-            rsCheckRows.next();
-            checkRows = rsCheckRows.getInt("rows");
+        boolean notValid = false;
 
-            if (checkRows == 1) {
-                PreparedStatement createStatement = this.shared.connect().prepareStatement(
-                        "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
-                        Statement.RETURN_GENERATED_KEYS
-                );
-                createStatement.setString(1, requirementsValue);
-                createStatement.setInt(2, requirementsFieldName);
+        if (name.length() < 0 && name.length() > 40)
+            notValid = true;
+        if (description == null)
+            notValid = true;
+        if (getCategoryById(parentID) == null)
+            notValid = true;
 
-                createStatement.execute();
-                ResultSet rs = createStatement.getGeneratedKeys();
-                int generatedKey = 0;
-                if (rs.next()) {
-                    generatedKey = rs.getInt(1);
-                    PreparedStatement createCategoryStatement = this.shared.connect().prepareStatement(
-                            "INSERT INTO categories(name, description, parent_id, requirements_id) VALUES (?,?,?,?)"
+        if (notValid = false) {
+            try {
+                int checkRows = 0;
+                PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+                checkRowsStatement.setInt(1, requirementsFieldName);
+                ResultSet rsCheckRows = checkRowsStatement.executeQuery();
+                rsCheckRows.next();
+                checkRows = rsCheckRows.getInt("rows");
+
+                if (checkRows == 1) {
+                    PreparedStatement createStatement = this.shared.connect().prepareStatement(
+                            "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
+                            Statement.RETURN_GENERATED_KEYS
                     );
-                    createCategoryStatement.setString(1, name);
-                    createCategoryStatement.setString(2, description);
-                    createCategoryStatement.setInt(3, parentID);
-                    createCategoryStatement.setInt(4, generatedKey);
-                    createCategoryStatement.execute();
+                    createStatement.setString(1, requirementsValue);
+                    createStatement.setInt(2, requirementsFieldName);
+
+                    createStatement.execute();
+                    ResultSet rs = createStatement.getGeneratedKeys();
+                    int generatedKey = 0;
+                    if (rs.next()) {
+                        generatedKey = rs.getInt(1);
+                        PreparedStatement createCategoryStatement = this.shared.connect().prepareStatement(
+                                "INSERT INTO categories(name, description, parent_id, requirements_id) VALUES (?,?,?,?)"
+                        );
+                        createCategoryStatement.setString(1, name);
+                        createCategoryStatement.setString(2, description);
+                        createCategoryStatement.setInt(3, parentID);
+                        createCategoryStatement.setInt(4, generatedKey);
+                        createCategoryStatement.execute();
+                    }
+                } else {
+                    System.out.println("There is no requirement status with ID: " + requirementsFieldName);
                 }
-            } else {
-                System.out.println("There is no requirement status with ID: " + requirementsFieldName);
+            } catch (IOException ioEx) {
+                System.out.println(ioEx.getMessage());
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
+            CategoryDBConnection.shared.closeConnection();
         }
-        CategoryDBConnection.shared.closeConnection();
     }
 
     public void createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
-        try {
-            int checkRows = 0;
-            PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
-            checkRowsStatement.setInt(1, requirementsFieldname);
-            ResultSet rsCheckRows = checkRowsStatement.executeQuery();
-            rsCheckRows.next();
-            checkRows = rsCheckRows.getInt("rows");
+        boolean notValid = false;
 
-            if (checkRows == 1) {
-                PreparedStatement createStatement = this.shared.connect().prepareStatement(
-                        "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
-                        Statement.RETURN_GENERATED_KEYS
-                );
-                createStatement.setString(1, requirementsValue);
-                createStatement.setInt(2, requirementsFieldname);
+        if (name.length() < 0 && name.length() > 40)
+            notValid = true;
+        if (description == null)
+            notValid = true;
 
-                createStatement.execute();
-                ResultSet rs = createStatement.getGeneratedKeys();
-                int generatedKey = 0;
-                if (rs.next()) {
-                    generatedKey = rs.getInt(1);
-                    PreparedStatement createCategoryStatement = this.shared.connect().prepareStatement(
-                            "INSERT INTO categories(name, description, requirements_id) VALUES (?,?,?)"
+        if (notValid = false) {
+            try {
+                int checkRows = 0;
+                PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+                checkRowsStatement.setInt(1, requirementsFieldname);
+                ResultSet rsCheckRows = checkRowsStatement.executeQuery();
+                rsCheckRows.next();
+                checkRows = rsCheckRows.getInt("rows");
+
+                if (checkRows == 1) {
+                    PreparedStatement createStatement = this.shared.connect().prepareStatement(
+                            "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
+                            Statement.RETURN_GENERATED_KEYS
                     );
-                    createCategoryStatement.setString(1, name);
-                    createCategoryStatement.setString(2, description);
-                    createCategoryStatement.setInt(3, generatedKey);
-                    createCategoryStatement.execute();
-                }
-            } else {
-                System.out.println("There is no requirement status with ID: " + requirementsFieldname);
-            }
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        CategoryDBConnection.shared.closeConnection();
-    }
+                    createStatement.setString(1, requirementsValue);
+                    createStatement.setInt(2, requirementsFieldname);
 
+                    createStatement.execute();
+                    ResultSet rs = createStatement.getGeneratedKeys();
+                    int generatedKey = 0;
+                    if (rs.next()) {
+                        generatedKey = rs.getInt(1);
+                        PreparedStatement createCategoryStatement = this.shared.connect().prepareStatement(
+                                "INSERT INTO categories(name, description, requirements_id) VALUES (?,?,?)"
+                        );
+                        createCategoryStatement.setString(1, name);
+                        createCategoryStatement.setString(2, description);
+                        createCategoryStatement.setInt(3, generatedKey);
+                        createCategoryStatement.execute();
+                    }
+                } else {
+                    System.out.println("There is no requirement status with ID: " + requirementsFieldname);
+                }
+            } catch (IOException ioEx) {
+                System.out.println(ioEx.getMessage());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            CategoryDBConnection.shared.closeConnection();
+        }
+    }
 }

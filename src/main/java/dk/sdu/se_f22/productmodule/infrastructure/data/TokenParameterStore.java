@@ -45,7 +45,7 @@ class TokenParameterStore  {
 			ex.printStackTrace();
 		}
 */
-		return new TokenParameter(" ", "('./?!')");
+		return new TokenParameter(" ", "\"'.!");
 	}
 
 

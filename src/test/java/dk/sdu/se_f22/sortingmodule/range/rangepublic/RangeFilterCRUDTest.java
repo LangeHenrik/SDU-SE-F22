@@ -223,16 +223,6 @@ public class RangeFilterCRUDTest {
                                 () -> rangeFilterCRUD.create("negative Max", "name", "price", 0, longs)
                         );
                     }
-
-                    @ParameterizedTest(name = "filter max negative {0}")
-                    @DisplayName("Negative max double")
-                    @ValueSource(ints = {-1, -3})
-                    void negativeMaxTime(int epochSec) {
-                        Instant instant = Instant.ofEpochSecond(epochSec); // Format from epochSec. MIGHT BE A BETTER WAY?
-                        Assertions.assertThrows(InvalidFilterException.class,
-                                () -> rangeFilterCRUD.create("negative Max", "name", "price", Instant.ofEpochSecond(0), instant)
-                        );
-                    }
                 }
 
                 @Nested

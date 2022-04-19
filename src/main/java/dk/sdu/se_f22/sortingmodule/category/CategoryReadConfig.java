@@ -7,9 +7,9 @@ import java.io.InputStream;
 import java.util.*;
 
 public class CategoryReadConfig {
-    HashMap<String, String> result = new HashMap<String, String>();
+    Properties result;
 
-    public HashMap<String, String> getPropValues() throws IOException {
+    public Properties getPropValues() throws IOException {
         String propFileName = "config.properties";
 
         try (InputStream inputStream = new FileInputStream(propFileName)) {
@@ -20,17 +20,7 @@ public class CategoryReadConfig {
             } else {
                 throw new FileNotFoundException("Property file '" + propFileName + "' not found in the classpath");
             }
-
-            Date time = new Date(System.currentTimeMillis());
-
-            // get the property value and print it out
-            String urlValue = prop.getProperty("db_url");
-            String usernameValue = prop.getProperty("db_user");
-            String passwordValue = prop.getProperty("db_password");
-
-            result.put("db_url", urlValue);
-            result.put("db_user", usernameValue);
-            result.put("db_password", passwordValue);
+            result = prop;
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         }

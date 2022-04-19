@@ -13,6 +13,7 @@ public class TemporaryConnectionTest {
 
     public static void main(String[] args) {
         testMethod();
+        System.out.println(CategoryDBConnection.shared.getAllCategories());
 
         System.out.println(CategoryDBConnection.shared.getAllCategories());
 

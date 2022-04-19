@@ -10,9 +10,7 @@ import java.util.Set;
 public class ReplaceForbiddenChars {
 
     private IllegalChars illegalCharsClass = new IllegalChars();
-
     private List<String> illegalChars = illegalCharsClass.illegalCharsFromDB();
-
 
     public String removeForbiddenChars(String toSort) {
         toSort = toSort.replaceAll(SearchModuleUtils.convertDelimitersToRegex(this.illegalChars), "");
@@ -31,6 +29,4 @@ public class ReplaceForbiddenChars {
         this.illegalChars.add(illegalChar);
 
     }
-
-
 }

@@ -223,12 +223,13 @@ class DatabaseTest {
         }
     }
 
-
+    @Disabled("not yet written")
     @Test
     void update() {
 
     }
 
+    @Disabled("not yet written")
     @Test
     void delete() {
 
@@ -244,6 +245,4 @@ class DatabaseTest {
                 () -> Assertions.assertEquals(new TimeFilter(3, "test name time", "test description for time filter", "expirationDate", Instant.parse("2018-11-30T15:35:24Z"), Instant.parse("2022-11-30T15:35:24Z")), result.get(2))
         );
     }
-
-
 }

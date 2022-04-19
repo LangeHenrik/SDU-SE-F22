@@ -47,7 +47,7 @@ public class ProductListTokensController {
 
     @FXML
     void initialize() {
-        this.allProducts = App.productManager != null ? App.productManager.getAllProducts() : new ArrayList<>();
+        this.allProducts = App.productManager != null ? App.productManager.readAllProducts() : new ArrayList<>();
         Product product = new Product();
         product.set(ProductAttribute.NAME, "Wubba");
         product.set(ProductAttribute.DESCRIPTION, "tre tre tre tre");

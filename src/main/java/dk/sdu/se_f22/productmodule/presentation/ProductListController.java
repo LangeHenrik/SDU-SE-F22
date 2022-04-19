@@ -39,7 +39,7 @@ public class ProductListController {
 
     @FXML
     void initialize() {
-        ArrayList<Product> products = App.productManager != null ? App.productManager.getAllProducts() : new ArrayList<>();
+        ArrayList<Product> products = App.productManager != null ? App.productManager.readAllProducts() : new ArrayList<>();
 
         for (Product p : products) {
             createProductListing(p);
@@ -95,7 +95,7 @@ public class ProductListController {
     void handleProceed(ActionEvent actionEvent) {
         Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
         try {
-            Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("producttokenization.fxml"));
+            Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("productlisttokens.fxml"));
             Scene scene = new Scene(fxmlLoader, 800,600);
             ((Stage)window).setScene(scene);
         } catch (IOException e) {

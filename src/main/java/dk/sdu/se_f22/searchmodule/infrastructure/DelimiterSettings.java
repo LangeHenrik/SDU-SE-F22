@@ -16,7 +16,7 @@ public class DelimiterSettings {
             updateDelimitersToDatabaseState();
             return delimiters;
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when getting search delimiters: " + e.getMessage());
             return null;
         }
     }
@@ -50,7 +50,7 @@ public class DelimiterSettings {
         } catch (PSQLException ex) {
             LoggingProvider.getLogger(this.getClass()).warn("This delimiter already exist");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when add a search delimiter: " + e.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class DelimiterSettings {
             PreparedStatement stmt = prepareDeleteStatement("DELETE FROM searchtokendelimiters WHERE delimiter=?", delim);
             return executeStatementIfDelimIsInDelimiters(delim, stmt);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(DelimiterSettings.class).error("A critical error happened when removing a search delimiter: " + e.getMessage());
             return false;
         }
     }

@@ -63,7 +63,7 @@ public class SearchLogger {
             insertStatement.execute();
             insertStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(SearchLogger.class).error("A critical error happened when saving search logs: " + e.getMessage());
         }
 
 
@@ -111,7 +111,7 @@ public class SearchLogger {
 
         }
         catch(SQLException e) {
-            e.printStackTrace();
+            LoggingProvider.getLogger(SearchLogger.class).error("A critical error happened when fetching all search logs: " + e.getMessage());
         }
         return searchList;
     }

@@ -91,7 +91,9 @@ public class SearchModuleImpl implements SearchModule {
 
     @Override
     public SearchHits search(String query) {
-        List<String> tokens = List.of();
+        ReplaceForbiddenChars replaceForbiddenChars = new ReplaceForbiddenChars();
+        String FIXTHISNAME = replaceForbiddenChars.removeForbiddenChars(query);
+        List<String> tokens = new Tokenizer().tokenize(FIXTHISNAME);
         tokens = filterTokens(tokens);
 
         SearchHits searchHits = new SearchHits();

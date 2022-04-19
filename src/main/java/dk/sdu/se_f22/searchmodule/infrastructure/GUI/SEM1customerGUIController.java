@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
 import java.util.NoSuchElementException;
 
 public class SEM1customerGUIController {
@@ -21,29 +22,34 @@ public class SEM1customerGUIController {
     private Label brandHitsCounter;
     @FXML
     private Label productHitsCounter;
-    private SearchLog searchLog;
     private SearchModuleImpl searchModule = new SearchModuleImpl();
 
 
     @FXML
-    public void onSem1SearchButton(){
+    public void onSem1SearchButton() {
         try {
             SearchHits searchResults = searchModule.search(SEM1customerSearchBar.getText());
-            for (var content : searchResults.getContents()) {
-                SEM1customerText.appendText(content.toString()+"\n");
+            if (!searchResults.getContents().isEmpty()) {
+                for (var content : searchResults.getContents()) {
+                    SEM1customerText.appendText(content.toString() + "\n");
+                }
             }
-            for (var brand : searchResults.getBrands()) {
-                SEM1customerText.appendText(brand.toString()+"\n");
+            if (!searchResults.getContents().isEmpty()) {
+                for (var brand : searchResults.getBrands()) {
+                    SEM1customerText.appendText(brand.toString() + "\n");
+                }
             }
-            for (var product : searchResults.getProducts()) {
-                SEM1customerText.appendText(product.toString() + "\n");
+            if (!searchResults.getContents().isEmpty()) {
+                for (var product : searchResults.getProducts()) {
+                    SEM1customerText.appendText(product.toString() + "\n");
+                }
             }
-        } catch (NoSuchElementException e){
+            brandHitsCounter.setText(String.valueOf(searchResults.getBrands().size()));
+            productHitsCounter.setText(String.valueOf(searchResults.getProducts().size()));
+
+        } catch (NoSuchElementException e) {
             System.out.println("No elements found");
             SEM1customerText.appendText("No elements found");
         }
-        brandHitsCounter.setText(String.valueOf(searchLog.getBrandsCounter()));
-        productHitsCounter.setText(String.valueOf(searchLog.getProductCounter()));
-
     }
 }

@@ -14,8 +14,9 @@ public class TemporaryConnectionTest {
     public static void main(String[] args) {
         testMethod();
         System.out.println(CategoryDBConnection.shared.getAllCategories());
-
-        System.out.println(CategoryDBConnection.shared.getAllCategories());
+        System.out.println(CategoryDBConnection.shared.getCategoryById(1));
+        System.out.println(CategoryDBConnection.shared.getCategoryById(4));
+        System.out.println(CategoryDBConnection.shared.getCategoryById(7));
 
         // USED FOR OWN GOODS AND TESTING
         /*

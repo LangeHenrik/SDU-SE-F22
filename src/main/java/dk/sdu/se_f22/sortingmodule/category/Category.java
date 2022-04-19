@@ -67,6 +67,35 @@ public class Category {
                 + "ID: " + getId() + "\n"
                 + "Name: " + getName() + "\n"
                 + "Description: " + getDescription() + "\n"
-                + "ParentId: " + getParentId() + "\n";
+                + "ParentId: " + getParentId() + "\n"
+                + "Value: " + getRequirementValue() + "\n"
+                + "Status: " + getRequirementStatus() + "\n";
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Category casted)){
+            return false;
+        }
+        if(this.id != casted.getId()){
+            return false;
+        }
+        if(!this.name.equals(casted.getName())){
+            return false;
+        }
+        if(!this.description.equals(casted.getDescription())){
+            return false;
+        }
+        if(this.parentId != casted.getParentId()){
+            return false;
+        }
+        if(!this.requirementValue.equals(casted.getRequirementValue())){
+            return false;
+        }
+        if(!this.requirementStatus.equals(casted.getRequirementStatus())){
+            return false;
+        }
+
+        return true;
     }
 }

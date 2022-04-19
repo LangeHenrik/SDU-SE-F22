@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class CategoryReadConfig {
+    // NOT USED - Only for educational proposes
     Properties result;
 
     public Properties getPropValues() throws IOException {

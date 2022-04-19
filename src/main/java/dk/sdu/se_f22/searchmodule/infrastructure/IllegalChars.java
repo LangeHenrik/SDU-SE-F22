@@ -13,6 +13,11 @@ import java.util.List;
 
 public class IllegalChars {
 
+    public String removeForbiddenChars(String toSort) {
+        toSort = toSort.replaceAll(SearchModuleUtils.convertDelimitersToRegex(illegalCharsFromDB()), "");
+        return toSort;
+    }
+
     public void addChar(String character) {
         //Adds illegal characters to database
         try (Connection connection = DBConnection.getPooledConnection()) {

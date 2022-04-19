@@ -25,7 +25,13 @@ interface SearchModule {
 }
 
 class ReplaceForbbidenChars {
+    - illegalCharsClass: IllegalChars
+    - illegalChars: List<String>
+
     + removeForbiddenChars(toSort: String): String
+    + getIllegalChars(): List<String>
+    + setIllegalChars(illegalChars: List<String>): void
+    + addIllegalChars(illegalChar: String): void
 }
 
 class SearchModuleImpl implements SearchModule {
@@ -85,6 +91,12 @@ class DatabaseConnectionException extends Exception {
     // Throws when the database connection failed //
 }
 
+class IllegalChars{
+    +addChar(character: String): void
+    +illegalCharsFromDB(): List<String>
+    +removeChar((character: String): void
+}
+
 
 Tokenization -> SearchModuleUtils
 Tokenization --> DelimiterSettings
@@ -93,6 +105,6 @@ Filterable <- SearchModuleImpl
 SearchModuleImpl -> DBConnection
 DatabaseConnectionException <-- DBConnection: //<<throws>>//
 DatabaseConnectionException <-- SearchModuleImpl: //<<throws>>//
-
+IllegalChars -> ReplaceForbbidenChars
 
 @enduml

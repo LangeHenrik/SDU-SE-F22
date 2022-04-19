@@ -9,6 +9,7 @@ import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -23,6 +24,13 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSearchModule {
+    private SearchModule searchModule;
+
+    @BeforeEach
+    public void beforeEach(){
+        this.searchModule = new SearchModuleImpl();
+    }
+
 
     @Test
     public void testFilterTokens() {
@@ -120,7 +128,7 @@ public class TestSearchModule {
         List<Brand> products = searchResult.getProducts().stream().toList();
         assertTrue(products.stream().findFirst().isPresent());
     }
-
+  
     void getDelimitersTest() {
         try {
             Connection connection = DBConnection.getPooledConnection();
@@ -194,5 +202,4 @@ public class TestSearchModule {
         searchModule.removeDelimiter("hello");
         assertArrayEquals(new String[0], searchModule.getDelimiters().toArray());
     }
-
 }

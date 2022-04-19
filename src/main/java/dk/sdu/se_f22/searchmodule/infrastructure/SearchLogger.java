@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class SearchLogger {
     private static final Logger logger = LoggingProvider.getLogger(SearchLogger.class);
@@ -33,41 +34,38 @@ public class SearchLogger {
                 }
             }
 
-            // Products
-            for (Product p : products) {
-                PreparedStatement productInsertStatement = connection.prepareStatement("INSERT INTO productsearches(productid, searchid) VALUES (?, ?);");
-                productInsertStatement.setString(1, p.toString());
-                productInsertStatement.setInt(2, id);
-                productInsertStatement.execute();
-                productInsertStatement.close();
-            }
+            // Insert search result id's
+            insertValues(products, id,
+                    "INSERT INTO productsearches(productid, searchid) VALUES (?, ?);",
+                    Product::toString);
 
-            // Brands
-            for (Brand b : brands) {
-                PreparedStatement brandInsertStatement = connection.prepareStatement("INSERT INTO brandsearches(brandid, searchid) VALUES (?, ?);");
-                brandInsertStatement.setString(1, String.valueOf(b.getId()));
-                brandInsertStatement.setInt(2, id);
-                brandInsertStatement.execute();
-                brandInsertStatement.close();
-            }
+            insertValues(brands, id,
+                    "INSERT INTO brandsearches(brandid, searchid) VALUES (?, ?);",
+                    (brand) -> Integer.toString(brand.getId()));
 
-            // Content
-            // for (Content c : contents) {
-            //     PreparedStatement contentInsertStatement = connection.prepareStatement("INSERT INTO contentsearches(contentid, searchid) VALUES (?, ?);");
-            //     contentInsertStatement.setString(1, c.getId());
-            //     contentInsertStatement.setInt(2, id);
-            //     contentInsertStatement.execute();
-            //     contentInsertStatement.close();
-            // }
+            // insertValues(contents, id, "INSERT INTO contentsearches(contentid, searchid) VALUES (?, ?);", (content) -> Content::toString));
 
             insertStatement.execute();
             insertStatement.close();
         } catch (SQLException e) {
             LoggingProvider.getLogger(SearchLogger.class).error("A critical error happened when saving search logs: " + e.getMessage());
         }
-
-
     }
+
+    private static <T> void insertValues(List<T> elements, int id, String sql, Function<T, String> getElementID) {
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            for (T elem : elements) {
+                PreparedStatement brandInsertStatement = connection.prepareStatement(sql);
+                brandInsertStatement.setString(1, getElementID.apply(elem));
+                brandInsertStatement.setInt(2, id);
+                brandInsertStatement.execute();
+                brandInsertStatement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<SearchLog> getAllSearchLogs() {
         List<String> brands = new ArrayList<>();
         List<String> products = new ArrayList<>();
@@ -113,6 +111,7 @@ public class SearchLogger {
         catch(SQLException e) {
             LoggingProvider.getLogger(SearchLogger.class).error("A critical error happened when fetching all search logs: " + e.getMessage());
         }
+
         return searchList;
     }
 }

@@ -19,9 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 
-// Currently, the tests involving instants fail,
-// since the string format of instants are not known at the moment,
-// and should be researched
 public class RangeFilterCRUDTest {
 
     private RangeFilterCRUD rangeFilterCRUD;

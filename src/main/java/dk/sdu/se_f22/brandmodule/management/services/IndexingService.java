@@ -22,7 +22,7 @@ public class IndexingService implements IIndexingService {
         updateIndex.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println(p.getIndexingInterval());
+              //  System.out.println(p.getIndexingInterval());
                 
                 //Ensure that brands are indexed in regular intervals
                 p.BIM2.indexBrands(p.getAllBrands());

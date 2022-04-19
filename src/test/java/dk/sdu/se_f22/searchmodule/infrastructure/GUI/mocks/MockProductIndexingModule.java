@@ -9,21 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MockBrandIndexingModule implements IndexingModule<Brand> {
-    private Map<String, Brand> data = new HashMap<>();
+public class MockProductIndexingModule implements IndexingModule<Product> {
+    private Map<String, Product> data = new HashMap<>();
 
-    public MockBrandIndexingModule() {
-        var brand = new Brand();
-        brand.setId(123);
-        brand.setName("Hello1");
-        data.put("Hello1", brand);
+    public MockProductIndexingModule() {
+        data.put("Test1", new Product());
     }
 
     @Override
-    public List<Brand> queryIndex(List<String> tokens) {
-        var results = new ArrayList<Brand>();
+    public List<Product> queryIndex(List<String> tokens) {
+        var results = new ArrayList<Product>();
 
         for(var token : tokens) {
+            System.out.println(token);
             if(data.get(token) != null)
                 results.add(data.get(token));
         }
@@ -31,4 +29,3 @@ public class MockBrandIndexingModule implements IndexingModule<Brand> {
         return results;
     }
 }
-

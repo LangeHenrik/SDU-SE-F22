@@ -3,6 +3,7 @@ package dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchLog;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ public class SEM1customerGUIController {
     private TextField SEM1customerSearchBar;
     @FXML
     private TextArea SEM1customerText;
+
     @FXML
     private Label brandHitsCounter;
     @FXML
@@ -32,19 +34,22 @@ public class SEM1customerGUIController {
 
     @FXML
     public void onSem1SearchButton() {
-        try {
+        boolean foundResult = false;
             SearchHits searchResults = searchModule.search(SEM1customerSearchBar.getText());
             if (!searchResults.getContents().isEmpty()) {
+                foundResult = true;
                 for (var content : searchResults.getContents()) {
                     SEM1customerText.appendText(content.toString() + "\n");
                 }
             }
-            if (!searchResults.getContents().isEmpty()) {
+            if (!searchResults.getBrands().isEmpty()) {
+                foundResult = true;
                 for (var brand : searchResults.getBrands()) {
                     SEM1customerText.appendText(brand.toString() + "\n");
                 }
             }
-            if (!searchResults.getContents().isEmpty()) {
+            if (!searchResults.getProducts().isEmpty()) {
+                foundResult = true;
                 for (var product : searchResults.getProducts()) {
                     SEM1customerText.appendText(product.toString() + "\n");
                 }
@@ -52,13 +57,21 @@ public class SEM1customerGUIController {
             brandHitsCounter.setText(String.valueOf(searchResults.getBrands().size()));
             productHitsCounter.setText(String.valueOf(searchResults.getProducts().size()));
 
-        } catch (NoSuchElementException e) {
-            System.out.println("No elements found");
-            SEM1customerText.appendText("No elements found");
-        }
+            if(!foundResult) {
+                System.out.println("No elements found");
+                SEM1customerText.appendText("No elements found");
+            }
     }
 
     public SearchModuleImpl getSearchModule() {
         return searchModule;
+    }
+
+    public Label getBrandHitsCounter() {
+        return brandHitsCounter;
+    }
+
+    public Label getProductHitsCounter() {
+        return productHitsCounter;
     }
 }

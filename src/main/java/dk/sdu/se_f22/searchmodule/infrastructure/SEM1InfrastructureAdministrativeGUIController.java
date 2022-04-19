@@ -2,9 +2,13 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
-public class SEM1InfrastructureAdministrativeGUIController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class SEM1InfrastructureAdministrativeGUIController implements Initializable {
 
     @FXML
     private RadioButton delimiterRB;
@@ -19,16 +23,18 @@ public class SEM1InfrastructureAdministrativeGUIController {
     @FXML
     private TextField removeTextField;
     @FXML
-    private Label delimitersCount;
-    @FXML
-    private Label forbiddenCharsCount;
-    @FXML
     private TextArea delimitersTextArea;
     @FXML
     private TextArea forbiddenCharsTextArea;
 
     private DelimiterSettings delimiterSettings;
+    private IllegalChars illegalChars;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        delimiterSettings = new DelimiterSettings();
+        illegalChars = new IllegalChars();
+    }
 
     public void addBtn(ActionEvent e) {
         if (delimiterRB.isSelected()) {
@@ -48,24 +54,28 @@ public class SEM1InfrastructureAdministrativeGUIController {
         }
     }
 
-    public void addDelimiter() {
+    private void addDelimiter() {
         delimiterSettings.addDelimiter(addTextField.getText());
         addTextField.clear();
         showDelimiters();
     }
 
-    public void removeDelimiter() {
+    private void removeDelimiter() {
         delimiterSettings.removeDelimiter(removeTextField.getText());
         removeTextField.clear();
         showForbiddenChars();
     }
 
-    public void addForbiddenChar() {
-
+    private void addForbiddenChar() {
+        illegalChars.addChar(addTextField.getText());
+        addTextField.clear();
+        showForbiddenChars();
     }
 
-    public void removeForbiddenChar() {
-
+    private void removeForbiddenChar() {
+        illegalChars.removeChar(removeTextField.getText());
+        removeTextField.clear();
+        showForbiddenChars();
     }
 
     private void showDelimiters() {
@@ -75,6 +85,8 @@ public class SEM1InfrastructureAdministrativeGUIController {
     }
 
     private void showForbiddenChars() {
-
+        for (String s : illegalChars.illegalCharsFromDB()) {
+            forbiddenCharsTextArea.appendText("\"" + s + "\"" + " ,");
+        }
     }
 }

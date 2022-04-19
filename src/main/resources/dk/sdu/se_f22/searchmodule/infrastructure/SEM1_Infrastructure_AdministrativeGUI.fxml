@@ -22,8 +22,8 @@
          </toggleGroup>
       </RadioButton>
       <RadioButton fx:id="forbiddenCharsRB" layoutX="300.0" layoutY="89.0" mnemonicParsing="false" text="Forbidden Characters" toggleGroup="$SearchSettingsToggle" />
-      <Button fx:id="addBtn" layoutX="91.0" layoutY="125.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="Add" />
-      <Button fx:id="removeBtn" layoutX="90.0" layoutY="168.0" mnemonicParsing="false" text="Remove" />
+      <Button fx:id="addBtn" layoutX="91.0" layoutY="125.0" mnemonicParsing="false" onAction="#addBtn" prefHeight="25.0" prefWidth="59.0" text="Add" />
+      <Button fx:id="removeBtn" layoutX="90.0" layoutY="168.0" mnemonicParsing="false" onAction="#removeBtn" text="Remove" />
       <TextField fx:id="addTextField" layoutX="162.0" layoutY="125.0" prefHeight="25.0" prefWidth="279.0" />
       <TextField fx:id="removeTextField" layoutX="162.0" layoutY="168.0" prefHeight="25.0" prefWidth="279.0" />
       <TextArea fx:id="delimitersTextArea" editable="false" layoutX="130.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />

@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.mockCMSInfra;
 
+import dk.sdu.se_f22.contentmodule.infrastructure.domain.Token;
+
 import java.util.ArrayList;
 
 public class MockFacade {
@@ -13,15 +15,15 @@ public class MockFacade {
         stopW = new MockStopW();
     }
 
-    public void mockUseStem(ArrayList<String> mocktokens){
+    public void mockUseStem(ArrayList<Token> mocktokens){
         stem.mockStem(new ArrayList<>());
     }
 
-    public void mockUseStopW(ArrayList<String> mocktokens){
+    public void mockUseStopW(ArrayList<Token> mocktokens){
         stopW.mockStopW(new ArrayList<>());
     }
 
-    public void mockUseIrr(ArrayList<String> mocktokens){
+    public void mockUseIrr(ArrayList<Token> mocktokens){
         irrW.mockIrrW(new ArrayList<>());
     }
 }

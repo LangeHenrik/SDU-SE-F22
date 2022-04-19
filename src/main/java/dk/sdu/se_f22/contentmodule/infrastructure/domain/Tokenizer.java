@@ -22,15 +22,7 @@ class Tokenizer {
                tokens.add(new Token(s.toLowerCase(Locale.ROOT), site.getId()));
             }
         }
-
-
-
-
-
-
         return tokens;
     }
-
-
 
 }

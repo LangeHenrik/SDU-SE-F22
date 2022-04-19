@@ -87,7 +87,6 @@ public class DBConnection {
         // NOTE: This isn't foolproof way to ensure getConnection isn't used outside the main thread.
         if (Thread.currentThread().getId() != 1) {
             logger.warn("A database connection cannot be retrieved from outside the main thread, use getPooledConnection() instead!");
-            return null;
         }
 
         try {

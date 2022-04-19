@@ -35,8 +35,10 @@ class DoubleFilterTest {
 
         @Test
         @DisplayName("filter a list of actual products")
-        void useFilter() {
+        void useFilter() throws InvalidFilterTypeException {
             DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
+            internalFilter.setUserMax(1000.0);
+            internalFilter.setUserMin(0.0);
             List<RangeSearchResultMock> mockResults = Helpers.readMockResultsFromFile("MockResults.csv");
 
             //crude check that the mockresults are what we expect, and have not been changed
@@ -70,6 +72,8 @@ class DoubleFilterTest {
         @DisplayName("Filtering an empty list of results")
         void filteringAnEmptyListOfResults() {
             DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
+            internalFilter.setUserMax(1000.0);
+            internalFilter.setUserMin(0.0);
             Collection<RangeSearchResultMock> emptyResults = new ArrayList<>();
 
             Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(emptyResults);

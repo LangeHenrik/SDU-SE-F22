@@ -29,12 +29,10 @@ abstract class RangeFilterClass implements RangeFilter{
         ID = -1; // Use -1 to show that it shouldn't be used. Maybe write test for it layer.
     }
 
-    //todo test this
     public abstract Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs);
 
     @Override
     public boolean equals(Object other) {
-        //todo test this
         if(!(other instanceof RangeFilterClass casted)){
             return false;
         }
@@ -86,7 +84,6 @@ abstract class RangeFilterClass implements RangeFilter{
 
 
     //Below are the methods which are specialization dependent
-    //todo test these in their specific implemenatations
     @Override
     public double getDbMinDouble() throws InvalidFilterTypeException {
         throw new InvalidFilterTypeException("Not a double filter");

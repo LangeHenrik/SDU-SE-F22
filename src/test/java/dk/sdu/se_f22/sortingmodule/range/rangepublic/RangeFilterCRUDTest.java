@@ -41,7 +41,7 @@ public class RangeFilterCRUDTest {
             class validFiltersThatShouldPass {
                 @Test
                 @DisplayName("ValidFilters with regular attributes")
-                    // Maybe later create csv file for testing valid attributes
+                // A csv file for testing valid attributes is in progress
                 void validFiltersWithRegularAttributesDouble() {
                     String description = "This filter checks a lot of attributes bla bla";
                     String name = "Sample filter";
@@ -57,7 +57,6 @@ public class RangeFilterCRUDTest {
 
             @Test
             @DisplayName("ValidFilters with regular attributes")
-                // Maybe later create csv file for testing valid attributes
             void validFiltersWithRegularAttributesLong() {
                 String description = "This filter checks a lot of attributes bla bla";
                 String name = "Sample filter";
@@ -72,7 +71,6 @@ public class RangeFilterCRUDTest {
 
             @Test
             @DisplayName("ValidFilters with regular attributes")
-                // Maybe later create csv file for testing valid attributes
             void validFiltersWithRegularAttributesTime() {
                 String description = "This filter checks a lot of attributes bla bla";
                 String name = "Sample filter";
@@ -102,7 +100,7 @@ public class RangeFilterCRUDTest {
                     Instant minInstant = Instant.ofEpochSecond(0);
                     Instant maxInstant = Instant.ofEpochSecond(800);
 
-                    Assertions.assertAll("Chcek that the 3 different filter types throw with empty description.",
+                    Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
                                             .create(input, "sample name", "Sample attribute", minDouble, maxDouble)
@@ -133,7 +131,7 @@ public class RangeFilterCRUDTest {
                     Instant minInstant = Instant.ofEpochSecond(0);
                     Instant maxInstant = Instant.ofEpochSecond(800);
 
-                    Assertions.assertAll("Chcek that the 3 different filter types throw with empty description.",
+                    Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
                                             .create("Testing empty product attribute", "sample name", input, minDouble, maxDouble)
@@ -163,7 +161,7 @@ public class RangeFilterCRUDTest {
                     Instant minInstant = Instant.ofEpochSecond(0);
                     Instant maxInstant = Instant.ofEpochSecond(800);
 
-                    Assertions.assertAll("Chcek that the 3 different filter types throw with empty description.",
+                    Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
                                             .create("Testing empty product attribute", input, "attribute", minDouble, maxDouble)
@@ -411,7 +409,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Delete time filter twice")
+        @DisplayName("Delete long filter twice")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
         void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) {
             //expected fail until database.create has been implemented
@@ -516,7 +514,7 @@ public class RangeFilterCRUDTest {
             );
         }
 
-        // Commented out because it is very hard for us to make the database empty
+        // Below is commented out because it is very hard for us to make the database empty
         // At least if we want robust tests of the other parts to the system
 
 //        @Test

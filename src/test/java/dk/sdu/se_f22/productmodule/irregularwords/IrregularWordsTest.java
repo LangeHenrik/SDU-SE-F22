@@ -14,7 +14,6 @@ class IrregularWordsTest {
     //Connecting the test class to the database before each test.
     @BeforeAll
     static void start() {
-    IrregularWords.INSTANCE.initialize();
     IrregularWords.INSTANCE.insertValues();
     }
 
@@ -71,7 +70,6 @@ class IrregularWordsTest {
 
     @Test
     void readIRWord() {
-        IrregularWords.INSTANCE.initialize();
         assertTrue(IrregularWords.INSTANCE.readIRWord());
     }
 

@@ -12,22 +12,13 @@ public class IrregularWords implements IIrregularWords {
     private IrregularWords (){}
     //use this url in the config propertise file jdbc:postgresql://testdb.stud-srv.sdu.dk:5432/semesterproject2
     //Initialize method to create a connection to the database.
-    public void initialize(){
-        try {
-            DBConnection.getPooledConnection();
-        } catch (SQLException e) {
-                e.printStackTrace();
-        }
-    }
-
-
     //Method used for inserting new words with an id into the database.
     @Override
     public boolean createIRWord(int Index, String Word) {
-        try {
+        try (Connection connection = DBConnection.getPooledConnection()){
             //Preparing a statement with the needed SQL language, thereafter putting the method signature
             //into the statement and executing.
-            PreparedStatement insertStatement = DBConnection.getPooledConnection().prepareStatement(
+            PreparedStatement insertStatement = connection.prepareStatement(
                     "INSERT INTO irregularwords (index, word) VALUES (?,?)");
             insertStatement.setInt(1,Index);
             insertStatement.setString(2,Word);
@@ -51,6 +42,12 @@ public class IrregularWords implements IIrregularWords {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }finally {
+            try {
+                DBConnection.getPooledConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -64,7 +61,14 @@ public class IrregularWords implements IIrregularWords {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }finally {
+            try {
+                DBConnection.getPooledConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     //Method for updating words in the database table.
@@ -79,6 +83,12 @@ public class IrregularWords implements IIrregularWords {
         }catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }finally {
+            try {
+                DBConnection.getPooledConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -96,6 +106,12 @@ public class IrregularWords implements IIrregularWords {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                DBConnection.getPooledConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -127,6 +143,12 @@ public class IrregularWords implements IIrregularWords {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }finally {
+            try {
+                DBConnection.getPooledConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -142,6 +164,12 @@ public class IrregularWords implements IIrregularWords {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                DBConnection.getPooledConnection().close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         System.out.println(index);
         return index;
@@ -179,7 +207,7 @@ public class IrregularWords implements IIrregularWords {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
-                createIRWord(Integer.parseInt(data[0]),data[1]);
+                createIRWord(Integer.parseInt(data[1]),data[0]);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -192,7 +220,7 @@ public class IrregularWords implements IIrregularWords {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
-                deleteIRWord((data[1]));
+                deleteIRWord((data[0]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -224,7 +252,6 @@ public class IrregularWords implements IIrregularWords {
         boolean running = true;
         try (Scanner s = new Scanner(System.in)) {
             while (running) {
-                INSTANCE.initialize();
                 switch (s.nextLine().toLowerCase()) {
                     case "createirword":
                     case "create":

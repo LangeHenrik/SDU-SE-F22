@@ -13,9 +13,11 @@ class  FilteredTokens {
     private static ArrayList<Token> tokens;
     private int htmlId;
     private int idToken;
-    private static int originalId = -1; //To hold temp token ID
+    private static int tempId = -1; //To hold temp token ID
     private String filteredTokens;
     private Date timeStamp;
+    private ArrayList<String> tokenStrings;
+    private ArrayList<Token> stringTokens;
     IMockCMSIndex mockindex = new MockCMSIndex(); // used for mocking Index-module
     ArrayList<Token> mocktokens = new ArrayList<>();  //used for mocking Index-module
     MockFacade mockfacade = new MockFacade(); //used for mocking Stop,Irr & Stem-modules
@@ -38,25 +40,35 @@ class  FilteredTokens {
         return filteredTokens;
     }
 
-    private static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
-        ArrayList<String> tokenStrings = new ArrayList<>();
+    private ArrayList<String> tokenToString(ArrayList<Token> tokens) {
+        tokenStrings = new ArrayList<>();
         for(Token t : tokens) {
-            tokenStrings.add(Objects.toString(t, null));
-            if(originalId == -1) {
-                originalId = t.getOriginID();
+            tokenStrings.add(t.getDocumentText());
+            if(tempId == -1) {
+                tempId = t.getOriginID();
             } else continue;
         }
         return tokenStrings;
     }
 
+    private ArrayList<Token> stringToToken(ArrayList<String> tokenStrings) {
+        stringTokens = new ArrayList<>();
+        for(String s : tokenStrings) {
+            stringTokens.add(new Token(s, tempId));
+        }
+        return stringTokens;
+    }
+
     ArrayList<Token> filterTokens(ArrayList<Token> tokens) {
         tokenToString(tokens);
-        //tokens.set(classstopwords.methodprovided(tokens));
-        //tokens.set(classirr.searchForIrregularWords(tokens));
-        //tokens.set(classstem.methodprovided(tokens));
+        //tokens.set(classstopwords.methodprovided(tokenStrings));
+        //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokenStrings));
+        //tokens.set(classstem.methodprovided(tokenStrings));
 
-        // save tokens to database - which tables? attributes?
-        return tokens;
+        stringToToken(tokenStrings);
+
+        //save log data??
+        return stringTokens;
     }
 
     /*void setTokens(ArrayList<Token> tokenslist) {   //This method should be changed to a method for passing the tokens on to the Index module

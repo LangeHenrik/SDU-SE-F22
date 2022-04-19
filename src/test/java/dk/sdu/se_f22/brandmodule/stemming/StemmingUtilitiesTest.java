@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StemmingUtilitiesTest {
-
     @Test
     @DisplayName("Step 1a Tests")
     public void testStep1a() {
@@ -25,6 +24,8 @@ public class StemmingUtilitiesTest {
         assertEquals("bled", StemmingUtilities.step1b(new Word("bled")).getWordString());
         assertEquals("motor", StemmingUtilities.step1b(new Word("motoring")).getWordString());
         assertEquals("sing", StemmingUtilities.step1b(new Word("sing")).getWordString());
+        assertEquals("si", StemmingUtilities.step1b(new Word("si")).getWordString());
+        assertEquals("yir", StemmingUtilities.step1b(new Word("yir")).getWordString());
     }
 
     @Test
@@ -85,6 +86,7 @@ public class StemmingUtilitiesTest {
         assertEquals("electric", StemmingUtilities.step3(new Word("electrical")).getWordString());
         assertEquals("hope", StemmingUtilities.step3(new Word("hopeful")).getWordString());
         assertEquals("good", StemmingUtilities.step3(new Word("goodness")).getWordString());
+
     }
 
     @Test

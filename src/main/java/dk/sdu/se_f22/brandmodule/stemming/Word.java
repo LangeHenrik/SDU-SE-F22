@@ -41,7 +41,11 @@ public class Word {
             // If the character is a normal vowel, it obviously isn't a consonant.
             case 'a', 'e', 'i', 'o', 'u', 'æ', 'ø', 'å': return false;
             // If the character is a y, we need to check for the character's index minus one and return the reverse.
-            case 'y': return !isCons(idx - 1);
+            case 'y': {
+                if (idx == 0) return true;
+                return !isCons(idx - 1);
+            }
+
             default: return true;
         }
     }
@@ -96,6 +100,8 @@ public class Word {
     }
 
     public boolean containsVowel(int startIndex, int endIndex) {
+        if (endIndex < 0) return false;
+        if (startIndex > endIndex) return false;
         String stem = getWordString().substring(startIndex, endIndex);
         for (int i = 0; i < stem.length(); i++) {
             if (this.isVowel(i)) return true;

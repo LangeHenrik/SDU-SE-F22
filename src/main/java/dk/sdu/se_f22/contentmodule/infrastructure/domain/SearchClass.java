@@ -13,11 +13,6 @@ public class SearchClass implements IndexingModule, IMockCMSSearch{
     @Override
     public List queryIndex(List tokens) {
         ArrayList<Integer> matchingIDs;
-
-
-
-
         return null;
     }
-
 }

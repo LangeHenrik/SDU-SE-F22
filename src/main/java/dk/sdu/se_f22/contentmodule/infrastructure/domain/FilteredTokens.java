@@ -9,17 +9,16 @@ import java.util.Date;
 import java.util.List;
 
 class  FilteredTokens {
-    //Skal være Arraylist af tokens
-    private static ArrayList<String> tokens;
+    private static ArrayList<Token> tokens;
     private int htmlId;
     private int idToken;
     private String filteredTokens;
     private Date timeStamp;
     IMockCMSIndex mockindex = new MockCMSIndex(); // used for mocking Index-module
-    ArrayList<String> mocktokens = new ArrayList<>();  //used for mocking Index-module
+    ArrayList<Token> mocktokens = new ArrayList<>();  //used for mocking Index-module
     MockFacade mockfacade = new MockFacade(); //used for mocking Stop,Irr & Stem-modules
 
-    public FilteredTokens(ArrayList<String> tokens) {
+    public FilteredTokens(ArrayList<Token> tokens) {
         this.tokens = tokens;
     }
 
@@ -36,26 +35,27 @@ class  FilteredTokens {
         return filteredTokens;
     }
 
-    void filterTokens(ArrayList<String> tokens) {
+    ArrayList<Token> filterTokens(ArrayList<Token> tokens) {
         //tokens.set(classstopwords.methodprovided(tokens));
         //tokens.set(classirr.methodprovided(tokens));
         //tokens.set(classstem.methodprovided(tokens));
 
         // save tokens to database - which tables? attributes?
+        return tokens;
     }
 
-    void setTokens(ArrayList<String> tokenslist) {   //This method should be changed to a method for passing the tokens on to the Index module
+    /*void setTokens(ArrayList<Token> tokenslist) {   //This method should be changed to a method for passing the tokens on to the Index module
         tokens = new ArrayList<>();
         tokens.addAll(tokenslist);
 
         mockindex.mockIndex(mocktokens); //used for mocking the method for indexing tokens
 
-    }
+    }*/ //This method is probably not nessecery
 
-    List<String> mockFilterTokens(ArrayList<String> mocktokens){  //a method for mocking and testing
+    ArrayList<Token> mockFilterTokens(ArrayList<Token> mocktokens){  //a method for mocking and testing
         mockfacade.mockUseStopW(mocktokens);
         mockfacade.mockUseIrr(mocktokens);
         mockfacade.mockUseStem(mocktokens);
-        return new ArrayList<>(mocktokens);
+        return mocktokens;
     }
 }

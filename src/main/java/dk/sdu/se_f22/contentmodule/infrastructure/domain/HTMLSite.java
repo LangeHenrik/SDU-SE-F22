@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
+import dk.sdu.se_f22.
 
-public class HTMLSite {
+public class HTMLSite implements IContentInfrastructre {
     private int id;
     private String documentText;
 
@@ -24,5 +25,10 @@ public class HTMLSite {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public HTMLSite convertedFile() {
+        return null;
     }
 }

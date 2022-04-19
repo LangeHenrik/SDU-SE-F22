@@ -37,7 +37,8 @@ public class LauncherController {
 	}
 
 	private boolean isGUI(File file) {
-		String[] parts = file.getAbsolutePath().split("\\.");
+		String dotLiteral = "\\."; // Regex to match a literal '.'
+		String[] parts = file.getAbsolutePath().split(dotLiteral);
 		String extension = parts[parts.length-1];
 		return extension.equalsIgnoreCase("fxml");
 	}

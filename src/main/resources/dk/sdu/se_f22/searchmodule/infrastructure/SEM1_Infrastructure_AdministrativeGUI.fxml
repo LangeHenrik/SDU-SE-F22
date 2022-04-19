@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.infrastructure.SEM1InfrastructureAdministrativeGUIController">
    <children>
       <Label layoutX="206.0" layoutY="41.0" text="Search Settings">
@@ -27,8 +26,8 @@
       <Button fx:id="removeBtn" layoutX="90.0" layoutY="168.0" mnemonicParsing="false" text="Remove" />
       <TextField fx:id="addTextField" layoutX="162.0" layoutY="125.0" prefHeight="25.0" prefWidth="279.0" />
       <TextField fx:id="removeTextField" layoutX="162.0" layoutY="168.0" prefHeight="25.0" prefWidth="279.0" />
-      <TextArea fx:id="delimitersTextArea" layoutX="130.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />
-      <TextArea fx:id="forbiddenCharsTextArea" layoutX="318.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />
+      <TextArea fx:id="delimitersTextArea" editable="false" layoutX="130.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />
+      <TextArea fx:id="forbiddenCharsTextArea" editable="false" layoutX="318.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />
       <Label fx:id="delimitersCount" layoutX="130.0" layoutY="233.0" text="Delimiters: 0" />
       <Label fx:id="forbiddenCharsCount" layoutX="318.0" layoutY="233.0" text="Forbidden Characters: 0" />
    </children>

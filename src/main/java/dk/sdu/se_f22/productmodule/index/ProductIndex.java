@@ -129,6 +129,8 @@ public class ProductIndex implements IProductIndex{
         }
 
     }
+
+
     public void createProduct(ProductHit product){
         try {
             PreparedStatement preparedStatement =
@@ -155,6 +157,7 @@ public class ProductIndex implements IProductIndex{
             e.printStackTrace();
         }
     }
+
 
     public List<ProductHit> getProducts(){
         List<ProductHit> productHitList = new ArrayList<>();

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String searchToken = "this";
 
         HTMLSite site2 = new HTMLSite(2,"This is the the text of two");
         HTMLSite site3 = new HTMLSite(3,"This is the text of three");

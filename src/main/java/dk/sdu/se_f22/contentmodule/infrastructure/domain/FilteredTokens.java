@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 class  FilteredTokens {
+    //Skal være Arraylist af tokens
     private static ArrayList<String> tokens;
     private int htmlId;
     private int idToken;

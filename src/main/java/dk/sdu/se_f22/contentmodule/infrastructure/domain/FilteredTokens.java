@@ -7,16 +7,19 @@ import dk.sdu.se_f22.contentmodule.infrastructure.mockCMSInfra.MockFacade;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 class  FilteredTokens {
     private static ArrayList<Token> tokens;
     private int htmlId;
     private int idToken;
+    private static int originalId = -1; //To hold temp token ID
     private String filteredTokens;
     private Date timeStamp;
     IMockCMSIndex mockindex = new MockCMSIndex(); // used for mocking Index-module
     ArrayList<Token> mocktokens = new ArrayList<>();  //used for mocking Index-module
     MockFacade mockfacade = new MockFacade(); //used for mocking Stop,Irr & Stem-modules
+    //IIrregularWords irregularWords = new IrregularWords();
 
     public FilteredTokens(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -35,9 +38,21 @@ class  FilteredTokens {
         return filteredTokens;
     }
 
+    private static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
+        ArrayList<String> tokenStrings = new ArrayList<>();
+        for(Token t : tokens) {
+            tokenStrings.add(Objects.toString(t, null));
+            if(originalId == -1) {
+                originalId = t.getOriginID();
+            } else continue;
+        }
+        return tokenStrings;
+    }
+
     ArrayList<Token> filterTokens(ArrayList<Token> tokens) {
+        tokenToString(tokens);
         //tokens.set(classstopwords.methodprovided(tokens));
-        //tokens.set(classirr.methodprovided(tokens));
+        //tokens.set(classirr.searchForIrregularWords(tokens));
         //tokens.set(classstem.methodprovided(tokens));
 
         // save tokens to database - which tables? attributes?

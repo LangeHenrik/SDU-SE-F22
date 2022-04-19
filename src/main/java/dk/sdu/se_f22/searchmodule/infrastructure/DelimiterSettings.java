@@ -46,7 +46,7 @@ public class DelimiterSettings {
             insertDelimiterIntoDatabase(delimiter);
             LoggingProvider.getLogger(this.getClass()).info("Delimiter added.");
         } catch (PSQLException ex) {
-            if (e.getSQLState().equals("23505")){
+            if (ex.getSQLState().equals("23505")){
                 LoggingProvider.getLogger(this.getClass()).warn("This delimiter already exist (" + delimiter + ")");
                 return;
             }

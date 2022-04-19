@@ -26,7 +26,7 @@ abstract class RangeFilterClass implements RangeFilter{
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
-        ID = 0; // Better way to do this?
+        ID = -1; // Use -1 to show that it shouldn't be used. Maybe write test for it layer.
     }
 
     //todo test this

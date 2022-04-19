@@ -2,11 +2,12 @@ package dk.sdu.se_f22.productmodule.irregularwords.Data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 
 public class IrregularWords implements IIrregularWords {
-    public static IrregularWords irregularWords = new IrregularWords();
+    public static IrregularWords INSTANCE = new IrregularWords();
 
     private Connection connection = null;
     private String dbName = "semesterproject2";
@@ -47,8 +48,7 @@ public class IrregularWords implements IIrregularWords {
     public boolean createIRWord(String tableWord, String insertionWord){
         try {
             //Get the ID from the first word
-            int index = irregularWords.getIndex(tableWord);
-
+            int index = INSTANCE.getIndex(tableWord);
             //Statement for inserting the insertionWord with the ID of the tableWord
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO irregularwords (index, word) VALUES (?,?)");
             stmt.setInt(1,index);
@@ -230,63 +230,60 @@ public class IrregularWords implements IIrregularWords {
         boolean running = true;
         try (Scanner s = new Scanner(System.in)) {
             while (running) {
-                irregularWords.initialize();
+                INSTANCE.initialize();
                 switch (s.nextLine().toLowerCase()) {
                     case "createirword":
                     case "create":
                         System.out.println("First type the id, then type the word you want to add");
                         System.out.println("or you can type a word from the table, followed by the word you want to add");
                         if(s.hasNextInt()) {
-                            irregularWords.createIRWord(s.nextInt(), s.next());
+                            INSTANCE.createIRWord(s.nextInt(), s.next());
                         }else{
-                            irregularWords.createIRWord(s.next(), s.next());
+                            INSTANCE.createIRWord(s.next(), s.next());
                         }
                         break;
                     case "deleteirword":
                     case "delete":
                         System.out.println("Which word do you want to delete");
-                        irregularWords.deleteIRWord(s.next());
+                        INSTANCE.deleteIRWord(s.next());
                         break;
                     case "updateirword":
                     case "update":
                         System.out.println("First type the word you want to edit, then the corrected word");
-                        irregularWords.updateIRWord(s.next(),s.next());
+                        INSTANCE.updateIRWord(s.next(),s.next());
                         break;
                     case "readirword":
                     case "read":
-                        irregularWords.readIRWord();
+                        INSTANCE.readIRWord();
                         break;
                     case "getirword":
                     case "get":
                         System.out.println("write the word");
-                        System.out.println(irregularWords.getIRWord(s.next()));
+                        System.out.println(INSTANCE.getIRWord(s.next()));
                         break;
                     case "getid":
                         System.out.println("Write the word that you want to find the ID from");
-                        irregularWords.getIndex(s.next());
+                        INSTANCE.getIndex(s.next());
                         break;
                     case "searchforirregularwords":
                     case "search":
                         System.out.println("Write the words you want to check seperated by, as follows \"word1,word2\"");
                         String string = s.nextLine();
                         String[] words = string.split(",");
-                        System.out.println(irregularWords.searchForIrregularWords(new ArrayList<String>(List.of(words))));
+                        System.out.println(INSTANCE.searchForIrregularWords(new ArrayList<String>(List.of(words))));
                         break;
                     case "insertvalues":
                         System.out.println("You should only use this method one time");
-                        irregularWords.insertValues();
+                        INSTANCE.insertValues();
                         break;
                     case "exit":
                         running=false;
                         break;
                     default:
-                        System.out.println(irregularWords.getHelp());
+                        System.out.println(INSTANCE.getHelp());
                         break;
                 }
             }
         }
-        irregularWords.initialize();
-    irregularWords.removeValues();
-
     }
 }

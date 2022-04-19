@@ -15,8 +15,8 @@ class IrregularWordsTest {
     //Connecting the test class to the database before each test.
     @BeforeAll
     static void start() {
-    IrregularWords.irregularWords.initialize();
-    IrregularWords.irregularWords.insertValues();
+    IrregularWords.INSTANCE.initialize();
+    IrregularWords.INSTANCE.insertValues();
     }
 
     @Test
@@ -27,15 +27,15 @@ class IrregularWordsTest {
         list.add("Hans2");
 
         //Create the two words in the database
-        IrregularWords.irregularWords.createIRWord(10055,"Hans");
-        IrregularWords.irregularWords.createIRWord("Hans", "Hans2");
+        IrregularWords.INSTANCE.createIRWord(10055,"Hans");
+        IrregularWords.INSTANCE.createIRWord("Hans", "Hans2");
 
         //Check that both words have been correctly added to the database
-        assertEquals(list,IrregularWords.irregularWords.searchForIrregularWords(list));
+        assertEquals(list,IrregularWords.INSTANCE.searchForIrregularWords(list));
 
         //Delete the words from the database
-        IrregularWords.irregularWords.deleteIRWord("Hans");
-        IrregularWords.irregularWords.deleteIRWord("Hans2");
+        IrregularWords.INSTANCE.deleteIRWord("Hans");
+        IrregularWords.INSTANCE.deleteIRWord("Hans2");
     }
 
     @Test
@@ -45,27 +45,28 @@ class IrregularWordsTest {
         list.add("Mathias2");
 
         // Deleting the word from the database
-        IrregularWords.irregularWords.deleteIRWord("Mathias2");
+        IrregularWords.INSTANCE.deleteIRWord("Mathias2");
 
-        assertEquals(0, IrregularWords.irregularWords.getIndex("Mathias2"));
+        assertEquals(0, IrregularWords.INSTANCE.getIndex("Mathias2"));
 
         //Reinserting the word for future use.
-        IrregularWords.irregularWords.createIRWord("Mathias1", "Mathias2");
+        IrregularWords.INSTANCE.createIRWord("Mathias1", "Mathias2");
     }
 
     @Test
     void updateIRWord() {
+
     }
 
     @Test
     void readIRWord() {
-        IrregularWords.irregularWords.initialize();
-        assertTrue(IrregularWords.irregularWords.readIRWord());
+        IrregularWords.INSTANCE.initialize();
+        assertTrue(IrregularWords.INSTANCE.readIRWord());
     }
 
     @Test
     void getIRWordCorrectOutput() {
-        ArrayList<String> result = IrregularWords.irregularWords.getIRWord("Gustav1");
+        ArrayList<String> result = IrregularWords.INSTANCE.getIRWord("Gustav1");
         String[] words = new String[3];
         for (int i = 0; i < 3; i++){
             words[i] = result.get(i);
@@ -75,7 +76,7 @@ class IrregularWordsTest {
 
     @Test
     void getIRWordWrongOutput(){
-        ArrayList<String> result = IrregularWords.irregularWords.getIRWord("Gustav2");
+        ArrayList<String> result = IrregularWords.INSTANCE.getIRWord("Gustav2");
         String[] words = new String[3];
         for (int i = 0; i < 3; i++){
             words[i] = result.get(i);
@@ -84,33 +85,33 @@ class IrregularWordsTest {
     }
 
     @Test
-    void getIDFromAllWordsWithSameID() {
+    void getIDFromAllWordsWithSameIndex() {
         int[] words = new int[3];
         for (int i = 1; i <= 3 ; i++) {
-            words[i - 1] = IrregularWords.irregularWords.getIndex("Gustav" + i);
+            words[i - 1] = IrregularWords.INSTANCE.getIndex("Gustav" + i);
         }
         assertArrayEquals(new int[] {1990,1990,1990}, words, "One or more words do not have the same ID");
     }
 
     @Test
-    void getIDFromWordsWithSameIDIncorrect(){
+    void getIDFromWordsWithSameIndexIncorrect(){
         int[] words = new int[4];
         for (int i = 1; i <= 3 ; i++) {
-            words[i - 1] = IrregularWords.irregularWords.getIndex("Gustav" + i);
+            words[i - 1] = IrregularWords.INSTANCE.getIndex("Gustav" + i);
         }
-        words[3] = IrregularWords.irregularWords.getIndex("Mathias1");
+        words[3] = IrregularWords.INSTANCE.getIndex("Mathias1");
         assertFalse(Arrays.equals(new int[] {1,1,1,1}, words), "One or more words do not have the same ID");
     }
 
     @Test
     void getIDSingleWordCorrect(){
-        int word = IrregularWords.irregularWords.getIndex("Mathias1");
+        int word = IrregularWords.INSTANCE.getIndex("Mathias1");
         assertEquals(1991,word, "Wrong ID was retrieved");
     }
 
     @Test
     void getIDSingleWordIncorrect(){
-        int word = IrregularWords.irregularWords.getIndex("Mathias1");
+        int word = IrregularWords.INSTANCE.getIndex("Mathias1");
         assertNotEquals(3, word);
     }
 
@@ -130,12 +131,12 @@ class IrregularWordsTest {
         answer.add("Hassan2");
         answer.add("Hassan3");
         answer.add("tester");
-        assertLinesMatch(answer,IrregularWords.irregularWords.searchForIrregularWords(tester));
+        assertLinesMatch(answer,IrregularWords.INSTANCE.searchForIrregularWords(tester));
 
     }
 
     @AfterAll
     static void end(){
-        IrregularWords.irregularWords.removeValues();
+        IrregularWords.INSTANCE.removeValues();
     }
 }

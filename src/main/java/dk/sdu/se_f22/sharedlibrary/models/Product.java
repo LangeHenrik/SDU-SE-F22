@@ -13,11 +13,12 @@ public class Product { //initialize class
     private final HashMap<ProductAttribute, String> productAttributes; //initialize hashmap to contain product attributes
     
     public Product(){ //product constructor w.o. attribute input
-        productAttributes = new HashMap<>(); //initialize hashmap
+        productAttributes = new HashMap<>();
+        //initialize hashmap
     }
     
     public @Nullable String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
-        return productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
+        return productAttributes.getOrDefault(pA, ""); //returns hashmap of pA's
     }
     
     public double getAsNumeric(ProductAttribute pA){

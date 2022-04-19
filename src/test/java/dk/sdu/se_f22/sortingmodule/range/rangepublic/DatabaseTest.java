@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.postgresql.util.PSQLException;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -39,6 +40,7 @@ class DatabaseTest {
                             min,
                             max)
                     );
+                    System.out.println("Created filter id is " + createdFilter.getId());
                     RangeFilter readFilter = database.read(createdFilter.getId());
 
                     Assertions.assertEquals(createdFilter, readFilter);
@@ -65,7 +67,10 @@ class DatabaseTest {
                                     Instant.parse(min),
                                     Instant.parse(max))
                     );
+                    System.out.println("Created filter id is " + createdFilter.getId());
+
                     RangeFilter readFilter = database.read(createdFilter.getId());
+
                     Assertions.assertEquals(createdFilter, readFilter);
                 } catch (InvalidFilterTypeException | SQLException e) {
                     fail(e);
@@ -80,6 +85,7 @@ class DatabaseTest {
         @DisplayName("Test creating a long filter")
         @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
         void testCreateLongFilter(String name, String description, String productAttribute, long min, long max){
+            RangeFilter createdFilter = null;
             try {
                 try {
                     RangeFilter longFilter = new LongFilter(
@@ -88,12 +94,13 @@ class DatabaseTest {
                             productAttribute,
                             min,
                             max);
-                    RangeFilter createdFilter = database.create(longFilter);
+                    createdFilter = database.create(longFilter);
+                    System.out.println("Created filter has ID "+ createdFilter.getId());
 
                     RangeFilter readFilter = database.read(createdFilter.getId());
                     Assertions.assertEquals(createdFilter, readFilter);
                 } catch (InvalidFilterTypeException | SQLException e) {
-                    fail(e);
+                    fail("Created filter " + e);
                 }
 
             } catch (UnknownFilterTypeException e) {
@@ -114,9 +121,12 @@ class DatabaseTest {
                                 min,
                                 max);
                 database.create(createdFilter);
-                Assertions.assertThrows(SQLIntegrityConstraintViolationException.class,
-                        () -> database.create(createdFilter)
-                );
+                try {
+                    database.create(createdFilter);
+                    fail("Should throw duplicate key exception");
+                } catch (PSQLException e){
+                    Assertions.assertTrue(e.getMessage().contains("ERROR: duplicate key value violates unique constraint \"sortingrangefilters_name_key\""));
+                }
             } catch (InvalidFilterTypeException | SQLException e) {
                 fail(e);
             }

@@ -113,6 +113,8 @@ BEGIN
 
     INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (filter_id_var, NEW.min, NEW.max);
 
+    new.filterid = filter_id_var;
+
     return new;
 END;
 $$
@@ -138,6 +140,8 @@ BEGIN
     RETURNING filterId into filter_id_var;
 
     INSERT INTO SortingRangeDoubleFilters (filterId, min, max) VALUES (filter_id_var, NEW.min, NEW.max);
+
+    new.filterid = filter_id_var;
 
     return new;
 END;
@@ -167,6 +171,8 @@ BEGIN
     RETURNING filterId into filter_id_var;
 
     INSERT INTO SortingRangeLongFilters (filterId, min, max) VALUES (filter_id_var, NEW.min, NEW.max);
+
+    new.filterid = filter_id_var;
 
     return new;
 END;

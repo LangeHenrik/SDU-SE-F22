@@ -20,58 +20,60 @@ public class Database implements DatabaseInterface {
      */
     @Override
     public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException, SQLException {
-        ResultSet queryResult;
-        int ID;
+        ResultSet queryResult = null;
+        ResultSet keys = null;
+        PreparedStatement statement;
+        int results = 0;
+        int ID = 0;
 
         switch (filter.getType()) {
             case DOUBLE -> {
-                PreparedStatement doubleStatement = connection.prepareStatement(
+                statement = connection.prepareStatement(
                         "INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?);",
-                        Statement.RETURN_GENERATED_KEYS
+                        new String[] { "filterid", "name", "description", "min", "max"}
                 );
-                doubleStatement.setString(1, filter.getName());
-                doubleStatement.setString(2, filter.getDescription());
-                doubleStatement.setString(3, filter.getProductAttribute());
-                doubleStatement.setDouble(4, filter.getDbMinDouble());
-                doubleStatement.setDouble(5, filter.getDbMaxDouble());
-                doubleStatement.executeQuery();
-                queryResult = doubleStatement.getGeneratedKeys();
+                statement.setString(1, filter.getName());
+                statement.setString(2, filter.getDescription());
+                statement.setString(3, filter.getProductAttribute());
+                statement.setDouble(4, filter.getDbMinDouble());
+                statement.setDouble(5, filter.getDbMaxDouble());
             }
             case LONG -> {
-                PreparedStatement longStatement = connection.prepareStatement(
+                statement = connection.prepareStatement(
                         "INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS
+                        new String[] { "filterid", "name", "description", "min", "max"}
                 );
-                longStatement.setString(1, filter.getName());
-                longStatement.setString(2, filter.getDescription());
-                longStatement.setString(3, filter.getProductAttribute());
-                longStatement.setLong(4, filter.getDbMinLong());
-                longStatement.setLong(5, filter.getDbMaxLong());
-                longStatement.executeQuery();
-                queryResult = longStatement.getGeneratedKeys();
+                statement.setString(1, filter.getName());
+                statement.setString(2, filter.getDescription());
+                statement.setString(3, filter.getProductAttribute());
+                statement.setLong(4, filter.getDbMinLong());
+                statement.setLong(5, filter.getDbMaxLong());
             }
             case INSTANT -> {
-                PreparedStatement timeStatement = connection.prepareStatement(
-                        "INSERT INTO SortingRangeInstantView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS
-                );
-                timeStatement.setString(1, filter.getName());
-                timeStatement.setString(2, filter.getDescription());
-                timeStatement.setString(3, filter.getProductAttribute());
-                timeStatement.setString(4, filter.getDbMinInstant().toString());
-                timeStatement.setString(5, filter.getDbMaxInstant().toString());
-                timeStatement.executeQuery();
-                queryResult = timeStatement.getGeneratedKeys();
+                statement = connection.prepareStatement(
+                        "INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
+                        new String[] { "filterid", "name", "description", "min", "max"}
+            );
+                statement.setString(1, filter.getName());
+                statement.setString(2, filter.getDescription());
+                statement.setString(3, filter.getProductAttribute());
+                statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
+                statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
             }
             default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
         }
-        if (!queryResult.next()){
+
+        results = statement.executeUpdate();
+        keys = statement.getGeneratedKeys();
+
+        if (results == 0){
             throw new SQLException("No ID to return.");
+        } else {
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys.next();
+            int created_filter_id = generatedKeys.getInt("filterid");
+            return createFilterWithID(filter, created_filter_id);
         }
-        ID = queryResult.getInt(1);
-
-        return createFilterWithID(filter, ID);
-
     }
 
 

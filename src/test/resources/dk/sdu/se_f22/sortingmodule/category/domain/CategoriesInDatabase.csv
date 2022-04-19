@@ -1,4 +1,4 @@
-Id, Name, Description, parentId, value, status
-1, Components, Beskrivelse, 0, Components, Contains
-4, SSDs, Beskrivelse, 0, SSDs, Contains
-7, Silkeborg, Beskrivelse, 0, Silkeborg, In Stock
+Id, Name, Description, ParentId, value, Fieldname
+1, Components, Beskrivelse, 0, Components, category
+4, SSDs, Beskrivelse, 3, SSDs, category
+8, Silkeborg, Beskrivelse, 5, Silkeborg, inStock

@@ -6,18 +6,18 @@ public class Category {
     private String description;
     private int parentId;
 
-    private String requirementStatus;
+    private String requirementFieldName;
     private String requirementValue;
 
-    public Category(int id, String name, String description, int parentId, String requirementStatus, String requirementValue){
+    public Category(int id, String name, String description, int parentId, String requirementFieldName, String requirementValue){
         this(id, name, description, parentId);
-        this.requirementStatus = requirementStatus;
+        this.requirementFieldName = requirementFieldName;
         this.requirementValue = requirementValue;
     }
 
-    public Category(int id, String name, String description, String requirementStatus, String requirementValue){
+    public Category(int id, String name, String description, String requirementFieldName, String requirementValue){
         this(id, name, description);
-        this.requirementStatus = requirementStatus;
+        this.requirementFieldName = requirementFieldName;
         this.requirementValue = requirementValue;
     }
 
@@ -53,8 +53,8 @@ public class Category {
         return parentId;
     }
 
-    public String getRequirementStatus() {
-        return requirementStatus;
+    public String getRequirementFieldName() {
+        return requirementFieldName;
     }
 
     public String getRequirementValue() {
@@ -68,8 +68,8 @@ public class Category {
                 + "Name: " + getName() + "\n"
                 + "Description: " + getDescription() + "\n"
                 + "ParentId: " + getParentId() + "\n"
-                + "Value: " + getRequirementValue() + "\n"
-                + "Status: " + getRequirementStatus() + "\n";
+                + "Fieldname: " + getRequirementFieldName() + "\n"
+                + "Value: " + getRequirementValue() + "\n";
     }
 
     @Override
@@ -92,7 +92,7 @@ public class Category {
         if(!this.requirementValue.equals(casted.getRequirementValue())){
             return false;
         }
-        if(!this.requirementStatus.equals(casted.getRequirementStatus())){
+        if(!this.requirementFieldName.equals(casted.getRequirementFieldName())){
             return false;
         }
 

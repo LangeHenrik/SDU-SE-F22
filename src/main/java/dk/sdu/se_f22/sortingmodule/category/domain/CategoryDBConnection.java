@@ -77,11 +77,11 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
 
     public Category getCategoryById(int queryId){
         Category tmpCategory = null;
-        String sql = "SELECT categories.id, parent_id, name, description, value, condition FROM categories\n" +
-                "INNER JOIN requirements\n" +
-                "on categories.requirements_id = requirements.id\n" +
-                "INNER JOIN requirements_status \n" +
-                "on requirements.status_id = requirements_status.id\n" +
+        String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
+                "INNER JOIN requirements_values \n" +
+                "on categories.requirements_id = requirements_values.id \n" +
+                "INNER JOIN requirements_fieldnames \n" +
+                "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE categories.id = ?";
 
         try(PreparedStatement queryStatement = this.shared.connect().prepareStatement(sql)) {
@@ -93,9 +93,9 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                 int parentId = queryResultSet.getInt("parent_id");
                 String name = queryResultSet.getString("name");
                 String description = queryResultSet.getString("description");
-                String status = queryResultSet.getString("condition");
+                String fieldname = queryResultSet.getString("fieldname");
                 String value = queryResultSet.getString("value");
-                tmpCategory = new Category(id, name, description, parentId, status, value);
+                tmpCategory = new Category(id, name, description, parentId, fieldname, value);
             }
             if(tmpCategory == null){
                 System.out.println("Category with the id " + queryId + " wasnt found");
@@ -195,22 +195,22 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         return 0;
     }
 
-    public void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsStatus) {
+    public void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
         try {
             int checkRows = 0;
-            PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_status WHERE id = ?");
-            checkRowsStatement.setInt(1, requirementsStatus);
+            PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+            checkRowsStatement.setInt(1, requirementsFieldName);
             ResultSet rsCheckRows = checkRowsStatement.executeQuery();
             rsCheckRows.next();
             checkRows = rsCheckRows.getInt("rows");
 
             if (checkRows == 1) {
                 PreparedStatement createStatement = this.shared.connect().prepareStatement(
-                        "INSERT INTO requirements(value, status_id) VALUES (?,?)",
+                        "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
                         Statement.RETURN_GENERATED_KEYS
                 );
                 createStatement.setString(1, requirementsValue);
-                createStatement.setInt(2, requirementsStatus);
+                createStatement.setInt(2, requirementsFieldName);
 
                 createStatement.execute();
                 ResultSet rs = createStatement.getGeneratedKeys();
@@ -227,7 +227,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     createCategoryStatement.execute();
                 }
             } else {
-                System.out.println("There is no requirement status with ID: " + requirementsStatus);
+                System.out.println("There is no requirement status with ID: " + requirementsFieldName);
             }
         } catch (IOException ioEx) {
             System.out.println(ioEx.getMessage());
@@ -237,22 +237,22 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         CategoryDBConnection.shared.closeConnection();
     }
 
-    public void createCategory(String name, String description, String requirementsValue, int requirementsStatus) {
+    public void createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
         try {
             int checkRows = 0;
-            PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_status WHERE id = ?");
-            checkRowsStatement.setInt(1, requirementsStatus);
+            PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+            checkRowsStatement.setInt(1, requirementsFieldname);
             ResultSet rsCheckRows = checkRowsStatement.executeQuery();
             rsCheckRows.next();
             checkRows = rsCheckRows.getInt("rows");
 
             if (checkRows == 1) {
                 PreparedStatement createStatement = this.shared.connect().prepareStatement(
-                        "INSERT INTO requirements(value, status_id) VALUES (?,?)",
+                        "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
                         Statement.RETURN_GENERATED_KEYS
                 );
                 createStatement.setString(1, requirementsValue);
-                createStatement.setInt(2, requirementsStatus);
+                createStatement.setInt(2, requirementsFieldname);
 
                 createStatement.execute();
                 ResultSet rs = createStatement.getGeneratedKeys();
@@ -268,7 +268,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     createCategoryStatement.execute();
                 }
             } else {
-                System.out.println("There is no requirement status with ID: " + requirementsStatus);
+                System.out.println("There is no requirement status with ID: " + requirementsFieldname);
             }
         } catch (IOException ioEx) {
             System.out.println(ioEx.getMessage());

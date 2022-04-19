@@ -28,15 +28,15 @@ public class CategoryFilter implements CategoryFilterInterface {
                 ProductHit product = (ProductHit)oldProduct;
 
                 for(Category category : categories){
-                    System.out.println(category.getRequirementStatus());
+                    System.out.println(category.getRequirementFieldName());
                     System.out.println(category.getRequirementValue());
                     System.out.println(category.getName());
-                    if (category.getRequirementStatus().toLowerCase().equals("contains")) {
+                    if (category.getRequirementFieldName().toLowerCase().equals("contains")) {
                         if(product.getCategory().contains(category.getRequirementValue())) {
                             newProducts.add(product);
                             break;
                         }
-                    } else if (category.getRequirementStatus().toLowerCase().equals("in stock")) {
+                    } else if (category.getRequirementFieldName().toLowerCase().equals("in stock")) {
                         System.out.println("VIRKER");
                         if(product.getInStock().contains(category.getRequirementValue())){
                             newProducts.add(product);
@@ -46,7 +46,7 @@ public class CategoryFilter implements CategoryFilterInterface {
                             break;
                         }
                     } else {
-                        System.out.println("Requirement Status: " + category.getRequirementStatus() + " isn't supported yet");
+                        System.out.println("Requirement Status: " + category.getRequirementFieldName() + " isn't supported yet");
                     }
                 }
             } else {

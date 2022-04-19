@@ -12,11 +12,11 @@ import java.util.List;
 public class TemporaryConnectionTest {
 
     public static void main(String[] args) {
-        testMethod();
-        System.out.println(CategoryDBConnection.shared.getAllCategories());
-        System.out.println(CategoryDBConnection.shared.getCategoryById(1));
-        System.out.println(CategoryDBConnection.shared.getCategoryById(4));
-        System.out.println(CategoryDBConnection.shared.getCategoryById(7));
+        //testMethod();
+        //System.out.println(CategoryDBConnection.shared.getAllCategories());
+        //System.out.println(CategoryDBConnection.shared.getCategoryById(1));
+        //System.out.println(CategoryDBConnection.shared.getCategoryById(4));
+        //System.out.println(CategoryDBConnection.shared.getCategoryById(8));
 
         // USED FOR OWN GOODS AND TESTING
         /*
@@ -48,14 +48,15 @@ public class TemporaryConnectionTest {
          */
         /*
         CategoryDBConnection.shared.createCategory("Components", "Beskrivelse", "Components", 2);
-        CategoryDBConnection.shared.createCategory("Processors", "Beskrivelse", "Processors", 2);
-        CategoryDBConnection.shared.createCategory("Storage", "Beskrivelse", "Storage", 2);
-        CategoryDBConnection.shared.createCategory("SSDs", "Beskrivelse", "SSDs", 2);
-        CategoryDBConnection.shared.createCategory("Arhus", "Beskrivelse", "Arhus", 1);
-        CategoryDBConnection.shared.createCategory("Vejle", "Beskrivelse", "Vejle", 1);
-        CategoryDBConnection.shared.createCategory("Silkeborg", "Beskrivelse", "Silkeborg", 1);
-        CategoryDBConnection.shared.createCategory("In Stock", "Beskrivelse", "NOT NULL", 1);
-         */
+        CategoryDBConnection.shared.createCategory("Processors", "Beskrivelse", "Processors", 1, 2);
+        CategoryDBConnection.shared.createCategory("Storage", "Beskrivelse", "Storage",1, 2);
+        CategoryDBConnection.shared.createCategory("SSDs", "Beskrivelse", "SSDs",3, 2);
+
+        CategoryDBConnection.shared.createCategory("In Stock", "Beskrivelse", "NOT NULL", 3);
+        CategoryDBConnection.shared.createCategory("Arhus", "Beskrivelse", "Arhus",5, 3);
+        CategoryDBConnection.shared.createCategory("Vejle", "Beskrivelse", "Vejle", 5, 3);
+        CategoryDBConnection.shared.createCategory("Silkeborg", "Beskrivelse", "Silkeborg", 5, 3);
+        */
         /*
         String category = "Components/Processors/Storage/SSDs";
         String notCategory = "fsaafa/dada/dad";

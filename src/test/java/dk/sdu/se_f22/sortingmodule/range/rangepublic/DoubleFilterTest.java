@@ -1,17 +1,32 @@
-package dk.sdu.se_f22.sortingmodule.range.rangefilter;
+package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.InternalFilter;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InternalFilterTest {
+class DoubleFilterTest {
+
+    @Test
+    @Disabled
+
+    void getType() {
+    }
+
+    @Test
+    @Disabled
+    void testEquals() {
+    }
+
     @Nested
     @DisplayName("Use filter method")
     class useFilterMethod {
@@ -21,8 +36,10 @@ class InternalFilterTest {
 
         @Test
         @DisplayName("filter a list of actual products")
-        void useFilter() {
-            InternalFilter internalFilter = new InternalFilter(0, 1000, "price");
+        void useFilter() throws InvalidFilterTypeException {
+            DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
+            internalFilter.setUserMax(1000.0);
+            internalFilter.setUserMin(0.0);
             List<RangeSearchResultMock> mockResults = Helpers.readMockResultsFromFile("MockResults.csv");
 
             //crude check that the mockresults are what we expect, and have not been changed
@@ -49,10 +66,15 @@ class InternalFilterTest {
             assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults);
         }
 
+
+        
+
         @Test
         @DisplayName("Filtering an empty list of results")
         void filteringAnEmptyListOfResults() {
-            InternalFilter internalFilter = new InternalFilter(0, 1000, "price");
+            DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
+            internalFilter.setUserMax(1000.0);
+            internalFilter.setUserMin(0.0);
             Collection<RangeSearchResultMock> emptyResults = new ArrayList<>();
 
             Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(emptyResults);
@@ -60,4 +82,6 @@ class InternalFilterTest {
             assertEquals(emptyResults, filteredResults);
         }
     }
+
+    //todo test setters
 }

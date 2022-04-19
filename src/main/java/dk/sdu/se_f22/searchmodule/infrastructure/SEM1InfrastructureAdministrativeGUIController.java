@@ -19,6 +19,10 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     @FXML
     private Button removeBtn;
     @FXML
+    private Label delimitersCount;
+    @FXML
+    private Label forbiddenCharsCount;
+    @FXML
     private TextField addTextField;
     @FXML
     private TextField removeTextField;
@@ -34,6 +38,8 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     public void initialize(URL url, ResourceBundle resourceBundle) {
         delimiterSettings = new DelimiterSettings();
         illegalChars = new IllegalChars();
+        showDelimiters();
+        showForbiddenChars();
     }
 
     public void addBtn(ActionEvent e) {
@@ -63,7 +69,7 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     private void removeDelimiter() {
         delimiterSettings.removeDelimiter(removeTextField.getText());
         removeTextField.clear();
-        showForbiddenChars();
+        showDelimiters();
     }
 
     private void addForbiddenChar() {
@@ -79,14 +85,18 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     }
 
     private void showDelimiters() {
+        delimitersTextArea.clear();
         for (String s : delimiterSettings.getDelimiters()) {
             delimitersTextArea.appendText("\"" + s + "\"" + " ,");
         }
+        delimitersCount.setText("Delimiters: " + delimiterSettings.getDelimiters().size());
     }
 
     private void showForbiddenChars() {
+        forbiddenCharsTextArea.clear();
         for (String s : illegalChars.illegalCharsFromDB()) {
             forbiddenCharsTextArea.appendText("\"" + s + "\"" + " ,");
         }
+        forbiddenCharsCount.setText("Forbidden Characters: " + illegalChars.illegalCharsFromDB().size());
     }
 }

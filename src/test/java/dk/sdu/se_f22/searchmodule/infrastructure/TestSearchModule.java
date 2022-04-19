@@ -128,18 +128,44 @@ public class TestSearchModule {
         List<Brand> products = searchResult.getProducts().stream().toList();
         assertTrue(products.stream().findFirst().isPresent());
     }
-
-    @Test
+  
     void getDelimitersTest() {
         try {
-            Connection dbConnection = DBConnection.getPooledConnection();
-            PreparedStatement stmt = dbConnection.prepareStatement("DELETE FROM searchtokendelimiters");
+            Connection connection = DBConnection.getPooledConnection();
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM searchtokendelimiters");
             stmt.execute();
             stmt.close();
-            dbConnection.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        SearchModuleImpl searchModule = new SearchModuleImpl();
+        assertArrayEquals(new String[0], searchModule.getDelimiters().toArray());
+
+        searchModule.addDelimiter("hello");
+
+        var delimiters = searchModule.getDelimiters();
+        var expectedDelimiters = List.of("hello");
+
+        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
+        searchModule.addDelimiter("hello");
+
+        delimiters = searchModule.getDelimiters();
+        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
+    }
+
+    @Test
+    void addDelimitersTest(){
+        try {
+            Connection connection = DBConnection.getPooledConnection();
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM searchtokendelimiters");
+            stmt.execute();
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        SearchModuleImpl searchModule = new SearchModuleImpl();
 
         assertArrayEquals(new String[0], searchModule.getDelimiters().toArray());
 
@@ -156,65 +182,24 @@ public class TestSearchModule {
     }
 
     @Test
-    void addDelimiterTest() {
+    void removeDelimiterTest(){
         try {
-            Connection dbConnection = DBConnection.getPooledConnection();
-            PreparedStatement stmt = dbConnection.prepareStatement("DELETE FROM searchtokendelimiters");
+            Connection connection = DBConnection.getPooledConnection();
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM searchtokendelimiters");
             stmt.execute();
             stmt.close();
-            dbConnection.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        assertArrayEquals(new String[0], this.searchModule.getDelimiters().toArray());
+        SearchModuleImpl searchModule = new SearchModuleImpl();
 
-        this.searchModule.addDelimiter("hello");
-
-        var delimiters = this.searchModule.getDelimiters();
+        searchModule.addDelimiter("hello");
         var expectedDelimiters = List.of("hello");
 
-        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
-        this.searchModule.addDelimiter("hello");
+        assertArrayEquals(expectedDelimiters.toArray(), searchModule.getDelimiters().toArray());
 
-        delimiters = this.searchModule.getDelimiters();
-        assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
-
-    }
-
-    @Test
-    void removeDelimiterCanRemove() {
-        try {
-            Connection dbConnection = DBConnection.getPooledConnection();
-            PreparedStatement stmt = dbConnection.prepareStatement("DELETE FROM searchtokendelimiters");
-            stmt.execute();
-            stmt.close();
-            dbConnection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        this.searchModule.addDelimiter("hello");
-        var expectedDelimiters = List.of("hello");
-
-        assertArrayEquals(expectedDelimiters.toArray(), this.searchModule.getDelimiters().toArray());
-
-        assertTrue(this.searchModule.removeDelimiter("hello"));
-        assertArrayEquals(new String[0], this.searchModule.getDelimiters().toArray());
-    }
-
-    @Test
-    void removeDelimiterCantRemove() {
-        try {
-            PreparedStatement stmt = DBConnection.getConnection().prepareStatement("DELETE FROM searchtokendelimiters");
-            stmt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        assertArrayEquals(new String[0], this.searchModule.getDelimiters().toArray());
-
-        assertFalse(this.searchModule.removeDelimiter("hello"));
-
-        assertArrayEquals(new String[0], this.searchModule.getDelimiters().toArray());
+        searchModule.removeDelimiter("hello");
+        assertArrayEquals(new String[0], searchModule.getDelimiters().toArray());
     }
 }

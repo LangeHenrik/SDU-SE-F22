@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.productmodule.presentation;
 
 import dk.sdu.se_f22.productmodule.management.IProductManager;
+import dk.sdu.se_f22.productmodule.management.ProductManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,7 +12,7 @@ public class App extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("searchview.fxml"));
+        Parent fxmlLoader = FXMLLoader.load(getClass().getClassLoader().getResource("home.fxml"));
         Scene scene = new Scene(fxmlLoader, 800,600);
         stage.setTitle("Product Module");
         stage.setScene(scene);

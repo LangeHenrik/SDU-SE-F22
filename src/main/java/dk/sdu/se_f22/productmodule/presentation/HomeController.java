@@ -2,6 +2,7 @@ package dk.sdu.se_f22.productmodule.presentation;
 
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
+import dk.sdu.se_f22.productmodule.management.ProductManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,9 +67,16 @@ public class HomeController {
 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON", "*.json");
         fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialDirectory(new File("src/main/resources/dk/sdu/se_f22"));
 
         File file = fileChooser.showOpenDialog(main.getScene().getWindow());
-        //App.productManager = new ProductManager(file.getAbsolutePath());
+
+        if (file == null) {
+            return; // Early return, since no file was chosen.
+            // TODO: Add error label? :D
+        }
+
+        App.productManager = new ProductManager(file.getAbsolutePath());
 
         Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
         try {

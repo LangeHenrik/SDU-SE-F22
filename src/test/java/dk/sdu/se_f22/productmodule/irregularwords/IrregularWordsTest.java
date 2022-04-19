@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
-import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

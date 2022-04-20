@@ -644,6 +644,7 @@ public class RangeFilterCRUDTest {
             @Nested
             @DisplayName("Updating valid information should result in a change of database state")
             class updatingValidInformationShouldResultInAChangeOfDatabaseState {
+                // the three tests below should be run for each type of filter
                 @Test
                 @DisplayName("Updating valid name should change the name stored in db")
                 void updatingValidNameShouldChangeTheNameStoredInDb() {
@@ -665,7 +666,168 @@ public class RangeFilterCRUDTest {
                     fail("not yet implemented");
                 }
 
+                @Nested
+                @DisplayName("Double filters updating should change db state")
+                class doubleFiltersUpdatingShouldChangeDbState {
+
+                    @Test
+                    @DisplayName("Min updating only should change the min stored in db")
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Max updating only should change the max stored in db")
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Both updating min and max should change their values stored in db")
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                }
+
+                @Nested
+                @DisplayName("Long filters updating should change db state")
+                class longFiltersUpdatingShouldChangeDbState {
+
+                    @Test
+                    @DisplayName("Min updating only should change the min stored in db")
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Max updating only should change the max stored in db")
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Both updating min and max should change their values stored in db")
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+                }
+
+                @Nested
+                @DisplayName("Time filters updating should change db state")
+                class timeFiltersUpdatingShouldChangeDbState {
+
+                    @Test
+                    @DisplayName("Min updating only should change the min stored in db")
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Max updating only should change the max stored in db")
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Both updating min and max should change their values stored in db")
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+                }
             }
         }
+        
+        @Nested
+        @DisplayName("Invalid filter updates")
+        class invalidFilterUpdates {
+            @Nested
+            @DisplayName("Filter type does not match variable types")
+            class filterTypeDoesNotMatchVariableTypes {
+
+                @Nested
+                @DisplayName("Incompatible types, should throw an exception")
+                class incompatibleTypesShouldThrowAnException {
+
+                    @Test
+                    @DisplayName("Double variables, but non-double filter should throw")
+                    void doubleVariablesButNonDoubleFilter() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Long variables, but non-long filter should throw")
+                    void longVariablesButNonLongFilterShouldThrow() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Instant variables, but non-instant filter should throw")
+                    void instantVariablesButNonInstantFilterShouldThrow() {
+
+                        fail("not yet implemented");
+                    }
+                }
+
+                @Nested
+                @DisplayName("Incompatible types should not alter database")
+                class incompatibleTypesShouldNotAlterDatabase {
+
+                    @Test
+                    @DisplayName("Double variables, but non-double filter should not alter db")
+                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Long variables, but non-long filter should not alter db")
+                    void longVariablesButNonLongFilterShouldNotAlterDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Instant variables, but non-instant filter should not alter db")
+                    void instantVariablesButNonInstantFilterShouldNotAlterDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                }
+            }
+
+
+            @Nested
+            @DisplayName("Invalid specializations")
+            class invalidSpecializations {
+
+                @Test
+                @DisplayName("Invalid specialization should result in an exception getting thrown")
+                void invalidSpecializationShouldResultInAnExceptionGettingThrown() {
+
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Invalid specialization should not change database contents")
+                void invalidSpecializationShouldNotChangeDatabaseContents() {
+
+                    fail("not yet implemented");
+                }
+            }
+        }
+        
     }
 }

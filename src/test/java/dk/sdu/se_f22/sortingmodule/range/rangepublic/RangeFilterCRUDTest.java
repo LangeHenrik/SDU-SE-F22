@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,6 +27,8 @@ public class RangeFilterCRUDTest {
     public void setup () {
         rangeFilterCRUD = new RangeFilterCRUD();
     }
+
+    public
 
     @Nested
     class CRUDCreatorTest  {
@@ -532,14 +535,34 @@ public class RangeFilterCRUDTest {
         @Nested
         @DisplayName("Valid updates")
         class validUpdates {
+
             @Nested
             @DisplayName("Updating valid information should not throw an exception")
             class updatingValidInformationShouldNotThrowAnException {
-                @Test
+
+                private static List<RangeFilter> provideRangeFilterForTest() {
+                    RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
+                    List<RangeFilter> listWithObjects = new ArrayList<>();
+                    try {
+                         listWithObjects.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv",1.0,13.0));
+                         listWithObjects.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf",10,130));
+                         listWithObjects.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc",Instant.parse("2018-11-30T15:35:24.00Z"),Instant.parse("2022-11-30T15:35:24.00Z")));
+                    } catch (InvalidFilterException e) {
+                        fail("ProvideRangeFilterForTest method did an uopps");
+                    } catch (InvalidFilterTypeException e) {
+                        fail("ProvideRangeFilterForTest method did an uopps");
+                    }
+                    return listWithObjects;
+                }
+
+                @ParameterizedTest
                 @DisplayName("Updating the name should not throw an exception")
-                void updatingTheNameShouldNotThrowAnException() {
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheNameShouldNotThrowAnException(List<RangeFilter> list) {
                     // Could be parameterized with a method source providing RangeFilter Objects
-                    fail("not yet implemented");
+                    for(RangeFilter e : list) {
+                        System.out.println(e);
+                    }
                 }
 
                 @Test

@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
@@ -11,6 +13,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -543,7 +546,16 @@ public class RangeFilterCRUDTest {
                 private static List<RangeFilter> provideRangeFilterForTest() {
                     RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
                     List<RangeFilter> listWithObjects = new ArrayList<>();
+
+                    DBMigration dbMigration = new DBMigration();
                     try {
+                        dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+
                          listWithObjects.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv",1.0,13.0));
                          listWithObjects.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf",10,130));
                          listWithObjects.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc",Instant.parse("2018-11-30T15:35:24.00Z"),Instant.parse("2022-11-30T15:35:24.00Z")));
@@ -558,11 +570,9 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest
                 @DisplayName("Updating the name should not throw an exception")
                 @MethodSource("provideRangeFilterForTest")
-                void updatingTheNameShouldNotThrowAnException(List<RangeFilter> list) {
+                void updatingTheNameShouldNotThrowAnException(RangeFilter object) {
                     // Could be parameterized with a method source providing RangeFilter Objects
-                    for(RangeFilter e : list) {
-                        System.out.println(e);
-                    }
+                    System.out.println(object);
                 }
 
                 @Test

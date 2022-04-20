@@ -524,4 +524,148 @@ public class RangeFilterCRUDTest {
 //            );
 //        }
     }
+
+    @Nested
+    @DisplayName("CRUD Update")
+    class crudUpdate {
+
+        @Nested
+        @DisplayName("Valid updates")
+        class validUpdates {
+            @Nested
+            @DisplayName("Updating valid information should not throw an exception")
+            class updatingValidInformationShouldNotThrowAnException {
+                @Test
+                @DisplayName("Updating the name should not throw an exception")
+                void updatingTheNameShouldNotThrowAnException() {
+                    // Could be parameterized with a method source providing RangeFilter Objects
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Updating the name and description should not throw an exception")
+                void updatingTheNameAndDescriptionShouldNotThrowAnException() {
+                    // same as above
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Updating the description but not changing the name should not throw an exception")
+                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException() {
+                    // same as above
+                    fail("not yet implemented");
+                }
+
+                @Nested
+                @DisplayName("Updating dbValues should not throw an exception")
+                class updatingDbValuesShouldNotThrowAnException {
+
+                    @Nested
+                    @DisplayName("updating Double filters in db")
+                    class updatingDoubleFiltersInDb {
+
+                        @Test
+                        @DisplayName("min updating only should not throw an exception")
+                        void minUpdatingOnlyShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                        @Test
+                        @DisplayName("max updating only should not throw an exception")
+                        void maxUpdatingOnlyShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                        @Test
+                        @DisplayName("Both updating should not throw an exception")
+                        void bothUpdatingShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                    }
+
+                    @Nested
+                    @DisplayName("updating long filters in db")
+                    class updatingLongFiltersInDb {
+
+                        @Test
+                        @DisplayName("min updating only should not throw an exception")
+                        void minUpdatingOnlyShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                        @Test
+                        @DisplayName("max updating only should not throw an exception")
+                        void maxUpdatingOnlyShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                        @Test
+                        @DisplayName("Both updating should not throw an exception")
+                        void bothUpdatingShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+                    }
+
+                    @Nested
+                    @DisplayName("updating time filters in db")
+                    class updatingTimeFiltersInDb {
+
+                        @Test
+                        @DisplayName("min updating only should not throw an exception")
+                        void minUpdatingOnlyShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                        @Test
+                        @DisplayName("max updating only should not throw an exception")
+                        void maxUpdatingOnlyShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+
+                        @Test
+                        @DisplayName("Both updating should not throw an exception")
+                        void bothUpdatingShouldNotThrowAnException() {
+
+                            fail("not yet implemented");
+                        }
+                    }
+                }
+            }
+
+            @Nested
+            @DisplayName("Updating valid information should result in a change of database state")
+            class updatingValidInformationShouldResultInAChangeOfDatabaseState {
+                @Test
+                @DisplayName("Updating valid name should change the name stored in db")
+                void updatingValidNameShouldChangeTheNameStoredInDb() {
+
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Updating only the description should change the description stored in the db")
+                void updatingOnlyTheDescriptionShouldChangeTheDescriptionStoredInTheDb() {
+
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Updating both name and description should change both stored in db")
+                void updatingBothNameAndDescriptionShouldChangeBothStoredInDb() {
+
+                    fail("not yet implemented");
+                }
+
+            }
+        }
+    }
 }

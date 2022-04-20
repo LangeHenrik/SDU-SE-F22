@@ -546,34 +546,29 @@ public class RangeFilterCRUDTest {
 
                 private static List<RangeFilter> provideRangeFilterForTest() {
                     RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
-                    List<RangeFilter> listWithObjects = new ArrayList<>();
-
+                    List<RangeFilter> listWithRangeFilters = new ArrayList<>();
                     DBMigration dbMigration = new DBMigration();
+                    
                     try {
+                        //Cleaning the database to avoid duplicate keys
                         dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-                    } catch (SQLException e) {
+                        
+                        //Adding RangeFilters to list
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv",1.0,13.0));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf",10,130));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc",Instant.parse("2018-11-30T15:35:24.00Z"),Instant.parse("2022-11-30T15:35:24.00Z")));
+                    } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
                         e.printStackTrace();
                     }
-
-                    try {
-
-                         listWithObjects.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv",1.0,13.0));
-                         listWithObjects.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf",10,130));
-                         listWithObjects.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc",Instant.parse("2018-11-30T15:35:24.00Z"),Instant.parse("2022-11-30T15:35:24.00Z")));
-                    } catch (InvalidFilterException e) {
-                        fail("ProvideRangeFilterForTest method did an uopps");
-                    } catch (InvalidFilterTypeException e) {
-                        fail("ProvideRangeFilterForTest method did an uopps");
-                    }
-                    return listWithObjects;
+                    return listWithRangeFilters;
                 }
 
                 @ParameterizedTest
                 @DisplayName("Updating the name should not throw an exception")
                 @MethodSource("provideRangeFilterForTest")
                 void updatingTheNameShouldNotThrowAnException(RangeFilter object) {
-                    // Could be parameterized with a method source providing RangeFilter Objects
-                    System.out.println(object);
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(object,object.getName() + " modified"));
+
                 }
 
                 @Test

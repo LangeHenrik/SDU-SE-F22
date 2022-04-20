@@ -6,6 +6,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -845,22 +846,269 @@ public class RangeFilterCRUDTest {
             @Nested
             @DisplayName("Invalid specializations")
             class invalidSpecializations {
-
-                @Test
+                @Nested
                 @DisplayName("Invalid specialization should result in an exception getting thrown")
-                void invalidSpecializationShouldResultInAnExceptionGettingThrown() {
+                class invalidSpecializationShouldResultInAnExceptionGettingThrown {
+                    @Test
+                    @DisplayName("Invalid specialization name change throw exception")
+                    void invalidSpecializationNameChangeThrowException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name"));
+                    }
 
-                    fail("not yet implemented");
+                    @Test
+                    @DisplayName("Invalid specialization description change throw exception")
+                    void invalidSpecializationDescriptionChangeThrowException() {
+                        RangeFilter illegalFilter = new IllegalRangeFilterClass();
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(illegalFilter, illegalFilter.getName(), "new illegal description"));
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization name and description change throw exception")
+                    void invalidSpecializationNameAndDescriptionChangeThrowException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name", "new illegal description"));
+                    }
+
+                    @Test
+                    @DisplayName("Double invalid specialization should throw an exception")
+                    void doubleInvalidSpecializationShouldThrowAnException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1.0, 10000.0));
+                    }
+
+                    @Test
+                    @DisplayName("Long invalid specialization should throw an exception")
+                    void longInvalidSpecializationShouldThrowAnException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1, 20000));
+                    }
+
+                    @Test
+                    @DisplayName("Instant invalid specialization should throw an exception")
+                    void instantInvalidSpecializationShouldThrowAnException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"),Instant.parse("2031-11-30T18:35:24.00Z")));
+                    }
                 }
 
-                @Test
+                @Nested
                 @DisplayName("Invalid specialization should not change database contents")
-                void invalidSpecializationShouldNotChangeDatabaseContents() {
+                class invalidSpecializationShouldNotChangeDatabaseContents {
 
-                    fail("not yet implemented");
+                    @Test
+                    @DisplayName("Invalid specialization name change should not change database contents")
+                    void invalidSpecializationNameChangeShouldNotChangeDatabaseContents() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name");
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                        fail("forced fail: Check that assertEquals works in this case, although it should");
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization description change should not change database contents")
+                    void invalidSpecializationDescriptionChangeShouldNotChangeDatabaseContents() {
+
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            RangeFilter illegalFilter = new IllegalRangeFilterClass();
+                            rangeFilterCRUD.update(illegalFilter, illegalFilter.getName(), "new illegal description");
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization name and description change should not alter db")
+                    void invalidSpecializationNameAndDescriptionChangeShouldNotAlterDb() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name", "new illegal description");
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Double variables should not alter db state with illegal implementation")
+                    void doubleVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1.0, 10000.0);
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Long variables should not alter db state with illegal implementation")
+                    void longVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1, 20000);
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Instant variables should not alter db state with illegal implementation")
+                    void instantVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"),Instant.parse("2031-11-30T18:35:24.00Z"));
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+                }
+
+
+                /** THis class is used as an example of an illegal implementation of the RangeFilter interface <br>
+                 * This can be seen since it does not extend RangeFilterClass
+                 */
+                class IllegalRangeFilterClass implements RangeFilter{
+                    @Override
+                    public int getId() {
+                        return 0;
+                    }
+
+                    @Override
+                    public String getName() {
+                        return "illegal class";
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "illegal class description";
+                    }
+
+                    @Override
+                    public String getProductAttribute() {
+                        return "illegal class product";
+                    }
+
+                    @Override
+                    public FilterTypes getType() {
+                        // This could be debated how smart it is to choose a class explicitly.
+                        // It has been done since it may be quite obvious to validate if the class has a gettype that returns
+                        // Something else than null
+                        return FilterTypes.DOUBLE;
+                    }
+
+                    @Override
+                    public double getDbMinDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getDbMinInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getDbMinLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getDbMaxDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getDbMaxInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getDbMaxLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getUserMinDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getUserMinInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getUserMinLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getUserMaxDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getUserMaxInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getUserMaxLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double setUserMin(double userMin) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant setUserMin(Instant userMin) throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long setUserMin(long userMin) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double setUserMax(double userMax) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant setUserMax(Instant userMax) throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long setUserMax(long userMax) throws InvalidFilterTypeException {
+                        return 0;
+                    }
                 }
             }
         }
-        
     }
 }

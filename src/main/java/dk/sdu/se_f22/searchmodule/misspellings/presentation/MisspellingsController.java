@@ -55,15 +55,18 @@ public class MisspellingsController {
 
     public void filterSearch(ActionEvent e){
         if (!filterInput.getText().isEmpty()){
-            ArrayList<String> arrayList = new ArrayList();
-            for (String wordsIn: arrayList) {
-                filterInput.getText().split(" ");
+
+            String[] stringArray = filterInput.getText().split(" ");
+            ArrayList<String> arrayList = new ArrayList<>();
+
+            for (String wordsIn: stringArray) {
                 arrayList.add(wordsIn);
             }
+
             misspelling.filter(arrayList);
             String outputString = "";
             for (String wordsOut: arrayList) {
-                outputString += wordsOut;
+                outputString += wordsOut + " ";
             }
             outputFilter.setText(outputString);
         }

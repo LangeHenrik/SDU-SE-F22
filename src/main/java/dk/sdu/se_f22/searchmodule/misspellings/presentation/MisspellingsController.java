@@ -23,18 +23,17 @@ public class MisspellingsController {
     }
 
     public void addMis(ActionEvent e){
-        System.out.println("add works");/*
         if (!misInput.getText().isEmpty() && !corInput.getText().isEmpty()){
             misspelling.addMisspelling(misInput.getText(), corInput.getText());
             output.setText("The misspelling: "+misInput.getText()+" has been added. The correct spelling is: "+corInput.getText());
         } else{
             output.setText("Write a misspelling and it's correct spelling");
-        }*/
+        }
 
     }
 
     public void updateMis(ActionEvent e){
-       /* if (!misInput.getText().isEmpty() && !misUpInput.getText().isEmpty()){
+        if (!misInput.getText().isEmpty() && !misUpInput.getText().isEmpty()){
             misspelling.updateMisspelling(misInput.getText(), misUpInput.getText());
             output.setText("The misspelling: "+misInput.getText()+" has been updated. The the new spelling is: "+misUpInput.getText());
         }else if (!corInput.getText().isEmpty()){
@@ -42,30 +41,32 @@ public class MisspellingsController {
         }
         else{
             output.setText("Write what misspelling you want to update and what misspelling it should be instead");
-        }*/
+        }
     }
 
     public void deleteMis(ActionEvent e){
-       /* if (!misInput.getText().isEmpty() && misUpInput.getText().isEmpty() && corInput.getText().isEmpty()) {
+        if (!misInput.getText().isEmpty() && misUpInput.getText().isEmpty() && corInput.getText().isEmpty()) {
             misspelling.deleteMisspelling(misInput.getText());
             output.setText("The misspelling: " + misUpInput.getText() + " has been deleted");
         }else{
             output.setText("You only have to write what misspelling you want to delete");
-        }*/
+        }
     }
 
     public void filterSearch(ActionEvent e){
-        /*if (!filterInput.getText().isEmpty()){
+        if (!filterInput.getText().isEmpty()){
             ArrayList<String> arrayList = new ArrayList();
             for (String wordsIn: arrayList) {
                 filterInput.getText().split(" ");
                 arrayList.add(wordsIn);
             }
             misspelling.filter(arrayList);
+            String outputString = "";
             for (String wordsOut: arrayList) {
-                outputFilter.setText(wordsOut);
+                outputString += wordsOut;
             }
-        }*/
+            outputFilter.setText(outputString);
+        }
     }
 
 

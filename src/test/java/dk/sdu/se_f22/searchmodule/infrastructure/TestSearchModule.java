@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSearchModule {
     private SearchModule searchModule;
@@ -75,17 +76,17 @@ public class TestSearchModule {
                 List.of(new MockIndexingData("Foo"), new MockIndexingData("Foo")).toArray()
         );
 
-        // Test throwing
-        assertThrows(
-                NoSuchElementException.class,
-                () -> searchModule.queryIndexOfType(String.class, List.of(""))
+        // Test non-existing module for datatype
+        assertEquals(
+                0,
+                searchModule.queryIndexOfType(String.class, List.of("")).size()
         );
 
         // Test removal
-        searchModule.removeIndexingModule(indexingModule);
-        assertThrows(
-                NoSuchElementException.class,
-                () -> searchModule.queryIndexOfType(MockIndexingData.class, List.of(""))
+        searchModule.removeIndexingModule(MockIndexingData.class);
+        assertEquals(
+                0,
+                searchModule.queryIndexOfType(MockIndexingData.class, List.of("")).size()
         );
     }
 

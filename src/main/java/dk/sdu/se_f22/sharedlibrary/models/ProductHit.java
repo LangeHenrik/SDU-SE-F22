@@ -89,6 +89,19 @@ public class ProductHit implements Comparable<ProductHit>{
         }
     }
 
+
+    /** This constructor is for test use only by gorup 2.3
+     * Constructor is limited to only setting the values used in the indexing process, and therefore only populates
+     * the needed attributes with values. Should not be used other than for testing purposes.
+     */
+    public ProductHit(String name, String description, String category){
+        this.name = name;
+        this.description = description;
+        this.category = category;
+    }
+
+
+
     /**@param attributeName The name of the attribute to retrieve
      * @return The value of the attribute referenced
      * @throws IllegalArgumentException if the attribute input does not correspond to any of the attributes, whose value is a double

@@ -48,5 +48,11 @@ public class Bim implements IBim {
     }
 
     @Override
-    public void setIndexInterval(int indexInterval) {}
+    public void setIndexInterval(int indexInterval) {
+        persistence.setIndexingInterval(indexInterval);
+    }
+    @Override
+    public int getIndexingInterval(){
+        return persistence.getIndexingInterval();
+     }
 }

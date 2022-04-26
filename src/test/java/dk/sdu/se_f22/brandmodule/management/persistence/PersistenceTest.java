@@ -100,4 +100,10 @@ public class PersistenceTest {
         // Assert: methods returns true if the database is indexed
         assertTrue(p.databaseIndexer());
     }
+
+    @Test
+    void getsetIndexingInterval(){
+
+        assertTrue(true);
+    }
 }

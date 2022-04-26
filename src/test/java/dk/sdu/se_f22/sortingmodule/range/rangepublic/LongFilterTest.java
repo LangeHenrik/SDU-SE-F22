@@ -18,11 +18,13 @@ class LongFilterTest {
     @Test
     @Disabled
     void getType() {
+        fail("test not yet written");
     }
 
     @Test
     @Disabled
     void testEquals() {
+        fail("test not yet written");
     }
 
     @Nested

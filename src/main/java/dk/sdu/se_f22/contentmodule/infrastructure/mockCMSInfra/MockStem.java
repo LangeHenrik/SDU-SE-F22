@@ -6,14 +6,13 @@ import java.util.ArrayList;
 
 public class MockStem {
 
-    ArrayList<Token> mockStem(ArrayList<Token> mocktokens) {
+    ArrayList<String> mockStem(ArrayList<String> mocktokens) {
         for (int i = 0; i < mocktokens.size(); i++) {
-            mocktokens.remove(7);
-            mocktokens.remove(8);
+            mocktokens.remove(2);
+            mocktokens.remove(4);
             mocktokens.remove(1);
-            mocktokens.add(1,new Token("StemWord2", 1));
-            mocktokens.add(2, new Token("StemWord2", 2));
-            mocktokens.add(3, new Token("StemWord3", 3));
+            mocktokens.add("StemWord2");
+            mocktokens.add("StemWord3");
         }
         return mocktokens;
     }

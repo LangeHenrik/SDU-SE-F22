@@ -1,5 +1,4 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
-import dk.sdu.se_f22.
 
 public class HTMLSite implements IContentInfrastructre {
     private int id;

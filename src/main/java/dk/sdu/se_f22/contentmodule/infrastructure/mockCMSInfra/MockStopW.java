@@ -7,11 +7,11 @@ import java.util.ArrayList;
 class MockStopW {
 
 
-    ArrayList<Token> mockStopW(ArrayList<Token> mocktokens){
+    ArrayList<String> mockStopW(ArrayList<String> mocktokens){
         for(int i = 0; i< mocktokens.size(); i++){
             mocktokens.remove(3);
-            mocktokens.remove(7);
-            mocktokens.remove(12);
+            mocktokens.remove(2);
+            mocktokens.remove(5);
         }
         return mocktokens;
     }

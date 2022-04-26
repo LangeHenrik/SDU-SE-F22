@@ -16,12 +16,12 @@ public class Main {
         ArrayList<HTMLSite> webSites = new ArrayList<>();
         webSites.add(site2);
         webSites.add(site3);
-
+/*
         for (Token token: Tokenizer.tokenizeHTMLBodyText(site2)){
             System.out.println(token.documentText);
         }
 
-
+*/
         
 
 

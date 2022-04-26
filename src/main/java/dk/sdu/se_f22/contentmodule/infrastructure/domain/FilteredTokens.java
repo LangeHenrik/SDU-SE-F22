@@ -13,11 +13,11 @@ class  FilteredTokens {
     private static ArrayList<Token> tokens;
     private int htmlId;
     private int idToken;
-    private static int tempId = -1; //To hold temp token ID
+    private static int tempId; //To hold temp token ID
     private String filteredTokens;
     private Date timeStamp;
-    private ArrayList<String> tokenStrings;
-    private ArrayList<Token> stringTokens;
+    private static ArrayList<String> tokenStrings;
+    private static ArrayList<Token> stringTokens;
     IMockCMSIndex mockindex = new MockCMSIndex(); // used for mocking Index-module
     ArrayList<Token> mocktokens = new ArrayList<>();  //used for mocking Index-module
     MockFacade mockfacade = new MockFacade(); //used for mocking Stop,Irr & Stem-modules
@@ -27,32 +27,35 @@ class  FilteredTokens {
         this.tokens = tokens;
     }
 
+
+
     public FilteredTokens(int idToken, String filteredTokens){
         this.idToken = idToken;
         this.filteredTokens = filteredTokens;
     }
 
-    public int getIdToken() {
+    int getIdToken() {
         return idToken;
     }
 
-    public String getFilteredTokens() {
+    String getFilteredTokens() {
         return filteredTokens;
     }
 
-    private ArrayList<String> tokenToString(ArrayList<Token> tokens) {
+    static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
         tokenStrings = new ArrayList<>();
         for(Token t : tokens) {
             tokenStrings.add(t.getDocumentText());
-            if(tempId == -1) {
-                tempId = t.getOriginID();
-            } else continue;
+            //if(tempId == -1) {
+            //    tempId = t.getOriginID();
+            //} else continue;
+            tempId = t.getOriginID();
         }
         return tokenStrings;
     }
 
-    private ArrayList<Token> stringToToken(ArrayList<String> tokenStrings) {
-        stringTokens = new ArrayList<>();
+    public static ArrayList<Token> stringToToken(ArrayList<String> tokenStrings) {
+        stringTokens = new ArrayList<Token>();
         for(String s : tokenStrings) {
             stringTokens.add(new Token(s, tempId));
         }
@@ -61,9 +64,15 @@ class  FilteredTokens {
 
     ArrayList<Token> filterTokens(ArrayList<Token> tokens) {
         tokenToString(tokens);
+
         //tokens.set(classstopwords.methodprovided(tokenStrings));
         //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokenStrings));
         //tokens.set(classstem.methodprovided(tokenStrings));
+
+        //For unit-testing
+        mockfacade.mockUseStopW(tokenStrings);
+        mockfacade.mockUseIrr(tokenStrings);
+        mockfacade.mockUseStem(tokenStrings);
 
         stringToToken(tokenStrings);
 
@@ -79,10 +88,11 @@ class  FilteredTokens {
 
     }*/ //This method is probably not nessecery
 
+    /* Just a method for testing
     ArrayList<Token> mockFilterTokens(ArrayList<Token> mocktokens){  //a method for mocking and testing
         mockfacade.mockUseStopW(mocktokens);
         mockfacade.mockUseIrr(mocktokens);
         mockfacade.mockUseStem(mocktokens);
         return mocktokens;
-    }
+    }*/
 }

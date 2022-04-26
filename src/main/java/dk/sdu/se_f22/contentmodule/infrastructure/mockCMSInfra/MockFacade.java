@@ -15,15 +15,15 @@ public class MockFacade {
         stopW = new MockStopW();
     }
 
-    public void mockUseStem(ArrayList<Token> mocktokens){
+    public void mockUseStem(ArrayList<String> mocktokens){
         stem.mockStem(new ArrayList<>());
     }
 
-    public void mockUseStopW(ArrayList<Token> mocktokens){
+    public void mockUseStopW(ArrayList<String> mocktokens){
         stopW.mockStopW(new ArrayList<>());
     }
 
-    public void mockUseIrr(ArrayList<Token> mocktokens){
+    public void mockUseIrr(ArrayList<String> mocktokens){
         irrW.mockIrrW(new ArrayList<>());
     }
 }

@@ -543,12 +543,16 @@ public class RangeFilterCRUDTest {
             @Nested
             @DisplayName("Updating valid information should not throw an exception")
             class updatingValidInformationShouldNotThrowAnException {
+                private static List<RangeFilter> listWithRangeFilters;
 
                 private static List<RangeFilter> provideRangeFilterForTest() {
                     RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
-                    List<RangeFilter> listWithRangeFilters = new ArrayList<>();
                     DBMigration dbMigration = new DBMigration();
-                    
+
+                    if(listWithRangeFilters.size() >= 3){
+                        return listWithRangeFilters;
+                    }
+
                     try {
                         //Cleaning the database to avoid duplicate keys
                         dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
@@ -815,8 +819,18 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Double variables, but non-double filter should not alter db")
-                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb() {
-
+                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb() throws UnknownFilterTypeException, IdNotFoundException {
+                        List<RangeFilter> previousState = rangeFilterCRUD.readAll();
+                        // use the illegal class
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a
+                        try {
+                            rangeFilterCRUD.update(filter, 1.0, 2.0);
+                        } catch (InvalidFilterException e) {
+                            System.out.println("Exception thrown correctly");
+                        }
+                        List<RangeFilter> endState = rangeFilterCRUD.readAll();
+                        assertEquals(previousState, endState);
                         fail("not yet implemented");
                     }
 

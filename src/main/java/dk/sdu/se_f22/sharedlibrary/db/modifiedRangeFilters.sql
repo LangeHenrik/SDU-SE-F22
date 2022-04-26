@@ -459,7 +459,7 @@ BEGIN
 
     UPDATE SortingRangeDoubleFilters SET min=NEW.min , max=NEW.max WHERE (filterId=filter_id_var);
 
-    new.filterId = filter_id_var;
+    new.filterid = filter_id_var;
 
     return new;
 END

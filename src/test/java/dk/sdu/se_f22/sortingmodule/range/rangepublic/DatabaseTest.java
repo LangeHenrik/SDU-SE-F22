@@ -3,12 +3,15 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sharedlibrary.db.SeedDatabase;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.postgresql.util.PSQLException;
 
@@ -434,6 +437,151 @@ class DatabaseTest {
     @Test
     void delete() {
 
+    }
+
+    @Nested
+    class Delete {
+        @Nested
+        class DeleteValidFilters {
+
+            @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+            @DisplayName(" Test Delete Existing Double Filter")
+            @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+            void testDeleteExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
+
+                RangeFilter doubleFilterFromDB;
+
+                try {
+                    doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
+                    Assertions.assertEquals(database.delete(doubleFilterFromDB.getId()), doubleFilterFromDB);
+                } catch (InvalidFilterException e) {
+                    e.printStackTrace();
+                    fail("Filter could not be deleted as it was not found");
+                }
+            }
+
+            @Nested
+            Class ReadDeletedDoubleFilter {
+                @ParameterizedTest(name = "{0} : {1}")
+                @DisplayName("test read of deleted filter")
+                @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+                void testReadOfDeletedFilter(int id, String name , String description, String productAttribute, double min, double max) throws UnknownFilterTypeException {
+                    RangeFilter doubleFilterFromDB = new DoubleFilter(id,)
+                    database.delete(id);
+                    try {
+                        assertNull(database.read(id));
+                    } catch (UnknownFilterTypeException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+                @BeforeAll
+                public static void refresh () {
+                try {
+                    new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+                } catch (SQLException e) {
+                    System.out.println("error when resetting database state, pooled connection threw sql exception:");
+                    e.printStackTrace();
+                }
+            }
+            }
+            @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+            @DisplayName(" test delete Existing Timefilter")//  læs data fra databasen, slet, læs og c
+            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+            void testDeleteExistingTimeFilter(int id, String name, String description, String productAttribute, Instant
+                    min, Instant max) {
+
+                RangeFilter timeFilterFromDB;
+                try {
+                    timeFilterFromDB = new TimeFilter(id, name, description, productAttribute, min, max);
+                    Assertions.assertEquals(database.delete(timeFilterFromDB.getId()), timeFilterFromDB);
+                    Assertions.assertThrows(UnknownFilterTypeException.class,
+                            () -> database.read(timeFilterFromDB.getId()));
+                } catch (IdNotFoundException e) {
+                    e.printStackTrace();
+                    fail("failed because was id not found");
+                }
+            }
+
+            @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+            @DisplayName("test delete Existing Longfilter")//  læs data fra databasen, slet, læs og c
+            @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+            void testDeleteExistingLongFilter(int id, String name, String description, String productAttribute, Long
+                    min, Long max) {
+
+                RangeFilter longFilterFromDB;
+                try {
+                    longFilterFromDB = new LongFilter(id, name, description, productAttribute, min, max);
+                    Assertions.assertEquals(longFilterFromDB, database.delete(longFilterFromDB.getId()));
+                } catch (IdNotFoundException e) {
+                    e.printStackTrace();
+                    fail("failed because was id not found");
+                }
+            }
+
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("test delete of invalid filterId")
+        @ValueSource(ints = {-1, -100, 1000, Integer.MIN_VALUE, Integer.MAX_VALUE})
+        void testdeleteOfInvalidFilterId ( int inputId){
+            //opret filter med invalid id, forsøg at slette og få exception som expected
+            try {
+                assertNull(database.delete(inputId));
+            } catch (IdNotFoundException e) {
+                e.printStackTrace();
+                fail("Delete threw exception instead of null");
+            }
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test delete double filter twice")
+        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        void testDeleteDoubleFilterTwice(int id, String name, String description, String productAttribute, double
+                min, double max) {
+            RangeFilter doubleFilterFromDB;
+
+
+            doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
+            //skal ikke kaste exception da filteret findes
+            assertDoesNotThrow( () -> database.delete(doubleFilterFromDB.getId()));
+            // skal kaste da filteret ikke findes længere
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> database.delete(doubleFilterFromDB.getId()));
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test delete time filter twice")
+        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        void testDeleteTimeFilterTwice(int id, String name, String description, String productAttribute, Instant
+                min, Instant max) {
+            RangeFilter TimeFilterFromDB;
+
+
+            TimeFilterFromDB = new TimeFilter(id, name, description, productAttribute, min, max);
+            //skal ikke kaste exception da filteret findes
+            assertDoesNotThrow( () -> database.delete(TimeFilterFromDB.getId()));
+            // skal kaste da filteret ikke findes længere
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> database.delete(TimeFilterFromDB.getId()));
+        }
+
+        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+        @DisplayName("Test delete Long filter twice")
+        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        void testDeleteLongFilterTwice(int id, String name, String description, String productAttribute, Long
+                min, Long max) {
+            RangeFilter LongFilterFromDB;
+
+
+            LongFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
+            //skal ikke kaste exception da filteret findes
+            assertDoesNotThrow( () -> database.delete(LongFilterFromDB.getId()));
+            // skal kaste da filteret ikke findes længere
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> database.delete(LongFilterFromDB.getId()));
+        }
     }
 
     @Test

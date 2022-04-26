@@ -76,7 +76,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter delete(int id) throws IdNotFoundException {
+    public RangeFilter delete(int id) throws IdNotFoundException, UnknownFilterTypeException {
         RangeFilter result = database.delete(id);
         if (result==null) {
             throw new IdNotFoundException("Invalid id");

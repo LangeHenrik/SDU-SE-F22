@@ -15,7 +15,7 @@ public interface DatabaseInterface {
 
     RangeFilter read(int id) throws UnknownFilterTypeException;
 
-    RangeFilter delete(int id);
+    RangeFilter delete(int id) throws UnknownFilterTypeException;
 
     RangeFilter update(RangeFilter updatedFilter) throws SQLException, InvalidFilterTypeException;
 

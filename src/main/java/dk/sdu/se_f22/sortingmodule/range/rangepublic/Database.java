@@ -250,8 +250,46 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public RangeFilter delete(int id) {
-        return null;
+    public RangeFilter delete(int id) throws UnknownFilterTypeException {
+        RangeFilter dbRangeFilter = null;
+        try {
+            PreparedStatement typeStatement = connection.prepareStatement("SELECT get_type_of_filter(?);");
+            typeStatement.setInt(1, id);
+            ResultSet typeResult = typeStatement.executeQuery();
+            if (typeResult.next()) {
+                if (typeResult.getString(1) == null) {
+                    return dbRangeFilter;
+                }
+                ResultSet filterResultSet;
+                switch (typeResult.getString(1)) {
+                    case "Double":
+                        filterResultSet = getSpecificFilter(connection,"get_double_filter",id);
+                        dbRangeFilter = createDoubleFilterFromResultset(filterResultSet);
+                        PreparedStatement doubleDelete = connection.prepareStatement("DELETE FROM sortingrangedoubleview WHERE ID = ?;");
+                        doubleDelete.setInt(1,id);
+                        doubleDelete.executeQuery();
+                        break;
+                    case "Long":
+                        filterResultSet = getSpecificFilter(connection, "get_long_filter",id);
+                        dbRangeFilter = createLongFilterFromResultset(filterResultSet);
+                        PreparedStatement longDelete = connection.prepareStatement("DELETE FROM sortingrangelongview WHERE ID = ?;");
+                        longDelete.setInt(1,id);
+                        longDelete.executeQuery();
+                        break;
+                    case "Time":
+                        filterResultSet = getSpecificFilter(connection,"get_time_filter",id);
+                        dbRangeFilter = createTimeFilterFromResultset(filterResultSet);
+                        PreparedStatement timeDelete = connection.prepareStatement("DELETE FROM sortingrangetimeview WHERE ID = ?;");
+                        timeDelete.setInt(1, id);
+                        timeDelete.executeQuery();
+                        break;
+                    default: throw new UnknownFilterTypeException("The filter type retrieved from the database, does not match any implemented filters");
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return dbRangeFilter;
     }
 
 

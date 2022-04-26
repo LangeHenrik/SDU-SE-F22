@@ -57,7 +57,7 @@ public interface RangeFilterCRUDInterface {
      * @param id Integer
      * @return RangeFilter
      */
-    RangeFilter delete(int id) throws IdNotFoundException;
+    RangeFilter delete(int id) throws IdNotFoundException, UnknownFilterTypeException;
 
     /**
      * This method updates a RangeFilter's name attribute <br>

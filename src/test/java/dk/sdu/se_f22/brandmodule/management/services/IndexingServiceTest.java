@@ -14,13 +14,16 @@ public class IndexingServiceTest {
 
     @BeforeAll
     static void setup() {
+
     }
     @Test
-    void StartIndexInterval() throws InterruptedException {
+    void indexingIntervalTimeTest() throws InterruptedException {
         // Variables that are used in the TimerTask
         final long[] start = new long[1];
         final long[] end = new long[1];
         final int[] counter = {0};
+
+        int indexInterval = p.getIndexingInterval();
 
         // Timer
         Timer updateIndex = new Timer();
@@ -42,18 +45,26 @@ public class IndexingServiceTest {
                 //  p.BIM2.indexBrands(p.getAllBrands());
 
             }
-        }, 0, p.getIndexingInterval());
+        }, 0, indexInterval);
 
-
-        // Delay to make the test work 80% of the time
-        for (int i = 0; i < 300000; i++) {
-            for (int j = 0; j < 2500; j++) {
-                for (int k = 0; k < 10000; k++) {
+        //Delay to test the thread
+        for (int i = 0; i < indexInterval*750; i++) {
+            for (int j = 0; j < indexInterval*100; j++) {
+                for (int k = 0; k < indexInterval*50; k++) {
                 }
             }
         }
-        // Check if it is right
-        assertEquals(p.getIndexingInterval(), end[0] - start[0]);
-    }
-}
 
+        // Check if it is right (including af buffer of 1/4th of the indexing interval ms)
+        int buffer = indexInterval/4;
+
+        try {
+            assertTrue((indexInterval - buffer) < (end[0] - start[0]) && (end[0] - start[0]) < (indexInterval + buffer));
+        } catch(AssertionError e){
+            System.out.println("ms_interval: "+ (end[0] - start[0])+ " l_boundary: "+(indexInterval-buffer)+" u_boundary: "+(indexInterval+buffer));
+            e.printStackTrace();
+            assertFalse(true);
+        }
+    }
+
+}

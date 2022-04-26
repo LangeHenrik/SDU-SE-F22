@@ -299,6 +299,8 @@ public class RangeFilterCRUDTest {
                         () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e){
+                fail("Fail because filter type does not exist");
             }
         }
 
@@ -325,6 +327,8 @@ public class RangeFilterCRUDTest {
                         () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e){
+                fail("Fail because filter type does not exist");
             }
         }
 
@@ -351,6 +355,8 @@ public class RangeFilterCRUDTest {
                         () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
             } catch (IdNotFoundException e) {
                 fail("Fail because id did not exist");
+            } catch (UnknownFilterTypeException e) {
+                fail("Fail because filter type does not exist");
             }
         }
 

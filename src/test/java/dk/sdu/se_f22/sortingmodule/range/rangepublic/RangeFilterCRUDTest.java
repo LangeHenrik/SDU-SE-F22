@@ -817,35 +817,61 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Incompatible types should not alter database")
                 class incompatibleTypesShouldNotAlterDatabase {
 
-                    @Test
+                    @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Double variables, but non-double filter should not alter db")
-                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb() throws UnknownFilterTypeException, IdNotFoundException {
+                    @ValueSource(ints = {2,3})
+                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
-                        // use the illegal class
-                        RangeFilter filter = rangeFilterCRUD.read(1);
-                        // id 1 should be a
+
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 2 should be a long filter, id 3 should be a time filter");
+
                         try {
                             rangeFilterCRUD.update(filter, 1.0, 2.0);
                         } catch (InvalidFilterException e) {
                             System.out.println("Exception thrown correctly");
                         }
+
                         List<RangeFilter> endState = rangeFilterCRUD.readAll();
                         assertEquals(previousState, endState);
-                        fail("not yet implemented");
                     }
 
-                    @Test
+                    @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Long variables, but non-long filter should not alter db")
-                    void longVariablesButNonLongFilterShouldNotAlterDb() {
+                    @ValueSource(ints = {1,3})
+                    void longVariablesButNonLongFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
-                        fail("not yet implemented");
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 3 should be a time filter");
+
+                        try {
+                            rangeFilterCRUD.update(filter, 1, 2);
+                        } catch (InvalidFilterException e) {
+                            System.out.println("Exception thrown correctly");
+                        }
+
+                        List<RangeFilter> endState = rangeFilterCRUD.readAll();
+                        assertEquals(previousState, endState);
                     }
 
-                    @Test
+                    @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Instant variables, but non-instant filter should not alter db")
-                    void instantVariablesButNonInstantFilterShouldNotAlterDb() {
+                    @ValueSource(ints = {1,2})
+                    void instantVariablesButNonInstantFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
-                        fail("not yet implemented");
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 2 should be a long filter");
+
+                        try {
+                            rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"),Instant.parse("2031-11-30T18:35:24.00Z"));
+                        } catch (InvalidFilterException e) {
+                            System.out.println("Exception thrown correctly");
+                        }
+
+                        List<RangeFilter> endState = rangeFilterCRUD.readAll();
+                        assertEquals(previousState, endState);
                     }
 
                 }

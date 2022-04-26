@@ -97,4 +97,8 @@ public class CategoryFilter implements CategoryFilterInterface {
 
         return searchHits;
     }
+
+    public List getAllCategories() {
+        return CategoryDBConnection.shared.getAllCategories();
+    }
 }

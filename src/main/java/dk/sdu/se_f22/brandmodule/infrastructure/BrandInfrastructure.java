@@ -6,6 +6,7 @@ import java.util.*;
 import com.google.gson.*;
 import dk.sdu.se_f22.brandmodule.index.*;
 import dk.sdu.se_f22.brandmodule.stemming.*;
+import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
 import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
@@ -68,7 +69,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 
     private List<String> filterTokens(List<String> tokens) {
         tokens = stemming.stem(tokens);
-        //tokens = irregularWords.searchForIrregularWords(tokens);
+        tokens = IrregularWords.INSTANCE.searchForIrregularWords(tokens);
         // tokens = stopwords.
         return tokens;
     }

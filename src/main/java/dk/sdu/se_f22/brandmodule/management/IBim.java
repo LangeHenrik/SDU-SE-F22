@@ -23,5 +23,6 @@ public interface IBim {
 
     //set the index interval
     void setIndexInterval(int indexInterval);
+    int  getIndexingInterval();
 
 }

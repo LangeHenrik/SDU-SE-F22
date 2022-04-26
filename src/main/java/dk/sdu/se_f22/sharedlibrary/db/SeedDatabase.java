@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sharedlibrary.db;
 
+
 import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
 
 import java.io.BufferedReader;
@@ -12,17 +13,10 @@ import java.sql.Statement;
 
 public class SeedDatabase {
     public static void main(String[] args) {
-        //Get the connection
-        Connection connection = DBConnection.getConnection();
-
-        //Ensure that the database is up to date
-        runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/database.sql");
-        runSQLFromFile(connection,"src/main/java/dk/sdu/se_f22/sharedlibrary/db/rangeFilters.sql");
-
-//------Seed the database-----------------------------------------------------------------------------
+        //------Seed the database-----------------------------------------------------------------------------
 
         //BIM-1
-
+        Persistence bim1 = new Persistence(); bim1.seedDatabase();
 
     }
 
@@ -67,6 +61,7 @@ public class SeedDatabase {
         } catch (FileNotFoundException e) {e.printStackTrace();
         } catch (SQLException e) {e.printStackTrace();
         } catch (IOException e) {e.printStackTrace();
+
         }
     }
 }

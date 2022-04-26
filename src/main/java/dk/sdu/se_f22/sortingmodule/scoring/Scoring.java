@@ -54,10 +54,10 @@ public class Scoring implements IScoring{
 
     @Override
     public List<Object> scoreSort(List<Object> input) {
-//        this.price(input);
-//        this.review(input);
-//        this.stock(input);
-//        this.releaseDate(input);
+        this.price(input);
+        this.review(input);
+        this.stock(input);
+        this.releaseDate(input);
 
         throw new UnsupportedOperationException("Unsupported");
     }

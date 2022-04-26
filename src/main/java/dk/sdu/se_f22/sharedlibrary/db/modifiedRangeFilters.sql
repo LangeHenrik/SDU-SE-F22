@@ -112,7 +112,6 @@ BEGIN
     RETURNING filterId into filter_id_var;
 
     INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (filter_id_var, NEW.min, NEW.max);
-
     new.filterid = filter_id_var;
 
     return new;
@@ -388,3 +387,88 @@ DELETE FROM SortingRangeDoubleView WHERE filterId = 2;
 
 SELECT * FROM sortingrangetimeview;
 
+
+
+create or replace function time_filter_view_update()
+    RETURNS trigger
+AS
+$$
+DECLARE
+    filter_id_var integer;
+BEGIN
+    UPDATE SortingRangeFilters SET description=NEW.description, name=NEW.name, productAttribute=NEW.productAttribute, filterTypeId=1
+    WHERE (filterId=NEW.NEW.filterId)
+    RETURNING filterId into filter_id_var;
+
+    UPDATE SortingRangeTimeFilters SET filterId=filter_id_var, min=NEW.mim, max=NEW.max WHERE (filterId = filter_id_var);
+    new.filterid = filter_id_var;
+
+    return new;
+END;
+$$
+    language plpgsql;
+
+
+create trigger trg_time_view_update_trigger
+    INSTEAD OF UPDATE
+    ON SortingRangeTimeView
+    FOR EACH ROW
+EXECUTE procedure time_filter_view_update();
+
+
+create or replace function long_filter_view_update()
+    RETURNS trigger
+AS
+$$
+DECLARE
+    filter_id_var integer;
+BEGIN
+    UPDATE SortingRangeFilters SET description=NEW.description, name=NEW.name, productAttribute=NEW.productAttribute, filterTypeId=2
+    WHERE (filterId = NEW.filterId)
+        -- The 2 in this line could be handled differently
+        -- We could create a trigger on inserts into each table containing different filter types instead
+        -- I prefer this, since it does not need an extra trigger, and also allows fo not null constraint on filterTypeId
+    RETURNING filterId into filter_id_var;
+
+    UPDATE SortingRangeLongFilters SET min=NEW.min, max=NEW.max WHERE (filterId = filter_id_var);
+
+    new.filterid = filter_id_var;
+
+    return new;
+END;
+$$
+    language plpgsql;
+
+create trigger trg_long_view_update_trigger
+    INSTEAD OF UPDATE
+    ON SortingRangeLongView
+    FOR EACH ROW
+EXECUTE procedure long_filter_view_update();
+
+
+create or replace function double_filter_view_update()
+    RETURNS trigger
+AS
+$$
+DECLARE
+    filter_id_var integer;
+BEGIN
+    UPDATE SortingRangeFilters SET description=NEW.description, name=NEW.name, productAttribute=NEW.productAttribute, filterTypeId=3
+    WHERE (filterId = NEW.filterId)
+    RETURNING filterId into filter_id_var;
+
+    UPDATE SortingRangeDoubleFilters SET min=NEW.min , max=NEW.max WHERE (filterId=filter_id_var);
+
+    new.filterId = filter_id_var;
+
+    return new;
+END
+$$
+    language plpgsql;
+
+
+create trigger trg_double_view_update_trigger
+    INSTEAD OF UPDATE
+    ON SortingRangeDoubleView
+    FOR EACH ROW
+EXeCUTE procedure double_filter_view_update();

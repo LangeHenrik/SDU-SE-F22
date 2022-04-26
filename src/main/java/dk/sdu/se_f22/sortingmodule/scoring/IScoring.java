@@ -5,27 +5,27 @@ import java.util.List;
 public interface IScoring {
 
     /**
-     <p> Returns weight value sum for multiple categories </p>
+     <p> Returns a list of products that is sorted by price, reviews, stock and date. </p>
      */
     List<TestProduct> scoreSort(List<TestProduct> input);
 
     /**
-     <p> Returns weight value for price </p>
+     <p> Returns a list of products that is sorted by price. </p>
      */
     List<TestProduct> scoreSortPrice(List<TestProduct> input);
 
     /**
-     <p> Returns weight value for review </p>
+     <p> Returns a list of products that is sorted by reviews. </p>
      */
     List<TestProduct> scoreSortReview(List<TestProduct> input);
 
     /**
-     <p> Returns weight value for stock </p>
+     <p> Returns a list of products that is sorted by stock. </p>
      */
     List<TestProduct> scoreSortStock(List<TestProduct> input);
 
     /**
-     <p> Returns weight value for release date </p>
+     <p> Returns a list of products that is sorted by date </p>
      */
     List<TestProduct> scoreSortDate(List<TestProduct> input);
 
@@ -35,7 +35,9 @@ public interface IScoring {
     List<String> readTable();
 
     /**
-     <p> Updates the row with the new data </p>
+     <p> Updates the row with the new data.
+     column is which type of data to input either "type", "bracket" or "weight".
+     newValue is the value you want to input, the right datatype is int for weight, double for price, and String for type </p>
      */
     void updateRow(int id, Object newValue, String column);
 

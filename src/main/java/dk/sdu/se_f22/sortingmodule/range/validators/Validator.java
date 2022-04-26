@@ -17,7 +17,6 @@ public class Validator {
     }
 
 
-    //TODO Make this validator also throw an exception if the strings contain special characters at all
     public static void NoSpecialCharacters(String s) throws InvalidFilterException{
         String[] characters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
 
@@ -28,19 +27,19 @@ public class Validator {
         }
     }
 
-    public static void MaxLessThanMin(double Min, double Max) throws InvalidFilterException{
-        if (Min > Max) {
-            throw new InvalidFilterException("Min cannot be greater than Max");
+    public static void MaxLessThanMin(double min, double max) throws InvalidFilterException{
+        if (min > max) {
+            throw new InvalidFilterException("min cannot be greater than max");
         }
     }
-    public static void MaxLessThanMin(Long Min, Long Max) throws InvalidFilterException{
-        if (Min > Max) {
-            throw new InvalidFilterException("Min cannot be greater than Max");
+    public static void MaxLessThanMin(Long min, Long max) throws InvalidFilterException{
+        if (min > max) {
+            throw new InvalidFilterException("min cannot be greater than max");
         }
     }
-    public static void MaxLessThanMin(Instant Min, Instant Max) throws InvalidFilterException{
-        if (Min.getEpochSecond() > Max.getEpochSecond()) {
-            throw new InvalidFilterException("Min cannot be greater than Max");
+    public static void MaxLessThanMin(Instant min, Instant max) throws InvalidFilterException{
+        if (min.isAfter(max)) {
+            throw new InvalidFilterException("min cannot be greater than max");
         }
     }
 }

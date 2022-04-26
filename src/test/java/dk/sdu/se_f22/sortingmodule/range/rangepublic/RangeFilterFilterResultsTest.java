@@ -22,9 +22,8 @@ class RangeFilterFilterResultsTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("Not yet written")
     @DisplayName("Filter results with non empty lists")
     void filterResultsWithNonEmptyLists() {
-        //Missing test
     }
 }

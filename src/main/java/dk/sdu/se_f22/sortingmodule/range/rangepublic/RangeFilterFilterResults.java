@@ -11,7 +11,7 @@ public class RangeFilterFilterResults {
     /**
      * This is the method that filters the products in the searchHits based on the filters given.
      * <p>
-     * You are nto allowed to extend {@link RangeFilter} and pass your own instances in the list.
+     * You are not allowed to extend {@link RangeFilter} and pass your own instances in the list.
      * You will get an {@link IllegalImplementationException} when using the filters if you try.
      *
      * @param rangeFilters The rangefilters to use for filtering the search hits, they must be in accordance with the filters stored in our DB.
@@ -23,8 +23,7 @@ public class RangeFilterFilterResults {
         Collection productHits = searchHits.getProducts();
 
         for (RangeFilter rangeFilter : rangeFilters) {
-            if (rangeFilter instanceof RangeFilterClass) {
-                RangeFilterClass filterCasted = (RangeFilterClass) rangeFilter;
+            if (rangeFilter instanceof RangeFilterClass filterCasted) {
                 productHits = filterCasted.useFilter(productHits);
             } else {
                 throw new IllegalImplementationException("You are not allowed to write your own implementation of RangeFilter\n" +

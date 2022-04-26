@@ -1,9 +1,12 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,28 +14,28 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-
-// Currently, the tests involving instants fail,
-// since the string format of instants are not known at the moment,
-// and should be researched
 public class RangeFilterCRUDTest {
 
     private RangeFilterCRUD rangeFilterCRUD;
 
     @BeforeEach
-    public void setup () {
+    public void setup() {
         rangeFilterCRUD = new RangeFilterCRUD();
     }
 
+    public
+
     @Nested
-    class CRUDCreatorTest  {
+    class CRUDCreatorTest {
         @Nested
         @DisplayName("Create Db filters")
         class createDbFilters {
@@ -41,7 +44,7 @@ public class RangeFilterCRUDTest {
             class validFiltersThatShouldPass {
                 @Test
                 @DisplayName("ValidFilters with regular attributes")
-                    // Maybe later create csv file for testing valid attributes
+                    // A csv file for testing valid attributes is in progress
                 void validFiltersWithRegularAttributesDouble() {
                     String description = "This filter checks a lot of attributes bla bla";
                     String name = "Sample filter";
@@ -57,7 +60,6 @@ public class RangeFilterCRUDTest {
 
             @Test
             @DisplayName("ValidFilters with regular attributes")
-                // Maybe later create csv file for testing valid attributes
             void validFiltersWithRegularAttributesLong() {
                 String description = "This filter checks a lot of attributes bla bla";
                 String name = "Sample filter";
@@ -72,7 +74,6 @@ public class RangeFilterCRUDTest {
 
             @Test
             @DisplayName("ValidFilters with regular attributes")
-                // Maybe later create csv file for testing valid attributes
             void validFiltersWithRegularAttributesTime() {
                 String description = "This filter checks a lot of attributes bla bla";
                 String name = "Sample filter";
@@ -102,7 +103,7 @@ public class RangeFilterCRUDTest {
                     Instant minInstant = Instant.ofEpochSecond(0);
                     Instant maxInstant = Instant.ofEpochSecond(800);
 
-                    Assertions.assertAll("Chcek that the 3 different filter types throw with empty description.",
+                    Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
                                             .create(input, "sample name", "Sample attribute", minDouble, maxDouble)
@@ -116,7 +117,6 @@ public class RangeFilterCRUDTest {
                                             .create(input, "sample name", "Sample attribute", minInstant, maxInstant)
                             )
                     );
-
                 }
 
 
@@ -133,7 +133,7 @@ public class RangeFilterCRUDTest {
                     Instant minInstant = Instant.ofEpochSecond(0);
                     Instant maxInstant = Instant.ofEpochSecond(800);
 
-                    Assertions.assertAll("Chcek that the 3 different filter types throw with empty description.",
+                    Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
                                             .create("Testing empty product attribute", "sample name", input, minDouble, maxDouble)
@@ -163,7 +163,7 @@ public class RangeFilterCRUDTest {
                     Instant minInstant = Instant.ofEpochSecond(0);
                     Instant maxInstant = Instant.ofEpochSecond(800);
 
-                    Assertions.assertAll("Chcek that the 3 different filter types throw with empty description.",
+                    Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
                                             .create("Testing empty product attribute", input, "attribute", minDouble, maxDouble)
@@ -261,6 +261,7 @@ public class RangeFilterCRUDTest {
                                 () -> rangeFilterCRUD.create("negative min", "name", "price", minInstant, maxInstant)
                         );
                     }
+
                     // Provides multiple parameters for the max less than min test
                     static Stream<Arguments> integerProvider() {
                         return Stream.of(
@@ -275,7 +276,7 @@ public class RangeFilterCRUDTest {
 
 
     @Nested
-    class CRUDDeleterTest  {
+    class CRUDDeleterTest {
         @ParameterizedTest
         @DisplayName("Delete valid doubleFilter")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
@@ -373,7 +374,7 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            }  catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException e) {
                 fail(e);
             }
 
@@ -396,7 +397,7 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
-            }  catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException e) {
                 fail(e);
             }
 
@@ -411,7 +412,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Delete time filter twice")
+        @DisplayName("Delete long filter twice")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
         void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) {
             //expected fail until database.create has been implemented
@@ -421,7 +422,7 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
-            }  catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException e) {
                 fail(e);
             }
 
@@ -516,7 +517,7 @@ public class RangeFilterCRUDTest {
             );
         }
 
-        // Commented out because it is very hard for us to make the database empty
+        // Below is commented out because it is very hard for us to make the database empty
         // At least if we want robust tests of the other parts to the system
 
 //        @Test
@@ -529,5 +530,709 @@ public class RangeFilterCRUDTest {
 //                    () -> rangeFilterCRUD.readAll(),"Database not empty"
 //            );
 //        }
+    }
+
+    @Nested
+    @DisplayName("CRUD Update")
+    class crudUpdate {
+
+        @Nested
+        @DisplayName("Valid updates")
+        class validUpdates {
+
+            @Nested
+            @DisplayName("Updating valid information should not throw an exception")
+            class updatingValidInformationShouldNotThrowAnException {
+                private static List<RangeFilter> listWithRangeFilters;
+
+                private static List<RangeFilter> provideRangeFilterForTest() {
+                    RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
+                    DBMigration dbMigration = new DBMigration();
+
+                    if (listWithRangeFilters.size() >= 3) {
+                        return listWithRangeFilters;
+                    }
+
+                    try {
+                        //Cleaning the database to avoid duplicate keys
+                        dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+                        
+                        //Adding RangeFilters to list
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
+                    } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
+                        e.printStackTrace();
+                    }
+                    return listWithRangeFilters;
+                }
+
+                @ParameterizedTest
+                @DisplayName("Updating the name should not throw an exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName() + " mfied1"));
+
+                }
+
+                @ParameterizedTest
+                @DisplayName("Updating the name and description should not throw an exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheNameAndDescriptionShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName() + " mfied2", rangefilter.getDescription() + " mfied2"));
+
+                }
+
+                @ParameterizedTest
+                @DisplayName("Updating the description but not changing the name should not throw an exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName(), rangefilter.getDescription() + " mfied3"));
+                }
+
+                @Nested
+                @DisplayName("Updating dbValues should not throw an exception")
+                class updatingDbValuesShouldNotThrowAnException {
+
+                    @Nested
+                    @DisplayName("updating Double filters in db")
+                    class updatingDoubleFiltersInDb {
+
+                        @Test
+                        @DisplayName("min updating only should not throw an exception")
+                        void minUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(1);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinDouble() + 1.0, rangefilter.getDbMaxDouble()));
+                        }
+
+                        @Test
+                        @DisplayName("max updating only should not throw an exception")
+                        void maxUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(1);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinDouble(), rangefilter.getDbMaxDouble() + 1.7));
+                        }
+
+                        @Test
+                        @DisplayName("Both updating should not throw an exception")
+                        void bothUpdatingShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(1);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinDouble() + 1.0, rangefilter.getDbMaxDouble() + 4.0));
+                        }
+                    }
+
+                    @Nested
+                    @DisplayName("updating long filters in db")
+                    class updatingLongFiltersInDb {
+
+                        @Test
+                        @DisplayName("min updating only should not throw an exception")
+                        void minUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(2);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinLong() + 6, rangefilter.getDbMaxLong()));
+                        }
+
+
+                        @Test
+                        @DisplayName("max updating only should not throw an exception")
+                        void maxUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(2);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinLong(), rangefilter.getDbMaxLong() + 47));
+                        }
+
+                        @Test
+                        @DisplayName("Both updating should not throw an exception")
+                        void bothUpdatingShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(2);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinLong() + 10, rangefilter.getDbMaxLong() + 40));
+                        }
+                    }
+
+                    @Nested
+                    @DisplayName("updating time filters in db")
+                    class updatingTimeFiltersInDb {
+
+                        @Test
+                        @DisplayName("min updating only should not throw an exception")
+                        void minUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(3);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant(), rangefilter.getDbMaxInstant().plusSeconds(10)));
+                        }
+
+                        @Test
+                        @DisplayName("max updating only should not throw an exception")
+                        void maxUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(3);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant().plusSeconds(152), rangefilter.getDbMaxInstant()));
+                        }
+
+                        @Test
+                        @DisplayName("Both updating should not throw an exception")
+                        void bothUpdatingShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(3);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant().plusSeconds(22), rangefilter.getDbMaxInstant().plusSeconds(10)));
+                        }
+                    }
+                }
+            }
+
+            @Nested
+            @DisplayName("Updating valid information should result in a change of database state")
+            class updatingValidInformationShouldResultInAChangeOfDatabaseState {
+                // the three tests below should be run for each type of filter
+                @Test
+                @DisplayName("Updating valid name should change the name stored in db")
+                void updatingValidNameShouldChangeTheNameStoredInDb() {
+
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Updating only the description should change the description stored in the db")
+                void updatingOnlyTheDescriptionShouldChangeTheDescriptionStoredInTheDb() {
+
+                    fail("not yet implemented");
+                }
+
+                @Test
+                @DisplayName("Updating both name and description should change both stored in db")
+                void updatingBothNameAndDescriptionShouldChangeBothStoredInDb() {
+
+                    fail("not yet implemented");
+                }
+
+                @Nested
+                @DisplayName("Double filters updating should change db state")
+                class doubleFiltersUpdatingShouldChangeDbState {
+
+                    @Test
+                    @DisplayName("Min updating only should change the min stored in db")
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a double filter
+
+                        double valueToAdd = 1.0;
+                        // update the filter
+                        rangeFilterCRUD.update(filter, filter.getDbMinDouble() + valueToAdd, filter.getDbMaxDouble());
+
+                        RangeFilter modifiedFilter = rangeFilterCRUD.read(1);
+                        // check that all values still match and that the new value has been correctly modified
+                        assertAll(
+                                () -> assertEquals(filter.getDbMinDouble() + valueToAdd, modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(filter.getName(), modifiedFilter.getName()),
+                                () -> assertEquals(filter.getType(), modifiedFilter.getType()),
+                                () -> assertEquals(filter.getDescription(), modifiedFilter.getDescription()),
+                                () -> assertEquals(filter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                                () -> assertEquals(filter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(filter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(filter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                        );
+                    }
+
+                    @Test
+                    @DisplayName("Max updating only should change the max stored in db")
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws InvalidFilterTypeException, UnknownFilterTypeException, IdNotFoundException, InvalidFilterException {
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a double filter
+
+                        double valueToAdd = 1.0;
+                        // update the filter
+                        rangeFilterCRUD.update(filter, filter.getDbMinDouble(), filter.getDbMaxDouble() + valueToAdd);
+
+                        RangeFilter modifiedFilter = rangeFilterCRUD.read(1);
+                        // check that all values still match and that the new value has been correctly modified
+                        assertAll(
+                                () -> assertEquals(filter.getDbMaxDouble() + valueToAdd, modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(filter.getName(), modifiedFilter.getName()),
+                                () -> assertEquals(filter.getType(), modifiedFilter.getType()),
+                                () -> assertEquals(filter.getDescription(), modifiedFilter.getDescription()),
+                                () -> assertEquals(filter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                                () -> assertEquals(filter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(filter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(filter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                        );
+                    }
+
+                    @Test
+                    @DisplayName("Both updating min and max should change their values stored in db")
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a double filter
+
+                        double valueToAdd = 1.0;
+                        // update the filter
+                        rangeFilterCRUD.update(filter, filter.getDbMinDouble() + valueToAdd * 2, filter.getDbMaxDouble() + valueToAdd);
+
+                        RangeFilter modifiedFilter = rangeFilterCRUD.read(1);
+                        // check that all values still match and that the new value has been correctly modified
+                        assertAll(
+                                () -> assertEquals(filter.getDbMinDouble() + valueToAdd * 2, modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(filter.getDbMaxDouble() + valueToAdd, modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(filter.getName(), modifiedFilter.getName()),
+                                () -> assertEquals(filter.getType(), modifiedFilter.getType()),
+                                () -> assertEquals(filter.getDescription(), modifiedFilter.getDescription()),
+                                () -> assertEquals(filter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                                () -> assertEquals(filter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(filter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                        );
+                    }
+
+                }
+
+                @Nested
+                @DisplayName("Long filters updating should change db state")
+                class longFiltersUpdatingShouldChangeDbState {
+
+                    @Test
+                    @DisplayName("Min updating only should change the min stored in db")
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Max updating only should change the max stored in db")
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Both updating min and max should change their values stored in db")
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+                }
+
+                @Nested
+                @DisplayName("Time filters updating should change db state")
+                class timeFiltersUpdatingShouldChangeDbState {
+
+                    @Test
+                    @DisplayName("Min updating only should change the min stored in db")
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
+                        fail("not yet implemented");
+
+                    }
+
+                    @Test
+                    @DisplayName("Max updating only should change the max stored in db")
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+
+                    @Test
+                    @DisplayName("Both updating min and max should change their values stored in db")
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() {
+
+                        fail("not yet implemented");
+                    }
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("Invalid filter updates")
+        class invalidFilterUpdates {
+            @Nested
+            @DisplayName("Filter type does not match variable types")
+            class filterTypeDoesNotMatchVariableTypes {
+
+                @Nested
+                @DisplayName("Incompatible types, should throw an exception")
+                class incompatibleTypesShouldThrowAnException {
+
+                    @ParameterizedTest(name = "id: {0}")
+                    @DisplayName("Double variables, but non-double filter should throw")
+                    @ValueSource(ints = {2, 3})
+                    void doubleVariablesButNonDoubleFilter(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 2 should be a long filter, id 3 should be a time filter");
+
+                        assertThrows(InvalidFilterException.class, () ->
+                                rangeFilterCRUD.update(filter, 1.0, 2.0)
+                        );
+                    }
+
+                    @ParameterizedTest(name = "id: {0}")
+                    @DisplayName("Long variables, but non-long filter should throw")
+                    @ValueSource(ints = {1, 3})
+                    void longVariablesButNonLongFilterShouldThrow(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 3 should be a time filter");
+
+                        assertThrows(InvalidFilterException.class, () ->
+                                rangeFilterCRUD.update(filter, 1, 2)
+                        );
+                    }
+
+                    @ParameterizedTest(name = "id: {0}")
+                    @DisplayName("Instant variables, but non-instant filter should throw")
+                    @ValueSource(ints = {1, 2})
+                    void instantVariablesButNonInstantFilterShouldThrow(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 2 should be a long filter");
+
+                        assertThrows(InvalidFilterException.class, () ->
+                                rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"))
+                        );
+                    }
+                }
+
+                @Nested
+                @DisplayName("Incompatible types should not alter database")
+                class incompatibleTypesShouldNotAlterDatabase {
+
+                    @ParameterizedTest(name = "id: {0}")
+                    @DisplayName("Double variables, but non-double filter should not alter db")
+                    @ValueSource(ints = {2, 3})
+                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        List<RangeFilter> previousState = rangeFilterCRUD.readAll();
+
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 2 should be a long filter, id 3 should be a time filter");
+
+                        try {
+                            rangeFilterCRUD.update(filter, 1.0, 2.0);
+                        } catch (InvalidFilterException e) {
+                            System.out.println("Exception thrown correctly");
+                        }
+
+                        List<RangeFilter> endState = rangeFilterCRUD.readAll();
+                        assertEquals(previousState, endState);
+                    }
+
+                    @ParameterizedTest(name = "id: {0}")
+                    @DisplayName("Long variables, but non-long filter should not alter db")
+                    @ValueSource(ints = {1, 3})
+                    void longVariablesButNonLongFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        List<RangeFilter> previousState = rangeFilterCRUD.readAll();
+
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 3 should be a time filter");
+
+                        try {
+                            rangeFilterCRUD.update(filter, 1, 2);
+                        } catch (InvalidFilterException e) {
+                            System.out.println("Exception thrown correctly");
+                        }
+
+                        List<RangeFilter> endState = rangeFilterCRUD.readAll();
+                        assertEquals(previousState, endState);
+                    }
+
+                    @ParameterizedTest(name = "id: {0}")
+                    @DisplayName("Instant variables, but non-instant filter should not alter db")
+                    @ValueSource(ints = {1, 2})
+                    void instantVariablesButNonInstantFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        List<RangeFilter> previousState = rangeFilterCRUD.readAll();
+
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 2 should be a long filter");
+
+                        try {
+                            rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"));
+                        } catch (InvalidFilterException e) {
+                            System.out.println("Exception thrown correctly");
+                        }
+
+                        List<RangeFilter> endState = rangeFilterCRUD.readAll();
+                        assertEquals(previousState, endState);
+                    }
+
+                }
+            }
+
+
+            @Nested
+            @DisplayName("Invalid specializations")
+            class invalidSpecializations {
+                @Nested
+                @DisplayName("Invalid specialization should result in an exception getting thrown")
+                class invalidSpecializationShouldResultInAnExceptionGettingThrown {
+                    @Test
+                    @DisplayName("Invalid specialization name change throw exception")
+                    void invalidSpecializationNameChangeThrowException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name"));
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization description change throw exception")
+                    void invalidSpecializationDescriptionChangeThrowException() {
+                        RangeFilter illegalFilter = new IllegalRangeFilterClass();
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(illegalFilter, illegalFilter.getName(), "new illegal description"));
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization name and description change throw exception")
+                    void invalidSpecializationNameAndDescriptionChangeThrowException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name", "new illegal description"));
+                    }
+
+                    @Test
+                    @DisplayName("Double invalid specialization should throw an exception")
+                    void doubleInvalidSpecializationShouldThrowAnException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1.0, 10000.0));
+                    }
+
+                    @Test
+                    @DisplayName("Long invalid specialization should throw an exception")
+                    void longInvalidSpecializationShouldThrowAnException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1, 20000));
+                    }
+
+                    @Test
+                    @DisplayName("Instant invalid specialization should throw an exception")
+                    void instantInvalidSpecializationShouldThrowAnException() {
+                        assertThrows(IllegalImplementationException.class,
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z")));
+                    }
+                }
+
+                @Nested
+                @DisplayName("Invalid specialization should not change database contents")
+                class invalidSpecializationShouldNotChangeDatabaseContents {
+
+                    @Test
+                    @DisplayName("Invalid specialization name change should not change database contents")
+                    void invalidSpecializationNameChangeShouldNotChangeDatabaseContents() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name");
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                        fail("forced fail: Check that assertEquals works in this case, although it should");
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization description change should not change database contents")
+                    void invalidSpecializationDescriptionChangeShouldNotChangeDatabaseContents() {
+
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            RangeFilter illegalFilter = new IllegalRangeFilterClass();
+                            rangeFilterCRUD.update(illegalFilter, illegalFilter.getName(), "new illegal description");
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Invalid specialization name and description change should not alter db")
+                    void invalidSpecializationNameAndDescriptionChangeShouldNotAlterDb() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name", "new illegal description");
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Double variables should not alter db state with illegal implementation")
+                    void doubleVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1.0, 10000.0);
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Long variables should not alter db state with illegal implementation")
+                    void longVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1, 20000);
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+
+                    @Test
+                    @DisplayName("Instant variables should not alter db state with illegal implementation")
+                    void instantVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                        List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
+
+                        try {
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"));
+                        } catch (InvalidFilterException e) {
+                            e.printStackTrace();
+                        }
+
+                        assertEquals(beforeState, rangeFilterCRUD.readAll());
+                    }
+                }
+
+
+                /**
+                 * THis class is used as an example of an illegal implementation of the RangeFilter interface <br>
+                 * This can be seen since it does not extend RangeFilterClass
+                 */
+                class IllegalRangeFilterClass implements RangeFilter {
+                    @Override
+                    public int getId() {
+                        return 0;
+                    }
+
+                    @Override
+                    public String getName() {
+                        return "illegal class";
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "illegal class description";
+                    }
+
+                    @Override
+                    public String getProductAttribute() {
+                        return "illegal class product";
+                    }
+
+                    @Override
+                    public FilterTypes getType() {
+                        // This could be debated how smart it is to choose a class explicitly.
+                        // It has been done since it may be quite obvious to validate if the class has a gettype that returns
+                        // Something else than null
+                        return FilterTypes.DOUBLE;
+                    }
+
+                    @Override
+                    public double getDbMinDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getDbMinInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getDbMinLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getDbMaxDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getDbMaxInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getDbMaxLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getUserMinDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getUserMinInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getUserMinLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getUserMaxDouble() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getUserMaxInstant() throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long getUserMaxLong() throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double setUserMin(double userMin) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant setUserMin(Instant userMin) throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long setUserMin(long userMin) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public double setUserMax(double userMax) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant setUserMax(Instant userMax) throws InvalidFilterTypeException {
+                        return null;
+                    }
+
+                    @Override
+                    public long setUserMax(long userMax) throws InvalidFilterTypeException {
+                        return 0;
+                    }
+                }
+            }
+        }
+
+        @AfterAll
+        public static void teardown() {
+            try {
+                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+            } catch (SQLException e) {
+                System.out.println("error when resetting database state, pooled connection threw sql exception:");
+                e.printStackTrace();
+
+            }
+        }
+
     }
 }

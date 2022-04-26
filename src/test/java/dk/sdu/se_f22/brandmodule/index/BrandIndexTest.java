@@ -13,11 +13,6 @@ class BrandIndexTest {
 
     @Test
     void searchBrandIndex() {
-
-    }
-
-    @Test
-    void indexBrandInformation() {
         Brand knownBand = new Brand(0, null, null, null, null, null);
         knownBand.setName("HP");
         knownBand.setDescription("HP Inc. is an American multinational information technology company headquartered in Palo Alto, California, that develops personal computers (PCs), printers and related supplies, as well as 3D printing solutions.");
@@ -43,5 +38,10 @@ class BrandIndexTest {
             assertEquals(knownBand.getProducts().get(i), s.deserializeBrand().get(indexNumber).getProducts().get(i));
             //System.out.println(s.deserializeBrand().get(i).getName());
         }
+    }
+
+    @Test
+    void indexBrandInformation() {
+
     }
 }

@@ -85,12 +85,8 @@ public class BrandIndex implements IndexInterface {
                     }
                 }
                 tokenInsert.execute();
-            }
-
-
-            for (int j = 0; j < tokens.size(); j++) {
                 queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
-                queryTokenId.setString(1, newTokens.get(j));
+                queryTokenId.setString(1, newTokens.get(i));
                 rsTokenId = queryTokenId.executeQuery();
                 while (rsTokenId.next()) {
                     mapInsert.setInt(1, brand.getId());

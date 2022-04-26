@@ -31,43 +31,35 @@ public class CategoryFilter implements CategoryFilterInterface {
                 String[] fieldNameArray;
 
                 for(Category category : categories){
-                    System.out.println(category.getRequirementFieldName());
-                    System.out.println(category.getRequirementValue());
-                    System.out.println(category.getName());
-
                     if (category.getRequirementFieldName().toLowerCase().equals("category")) {
-                        fieldNameArray = product.getCategory().split("/");
+                        Pattern pattern = Pattern.compile("(^|[^\\w])\\/?(" + category.getRequirementValue() + ")\\/?([^\\w+]|$)", Pattern.CASE_INSENSITIVE);
+                        Matcher matcher = pattern.matcher(product.getCategory());
+                        boolean matchFound = matcher.find();
 
-                        for (String fieldCategory : fieldNameArray) {
-                            Pattern pattern = Pattern.compile(category.getRequirementValue());
-                            Matcher matcher = pattern.matcher(fieldCategory);
-                            boolean matchFound = matcher.matches();
+                        if (matchFound) {
+                            System.out.println("Match found: " + product.getName());
 
-                            if (matchFound) {
-                                System.out.println("Match found: " + product.getName());
-
+                            if (!newProducts.contains(product)) {
                                 newProducts.add(product);
-                                break;
-                            } else {
-                                System.out.println("Match not found:" + product.getName());
                             }
+                            break;
+                        } else {
+                            System.out.println("Match not found:" + product.getName());
                         }
                     } else if (category.getRequirementFieldName().toLowerCase().equals("name")) {
-                        fieldNameArray = product.getName().split(" ");
+                        Pattern pattern = Pattern.compile(category.getRequirementValue());
+                        Matcher matcher = pattern.matcher(product.getName());
+                        boolean matchFound = matcher.matches();
 
-                        for (String fieldName : fieldNameArray) {
-                            Pattern pattern = Pattern.compile(category.getRequirementValue());
-                            Matcher matcher = pattern.matcher(fieldName);
-                            boolean matchFound = matcher.matches();
+                        if (matchFound) {
+                            System.out.println("Match found: " + product.getName());
 
-                            if (matchFound) {
-                                System.out.println("Match found: " + product.getName());
-
+                            if (!newProducts.contains(product)) {
                                 newProducts.add(product);
-                                break;
-                            } else {
-                                System.out.println("Match not found:" + product.getName());
                             }
+                            break;
+                        } else {
+                            System.out.println("Match not found:" + product.getName());
                         }
                     } else if (category.getRequirementFieldName().toLowerCase().equals("instock")) {
                         if (category.getRequirementValue() != null) {
@@ -86,7 +78,6 @@ public class CategoryFilter implements CategoryFilterInterface {
                                 }
                             }
                         } else {
-                            System.out.println("Hej med dig");
                             if (product.getInStock().isEmpty()) {
                                 System.out.println("Match found: " + product.getName());
 
@@ -97,27 +88,6 @@ public class CategoryFilter implements CategoryFilterInterface {
                             }
                         }
                     }
-
-                    /*
-                    if (category.getRequirementFieldName().toLowerCase().equals("contains")) {
-                        if(product.getCategory().contains(category.getRequirementValue())) {
-                            newProducts.add(product);
-                            break;
-                        }
-                    } else if (category.getRequirementFieldName().toLowerCase().equals("in stock")) {
-                        System.out.println("VIRKER");
-                        if(product.getInStock().contains(category.getRequirementValue())){
-                            newProducts.add(product);
-                            break;
-                        } else if(product.getInStock().isEmpty() != true) {
-                            newProducts.add(product);
-                            break;
-                        }
-                    } else {
-                        System.out.println("Requirement Status: " + category.getRequirementFieldName() + " isn't supported yet");
-                    }
-
-                     */
                 }
             } else {
                 System.out.println("The instance " + oldProduct.getClass() + " isn't supported");

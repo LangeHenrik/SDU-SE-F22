@@ -573,7 +573,6 @@ public class RangeFilterCRUDTest {
                 @MethodSource("provideRangeFilterForTest")
                 void updatingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
                     Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName() + " mfied1"));
-
                 }
 
                 @ParameterizedTest(name = "{0}")
@@ -681,6 +680,62 @@ public class RangeFilterCRUDTest {
                             rangefilter = rangeFilterCRUD.read(3);
                             Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant().plusSeconds(22), rangefilter.getDbMaxInstant().plusSeconds(10)));
                         }
+                    }
+                }
+            }
+
+            @Nested
+            @DisplayName("Updating invalid information should throw an exception")
+            class updatingInvalidInformationShouldThrowAnException {
+
+                @ParameterizedTest(name = "{0}")
+                @DisplayName("Updating filters with invalid name should throw exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingFiltersWithInvalidNameShouldThrowException(RangeFilter rangefilter) {
+                    String newName = "%*./";
+                    Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangefilter, newName));
+                }
+
+                @ParameterizedTest(name = "{0}")
+                @DisplayName("Updating filters with invalid description should throw exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingFiltersWithInvalidDescriptionShouldThrowException(RangeFilter rangefilter) {
+                    String newDescription = "!!!.-";
+                    Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangefilter, rangefilter.getName(), newDescription));
+                }
+
+                @ParameterizedTest(name = "{0}")
+                @DisplayName("Updating filters with invalid name and description should throw exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingFiltersWithInvalidNameAndDescriptionShouldThrowException(RangeFilter rangefilter) {
+                    String newName = "/%   .";
+                    String newDescription = "%";
+                    Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangefilter, newName, newDescription));
+                }
+
+                @Nested
+                @DisplayName("Updating dbValues should throw an exception")
+                class updatingDbValuesShouldThrowAnException {
+                    @Test
+                    @DisplayName("Updating double filter with min greater than max should throw exception")
+                    void updatingDoubleFilterWithMinGreaterThanMaxShouldThrowException() throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter rangeFilter = rangeFilterCRUD.read(1);
+                        Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangeFilter, 100.0, 1.0));
+                    }
+
+                    @Test
+                    @DisplayName("Updating double filter with min greater than max should throw exception")
+                    void updatingInstantFilterWithMinGreaterThanMaxShouldThrowException() throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter rangeFilter = rangeFilterCRUD.read(2);
+                        Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangeFilter, 1030, 9));
+                    }
+
+                    @Test
+                    @DisplayName("Updating double filter with min greater than max should throw exception")
+                    void updatingTimeFilterWithMinGreaterThanMaxShouldThrowException() throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter rangeFilter = rangeFilterCRUD.read(3);
+                        //315569260 is 10 years in seconds
+                        Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangeFilter, rangeFilter.getDbMinInstant().plusSeconds(315569260), rangeFilter.getDbMaxInstant()));
                     }
                 }
             }

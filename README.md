@@ -121,3 +121,19 @@ The system also has a batch tracker, so that you can look up, in which batch, wh
 
 #### Tl;dr
 This makes it possible to update the database. The only thing you have to do, is write a new .sql file in `src\main\resources\dk\sdu\se_f22\sharedlibrary\db\migrations` that contains the sql code necessary to update the database to the new desired state. As well as run the migration code.
+
+
+## Github actions
+We have implemented, some automated checks, called GitHub Actions or Workflows, that automaticly tests the whole project.  
+
+We have two different tests:
+- Java compile test
+  - This only checks, if the whole codebase can be compiled, and ensure that groups are warned if they have a pull-request or push to main, that contains errors that result in an error while compiling
+- Java system test
+  - This will run all integration- and unit-tests, as well as test all the migrations.
+
+A failed check cannot block any merges or pushes. Therefore these automated checks can only be viewed as a pointer to see, if your code is up to par.  
+The checks are visible when creating a pull request on GitHub, just abode the merge button. A green checkmark can be seen when a pull request or a push has passed all checks, and a red x can be seen when one or more checks has failed.
+
+All of this, is beyond the current pensum for 2. semester.  
+The GitHub actions can be found in the `.github\workflows` folder.

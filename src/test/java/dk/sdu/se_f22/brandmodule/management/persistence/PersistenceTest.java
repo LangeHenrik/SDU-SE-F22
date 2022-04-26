@@ -103,7 +103,14 @@ public class PersistenceTest {
 
     @Test
     void getsetIndexingInterval(){
+        //Save old indexing interval into a variable
+        int OLD_indexing_interval = p.getIndexingInterval();
+        
+        //get indexinterval and assert expected
+        p.setIndexingInterval(100);
+        assertEquals(100, p.getIndexingInterval());
 
-        assertTrue(true);
+        //Set indexing interval to the same as before the test
+        p.setIndexingInterval(OLD_indexing_interval);
     }
 }

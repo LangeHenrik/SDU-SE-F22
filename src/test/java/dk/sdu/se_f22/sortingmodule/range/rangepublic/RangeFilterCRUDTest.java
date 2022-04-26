@@ -9,10 +9,8 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
+import org.w3c.dom.ranges.Range;
 
 import java.sql.SQLException;
 import java.time.Instant;
@@ -540,32 +538,35 @@ public class RangeFilterCRUDTest {
         @Nested
         @DisplayName("Valid updates")
         class validUpdates {
+            private static List<RangeFilter> listWithRangeFilters = new ArrayList<>();
+
+            public static List<RangeFilter> provideRangeFilterForTest() {
+                RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
+                DBMigration dbMigration = new DBMigration();
+
+                if (listWithRangeFilters.size() >= 3) {
+                    return listWithRangeFilters;
+                }
+
+                try {
+                    //Cleaning the database to avoid duplicate keys
+                    dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+
+                    //Adding RangeFilters to list
+                    listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
+                    listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
+                    listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
+                } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
+                    e.printStackTrace();
+                }
+                return listWithRangeFilters;
+            }
 
             @Nested
             @DisplayName("Updating valid information should not throw an exception")
             class updatingValidInformationShouldNotThrowAnException {
-                private static List<RangeFilter> listWithRangeFilters = new ArrayList<>();
-
-                private static List<RangeFilter> provideRangeFilterForTest() {
-                    RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
-                    DBMigration dbMigration = new DBMigration();
-
-                    if (listWithRangeFilters.size() >= 3) {
-                        return listWithRangeFilters;
-                    }
-
-                    try {
-                        //Cleaning the database to avoid duplicate keys
-                        dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-                        
-                        //Adding RangeFilters to list
-                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
-                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
-                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
-                    } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
-                        e.printStackTrace();
-                    }
-                    return listWithRangeFilters;
+                static List<RangeFilter> provideRangeFilterForTest() {
+                    return validUpdates.provideRangeFilterForTest();
                 }
 
                 @ParameterizedTest(name = "{0}")
@@ -687,11 +688,15 @@ public class RangeFilterCRUDTest {
             @Nested
             @DisplayName("Updating valid information should result in a change of database state")
             class updatingValidInformationShouldResultInAChangeOfDatabaseState {
+                static List<RangeFilter> provideRangeFilterForTest() {
+                    return validUpdates.provideRangeFilterForTest();
+                }
+
                 // the three tests below should be run for each type of filter
                 @ParameterizedTest
                 @DisplayName("Updating valid name should change the name stored in db")
                 @MethodSource("provideRangeFilterForTest")
-                void updatingValidNameShouldChangeTheNameStoredInDb(RangeFilter rangefilter) throws InvalidFilterException, UnknownFilterTypeException, IdNotFoundException {
+                void updatingValidNameShouldChangeTheNameStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                     String newName = rangefilter.getName() + " mfied4";
                     rangeFilterCRUD.update(rangefilter, newName);
 
@@ -713,7 +718,7 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest
                 @DisplayName("Updating only the description should change the description stored in the db")
                 @MethodSource("provideRangeFilterForTest")
-                void updatingOnlyTheDescriptionShouldChangeTheDescriptionStoredInTheDb(RangeFilter rangefilter) throws InvalidFilterException, UnknownFilterTypeException, IdNotFoundException {
+                void updatingOnlyTheDescriptionShouldChangeTheDescriptionStoredInTheDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                     String newDescription = rangefilter.getDescription() + " mfied5";
                     rangeFilterCRUD.update(rangefilter, rangefilter.getName(), newDescription);
 
@@ -736,7 +741,7 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest
                 @DisplayName("Updating both name and description should change both stored in db")
                 @MethodSource("provideRangeFilterForTest")
-                void updatingBothNameAndDescriptionShouldChangeBothStoredInDb(RangeFilter rangefilter) throws InvalidFilterException, UnknownFilterTypeException, IdNotFoundException {
+                void updatingBothNameAndDescriptionShouldChangeBothStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                     String newName = rangefilter.getDescription() + " mfied6";
                     String newDescription = rangefilter.getDescription() + " mfied6";
                     rangeFilterCRUD.update(rangefilter, newName, newDescription);
@@ -762,7 +767,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Min updating only should change the min stored in db")
-                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         RangeFilter filter = rangeFilterCRUD.read(1);
                         // id 1 should be a double filter
 
@@ -787,7 +792,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Max updating only should change the max stored in db")
-                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws InvalidFilterTypeException, UnknownFilterTypeException, IdNotFoundException, InvalidFilterException {
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws InvalidFilterTypeException, UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                         RangeFilter filter = rangeFilterCRUD.read(1);
                         // id 1 should be a double filter
 
@@ -812,7 +817,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Both updating min and max should change their values stored in db")
-                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         RangeFilter filter = rangeFilterCRUD.read(1);
                         // id 1 should be a double filter
 
@@ -843,7 +848,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Min updating only should change the min stored in db")
-                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         int id = 2;
                         // id 2 should be a long filter
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -869,7 +874,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Max updating only should change the max stored in db")
-                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         int id = 2;
                         // id 2 should be a long filter
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -895,7 +900,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Both updating min and max should change their values stored in db")
-                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         int id = 2;
                         // id 2 should be a long filter
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -925,7 +930,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Min updating only should change the min stored in db")
-                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         int id = 3;
                         // id 3 should be a time filter
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -955,7 +960,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Max updating only should change the max stored in db")
-                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         int id = 3;
                         // id 3 should be a time filter
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -985,7 +990,7 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Both updating min and max should change their values stored in db")
-                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, IllegalImplementationException {
                         int id = 3;
                         // id 3 should be a time filter
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -1014,6 +1019,10 @@ public class RangeFilterCRUDTest {
                         );
                     }
                 }
+
+
+
+
             }
         }
 
@@ -1035,7 +1044,7 @@ public class RangeFilterCRUDTest {
                         RangeFilter filter = rangeFilterCRUD.read(id);
                         System.out.println("id 2 should be a long filter, id 3 should be a time filter");
 
-                        assertThrows(InvalidFilterException.class, () ->
+                        assertThrows(InvalidFilterTypeException.class, () ->
                                 rangeFilterCRUD.update(filter, 1.0, 2.0)
                         );
                     }
@@ -1047,7 +1056,7 @@ public class RangeFilterCRUDTest {
                         RangeFilter filter = rangeFilterCRUD.read(id);
                         System.out.println("id 1 should be a double filter, id 3 should be a time filter");
 
-                        assertThrows(InvalidFilterException.class, () ->
+                        assertThrows(InvalidFilterTypeException.class, () ->
                                 rangeFilterCRUD.update(filter, 1, 2)
                         );
                     }
@@ -1059,7 +1068,7 @@ public class RangeFilterCRUDTest {
                         RangeFilter filter = rangeFilterCRUD.read(id);
                         System.out.println("id 1 should be a double filter, id 2 should be a long filter");
 
-                        assertThrows(InvalidFilterException.class, () ->
+                        assertThrows(InvalidFilterTypeException.class, () ->
                                 rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"))
                         );
                     }
@@ -1072,7 +1081,7 @@ public class RangeFilterCRUDTest {
                     @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Double variables, but non-double filter should not alter db")
                     @ValueSource(ints = {2, 3})
-                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                    void doubleVariablesButNonDoubleFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -1080,7 +1089,7 @@ public class RangeFilterCRUDTest {
 
                         try {
                             rangeFilterCRUD.update(filter, 1.0, 2.0);
-                        } catch (InvalidFilterException e) {
+                        } catch (InvalidFilterTypeException e) {
                             System.out.println("Exception thrown correctly");
                         }
 
@@ -1091,7 +1100,7 @@ public class RangeFilterCRUDTest {
                     @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Long variables, but non-long filter should not alter db")
                     @ValueSource(ints = {1, 3})
-                    void longVariablesButNonLongFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                    void longVariablesButNonLongFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -1099,7 +1108,7 @@ public class RangeFilterCRUDTest {
 
                         try {
                             rangeFilterCRUD.update(filter, 1, 2);
-                        } catch (InvalidFilterException e) {
+                        } catch (InvalidFilterTypeException e) {
                             System.out.println("Exception thrown correctly");
                         }
 
@@ -1110,7 +1119,7 @@ public class RangeFilterCRUDTest {
                     @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Instant variables, but non-instant filter should not alter db")
                     @ValueSource(ints = {1, 2})
-                    void instantVariablesButNonInstantFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                    void instantVariablesButNonInstantFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
                         RangeFilter filter = rangeFilterCRUD.read(id);
@@ -1118,7 +1127,7 @@ public class RangeFilterCRUDTest {
 
                         try {
                             rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"));
-                        } catch (InvalidFilterException e) {
+                        } catch (InvalidFilterTypeException e) {
                             System.out.println("Exception thrown correctly");
                         }
 
@@ -1132,6 +1141,9 @@ public class RangeFilterCRUDTest {
             @Nested
             @DisplayName("Updating invalid information should throw an exception")
             class updatingInvalidInformationShouldThrowAnException {
+                static List<RangeFilter> provideRangeFilterForTest() {
+                    return validUpdates.provideRangeFilterForTest();
+                }
 
                 @ParameterizedTest(name = "{0}")
                 @DisplayName("Updating filters with invalid name should throw exception")
@@ -1246,8 +1258,8 @@ public class RangeFilterCRUDTest {
 
                         try {
                             rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name");
-                        } catch (InvalidFilterException e) {
-                            e.printStackTrace();
+                        } catch ( IllegalImplementationException e) {
+                            System.out.println("exception thrown correctly");
                         }
 
                         assertEquals(beforeState, rangeFilterCRUD.readAll());
@@ -1262,8 +1274,8 @@ public class RangeFilterCRUDTest {
                         try {
                             RangeFilter illegalFilter = new IllegalRangeFilterClass();
                             rangeFilterCRUD.update(illegalFilter, illegalFilter.getName(), "new illegal description");
-                        } catch (InvalidFilterException e) {
-                            e.printStackTrace();
+                        } catch ( IllegalImplementationException e) {
+                            System.out.println("exception thrown correctly");
                         }
 
                         assertEquals(beforeState, rangeFilterCRUD.readAll());
@@ -1276,8 +1288,8 @@ public class RangeFilterCRUDTest {
 
                         try {
                             rangeFilterCRUD.update(new IllegalRangeFilterClass(), "new illegal name", "new illegal description");
-                        } catch (InvalidFilterException e) {
-                            e.printStackTrace();
+                        } catch ( IllegalImplementationException e) {
+                            System.out.println("exception thrown correctly");
                         }
 
                         assertEquals(beforeState, rangeFilterCRUD.readAll());
@@ -1285,13 +1297,13 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Double variables should not alter db state with illegal implementation")
-                    void doubleVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                    void doubleVariablesShouldNotAlterDbStateWithIllegalImplementation() throws InvalidFilterTypeException {
                         List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
 
                         try {
                             rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1.0, 10000.0);
-                        } catch (InvalidFilterException e) {
-                            e.printStackTrace();
+                        } catch ( IllegalImplementationException e) {
+                            System.out.println("exception thrown correctly");
                         }
 
                         assertEquals(beforeState, rangeFilterCRUD.readAll());
@@ -1299,13 +1311,13 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Long variables should not alter db state with illegal implementation")
-                    void longVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                    void longVariablesShouldNotAlterDbStateWithIllegalImplementation() throws InvalidFilterTypeException {
                         List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
 
                         try {
                             rangeFilterCRUD.update(new IllegalRangeFilterClass(), 1, 20000);
-                        } catch (InvalidFilterException e) {
-                            e.printStackTrace();
+                        } catch ( IllegalImplementationException e) {
+                            System.out.println("exception thrown correctly");
                         }
 
                         assertEquals(beforeState, rangeFilterCRUD.readAll());
@@ -1313,13 +1325,13 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Instant variables should not alter db state with illegal implementation")
-                    void instantVariablesShouldNotAlterDbStateWithIllegalImplementation() {
+                    void instantVariablesShouldNotAlterDbStateWithIllegalImplementation() throws InvalidFilterTypeException {
                         List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
 
                         try {
                             rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"));
-                        } catch (InvalidFilterException e) {
-                            e.printStackTrace();
+                        } catch ( IllegalImplementationException e) {
+                            System.out.println("exception thrown correctly");
                         }
 
                         assertEquals(beforeState, rangeFilterCRUD.readAll());
@@ -1361,92 +1373,92 @@ public class RangeFilterCRUDTest {
                     }
 
                     @Override
-                    public double getDbMinDouble() throws InvalidFilterTypeException {
+                    public double getDbMinDouble() {
                         return 0;
                     }
 
                     @Override
-                    public Instant getDbMinInstant() throws InvalidFilterTypeException {
+                    public Instant getDbMinInstant() {
                         return null;
                     }
 
                     @Override
-                    public long getDbMinLong() throws InvalidFilterTypeException {
+                    public long getDbMinLong() {
                         return 0;
                     }
 
                     @Override
-                    public double getDbMaxDouble() throws InvalidFilterTypeException {
+                    public double getDbMaxDouble() {
                         return 0;
                     }
 
                     @Override
-                    public Instant getDbMaxInstant() throws InvalidFilterTypeException {
+                    public Instant getDbMaxInstant() {
                         return null;
                     }
 
                     @Override
-                    public long getDbMaxLong() throws InvalidFilterTypeException {
+                    public long getDbMaxLong() {
                         return 0;
                     }
 
                     @Override
-                    public double getUserMinDouble() throws InvalidFilterTypeException {
+                    public double getUserMinDouble() {
                         return 0;
                     }
 
                     @Override
-                    public Instant getUserMinInstant() throws InvalidFilterTypeException {
+                    public Instant getUserMinInstant() {
                         return null;
                     }
 
                     @Override
-                    public long getUserMinLong() throws InvalidFilterTypeException {
+                    public long getUserMinLong() {
                         return 0;
                     }
 
                     @Override
-                    public double getUserMaxDouble() throws InvalidFilterTypeException {
+                    public double getUserMaxDouble() {
                         return 0;
                     }
 
                     @Override
-                    public Instant getUserMaxInstant() throws InvalidFilterTypeException {
+                    public Instant getUserMaxInstant() {
                         return null;
                     }
 
                     @Override
-                    public long getUserMaxLong() throws InvalidFilterTypeException {
+                    public long getUserMaxLong() {
                         return 0;
                     }
 
                     @Override
-                    public double setUserMin(double userMin) throws InvalidFilterTypeException {
+                    public double setUserMin(double userMin) {
                         return 0;
                     }
 
                     @Override
-                    public Instant setUserMin(Instant userMin) throws InvalidFilterTypeException {
+                    public Instant setUserMin(Instant userMin) {
                         return null;
                     }
 
                     @Override
-                    public long setUserMin(long userMin) throws InvalidFilterTypeException {
+                    public long setUserMin(long userMin) {
                         return 0;
                     }
 
                     @Override
-                    public double setUserMax(double userMax) throws InvalidFilterTypeException {
+                    public double setUserMax(double userMax) {
                         return 0;
                     }
 
                     @Override
-                    public Instant setUserMax(Instant userMax) throws InvalidFilterTypeException {
+                    public Instant setUserMax(Instant userMax) {
                         return null;
                     }
 
                     @Override
-                    public long setUserMax(long userMax) throws InvalidFilterTypeException {
+                    public long setUserMax(long userMax) {
                         return 0;
                     }
                 }

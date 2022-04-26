@@ -6,9 +6,9 @@
 -- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
 DROP TABLE IF EXISTS TokenBrandMap;
-
 -- Drop all other tables
 DROP TABLE IF EXISTS Tokens;
+-- Drop all other tables
 DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
@@ -25,7 +25,6 @@ CREATE TABLE Brand(
     headquarters VARCHAR(255)
 );
 
-
 CREATE TABLE ProductType(
     id   serial PRIMARY KEY,
     type VARCHAR(255) UNIQUE NOT NULL
@@ -40,6 +39,7 @@ CREATE TABLE TokenBrandMap(
     id serial PRIMARY KEY,
     tokenId INTEGER NOT NULL REFERENCES Tokens (id),
     brandId INTEGER NOT NULL REFERENCES Brand (id)
+
 );
 
 CREATE TABLE BrandProductTypeJunction(
@@ -55,4 +55,3 @@ CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL
 );
-

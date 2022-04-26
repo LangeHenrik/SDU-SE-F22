@@ -1,13 +1,12 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import dk.sdu.se_f22.sortingmodule.category.Category;
+import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
+import dk.sdu.se_f22.sortingmodule.category.CategoryProduct;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class TemporaryConnectionTest {
 
@@ -46,6 +45,7 @@ public class TemporaryConnectionTest {
             System.out.println(category);
         }
          */
+
         /*
         CategoryDBConnection.shared.createCategory("Components", "Beskrivelse", "Components", 2);
         CategoryDBConnection.shared.createCategory("Processors", "Beskrivelse", "Processors", 1, 2);
@@ -56,7 +56,12 @@ public class TemporaryConnectionTest {
         CategoryDBConnection.shared.createCategory("Arhus", "Beskrivelse", "Arhus",5, 3);
         CategoryDBConnection.shared.createCategory("Vejle", "Beskrivelse", "Vejle", 5, 3);
         CategoryDBConnection.shared.createCategory("Silkeborg", "Beskrivelse", "Silkeborg", 5, 3);
-        */
+         */
+
+        // CategoryDBConnection.shared.createCategory("Lenovo", "Beskrivelse", "Lenovo", 1);
+
+        testMethod();
+
         /*
         String category = "Components/Processors/Storage/SSDs";
         String notCategory = "fsaafa/dada/dad";
@@ -111,7 +116,33 @@ public class TemporaryConnectionTest {
         CategoryFilter categoryFilter = new CategoryFilter();
         CategoryDBConnection categoryDB = new CategoryDBConnection();
 
-        // categoryFilter.filterProductsByCategory();
-        // categoryDB.getAllCategories();
+        ArrayList<String> liste = new ArrayList<String>();
+        liste.add("Vejle");
+        ArrayList<String> lorteListe = new ArrayList<String>();
+        lorteListe.add("Tis");
+
+        Collection products = new ArrayList<CategoryProduct>();
+        products.add(new CategoryProduct("Lenovo Intel hard drive", "Components/Storage/Harddrives", new ArrayList<>()));
+        products.add(new CategoryProduct("Lenovo Intel hard drive 2", "Monitors", new ArrayList<>()));
+        products.add(new CategoryProduct("Lenovo Intel hard drive 3", "Components/Storage/Harddrives", liste));
+        products.add(new CategoryProduct("fuck dig", "skrid", lorteListe));
+
+        SearchHits testSearchHit = new SearchHits();
+        testSearchHit.setProducts(products);
+
+        ArrayList<Integer> testCategoryIDs = new ArrayList<Integer>();
+        testCategoryIDs.add(1);
+        testCategoryIDs.add(2);
+        testCategoryIDs.add(5);
+        testCategoryIDs.add(7);
+        testCategoryIDs.add(9);
+
+        categoryFilter.filterProductsByCategory(testSearchHit, testCategoryIDs);
+
+        for (Object addedProduct : testSearchHit.getProducts()) {
+            if (addedProduct instanceof CategoryProduct) {
+                System.out.println(((CategoryProduct)addedProduct).getName());
+            }
+        }
     }
 }

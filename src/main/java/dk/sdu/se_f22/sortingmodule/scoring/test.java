@@ -27,7 +27,7 @@ public class test {
         IScoring scoring = new Scoring();
         //System.out.println(scoring.scoreSort(products));
         //System.out.println(scoring.readTable());
-        scoring.updateRow(16,"date","type");
+        scoring.updateRow(16,"1500","bracket");
         //scoring.deleteRow(28);
         //scoring.createRow("price",2000,2);
         System.out.println(scoring.readTable());

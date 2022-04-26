@@ -188,7 +188,13 @@ public class Scoring implements IScoring {
                     return;
                 }
             }
-            stmt.setObject(1,newValue);
+            if (column == "bracket") {
+                stmt.setDouble(1,Double.parseDouble((String) newValue));
+            } else if (column == "weight") {
+                stmt.setInt(1,Integer.parseInt((String) newValue));
+            } else {
+                stmt.setObject(1,newValue);
+            }
             stmt.setInt(2,id);
             stmt.execute();
         } catch (SQLException ex) {

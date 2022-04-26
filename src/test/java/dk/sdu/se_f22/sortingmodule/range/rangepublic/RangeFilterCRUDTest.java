@@ -706,23 +706,74 @@ public class RangeFilterCRUDTest {
 
                     @Test
                     @DisplayName("Min updating only should change the min stored in db")
-                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
+                    void minUpdatingOnlyShouldChangeTheMinStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a double filter
 
-                        fail("not yet implemented");
+                        double valueToAdd = 1.0;
+                        // update the filter
+                        rangeFilterCRUD.update(filter, filter.getDbMinDouble() + valueToAdd, filter.getDbMaxDouble());
+
+                        RangeFilter modifiedFilter = rangeFilterCRUD.read(1);
+                        // check that all values still match and that the new value has been correctly modified
+                        assertAll(
+                                () -> assertEquals(filter.getDbMinDouble() + valueToAdd, modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(filter.getName(), modifiedFilter.getName()),
+                                () -> assertEquals(filter.getType(), modifiedFilter.getType()),
+                                () -> assertEquals(filter.getDescription(), modifiedFilter.getDescription()),
+                                () -> assertEquals(filter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                                () -> assertEquals(filter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(filter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(filter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                        );
                     }
 
                     @Test
                     @DisplayName("Max updating only should change the max stored in db")
-                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() {
+                    void maxUpdatingOnlyShouldChangeTheMinStoredInDb() throws InvalidFilterTypeException, UnknownFilterTypeException, IdNotFoundException, InvalidFilterException {
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a double filter
 
-                        fail("not yet implemented");
+                        double valueToAdd = 1.0;
+                        // update the filter
+                        rangeFilterCRUD.update(filter, filter.getDbMinDouble(), filter.getDbMaxDouble() + valueToAdd);
+
+                        RangeFilter modifiedFilter = rangeFilterCRUD.read(1);
+                        // check that all values still match and that the new value has been correctly modified
+                        assertAll(
+                                () -> assertEquals(filter.getDbMaxDouble() + valueToAdd, modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(filter.getName(), modifiedFilter.getName()),
+                                () -> assertEquals(filter.getType(), modifiedFilter.getType()),
+                                () -> assertEquals(filter.getDescription(), modifiedFilter.getDescription()),
+                                () -> assertEquals(filter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                                () -> assertEquals(filter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(filter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(filter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                        );
                     }
 
                     @Test
                     @DisplayName("Both updating min and max should change their values stored in db")
-                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() {
+                    void bothUpdatingMinAndMaxShouldChangeTheirValuesStoredInDb() throws UnknownFilterTypeException, IdNotFoundException, InvalidFilterTypeException, InvalidFilterException {
+                        RangeFilter filter = rangeFilterCRUD.read(1);
+                        // id 1 should be a double filter
 
-                        fail("not yet implemented");
+                        double valueToAdd = 1.0;
+                        // update the filter
+                        rangeFilterCRUD.update(filter, filter.getDbMinDouble() + valueToAdd * 2, filter.getDbMaxDouble() + valueToAdd);
+
+                        RangeFilter modifiedFilter = rangeFilterCRUD.read(1);
+                        // check that all values still match and that the new value has been correctly modified
+                        assertAll(
+                                () -> assertEquals(filter.getDbMinDouble() + valueToAdd * 2, modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(filter.getDbMaxDouble() + valueToAdd, modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(filter.getName(), modifiedFilter.getName()),
+                                () -> assertEquals(filter.getType(), modifiedFilter.getType()),
+                                () -> assertEquals(filter.getDescription(), modifiedFilter.getDescription()),
+                                () -> assertEquals(filter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                                () -> assertEquals(filter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(filter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                        );
                     }
 
                 }
@@ -760,8 +811,8 @@ public class RangeFilterCRUDTest {
                     @Test
                     @DisplayName("Min updating only should change the min stored in db")
                     void minUpdatingOnlyShouldChangeTheMinStoredInDb() {
-
                         fail("not yet implemented");
+
                     }
 
                     @Test
@@ -1162,5 +1213,17 @@ public class RangeFilterCRUDTest {
                 }
             }
         }
+
+        @AfterAll
+        public static void teardown() {
+            try {
+                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+            } catch (SQLException e) {
+                System.out.println("error when resetting database state, pooled connection threw sql exception:");
+                e.printStackTrace();
+
+            }
+        }
+
     }
 }

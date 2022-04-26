@@ -28,6 +28,9 @@ public class BrandIndex implements IndexInterface {
                 queryStatement.setString(1, tokens.get(i));
                 ResultSet queryResultSet = queryStatement.executeQuery();
                 tempList.add(Integer.valueOf(queryResultSet.getString("id")));
+
+                queryResultSet.close();
+                queryStatement.close();
             }
 
             for (int i = 0; i < tempList.size(); i++) {
@@ -49,6 +52,8 @@ public class BrandIndex implements IndexInterface {
                         queryResultSet.getString("founded"),
                         queryResultSet.getString("headquarters"), new ArrayList<String>()));
             }
+            queryResultSet.close();
+            queryStatement.close();
 
         } catch (SQLException e) {
             e.printStackTrace();

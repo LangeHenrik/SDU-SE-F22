@@ -91,8 +91,8 @@ public class Scoring implements IScoring {
 
     public List<ProductScore> wrapProduct (List<TestProduct> input) {
         List<ProductScore> products = new ArrayList<>();
-        for (int i = 0; i < input.size(); i++) {
-            ProductScore productScore = new ProductScore(input.get(i));
+        for (TestProduct testProduct : input) {
+            ProductScore productScore = new ProductScore(testProduct);
             products.add(productScore);
         }
         return products;
@@ -100,8 +100,8 @@ public class Scoring implements IScoring {
 
     public List<TestProduct> unWrapProduct (List<ProductScore> input) {
         List<TestProduct> products = new ArrayList<>();
-        for (int i = 0; i < input.size(); i++) {
-            products.add(input.get(i).getProduct());
+        for (ProductScore productScore : input) {
+            products.add(productScore.getProduct());
         }
         return products;
     }
@@ -188,9 +188,9 @@ public class Scoring implements IScoring {
                     return;
                 }
             }
-            if (column == "bracket") {
+            if (column.equals("bracket")) {
                 stmt.setDouble(1,Double.parseDouble((String) newValue));
-            } else if (column == "weight") {
+            } else if (column.equals("weight")) {
                 stmt.setInt(1,Integer.parseInt((String) newValue));
             } else {
                 stmt.setObject(1,newValue);

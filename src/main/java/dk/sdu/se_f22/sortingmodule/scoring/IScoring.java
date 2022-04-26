@@ -11,7 +11,6 @@ public interface IScoring {
 
     /**
      <p> Returns weight value for price </p>
-     * @return
      */
     List<TestProduct> scoreSortPrice(List<TestProduct> input);
 

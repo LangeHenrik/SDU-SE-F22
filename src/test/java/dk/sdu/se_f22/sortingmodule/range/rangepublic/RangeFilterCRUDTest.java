@@ -117,7 +117,6 @@ public class RangeFilterCRUDTest {
                                             .create(input, "sample name", "Sample attribute", minInstant, maxInstant)
                             )
                     );
-
                 }
 
 
@@ -557,7 +556,7 @@ public class RangeFilterCRUDTest {
                     try {
                         //Cleaning the database to avoid duplicate keys
                         dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-
+                        
                         //Adding RangeFilters to list
                         listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
                         listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
@@ -571,23 +570,24 @@ public class RangeFilterCRUDTest {
                 @ParameterizedTest
                 @DisplayName("Updating the name should not throw an exception")
                 @MethodSource("provideRangeFilterForTest")
-                void updatingTheNameShouldNotThrowAnException(RangeFilter object) {
-                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(object, object.getName() + " modified"));
+                void updatingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName() + " mfied1"));
 
                 }
 
-                @Test
+                @ParameterizedTest
                 @DisplayName("Updating the name and description should not throw an exception")
-                void updatingTheNameAndDescriptionShouldNotThrowAnException() {
-                    // same as above
-                    fail("not yet implemented");
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheNameAndDescriptionShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName() + " mfied2", rangefilter.getDescription() + " mfied2"));
+
                 }
 
-                @Test
+                @ParameterizedTest
                 @DisplayName("Updating the description but not changing the name should not throw an exception")
-                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException() {
-                    // same as above
-                    fail("not yet implemented");
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName(), rangefilter.getDescription() + " mfied3"));
                 }
 
                 @Nested
@@ -600,25 +600,27 @@ public class RangeFilterCRUDTest {
 
                         @Test
                         @DisplayName("min updating only should not throw an exception")
-                        void minUpdatingOnlyShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void minUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(1);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinDouble() + 1.0, rangefilter.getDbMaxDouble()));
                         }
 
                         @Test
                         @DisplayName("max updating only should not throw an exception")
-                        void maxUpdatingOnlyShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void maxUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(1);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinDouble(), rangefilter.getDbMaxDouble() + 1.7));
                         }
 
                         @Test
                         @DisplayName("Both updating should not throw an exception")
-                        void bothUpdatingShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void bothUpdatingShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(1);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinDouble() + 1.0, rangefilter.getDbMaxDouble() + 4.0));
                         }
-
                     }
 
                     @Nested
@@ -627,23 +629,27 @@ public class RangeFilterCRUDTest {
 
                         @Test
                         @DisplayName("min updating only should not throw an exception")
-                        void minUpdatingOnlyShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void minUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(2);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinLong() + 6, rangefilter.getDbMaxLong()));
                         }
+
 
                         @Test
                         @DisplayName("max updating only should not throw an exception")
-                        void maxUpdatingOnlyShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void maxUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(2);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinLong(), rangefilter.getDbMaxLong() + 47));
                         }
 
                         @Test
                         @DisplayName("Both updating should not throw an exception")
-                        void bothUpdatingShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void bothUpdatingShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(2);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinLong() + 10, rangefilter.getDbMaxLong() + 40));
                         }
                     }
 
@@ -653,23 +659,26 @@ public class RangeFilterCRUDTest {
 
                         @Test
                         @DisplayName("min updating only should not throw an exception")
-                        void minUpdatingOnlyShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void minUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(3);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant(), rangefilter.getDbMaxInstant().plusSeconds(10)));
                         }
 
                         @Test
                         @DisplayName("max updating only should not throw an exception")
-                        void maxUpdatingOnlyShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void maxUpdatingOnlyShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(3);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant().plusSeconds(152), rangefilter.getDbMaxInstant()));
                         }
 
                         @Test
                         @DisplayName("Both updating should not throw an exception")
-                        void bothUpdatingShouldNotThrowAnException() {
-
-                            fail("not yet implemented");
+                        void bothUpdatingShouldNotThrowAnException() throws UnknownFilterTypeException, IdNotFoundException {
+                            final RangeFilter rangefilter;
+                            rangefilter = rangeFilterCRUD.read(3);
+                            Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getDbMinInstant().plusSeconds(22), rangefilter.getDbMaxInstant().plusSeconds(10)));
                         }
                     }
                 }

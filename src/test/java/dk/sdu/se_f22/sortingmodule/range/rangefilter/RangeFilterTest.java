@@ -13,8 +13,8 @@ import java.util.List;
 
 class RangeFilterTest {
     private RangeFilterInterface rangeFilterInterface;
-    private List<RangeSearchResultMock> mockResults;
-    private List<RangeFilter> mockFilters;
+    private List mockResults;
+    private List mockFilters;
 
     @BeforeEach
     void setup() {

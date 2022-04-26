@@ -584,12 +584,12 @@ public class RangeFilterCRUDTest {
 
                 }
 
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Updating the description but not changing the name should not throw an exception")
-                @MethodSource("provideRangeFilterForTest")
-                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
-                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName(), rangefilter.getDescription() + " mfied3"));
-                }
+//                @ParameterizedTest(name = "{0}")
+//                @DisplayName("Updating the description but not changing the name should not throw an exception")
+//                @MethodSource("provideRangeFilterForTest")
+//                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
+//                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName(), rangefilter.getDescription() + " mfied3"));
+//                }
 
                 @Nested
                 @DisplayName("Updating dbValues should not throw an exception")

@@ -55,10 +55,11 @@ public class DBConnection {
         // Pooling settings
         // There is not any particular reason behind these values,
         // and they can be tweaked if necessary.
-        connectionPool.setMinIdle(5);
-        connectionPool.setMaxIdle(20);
-        connectionPool.setMaxTotal(30);
-        connectionPool.setMaxOpenPreparedStatements(100);
+        //Group 4.4 has increased some values, since tests were breaking and froze
+        connectionPool.setMinIdle(20);
+        connectionPool.setMaxIdle(60);
+        connectionPool.setMaxTotal(120);
+        connectionPool.setMaxOpenPreparedStatements(500);
     }
 
     public static DBConnection getInstance() {

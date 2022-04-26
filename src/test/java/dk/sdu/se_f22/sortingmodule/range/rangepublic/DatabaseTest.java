@@ -269,7 +269,7 @@ class DatabaseTest {
                             200
                     ));
                     Assertions.assertEquals(updatedFilter, database.read(doubleFilter.getId()));
-                } catch (UnknownFilterTypeException e) {
+                } catch (UnknownFilterTypeException | SQLException | InvalidFilterTypeException e) {
                     e.printStackTrace();
                     fail("An exception from 'read' was thrown, see 'read' under 'RangeFilterCURD' or check if the filter " +
                             "exists in the database.");
@@ -307,7 +307,7 @@ class DatabaseTest {
                                 )
                             );
                     Assertions.assertEquals(updatedFilter, database.read(longFilter.getId()));
-                } catch (UnknownFilterTypeException e) {
+                } catch (UnknownFilterTypeException | SQLException | InvalidFilterTypeException e) {
                     e.printStackTrace();
                     fail("An exception from 'read' was thrown, see 'read' under 'RangeFilterCURD' or check if the filter " +
                         "exists in the database.");

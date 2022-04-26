@@ -17,7 +17,7 @@ public interface DatabaseInterface {
 
     RangeFilter delete(int id);
 
-    RangeFilter update(RangeFilter updatedFilter);
+    RangeFilter update(RangeFilter updatedFilter) throws SQLException, InvalidFilterTypeException;
 
     List<RangeFilter> readAllFilters();
 }

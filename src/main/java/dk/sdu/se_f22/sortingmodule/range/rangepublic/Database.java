@@ -183,7 +183,56 @@ public class Database implements DatabaseInterface {
     @Override
     public RangeFilter update(RangeFilter filter) {
 
-        return null;
+        switch (filter.getType()) {
+            case DOUBLE -> {
+                statement = connection.prepareStatement(
+                        "UPDATE SortingRangeDoubleView SET name=(?), description=(?), productAttribute=(?), min=(?), max=(?) WHERE (filterId = (?));",
+                        new String[] { "filterid", "name", "description", "min", "max"}
+                );
+                statement.setString(1, filter.getName());
+                statement.setString(2, filter.getDescription());
+                statement.setString(3, filter.getProductAttribute());
+                statement.setDouble(4, filter.getDbMinDouble());
+                statement.setDouble(5, filter.getDbMaxDouble());
+                statement.setInt(6, filter.getId());
+            }
+            case LONG -> {
+                statement = connection.prepareStatement(
+                        "UPDATE SortingRangeLongView SET name=(?), description=(?), productAttribute=(?), min=(?), max=(?) WHERE (filterId = (?));",
+                        new String[] { "filterid", "name", "description", "min", "max"}
+                );
+                statement.setString(1, filter.getName());
+                statement.setString(2, filter.getDescription());
+                statement.setString(3, filter.getProductAttribute());
+                statement.setLong(4, filter.getDbMinLong());
+                statement.setLong(5, filter.getDbMaxLong());
+                statement.setInt(6, filter.getId());
+
+            }
+            case TIME -> {
+                statement = connection.prepareStatement(
+                        "UPDATE SortingRangeTimeView SET name=(?), description=(?), productAttribute=(?), min=(?), max=(?) WHERE (filterId = (?));",
+                        new String[] { "filterid", "name", "description", "min", "max"}
+                );
+                statement.setString(1, filter.getName());
+                statement.setString(2, filter.getDescription());
+                statement.setString(3, filter.getProductAttribute());
+                statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
+                statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
+                statement.setInt(6, filter.getId());
+            }
+            default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
+        }
+        int results = statement.executeUpdate();
+        if (results < 1 ){
+            throw new SQLException("Nothing updated");
+        }
+
+        return switch (filter.getType()) {
+            case DOUBLE -> createDoubleFilterFromResultset(statement.getResultSet());
+            case LONG -> createLongFilterFromResultset(statement.getResultSet());
+            case TIME -> createTimeFilterFromResultset(statement.getResultSet());
+        };
     }
 
     @Override

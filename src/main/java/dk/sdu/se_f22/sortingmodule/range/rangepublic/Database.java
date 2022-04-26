@@ -181,7 +181,9 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter) {
+    public RangeFilter update(RangeFilter filter) throws SQLException, InvalidFilterTypeException {
+
+        PreparedStatement statement = null;
 
         switch (filter.getType()) {
             case DOUBLE -> {

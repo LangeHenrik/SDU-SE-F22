@@ -46,12 +46,14 @@ public class Item {
     public Item getSuperItem() {
         return superItem;
     }
-
     public int getSuperId() {
         return superId;
     }
-
     public int getId() {
         return id;
+    }
+    @Override
+    public String toString(){
+        return "Id: "+getId()+" Name: "+getName()+" SuperId: "+getSuperId();
     }
 }

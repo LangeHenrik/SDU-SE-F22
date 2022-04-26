@@ -77,21 +77,6 @@ public class DatabaseAPI {
         return null;
     }
 
-    /*
-    public static ResultSet readDB(String name) {
-        try {
-            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items WHERE name = ?");
-            quaryStatement.setString(1, name);
-            ResultSet quaryResultSet = quaryStatement.executeQuery();
-            while (quaryResultSet.next()) {
-                if (quaryResultSet.getInt(1) != 0) {
-
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }*/
 public static void deleteItems(boolean version, int id, String name) {
     PreparedStatement deleteStatement = null;
     if (version) {

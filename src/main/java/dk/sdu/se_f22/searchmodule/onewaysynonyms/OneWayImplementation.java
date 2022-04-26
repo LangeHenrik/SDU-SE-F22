@@ -33,7 +33,9 @@ public class OneWayImplementation implements OneWayInterface {
         tokens.add("Humans");
         OneWayImplementation owi = new OneWayImplementation();
         tokens = owi.filter(tokens);
-        System.out.println(tokens);
+        for (Item items : owi.createItemArray()){
+            System.out.println(items+"\n");
+        }
     }
 
     @Override

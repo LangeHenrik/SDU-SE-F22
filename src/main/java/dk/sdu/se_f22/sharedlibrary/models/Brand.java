@@ -18,10 +18,34 @@ public class Brand {
         this.headquarters = headquarters;
         this.products = products;
     }
+    public Brand(Integer id, String name, String description, String founded, String headquarters) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.founded = founded;
+        this.headquarters = headquarters;
+        this.products = new ArrayList<>();
+    }
+    public Brand(String name, String description, String founded, String headquarters, ArrayList<String> products) {
+        this.name = name;
+        this.description = description;
+        this.founded = founded;
+        this.headquarters = headquarters;
+        this.products = products;
+    }
+    public Brand(String name, String description, String founded, String headquarters) {
+        this.id = null;
+        this.name = name;
+        this.description = description;
+        this.founded = founded;
+        this.headquarters = headquarters;
+        this.products = new ArrayList<>();
+    }
+
 
     public Brand(){}
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

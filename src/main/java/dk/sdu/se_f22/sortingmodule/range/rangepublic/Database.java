@@ -182,6 +182,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public RangeFilter update(RangeFilter filter) {
+
         return null;
     }
 

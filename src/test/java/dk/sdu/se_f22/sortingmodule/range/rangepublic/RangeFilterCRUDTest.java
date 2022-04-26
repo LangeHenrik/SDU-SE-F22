@@ -544,7 +544,7 @@ public class RangeFilterCRUDTest {
             @Nested
             @DisplayName("Updating valid information should not throw an exception")
             class updatingValidInformationShouldNotThrowAnException {
-                private static List<RangeFilter> listWithRangeFilters;
+                private static List<RangeFilter> listWithRangeFilters = new ArrayList<>();
 
                 private static List<RangeFilter> provideRangeFilterForTest() {
                     RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
@@ -689,25 +689,72 @@ public class RangeFilterCRUDTest {
             @DisplayName("Updating valid information should result in a change of database state")
             class updatingValidInformationShouldResultInAChangeOfDatabaseState {
                 // the three tests below should be run for each type of filter
-                @Test
+                @ParameterizedTest
                 @DisplayName("Updating valid name should change the name stored in db")
-                void updatingValidNameShouldChangeTheNameStoredInDb() {
+                @MethodSource("provideRangeFilterForTest")
+                void updatingValidNameShouldChangeTheNameStoredInDb(RangeFilter rangefilter) throws InvalidFilterException, UnknownFilterTypeException, IdNotFoundException {
+                    String newName = rangefilter.getName() + " mfied4";
+                    rangeFilterCRUD.update(rangefilter, newName);
 
-                    fail("not yet implemented");
+                    RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
+
+                    assertAll(
+                            () -> assertEquals(newName, modifiedFilter.getName()),
+
+                            () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
+                            () -> assertEquals(rangefilter.getDescription(), modifiedFilter.getDescription()),
+                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                            () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                            () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                            () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                            () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                    );
                 }
 
-                @Test
+                @ParameterizedTest
                 @DisplayName("Updating only the description should change the description stored in the db")
-                void updatingOnlyTheDescriptionShouldChangeTheDescriptionStoredInTheDb() {
+                @MethodSource("provideRangeFilterForTest")
+                void updatingOnlyTheDescriptionShouldChangeTheDescriptionStoredInTheDb(RangeFilter rangefilter) throws InvalidFilterException, UnknownFilterTypeException, IdNotFoundException {
+                    String newDescription = rangefilter.getDescription() + " mfied5";
+                    rangeFilterCRUD.update(rangefilter, rangefilter.getName(), newDescription);
 
-                    fail("not yet implemented");
+                    RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
+
+                    assertAll(
+                            () -> assertEquals(newDescription, modifiedFilter.getDescription()),
+
+                            () -> assertEquals(rangefilter.getName(), modifiedFilter.getName()),
+                            () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
+                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                            () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                            () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                            () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                            () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                    );
                 }
 
-                @Test
-                @DisplayName("Updating both name and description should change both stored in db")
-                void updatingBothNameAndDescriptionShouldChangeBothStoredInDb() {
 
-                    fail("not yet implemented");
+                @ParameterizedTest
+                @DisplayName("Updating both name and description should change both stored in db")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingBothNameAndDescriptionShouldChangeBothStoredInDb(RangeFilter rangefilter) throws InvalidFilterException, UnknownFilterTypeException, IdNotFoundException {
+                    String newName = rangefilter.getDescription() + " mfied6";
+                    String newDescription = rangefilter.getDescription() + " mfied6";
+                    rangeFilterCRUD.update(rangefilter, newName, newDescription);
+
+                    RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
+
+                    assertAll(
+                            () -> assertEquals(newDescription, modifiedFilter.getDescription()),
+                            () -> assertEquals(newDescription, modifiedFilter.getName()),
+
+                            () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
+                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
+                            () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                            () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                            () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                            () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                    );
                 }
 
                 @Nested

@@ -72,7 +72,7 @@ public class Database implements DatabaseInterface {
         ResultSet generatedKeys = statement.getGeneratedKeys();
         generatedKeys.next();
         int created_filter_id = generatedKeys.getInt("filterid");
-        return createFilterWithID(filter, created_filter_id);
+        return createFilterWithID(filter, created_filter_id); // Maybe returns as the specific filter type?
 
     }
 

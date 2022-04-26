@@ -5,6 +5,7 @@ import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sharedlibrary.db.SeedDatabase;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Timer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -223,10 +225,201 @@ class DatabaseTest {
         }
     }
 
-    @Disabled("not yet written")
-    @Test
-    void update() {
+    @Nested
+    @DisplayName("Update")
+    class update {
+        @BeforeEach
+        void setup() {
+            try {
+                dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
+        @Nested
+        @DisplayName("Update existing filter")
+        class UpdateExistingFilter{
+            @Test
+            @DisplayName("Update existing double filter")
+            void updateExistingDoubleFilter() {
+                DoubleFilter doubleFilter = null;
+                try {
+                    doubleFilter = (DoubleFilter) database.create(new DoubleFilter("TestUpdateDoubleName", "TestUpdateDoubleDescription",
+                            "TestUpdateDoubleAttribute", 1, 100));
+                } catch (InvalidFilterTypeException e) {
+                    e.printStackTrace();
+                    fail("Filter type was invalid, see 'create' under 'RangeFilterCRUD'");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    fail("An error occurred in the database during creation of the filter used in the test");
+                }
+
+                if (doubleFilter == null) {
+                    fail("Filter was 'null'");
+                }
+
+                try {
+                    DoubleFilter updatedFilter = (DoubleFilter) database.update(new DoubleFilter(
+                            doubleFilter.getId(),
+                            doubleFilter.getName(),
+                            doubleFilter.getDescription(),
+                            doubleFilter.getProductAttribute(),
+                            100,
+                            200
+                    ));
+                    Assertions.assertEquals(updatedFilter, database.read(doubleFilter.getId()));
+                } catch (UnknownFilterTypeException e) {
+                    e.printStackTrace();
+                    fail("An exception from 'read' was thrown, see 'read' under 'RangeFilterCURD' or check if the filter " +
+                            "exists in the database.");
+                }
+            }
+
+            @Test
+            @DisplayName("Update existing long filter")
+            void updateExistingLongFilter() {
+                LongFilter longFilter = null;
+                try {
+                    longFilter = (LongFilter) database.create(new LongFilter("TestUpdateLongName", "TestUpdateLongDescription",
+                            "TestUpdateLongAttribute", 1, 100));
+                } catch (InvalidFilterTypeException e) {
+                    e.printStackTrace();
+                    fail("Filter type was invalid, see 'create' under 'RangeFilterCRUD'");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    fail("An error occurred in the database during creation of the filter used in the test");
+                }
+
+                if (longFilter == null) {
+                    fail("Filter was 'null'");
+                }
+
+                try {
+                    LongFilter updatedFilter = (LongFilter) database.update(
+                                new LongFilter(
+                                        longFilter.getId(),
+                                        longFilter.getName(),
+                                        longFilter.getDescription(),
+                                        longFilter.getProductAttribute(),
+                                        10000,
+                                        100000000
+                                )
+                            );
+                    Assertions.assertEquals(updatedFilter, database.read(longFilter.getId()));
+                } catch (UnknownFilterTypeException e) {
+                    e.printStackTrace();
+                    fail("An exception from 'read' was thrown, see 'read' under 'RangeFilterCURD' or check if the filter " +
+                        "exists in the database.");
+                }
+            }
+
+            @Test
+            @DisplayName("Update existing time filter")
+            void updateExistingTimeFilter() {
+                TimeFilter filter = null;
+                TimeFilter updatedFilter = null;
+                TimeFilter readFilter = null;
+                try {
+                filter = (TimeFilter) database.create(new TimeFilter("TestUpdateTimeName", "TestUpdateTimeDescription",
+                        "TestUpdateTimeAttribute",
+                        Instant.parse("2020-11-30T18:35:24.00Z"), Instant.parse("2021-11-30T18:35:24.00Z")));
+                } catch (SQLException | InvalidFilterTypeException e) {
+                    fail("Creating filter failed " + e);
+                }
+
+                if (filter == null) {
+                   fail("Created filter is null");
+                }
+
+                try{
+                    updatedFilter = (TimeFilter) database.update(
+                            new TimeFilter(
+                                    filter.getId(),
+                                    filter.getName(),
+                                    filter.getDescription(),
+                                    filter.getProductAttribute(),
+                                    Instant.parse("2022-11-30T18:35:24.00Z"),
+                                    Instant.parse("2023-11-30T18:35:24.00Z")
+                                    )
+                            );
+                 } catch (Exception e ){
+                    fail("Filter update failed " + e);
+                }
+
+                try {
+                    readFilter = (TimeFilter) database.read(filter.getId());
+                } catch (UnknownFilterTypeException e) {
+                    fail("Read filter failed");
+                }
+
+                Assertions.assertEquals(updatedFilter, readFilter);
+            }
+        }
+
+        @Nested
+        @DisplayName("Update nonexisting filter")
+        class UpdateNonexistingFilter {
+            @Test
+            @DisplayName("Update nonexisting double filter")
+            void updateNonexistingDoubleFilter() {
+                DoubleFilter doubleFilter = new DoubleFilter(10000, "DoubleTestName", "DoubleTestDescription",
+                        "DoubleTestAttribute", 1, 100);
+
+                Assertions.assertThrows(SQLException.class, () -> database.update(doubleFilter));
+            }
+
+            @Test
+            @DisplayName("Update nonexisting long filter")
+            void updateNonexistingLongFilter() {
+
+                LongFilter longFilter = new LongFilter(10001, "LongTestName", "LongTestDescription",
+                        "LongTestAttribute", 1, 1000);
+
+                Assertions.assertThrows(SQLException.class, () -> database.update(longFilter));
+            }
+
+            @Test
+            @DisplayName("Update nonexisting time filter")
+            void updateNonexistingTimeFilter() {
+                TimeFilter timeFilter = new TimeFilter(10002, "DoubleTestName", "DoubleTestDescription",
+                        "DoubleTestAttribute", Instant.parse("2022-11-30T18:35:24.00Z"), Instant.parse("2022-11-30T18:35:24.00Z"));
+
+                Assertions.assertThrows(SQLException.class, () -> database.update(timeFilter));
+            }
+
+
+            @Nested
+            @DisplayName("Filter with default ID")
+            class FilterWithoutID {
+                @Test
+                @DisplayName("Existing double filter default ID")
+                void testDoubleFilterWithoutId() {
+                    DoubleFilter doubleFilter = new DoubleFilter("DoubleTestName", "DoubleTestDescription",
+                            "DoubleTestAttribute", 1, 100);
+
+                    Assertions.assertThrows(SQLException.class, () -> database.update(doubleFilter));
+                }
+
+                @Test
+                @DisplayName("Existing long filter default ID")
+                void testLongFilterWithoutId() {
+                    LongFilter longFilter = new LongFilter("LongTestName", "LongTestDescription",
+                            "LongTestAttribute", 1, 1000);
+
+                    Assertions.assertThrows(SQLException.class, () -> database.update(longFilter));
+                }
+
+                @Test
+                @DisplayName("Existing time filter default ID")
+                void testTimeFilterWithoutId() {
+                    TimeFilter timeFilter = new TimeFilter( "DoubleTestName", "DoubleTestDescription",
+                            "DoubleTestAttribute", Instant.parse("2022-11-30T18:35:24.00Z"), Instant.parse("2022-11-30T18:35:24.00Z"));
+
+                    Assertions.assertThrows(SQLException.class, () -> database.update(timeFilter));
+                }
+            }
+        }
     }
 
     @Disabled("not yet written")

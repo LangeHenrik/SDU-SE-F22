@@ -17,7 +17,7 @@ public interface DatabaseInterface {
 
     RangeFilter delete(int id);
 
-    RangeFilter update(RangeFilter filter);
+    RangeFilter update(RangeFilter updatedFilter);
 
     List<RangeFilter> readAllFilters();
 }

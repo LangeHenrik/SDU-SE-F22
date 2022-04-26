@@ -10,6 +10,7 @@ import java.util.Collection;
  * Intentionally default
  */
 abstract class RangeFilterClass implements RangeFilter{
+    public static final int DEFAULT_ID = -1;
     private final int ID;
     private final String NAME;
     private final String DESCRIPTION;
@@ -26,7 +27,7 @@ abstract class RangeFilterClass implements RangeFilter{
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
-        ID = -1; // Use -1 to show that it shouldn't be used. Maybe write test for it layer.
+        this.ID = DEFAULT_ID;
     }
 
     public abstract Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs);

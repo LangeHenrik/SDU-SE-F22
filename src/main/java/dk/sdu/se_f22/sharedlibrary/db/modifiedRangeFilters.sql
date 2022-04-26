@@ -6,6 +6,16 @@ DROP function if exists get_double_filter;
 DROP TRIGGER IF EXISTS trg_double_view_insert_trigger ON SortingRangeDoubleView;
 DROP TRIGGER IF EXISTS trg_time_view_insert_trigger ON SortingRangeTimeView;
 DROP TRIGGER IF EXISTS trg_long_view_insert_trigger ON sortingrangelongview;
+
+DROP TRIGGER IF EXISTS trg_double_view_update_trigger on SortingRangeDoubleView;
+DROP TRIGGER IF EXISTS trg_long_view_update_trigger on SortingRangeLongView;
+DROP TRIGGER IF EXISTS trg_time_view_update_trigger on SortingRangeTimeView;
+
+DROP FUNCTION IF EXISTS double_filter_view_update;
+DROP FUNCTION IF EXISTS long_filter_view_update;
+DROP FUNCTION IF EXISTS time_filter_view_update;
+
+
 DROP FUNCTION IF EXISTS double_filter_view_insert;
 DROP FUNCTION IF EXISTS time_filter_view_insert;
 DROP FUNCTION IF EXISTS long_filter_view_insert;
@@ -397,10 +407,10 @@ DECLARE
     filter_id_var integer;
 BEGIN
     UPDATE SortingRangeFilters SET description=NEW.description, name=NEW.name, productAttribute=NEW.productAttribute, filterTypeId=1
-    WHERE (filterId=NEW.NEW.filterId)
+    WHERE (filterId=NEW.filterId)
     RETURNING filterId into filter_id_var;
 
-    UPDATE SortingRangeTimeFilters SET filterId=filter_id_var, min=NEW.mim, max=NEW.max WHERE (filterId = filter_id_var);
+    UPDATE SortingRangeTimeFilters SET filterId=filter_id_var, min=NEW.min, max=NEW.max WHERE (filterId = filter_id_var);
     new.filterid = filter_id_var;
 
     return new;
@@ -459,7 +469,7 @@ BEGIN
 
     UPDATE SortingRangeDoubleFilters SET min=NEW.min , max=NEW.max WHERE (filterId=filter_id_var);
 
-    new.filterId = filter_id_var;
+    new.filterid = filter_id_var;
 
     return new;
 END

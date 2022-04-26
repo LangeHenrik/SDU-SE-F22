@@ -240,13 +240,14 @@ class DatabaseTest {
         @Nested
         @DisplayName("Update existing filter")
         class UpdateExistingFilter{
-            @Test
+            @ParameterizedTest
             @DisplayName("Update existing double filter")
-            void updateExistingDoubleFilter() {
+            @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+            void updateExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max,
+                                            double uMin, double uMax) {
                 DoubleFilter doubleFilter = null;
                 try {
-                    doubleFilter = (DoubleFilter) database.create(new DoubleFilter("TestUpdateDoubleName", "TestUpdateDoubleDescription",
-                            "TestUpdateDoubleAttribute", 1, 100));
+                    doubleFilter = (DoubleFilter) database.create(new DoubleFilter(name, description, productAttribute, min, max));
                 } catch (InvalidFilterTypeException e) {
                     e.printStackTrace();
                     fail("Filter type was invalid, see 'create' under 'RangeFilterCRUD'");
@@ -265,8 +266,8 @@ class DatabaseTest {
                             doubleFilter.getName(),
                             doubleFilter.getDescription(),
                             doubleFilter.getProductAttribute(),
-                            100,
-                            200
+                            uMin,
+                            uMax
                     ));
                     Assertions.assertEquals(updatedFilter, database.read(doubleFilter.getId()));
                 } catch (UnknownFilterTypeException | SQLException | InvalidFilterTypeException e) {
@@ -276,13 +277,14 @@ class DatabaseTest {
                 }
             }
 
-            @Test
+            @ParameterizedTest
             @DisplayName("Update existing long filter")
-            void updateExistingLongFilter() {
+            @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
+            void updateExistingLongFilter(int id, String name, String description, String productAttribute, long min, long max,
+                                          long uMin, long uMax) {
                 LongFilter longFilter = null;
                 try {
-                    longFilter = (LongFilter) database.create(new LongFilter("TestUpdateLongName", "TestUpdateLongDescription",
-                            "TestUpdateLongAttribute", 1, 100));
+                    longFilter = (LongFilter) database.create(new LongFilter(name, description, productAttribute, min, max));
                 } catch (InvalidFilterTypeException e) {
                     e.printStackTrace();
                     fail("Filter type was invalid, see 'create' under 'RangeFilterCRUD'");
@@ -302,8 +304,8 @@ class DatabaseTest {
                                         longFilter.getName(),
                                         longFilter.getDescription(),
                                         longFilter.getProductAttribute(),
-                                        10000,
-                                        100000000
+                                        uMin,
+                                        uMax
                                 )
                             );
                     Assertions.assertEquals(updatedFilter, database.read(longFilter.getId()));
@@ -314,16 +316,16 @@ class DatabaseTest {
                 }
             }
 
-            @Test
+            @ParameterizedTest
             @DisplayName("Update existing time filter")
-            void updateExistingTimeFilter() {
+            @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
+            void updateExistingTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
+                                          Instant uMin, Instant uMax) {
                 TimeFilter filter = null;
                 TimeFilter updatedFilter = null;
                 TimeFilter readFilter = null;
                 try {
-                filter = (TimeFilter) database.create(new TimeFilter("TestUpdateTimeName", "TestUpdateTimeDescription",
-                        "TestUpdateTimeAttribute",
-                        Instant.parse("2020-11-30T18:35:24.00Z"), Instant.parse("2021-11-30T18:35:24.00Z")));
+                filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
                 } catch (SQLException | InvalidFilterTypeException e) {
                     fail("Creating filter failed " + e);
                 }
@@ -339,8 +341,8 @@ class DatabaseTest {
                                     filter.getName(),
                                     filter.getDescription(),
                                     filter.getProductAttribute(),
-                                    Instant.parse("2022-11-30T18:35:24.00Z"),
-                                    Instant.parse("2023-11-30T18:35:24.00Z")
+                                    uMin,
+                                    uMax
                                     )
                             );
                  } catch (Exception e ){
@@ -360,30 +362,33 @@ class DatabaseTest {
         @Nested
         @DisplayName("Update nonexisting filter")
         class UpdateNonexistingFilter {
-            @Test
+            @ParameterizedTest
             @DisplayName("Update nonexisting double filter")
-            void updateNonexistingDoubleFilter() {
-                DoubleFilter doubleFilter = new DoubleFilter(10000, "DoubleTestName", "DoubleTestDescription",
-                        "DoubleTestAttribute", 1, 100);
+            @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+            void updateNonexistingDoubleFilter(int id, String name, String description, String productAttribute,
+                                               double min, double max, double uMin, double uMax) {
+                DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
 
                 Assertions.assertThrows(SQLException.class, () -> database.update(doubleFilter));
             }
 
-            @Test
+            @ParameterizedTest
             @DisplayName("Update nonexisting long filter")
-            void updateNonexistingLongFilter() {
+            @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
+            void updateNonexistingLongFilter(int id, String name, String description, String productAttribute,
+                                             long min, long max, long uMin, long uMax) {
 
-                LongFilter longFilter = new LongFilter(10001, "LongTestName", "LongTestDescription",
-                        "LongTestAttribute", 1, 1000);
+                LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
 
                 Assertions.assertThrows(SQLException.class, () -> database.update(longFilter));
             }
 
-            @Test
+            @ParameterizedTest
             @DisplayName("Update nonexisting time filter")
-            void updateNonexistingTimeFilter() {
-                TimeFilter timeFilter = new TimeFilter(10002, "DoubleTestName", "DoubleTestDescription",
-                        "DoubleTestAttribute", Instant.parse("2022-11-30T18:35:24.00Z"), Instant.parse("2022-11-30T18:35:24.00Z"));
+            @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
+            void updateNonexistingTimeFilter(int id, String name, String description, String productAttribute,
+                                             Instant min, Instant max, Instant uMin, Instant uMax) {
+                TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
 
                 Assertions.assertThrows(SQLException.class, () -> database.update(timeFilter));
             }
@@ -392,29 +397,32 @@ class DatabaseTest {
             @Nested
             @DisplayName("Filter with default ID")
             class FilterWithoutID {
-                @Test
+                @ParameterizedTest
                 @DisplayName("Existing double filter default ID")
-                void testDoubleFilterWithoutId() {
-                    DoubleFilter doubleFilter = new DoubleFilter("DoubleTestName", "DoubleTestDescription",
-                            "DoubleTestAttribute", 1, 100);
+                @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+                void testDoubleFilterWithoutId(int id, String name, String description, String productAttribute,
+                                               double min, double max, double uMin, double uMax) {
+                    DoubleFilter doubleFilter = new DoubleFilter(name, description, productAttribute, min, max);
 
                     Assertions.assertThrows(SQLException.class, () -> database.update(doubleFilter));
                 }
 
-                @Test
+                @ParameterizedTest
                 @DisplayName("Existing long filter default ID")
-                void testLongFilterWithoutId() {
-                    LongFilter longFilter = new LongFilter("LongTestName", "LongTestDescription",
-                            "LongTestAttribute", 1, 1000);
+                @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
+                void testLongFilterWithoutId(int id, String name, String description, String productAttribute,
+                                             long min, long max, long uMin, long uMax) {
+                    LongFilter longFilter = new LongFilter(name, description, productAttribute, min, max);
 
                     Assertions.assertThrows(SQLException.class, () -> database.update(longFilter));
                 }
 
-                @Test
+                @ParameterizedTest
                 @DisplayName("Existing time filter default ID")
-                void testTimeFilterWithoutId() {
-                    TimeFilter timeFilter = new TimeFilter( "DoubleTestName", "DoubleTestDescription",
-                            "DoubleTestAttribute", Instant.parse("2022-11-30T18:35:24.00Z"), Instant.parse("2022-11-30T18:35:24.00Z"));
+                @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
+                void testTimeFilterWithoutId(int id, String name, String description, String productAttribute,
+                                             Instant min, Instant max, Instant uMin, Instant Umax) {
+                    TimeFilter timeFilter = new TimeFilter(name, description, productAttribute, min, max);
 
                     Assertions.assertThrows(SQLException.class, () -> database.update(timeFilter));
                 }

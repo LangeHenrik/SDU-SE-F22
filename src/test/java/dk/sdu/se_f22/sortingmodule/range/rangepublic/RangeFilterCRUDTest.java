@@ -28,14 +28,14 @@ public class RangeFilterCRUDTest {
     private RangeFilterCRUD rangeFilterCRUD;
 
     @BeforeEach
-    public void setup () {
+    public void setup() {
         rangeFilterCRUD = new RangeFilterCRUD();
     }
 
     public
 
     @Nested
-    class CRUDCreatorTest  {
+    class CRUDCreatorTest {
         @Nested
         @DisplayName("Create Db filters")
         class createDbFilters {
@@ -44,7 +44,7 @@ public class RangeFilterCRUDTest {
             class validFiltersThatShouldPass {
                 @Test
                 @DisplayName("ValidFilters with regular attributes")
-                // A csv file for testing valid attributes is in progress
+                    // A csv file for testing valid attributes is in progress
                 void validFiltersWithRegularAttributesDouble() {
                     String description = "This filter checks a lot of attributes bla bla";
                     String name = "Sample filter";
@@ -262,6 +262,7 @@ public class RangeFilterCRUDTest {
                                 () -> rangeFilterCRUD.create("negative min", "name", "price", minInstant, maxInstant)
                         );
                     }
+
                     // Provides multiple parameters for the max less than min test
                     static Stream<Arguments> integerProvider() {
                         return Stream.of(
@@ -276,7 +277,7 @@ public class RangeFilterCRUDTest {
 
 
     @Nested
-    class CRUDDeleterTest  {
+    class CRUDDeleterTest {
         @ParameterizedTest
         @DisplayName("Delete valid doubleFilter")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
@@ -374,7 +375,7 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            }  catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException e) {
                 fail(e);
             }
 
@@ -397,7 +398,7 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
-            }  catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException e) {
                 fail(e);
             }
 
@@ -422,7 +423,7 @@ public class RangeFilterCRUDTest {
                 rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
-            }  catch (InvalidFilterTypeException e) {
+            } catch (InvalidFilterTypeException e) {
                 fail(e);
             }
 
@@ -549,18 +550,18 @@ public class RangeFilterCRUDTest {
                     RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
                     DBMigration dbMigration = new DBMigration();
 
-                    if(listWithRangeFilters.size() >= 3){
+                    if (listWithRangeFilters.size() >= 3) {
                         return listWithRangeFilters;
                     }
 
                     try {
                         //Cleaning the database to avoid duplicate keys
                         dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-                        
+
                         //Adding RangeFilters to list
-                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv",1.0,13.0));
-                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf",10,130));
-                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc",Instant.parse("2018-11-30T15:35:24.00Z"),Instant.parse("2022-11-30T15:35:24.00Z")));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
+                        listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
                     } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
                         e.printStackTrace();
                     }
@@ -571,7 +572,7 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Updating the name should not throw an exception")
                 @MethodSource("provideRangeFilterForTest")
                 void updatingTheNameShouldNotThrowAnException(RangeFilter object) {
-                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(object,object.getName() + " modified"));
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(object, object.getName() + " modified"));
 
                 }
 
@@ -779,7 +780,7 @@ public class RangeFilterCRUDTest {
                 }
             }
         }
-        
+
         @Nested
         @DisplayName("Invalid filter updates")
         class invalidFilterUpdates {
@@ -791,25 +792,40 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Incompatible types, should throw an exception")
                 class incompatibleTypesShouldThrowAnException {
 
-                    @Test
+                    @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Double variables, but non-double filter should throw")
-                    void doubleVariablesButNonDoubleFilter() {
+                    @ValueSource(ints = {2, 3})
+                    void doubleVariablesButNonDoubleFilter(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 2 should be a long filter, id 3 should be a time filter");
 
-                        fail("not yet implemented");
+                        assertThrows(InvalidFilterException.class, () ->
+                                rangeFilterCRUD.update(filter, 1.0, 2.0)
+                        );
                     }
 
-                    @Test
+                    @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Long variables, but non-long filter should throw")
-                    void longVariablesButNonLongFilterShouldThrow() {
+                    @ValueSource(ints = {1, 3})
+                    void longVariablesButNonLongFilterShouldThrow(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 3 should be a time filter");
 
-                        fail("not yet implemented");
+                        assertThrows(InvalidFilterException.class, () ->
+                                rangeFilterCRUD.update(filter, 1, 2)
+                        );
                     }
 
-                    @Test
+                    @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Instant variables, but non-instant filter should throw")
-                    void instantVariablesButNonInstantFilterShouldThrow() {
+                    @ValueSource(ints = {1, 2})
+                    void instantVariablesButNonInstantFilterShouldThrow(int id) throws UnknownFilterTypeException, IdNotFoundException {
+                        RangeFilter filter = rangeFilterCRUD.read(id);
+                        System.out.println("id 1 should be a double filter, id 2 should be a long filter");
 
-                        fail("not yet implemented");
+                        assertThrows(InvalidFilterException.class, () ->
+                                rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"))
+                        );
                     }
                 }
 
@@ -819,7 +835,7 @@ public class RangeFilterCRUDTest {
 
                     @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Double variables, but non-double filter should not alter db")
-                    @ValueSource(ints = {2,3})
+                    @ValueSource(ints = {2, 3})
                     void doubleVariablesButNonDoubleFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
@@ -838,7 +854,7 @@ public class RangeFilterCRUDTest {
 
                     @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Long variables, but non-long filter should not alter db")
-                    @ValueSource(ints = {1,3})
+                    @ValueSource(ints = {1, 3})
                     void longVariablesButNonLongFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
@@ -857,7 +873,7 @@ public class RangeFilterCRUDTest {
 
                     @ParameterizedTest(name = "id: {0}")
                     @DisplayName("Instant variables, but non-instant filter should not alter db")
-                    @ValueSource(ints = {1,2})
+                    @ValueSource(ints = {1, 2})
                     void instantVariablesButNonInstantFilterShouldNotAlterDb(int id) throws UnknownFilterTypeException, IdNotFoundException {
                         List<RangeFilter> previousState = rangeFilterCRUD.readAll();
 
@@ -865,7 +881,7 @@ public class RangeFilterCRUDTest {
                         System.out.println("id 1 should be a double filter, id 2 should be a long filter");
 
                         try {
-                            rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"),Instant.parse("2031-11-30T18:35:24.00Z"));
+                            rangeFilterCRUD.update(filter, Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"));
                         } catch (InvalidFilterException e) {
                             System.out.println("Exception thrown correctly");
                         }
@@ -924,7 +940,7 @@ public class RangeFilterCRUDTest {
                     @DisplayName("Instant invalid specialization should throw an exception")
                     void instantInvalidSpecializationShouldThrowAnException() {
                         assertThrows(IllegalImplementationException.class,
-                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"),Instant.parse("2031-11-30T18:35:24.00Z")));
+                                () -> rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z")));
                     }
                 }
 
@@ -1011,7 +1027,7 @@ public class RangeFilterCRUDTest {
                         List<RangeFilter> beforeState = rangeFilterCRUD.readAll();
 
                         try {
-                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"),Instant.parse("2031-11-30T18:35:24.00Z"));
+                            rangeFilterCRUD.update(new IllegalRangeFilterClass(), Instant.parse("2021-11-30T18:35:24.00Z"), Instant.parse("2031-11-30T18:35:24.00Z"));
                         } catch (InvalidFilterException e) {
                             e.printStackTrace();
                         }
@@ -1021,10 +1037,11 @@ public class RangeFilterCRUDTest {
                 }
 
 
-                /** THis class is used as an example of an illegal implementation of the RangeFilter interface <br>
+                /**
+                 * THis class is used as an example of an illegal implementation of the RangeFilter interface <br>
                  * This can be seen since it does not extend RangeFilterClass
                  */
-                class IllegalRangeFilterClass implements RangeFilter{
+                class IllegalRangeFilterClass implements RangeFilter {
                     @Override
                     public int getId() {
                         return 0;

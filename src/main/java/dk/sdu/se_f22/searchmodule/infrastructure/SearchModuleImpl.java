@@ -3,31 +3,46 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
-import dk.sdu.se_f22.sharedlibrary.models.*;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
+import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
 
 
 public class SearchModuleImpl implements SearchModule {
+    private static final Logger logger = LoggingProvider.getLogger(SearchModuleImpl.class);
     private final Set<Filterable> filteringModules;
-    private final Set<IndexingModule<?>> indexingModules;
+    private final Map<Class<?>, IndexingModule<?>> indexingModules;
     private DelimiterSettings delimiterSettings = new DelimiterSettings();
 
     public SearchModuleImpl() {
-        this.indexingModules = new HashSet<>();
+        this.indexingModules = new HashMap<>();
         this.filteringModules = new HashSet<>();
         delimiterSettings.addDelimiter(" ");
     }
 
     public <T extends IndexingModule<?>> void addIndexingModule(T index) {
-        indexingModules.add(index);
+        // Get parameterized type i.e. the thing between the angle brackets
+        // Example, here the found class would be Foo:
+        //      class SomeIndexingModule implements IndexingModule<Foo>
+        Class<?> indexDataType = Arrays.stream(index.getClass().getGenericInterfaces())
+                .map(ParameterizedType.class::cast)
+                .map(ParameterizedType::getActualTypeArguments)
+                .map(Arrays::asList)
+                .flatMap(List::stream)
+                .map(Class.class::cast)
+                .findFirst()
+                .orElseThrow();
+
+        indexingModules.put(indexDataType, index);
     }
 
-    public <T extends IndexingModule<?>> void removeIndexingModule(T index) {
-        indexingModules.remove(index);
+    public void removeIndexingModule(Class<?> clazz) {
+        indexingModules.remove(clazz);
     }
 
     public void addFilteringModule(Filterable filteringModule) {
@@ -47,47 +62,14 @@ public class SearchModuleImpl implements SearchModule {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
-        // We need to find the indexing module for the specified page type (i.e. content, brand, product or something else)
-        for (var indexingModule : indexingModules) {
-            // Using reflection we can get the generic type parameter for the indexing module,
-            // meaning the class specified between the angle brackets.
+        var module = indexingModules.get(clazz);
 
-            // Here we just get a list of all the parameterized interfaces
-            // this indexing module implements.
-            List<Type> moduleInterfaces = Arrays.stream(
-                    indexingModule.getClass().getGenericInterfaces()
-            ).toList();
-
-            // Since we need to find the type parameter, we down-cast to a ParameterizedType list
-            List<ParameterizedType> parameterizedModuleInterfaces = moduleInterfaces
-                    .stream()
-                    .map(ParameterizedType.class::cast)
-                    .toList();
-
-            // Now we can extract the type arguments for the interfaces of the indexing module
-            List<Type[]> interfaceTypeParameters = parameterizedModuleInterfaces
-                    .stream()
-                    .map(ParameterizedType::getActualTypeArguments)
-                    .toList();
-
-            // We flatten this list, to make searching for matches easier
-            List<Type> flattenedInterfaceTypeParameters = interfaceTypeParameters.stream()
-                    .map(Arrays::asList) // Convert Type[] to List<Type>
-                    .flatMap(List::stream) // Merge all the lists together
-                    .toList(); // Collect
-
-            // Now we just need to match the given class against the type arguments
-            boolean foundMatchingTypeParameter = flattenedInterfaceTypeParameters
-                    .stream()
-                    .anyMatch(t -> Objects.equals(t.getTypeName(), clazz.getTypeName()));
-
-            // This indexing module is the one matching the given class, so we query that
-            if(foundMatchingTypeParameter) {
-                return (List<T>) indexingModule.queryIndex(tokens);
-            }
+        if(module == null) {
+            logger.warn("Could not find indexing module: " + clazz.getName());
+            return new ArrayList<>();
         }
 
-        throw new NoSuchElementException();
+        return (List<T>) module.queryIndex(tokens);
     }
 
     @Override

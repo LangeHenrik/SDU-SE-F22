@@ -30,23 +30,44 @@ public class BrandIndex implements IndexInterface {
 
             ArrayList<String> newTokens = new ArrayList<>(tokens);
 
-            for (int i = 0; i < tokens.size(); i++){
-                while (rs.next()){
-                    if (rs.getString("token") != newTokens.get(i)){
+            String dbColumnToken = "token"; //
+
+            PreparedStatement queryTokenId = null;
+            ResultSet rsTokenId = null;
+
+
+            for (int i = 0; i < tokens.size(); i++) {
+                while (rs.next()) {
+                    if (rs.getString(dbColumnToken) != newTokens.get(i)) {
                         tokenInsert.setString(1, newTokens.get(i));
                     }
                 }
-                PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
-                queryTokenId.setString(1, newTokens.get(i));
-                ResultSet rsTokenId = queryTokenId.executeQuery();
-                while (rsTokenId.next()){
+                tokenInsert.execute();
+            }
+
+
+            for (int j = 0; j < tokens.size(); j++) {
+                queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
+                queryTokenId.setString(1, newTokens.get(j));
+                rsTokenId = queryTokenId.executeQuery();
+                while (rsTokenId.next()) {
                     mapInsert.setInt(1, brand.getId());
                     mapInsert.setInt(2, rsTokenId.getInt(1));
                     mapInsert.execute();
                 }
-                tokenInsert.execute();
             }
-        } catch (SQLException e) {
+            //preparedStatements
+            mapInsert.close();
+            tokenInsert.close();
+            queryToken.close();
+            queryTokenId.close();
+
+            //resultSets
+            rs.close();
+            rsTokenId.close();
+
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }

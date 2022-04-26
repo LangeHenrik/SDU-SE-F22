@@ -16,6 +16,7 @@ module dk.sdu.se_f22 {
     requires com.google.gson;
     requires org.apache.commons.pool2;
 
+    requires org.jetbrains.annotations;
     opens dk.sdu.se_f22 to javafx.fxml;
     opens dk.sdu.se_f22.searchmodule.infrastructure to javafx.fxml;
 

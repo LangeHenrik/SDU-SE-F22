@@ -263,11 +263,13 @@ public class DBMigration {
     }
 
     /**
-     * Print stacktrace to console
+     * Print stacktrace to console.
+     * This will always print to console.
      * 
      * @param stackTrace as StackTraceElement array
      */
     private void println(Throwable error, StackTraceElement[] stackTrace) {
+        this.printText = true;
         this.println("Error occurred!", Color.RED_BOLD);
         this.println(error.getClass().getName() + " " + error.getMessage(), Color.RED_BOLD);
         this.println("Stack trace:", Color.RED);

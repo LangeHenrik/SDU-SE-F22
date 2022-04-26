@@ -6,10 +6,13 @@ import java.util.List;
 
 public interface IPersistence {
     Brand getBrand(int id);
-    Brand getBrand(Brand brand);
-    void deleteBrand(int id);
-    void deleteBrand(Brand brand);
-    void addOrUpdateBrands(List<Brand> brands);
-    void setupDatabase();
+    Brand getBrand(String name);
+    List<Brand> getAllBrands();
+    boolean deleteBrand(int id);
+    boolean deleteBrand(Brand brand);
+    boolean databaseIndexer();
+    boolean addOrUpdateBrands(List<Brand> brands);
     void seedDatabase();
+    void setIndexingInterval(int indexingInterval);
+    int  getIndexingInterval();
 }

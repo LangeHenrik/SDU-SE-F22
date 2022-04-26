@@ -40,4 +40,11 @@ public class WordTest {
     public void testEndsWithDoubleCons() {
 
     }
+
+    @Test
+    @DisplayName("Test ends with CVC")
+    public void testEndsWithCVC() {
+        assertFalse(new Word("on").endsWithCVC());
+        assertTrue(new Word("cac").endsWithCVC());
+    }
 }

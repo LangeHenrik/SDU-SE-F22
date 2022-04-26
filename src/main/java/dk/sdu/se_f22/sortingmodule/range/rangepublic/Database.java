@@ -196,8 +196,8 @@ public class Database implements DatabaseInterface {
         switch (filter.getType()) {
             case DOUBLE -> {
                 statement = connection.prepareStatement(
-                        "UPDATE SortingRangeDoubleView SET name=(?), description=(?), productAttribute=(?), min=(?), max=(?) WHERE (filterId = (?));",
-                        new String[] { "filterid", "name", "description", "min", "max"}
+                        "UPDATE SortingRangeDoubleView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
+                        new String[] { "filterid", "name", "description", "productattribute", "min", "max"}
                 );
                 statement.setString(1, filter.getName());
                 statement.setString(2, filter.getDescription());
@@ -208,8 +208,8 @@ public class Database implements DatabaseInterface {
             }
             case LONG -> {
                 statement = connection.prepareStatement(
-                        "UPDATE SortingRangeLongView SET name=(?), description=(?), productAttribute=(?), min=(?), max=(?) WHERE (filterId = (?));",
-                        new String[] { "filterid", "name", "description", "min", "max"}
+                        "UPDATE SortingRangeLongView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
+                        new String[] { "filterid", "name", "description", "productattribute", "min", "max"}
                 );
                 statement.setString(1, filter.getName());
                 statement.setString(2, filter.getDescription());
@@ -221,8 +221,8 @@ public class Database implements DatabaseInterface {
             }
             case TIME -> {
                 statement = connection.prepareStatement(
-                        "UPDATE SortingRangeTimeView SET name=(?), description=(?), productAttribute=(?), min=(?), max=(?) WHERE (filterId = (?));",
-                        new String[] { "filterid", "name", "description", "min", "max"}
+                        "UPDATE SortingRangeTimeView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
+                        new String[] { "filterid", "name", "description", "productattribute", "min", "max"}
                 );
                 statement.setString(1, filter.getName());
                 statement.setString(2, filter.getDescription());
@@ -238,11 +238,15 @@ public class Database implements DatabaseInterface {
             throw new SQLException("Nothing updated");
         }
 
-        return switch (filter.getType()) {
-            case DOUBLE -> createDoubleFilterFromResultset(statement.getResultSet());
-            case LONG -> createLongFilterFromResultset(statement.getResultSet());
-            case TIME -> createTimeFilterFromResultset(statement.getResultSet());
-        };
+        ResultSet resultSet = statement.getGeneratedKeys();
+        if (resultSet.next()){
+            return switch (filter.getType()) {
+                case DOUBLE -> createDoubleFilterFromResultset(resultSet);
+                case LONG -> createLongFilterFromResultset(resultSet);
+                case TIME -> createTimeFilterFromResultset(resultSet);
+            };
+        }
+        return null;
     }
 
     @Override

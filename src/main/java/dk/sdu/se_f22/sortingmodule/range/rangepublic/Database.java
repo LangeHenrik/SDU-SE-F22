@@ -10,7 +10,15 @@ import java.util.List;
 
 public class Database implements DatabaseInterface {
 
-    Connection connection = DBConnection.getConnection();
+    Connection connection;
+
+    {
+        try {
+            connection = DBConnection.getPooledConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /** This method will take a filter of type RangeFilter and create one of the 3 LongFilter, DoubleFilter, TimeFilter
      *

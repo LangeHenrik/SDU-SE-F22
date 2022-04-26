@@ -5,6 +5,7 @@ import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
 import org.w3c.dom.ranges.Range;
 
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.Instant;
 import java.util.List;
 
@@ -84,12 +85,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName) throws IllegalImplementationException {
+    public RangeFilter update(RangeFilter filter, String newName) throws IllegalImplementationException, SQLException, InvalidFilterTypeException {
         return update(filter, newName, filter.getDescription());
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws IllegalImplementationException {
+    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws IllegalImplementationException, SQLException, InvalidFilterTypeException {
         RangeFilter out = null;
         if (filter instanceof DoubleFilter doubleFilter){
             out = new DoubleFilter(
@@ -145,7 +146,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
                 e.printStackTrace();
             }
         }
-        if (filter instanceof TimeFilter timeFilter){
+        if (filter instanceof TimeFilter){
             try {
                 result.setUserMax(filter.getUserMaxInstant());
                 result.setUserMin(filter.getUserMinInstant());
@@ -158,7 +159,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException {
+    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof DoubleFilter)){
@@ -187,7 +188,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException {
+    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof LongFilter)){
@@ -216,10 +217,10 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException {
+    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException {
         validateFilterImplementation(filter);
 
-        if (!(filter instanceof DoubleFilter)){
+        if (!(filter instanceof TimeFilter)){
             throw new InvalidFilterTypeException("You cannot set a double values for a non double filter");
         }
 

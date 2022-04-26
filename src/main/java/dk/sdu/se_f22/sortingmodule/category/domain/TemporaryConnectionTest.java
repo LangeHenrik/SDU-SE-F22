@@ -133,8 +133,6 @@ public class TemporaryConnectionTest {
         ArrayList<Integer> testCategoryIDs = new ArrayList<Integer>();
         testCategoryIDs.add(1);
         testCategoryIDs.add(2);
-        testCategoryIDs.add(5);
-        testCategoryIDs.add(7);
         testCategoryIDs.add(9);
 
         categoryFilter.filterProductsByCategory(testSearchHit, testCategoryIDs);

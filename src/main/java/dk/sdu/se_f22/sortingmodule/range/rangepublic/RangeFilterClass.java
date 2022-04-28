@@ -1,10 +1,14 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Intentionally default
@@ -16,21 +20,48 @@ abstract class RangeFilterClass implements RangeFilter{
     private final String DESCRIPTION;
     private final String PRODUCT_ATTRIBUTE;
 
-    public RangeFilterClass(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE) {
+    public List<String> validAttributes;
+
+    public RangeFilterClass(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> validAttributes) {
         this.ID = ID;
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
+
+        this.validAttributes = validAttributes;
     }
 
-    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE) {
-        this.NAME = NAME;
-        this.DESCRIPTION = DESCRIPTION;
-        this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
-        this.ID = DEFAULT_ID;
+    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> validAttributes) {
+        this(DEFAULT_ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE, validAttributes);
     }
 
-    public abstract Collection<RangeSearchResultMock> useFilter(Collection<RangeSearchResultMock> inputs);
+    /**
+     * uses non-strict mode, equivalent to useFilter(inputs, false), but the exception is silently handled here,
+     * which is convenient, since it should never be thrown when strict is false.
+     */
+    public Collection<ProductHit> useFilter(Collection<ProductHit> inputs) {
+        try {
+            return useFilter(inputs, false);
+        } catch (InvalidAttributeException e) {
+            //should never happen
+            e.printStackTrace();
+        }
+        // only possible if InvalidAttributeException, which won't happen in non-strict mode
+        return inputs;
+    }
+
+    abstract Collection<ProductHit> filterList(Collection<ProductHit> inputs);
+
+    public Collection<ProductHit> useFilter(Collection<ProductHit> inputs, boolean strict) throws InvalidAttributeException {
+        if (!(validAttributes.contains(this.getProductAttribute()))) {
+            if(strict){
+                throw new InvalidAttributeException(this.getProductAttribute(), validAttributes);
+            }
+            return inputs;
+        }
+
+        return filterList(inputs);
+    }
 
     @Override
     public boolean equals(Object other) {

@@ -10,7 +10,6 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import org.w3c.dom.ranges.Range;
 
 import java.sql.SQLException;
 import java.time.Instant;
@@ -545,14 +544,14 @@ public class RangeFilterCRUDTest {
         @Nested
         @DisplayName("Valid updates")
         class validUpdates {
-            private static List<RangeFilter> listWithRangeFilters = new ArrayList<>();
+            private static final List<RangeFilter> listOfRangeFilters = new ArrayList<>();
 
             public static List<RangeFilter> provideRangeFilterForTest() {
                 RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
                 DBMigration dbMigration = new DBMigration();
 
-                if (listWithRangeFilters.size() >= 3) {
-                    return listWithRangeFilters;
+                if (listOfRangeFilters.size() >= 3) {
+                    return listOfRangeFilters;
                 }
 
                 try {
@@ -560,13 +559,13 @@ public class RangeFilterCRUDTest {
                     dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
 
                     //Adding RangeFilters to list
-                    listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
-                    listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
-                    listWithRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
+                    listOfRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
+                    listOfRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
+                    listOfRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
                 } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
                     e.printStackTrace();
                 }
-                return listWithRangeFilters;
+                return listOfRangeFilters;
             }
 
             @Nested
@@ -704,7 +703,7 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Updating valid name should change the name stored in db")
                 @MethodSource("provideRangeFilterForTest")
                 void updatingValidNameShouldChangeTheNameStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException, SQLException, InvalidFilterTypeException {
-                    String newName = rangefilter.getName() + " mfied4";
+                    String newName = rangefilter.getName() + "mfied4";
                     rangeFilterCRUD.update(rangefilter, newName);
 
                     RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
@@ -749,8 +748,8 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Updating both name and description should change both stored in db")
                 @MethodSource("provideRangeFilterForTest")
                 void updatingBothNameAndDescriptionShouldChangeBothStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException, SQLException, InvalidFilterTypeException {
-                    String newName = rangefilter.getDescription() + " mfied6";
-                    String newDescription = rangefilter.getDescription() + " mfied6";
+                    String newName = rangefilter.getDescription() + "mfied6";
+                    String newDescription = rangefilter.getDescription() + "mfied6";
                     rangeFilterCRUD.update(rangefilter, newName, newDescription);
 
                     RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());

@@ -113,7 +113,7 @@ class DatabaseTest {
         @DisplayName("Test creating a long filter")
         @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
         void testCreateLongFilter(String name, String description, String productAttribute, long min, long max){
-            RangeFilter createdFilter = null;
+            RangeFilter createdFilter;
             try {
                 try {
                     RangeFilter longFilter = new LongFilter(
@@ -343,7 +343,7 @@ class DatabaseTest {
                 TimeFilter updatedFilter = null;
                 TimeFilter readFilter = null;
                 try {
-                filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
+                    filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
                 } catch (SQLException | InvalidFilterTypeException e) {
                     fail("Creating filter failed " + e);
                 }
@@ -373,6 +373,11 @@ class DatabaseTest {
                     fail("Read filter failed");
                 }
 
+                // TODO add test for update return correctly
+                // Since this test, is responsible for testing whether the data returned match the data actually saved
+                // There should be a test to ensure the update method returns the updated info
+                // (this test will pass even if no update is performed in the db,
+                // as long as the update method returns the same filter it received)
                 Assertions.assertEquals(updatedFilter, readFilter);
             }
         }

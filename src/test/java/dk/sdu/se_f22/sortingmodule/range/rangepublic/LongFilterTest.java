@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import org.junit.jupiter.api.Disabled;
@@ -16,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class LongFilterTest {
 
     @Test
-    @Disabled("test not yet written")
     void getType() {
-        fail("test not yet written");
+        LongFilter longFilter = new LongFilter(0, "test name", "test description", "ean", 0, 1000);
+        assertEquals(FilterTypes.LONG, longFilter.getType());
     }
 
     @Test
@@ -37,10 +38,12 @@ class LongFilterTest {
         @Test
         @DisplayName("filter a list of actual products")
         void useFilter() {
+            // The cause for the fail is known.
+            // See DoubleFilterTest of the same method for explanation
             LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000);
             internalFilter.setUserMin(0);
-            List<RangeSearchResultMock> mockResults = Helpers.readMockResultsFromFile("MockResults.csv");
+            List<ProductHit> mockResults = Helpers.readMockResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
             assertEquals(6, mockResults.size());
@@ -56,12 +59,12 @@ class LongFilterTest {
             expectedResultStrings.add("200.0,200.0,6");
             expectedResultStrings.add("300.0,300.0,7");
 
-            Collection<RangeSearchResultMock> expectedResults = Helpers.createMockResultsFromStringList(expectedResultStrings, attributeNames);
+            Collection<ProductHit> expectedResults = Helpers.createMockResultsFromStringList(expectedResultStrings);
 
             //crude check that the expectedResults are still the same as when the test was written
             assertEquals(4, expectedResults.size());
 
-            Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(mockResults);
+            Collection<ProductHit> filteredResults = internalFilter.useFilter(mockResults);
 
             assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults);
         }
@@ -72,9 +75,9 @@ class LongFilterTest {
             LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000);
             internalFilter.setUserMin(0);
-            Collection<RangeSearchResultMock> emptyResults = new ArrayList<>();
+            Collection<ProductHit> emptyResults = new ArrayList<>();
 
-            Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(emptyResults);
+            Collection<ProductHit> filteredResults = internalFilter.useFilter(emptyResults);
 
             assertEquals(emptyResults, filteredResults);
         }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
+import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 
 /**
@@ -31,13 +32,13 @@ public class SortingModuleImpl implements SortingModule {
     @Override
     public void setCategory(ArrayList<Integer> categories) {
         this.query.setCategory(categories);
-        
+
     }
 
     @Override
     public void addCategory(int category) {
         this.query.addCategory(category);
-        
+
     }
 
     @Override
@@ -63,7 +64,7 @@ public class SortingModuleImpl implements SortingModule {
     @Override
     public void setScoring(int scoring) {
         this.query.setScoring(scoring);
-        
+
     }
 
     @Override
@@ -72,7 +73,7 @@ public class SortingModuleImpl implements SortingModule {
         this.saveSearch();
 
         // Search
-        SearchModuleImpl searchModule = new SearchModuleImpl();
+        SearchModule searchModule = new SearchModuleImpl();
         return new SearchHits();
         // return searchModule.search(this.searchString);
 
@@ -84,7 +85,7 @@ public class SortingModuleImpl implements SortingModule {
 
         // Return paginated SearchHits
     }
-    
+
     private void saveSearch() {
         SaveSearchQuery.saveSearch(this.query, this.searchString);
     }

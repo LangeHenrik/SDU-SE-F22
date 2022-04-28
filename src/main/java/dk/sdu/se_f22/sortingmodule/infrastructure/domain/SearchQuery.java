@@ -2,6 +2,8 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Query class, that holds information about a search query from the user.
@@ -10,12 +12,12 @@ public class SearchQuery {
     /**
      * Pagination information. 2 places. [page, page size]
      */
-    int[] pagination = {0, 25};
+    private int[] pagination = { 0, 25 };
 
     /**
      * List of range filters
      */
-    HashMap<Integer, String[]> range;
+    private HashMap<Integer, String[]> range;
 
     /**
      * List of categories to filter by
@@ -25,7 +27,7 @@ public class SearchQuery {
     /**
      * Scoring method id
      */
-    int scoring = 0;
+    private int scoring = 0;
 
     public SearchQuery() {
         this.range = new HashMap<>();
@@ -61,14 +63,12 @@ public class SearchQuery {
     /**
      * Add a new range to filter by
      * 
-     * @param rangeId The id of the range to filter by
+     * @param rangeId    The id of the range to filter by
      * @param startRange The start of the range
-     * @param endRange The end of the range
+     * @param endRange   The end of the range
      */
     public void addRange(int rangeId, String startRange, String endRange) {
-
-        this.range.put(rangeId, new String[]{startRange, endRange});
-
+        this.range.put(rangeId, new String[] { startRange, endRange });
     }
 
     /**
@@ -81,7 +81,7 @@ public class SearchQuery {
     /**
      * Set the pagination information
      * 
-     * @param page Current page to query
+     * @param page     Current page to query
      * @param pageSize The amount of hits to return
      */
     public void setPagination(int page, int pageSize) {
@@ -98,11 +98,11 @@ public class SearchQuery {
         this.scoring = scoring;
     }
 
-    public ArrayList<Integer> getCategory() {
+    public List<Integer> getCategory() {
         return this.category;
     }
 
-    public HashMap<Integer, String[]> getRange() {
+    public Map<Integer, String[]> getRange() {
         return this.range;
     }
 

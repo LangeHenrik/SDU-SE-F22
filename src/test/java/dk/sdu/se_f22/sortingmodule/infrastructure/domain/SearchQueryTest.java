@@ -15,7 +15,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(7);
         s.setCategory(a);
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -24,7 +24,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(2);
         s.addCategory(2);
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -34,7 +34,7 @@ class SearchQueryTest {
         s.addCategory(1);
         s.addCategory(2);
         s.clearCategory();
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -79,23 +79,23 @@ class SearchQueryTest {
         SearchQuery s = new SearchQuery();
         int[] values = {1,2};
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
 
         values[0] = 654;
         values[1] = 68469826;
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
 
         values[0] = -48;
         values[1] = 867;
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
     }
 
     @Test
     void setScoringTest() {
         SearchQuery s = new SearchQuery();
         s.setScoring(5);
-        assertEquals(5, s.scoring);
+        assertEquals(5, s.getScoring());
     }
 }

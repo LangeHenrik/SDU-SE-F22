@@ -9,15 +9,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SaveSearchQuery {
     public static void saveSearch(SearchQuery query, String searchString) {
         int pageNumber = query.getPagination()[0];
         int pageSize = query.getPagination()[1];
-        HashMap<Integer, String[]> queryRanges = query.getRange();
-        ArrayList<Integer> queryCategories = query.getCategory();
+        Map<Integer, String[]> queryRanges = query.getRange();
+        List<Integer> queryCategories = query.getCategory();
         int queryScoring = query.getScoring();
         String queryString = searchString;
 
@@ -58,6 +59,7 @@ public class SaveSearchQuery {
                 stmt.setString(3, range.getValue()[0]);
                 stmt.setString(4, range.getValue()[1]);
                 stmt.execute();
+                stmt.close();
             }
             
             // category query
@@ -68,6 +70,7 @@ public class SaveSearchQuery {
                 stmt.setInt(1, mainQueryId);
                 stmt.setInt(2, category);
                 stmt.execute();
+                stmt.close();
             }
             
             connection.setAutoCommit(true);

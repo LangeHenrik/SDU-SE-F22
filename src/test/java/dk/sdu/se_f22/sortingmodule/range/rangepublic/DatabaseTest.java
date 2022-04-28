@@ -25,7 +25,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
     private Database database;
-    private DBMigration dbMigration = new DBMigration();
+    private static final DBMigration dbMigration = new DBMigration();
+
+    private static void resetDB(){
+        try {
+           dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+        } catch (SQLException e) {
+            System.out.println("error when resetting database state, pooled connection threw sql exception:");
+            e.printStackTrace();
+        }
+    }
+
 
     @BeforeEach
     void setup() {
@@ -154,6 +164,11 @@ class DatabaseTest {
     @Nested
     @DisplayName("read")
     class read {
+        @BeforeAll
+        public static void setup(){
+            resetDB();
+        }
+
         @Nested
         @DisplayName("Read valid filters from database")
         class readValidFiltersFromDatabase {
@@ -447,26 +462,21 @@ class DatabaseTest {
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName(" Test Delete Existing Double Filter")
             @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void testDeleteExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
+            void testDeleteExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) throws UnknownFilterTypeException {
 
                 RangeFilter doubleFilterFromDB;
 
-                try {
-                    doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(database.delete(doubleFilterFromDB.getId()), doubleFilterFromDB);
-                } catch (InvalidFilterException e) {
-                    e.printStackTrace();
-                    fail("Filter could not be deleted as it was not found");
-                }
+                doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
+                Assertions.assertEquals(database.delete(doubleFilterFromDB.getId()), doubleFilterFromDB);
             }
 
             @Nested
-            Class ReadDeletedDoubleFilter {
+            class ReadDeletedDoubleFilter {
                 @ParameterizedTest(name = "{0} : {1}")
                 @DisplayName("test read of deleted filter")
                 @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
                 void testReadOfDeletedFilter(int id, String name , String description, String productAttribute, double min, double max) throws UnknownFilterTypeException {
-                    RangeFilter doubleFilterFromDB = new DoubleFilter(id,)
+                    RangeFilter doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
                     database.delete(id);
                     try {
                         assertNull(database.read(id));
@@ -490,7 +500,7 @@ class DatabaseTest {
             @DisplayName(" test delete Existing Timefilter")//  læs data fra databasen, slet, læs og c
             @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
             void testDeleteExistingTimeFilter(int id, String name, String description, String productAttribute, Instant
-                    min, Instant max) {
+                    min, Instant max)  {
 
                 RangeFilter timeFilterFromDB;
                 try {
@@ -498,9 +508,9 @@ class DatabaseTest {
                     Assertions.assertEquals(database.delete(timeFilterFromDB.getId()), timeFilterFromDB);
                     Assertions.assertThrows(UnknownFilterTypeException.class,
                             () -> database.read(timeFilterFromDB.getId()));
-                } catch (IdNotFoundException e) {
+                } catch (UnknownFilterTypeException e) {
                     e.printStackTrace();
-                    fail("failed because was id not found");
+                    fail("failed because filtertype unknown not found");
                 }
             }
 
@@ -514,9 +524,9 @@ class DatabaseTest {
                 try {
                     longFilterFromDB = new LongFilter(id, name, description, productAttribute, min, max);
                     Assertions.assertEquals(longFilterFromDB, database.delete(longFilterFromDB.getId()));
-                } catch (IdNotFoundException e) {
+                } catch (UnknownFilterTypeException e) {
                     e.printStackTrace();
-                    fail("failed because was id not found");
+                    fail("failed because filtertype unknown not found");
                 }
             }
 
@@ -525,14 +535,9 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("test delete of invalid filterId")
         @ValueSource(ints = {-1, -100, 1000, Integer.MIN_VALUE, Integer.MAX_VALUE})
-        void testdeleteOfInvalidFilterId ( int inputId){
+        void testdeleteOfInvalidFilterId ( int inputId) throws UnknownFilterTypeException {
             //opret filter med invalid id, forsøg at slette og få exception som expected
-            try {
-                assertNull(database.delete(inputId));
-            } catch (IdNotFoundException e) {
-                e.printStackTrace();
-                fail("Delete threw exception instead of null");
-            }
+            assertNull(database.delete(inputId));
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")

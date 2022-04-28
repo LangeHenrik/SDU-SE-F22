@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class LongFilterTest {
 
     @Test
-    @Disabled
+    @Disabled("test not yet written")
     void getType() {
         fail("test not yet written");
     }
 
     @Test
-    @Disabled
+    @Disabled("test not yet written")
     void testEquals() {
         fail("test not yet written");
     }

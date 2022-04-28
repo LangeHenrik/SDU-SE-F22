@@ -17,13 +17,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class DoubleFilterTest {
 
     @Test
-    @Disabled
-
+    @Disabled("test not yet written")
     void getType() {
     }
 
     @Test
-    @Disabled
+    @Disabled("test not yet written")
     void testEquals() {
     }
 

@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary;
 
+import dk.sdu.se_f22.sharedlibrary.models.Product;
+
 import java.util.ArrayList;
 import java.util.Collection;
 

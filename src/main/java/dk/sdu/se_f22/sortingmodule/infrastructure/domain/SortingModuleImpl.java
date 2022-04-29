@@ -7,6 +7,7 @@ import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.utils.Color;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 
 /**
@@ -77,23 +78,27 @@ public class SortingModuleImpl implements SortingModule {
         // Search
         SearchModule searchModule = new SearchModuleImpl();
         
-        SearchHits hits;
+        SearchHits searchHits;
         try {
-            hits = searchModule.search(this.searchString);            
+            searchHits = searchModule.search(this.searchString);
         } catch (NoSuchElementException e) {
             System.out.println(Color.YELLOW + "Something went wrong when searching!" + Color.RESET);
-            hits = new SearchHits();
+            searchHits = new SearchHits();
         }
 
         // Filters
+        CategoryFilter categoryFilter = new CategoryFilter();
 
         // Scoring
 
         // Pagination
 
+        // Category
+        searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
+
         // Return paginated SearchHits
 
-        return hits;
+        return searchHits;
     }
 
     private void saveSearch() {

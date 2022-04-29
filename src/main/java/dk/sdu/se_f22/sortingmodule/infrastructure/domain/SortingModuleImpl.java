@@ -87,17 +87,18 @@ public class SortingModuleImpl implements SortingModule {
         }
 
         // Filters
+        // Category
         CategoryFilter categoryFilter = new CategoryFilter();
+        searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
+
+        // Range
+
 
         // Scoring
 
         // Pagination
 
-        // Category
-        searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
-
         // Return paginated SearchHits
-
         return searchHits;
     }
 

@@ -1,8 +1,10 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.utils.Color;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
@@ -74,8 +76,14 @@ public class SortingModuleImpl implements SortingModule {
 
         // Search
         SearchModule searchModule = new SearchModuleImpl();
-        return new SearchHits();
-        // return searchModule.search(this.searchString);
+        
+        SearchHits hits;
+        try {
+            hits = searchModule.search(this.searchString);            
+        } catch (NoSuchElementException e) {
+            System.out.println(Color.YELLOW + "Something went wrong when searching!" + Color.RESET);
+            hits = new SearchHits();
+        }
 
         // Filters
 
@@ -84,6 +92,8 @@ public class SortingModuleImpl implements SortingModule {
         // Pagination
 
         // Return paginated SearchHits
+
+        return hits;
     }
 
     private void saveSearch() {

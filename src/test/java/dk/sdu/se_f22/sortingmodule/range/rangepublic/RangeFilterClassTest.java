@@ -2,9 +2,13 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
+// Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterClassTest {
     // TODO write test class for Time filter
 

@@ -1,4 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
+// To run the tests in parallel that are marked to run concurrently add the following parameter to the run options of the test runner
+// -Djunit.jupiter.execution.parallel.enabled=true
+// (in intellij, this is added after the -ea when editing configurations for the runner)
+// In theory this provides a speedup. In practice the majority of our tests are not capable of being ran concurrently
+// especially our database tests, which take up the majority of the test time
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
@@ -64,7 +69,7 @@ public class RangeFilterCRUDTest {
                 long max = 800;
 
                 Assertions.assertDoesNotThrow(
-                        () -> rangeFilterCRUD.create(description, name, productAttribute, min, max)
+                        () -> rangeFilterCRUD.create(name, description, productAttribute, min, max)
                 );
             }
 
@@ -1085,6 +1090,7 @@ public class RangeFilterCRUDTest {
                 class incompatibleTypesShouldNotAlterDatabase {
                     @BeforeEach
                     public void setup(){
+                        // NOTE: commenting the below out, makes 9 tests pass out of the blue?
                         try {
                             new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
                         } catch (SQLException e) {

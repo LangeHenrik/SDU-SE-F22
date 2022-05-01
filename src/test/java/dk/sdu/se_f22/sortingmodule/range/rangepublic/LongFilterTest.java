@@ -2,7 +2,6 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,7 +42,7 @@ class LongFilterTest {
             LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000);
             internalFilter.setUserMin(0);
-            List<ProductHit> mockResults = Helpers.readMockResultsFromFile("MockResults.csv", true);
+            List<ProductHit> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
             assertEquals(6, mockResults.size());

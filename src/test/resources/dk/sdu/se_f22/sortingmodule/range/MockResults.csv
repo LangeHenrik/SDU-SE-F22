@@ -1,7 +1,7 @@
-price,height,stock
-1000.0,100.0,2
-2000.0,200.0,3
-3000.0,10.0,4
-100.0,100.0,5
-200.0,200.0,6
-300.0,300.0,7
+id,average user review,ean,price,published date,expiration date,category,name,description,size,clockspeed,weight
+1,2.3,12345678,1000,2018-11-30T15:35:24.00Z,2025-11-30T15:35:24.00Z,pc,testPc,very testy,unavailable,unavailable,unavailable
+2,3.4,12345679,100,2018-11-30T15:35:24.00Z,2025-11-30T15:35:24.00Z,ssd,testSSD,testy boi,unavailable,unavailable,unavailable
+3,1.2,12345671,500,2018-11-30T15:35:24.00Z,2025-11-30T15:35:24.00Z,laptop,testLaptop,test tabolous,unavailable,unavailable,unavailable
+4,3.8,12345672,2000,2018-11-30T15:35:24.00Z,2025-11-30T15:35:24.00Z,pc,testPCUltra,ultra testy,unavailable,unavailable,unavailable
+5,4.8,12345673,10,2018-11-30T15:35:24.00Z,2025-11-30T15:35:24.00Z,monitor,testMonitor,test monitoring,unavailable,unavailable,unavailable
+6,3.9,12345674,999,2018-11-30T15:35:24.00Z,2025-11-30T15:35:24.00Z,hdd,testHDD,test capacity boi,unavailable,unavailable,unavailable

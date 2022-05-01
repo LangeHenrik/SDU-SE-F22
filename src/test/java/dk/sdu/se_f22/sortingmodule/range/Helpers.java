@@ -22,7 +22,7 @@ public class Helpers {
         return out;
     }
 
-    public static List<ProductHit> readMockResultsFromFile(String fileName, boolean removeHeaders) {
+    public static List<ProductHit> readMockProductResultsFromFile(String fileName, boolean removeHeaders) {
         List<String> products = Helpers.readFromCSV(fileName);
         if (removeHeaders) {
             products.remove(0);

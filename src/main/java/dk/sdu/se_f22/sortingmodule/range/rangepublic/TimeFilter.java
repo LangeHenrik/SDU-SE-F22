@@ -41,33 +41,27 @@ class TimeFilter extends RangeFilterClass {
     @Override
     public boolean equals(Object other) {
         if (!super.equals(other)) {
-            System.out.println("super");
             return false;
         }
 
         if (!(other instanceof TimeFilter otherFilter)) {
-            System.out.println("non time");
             return false;
         }
 
 
         if (instantsDifferNullSafe(otherFilter.getDbMinInstant(), this.getDbMinInstant())) {
-            System.out.println("dbmin");
             return false;
         }
 
         if (instantsDifferNullSafe(otherFilter.getDbMaxInstant(), this.getDbMaxInstant())) {
-            System.out.println("dbmax");
             return false;
         }
 
         if (instantsDifferNullSafe(otherFilter.getUserMinInstant(), this.getUserMinInstant())) {
-            System.out.println("usermin");
             return false;
         }
 
         if (instantsDifferNullSafe(otherFilter.getUserMaxInstant(), this.getUserMaxInstant())) {
-            System.out.println("usermax");
             return false;
         }
 

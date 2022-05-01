@@ -12,6 +12,13 @@ public class Database implements DatabaseInterface {
     private Connection connection = null;
 
     private Connection getConn() throws SQLException {
+        // Perhaps we should move this functionality to a connectionHandler class which can implement AutoCloseable
+        // This way we can use a try-with block in our code wherever we need a connection
+        // This would help ensure that we never forget to close a connection
+
+        // We need another class in order to actually implement the interface.
+        // That class however does not need to be complicated it can simply contain a method called getConnection
+        // Aside from the close method of course, which could simply close the connection
         if (connection == null || connection.isClosed()) {
             connection = DBConnection.getPooledConnection();
         }
@@ -279,6 +286,15 @@ public class Database implements DatabaseInterface {
     @Override
     public RangeFilter delete(int id) throws UnknownFilterTypeException {
         // remember to close the connection after use
+        // remember to use getConn instead of the connection attribute directly
+        // to use the method getSpecificFilter though, you will need to create a local variable continaing your connection, see below example
+//        try {
+//            Connection localConnection = getConn();
+//        } catch (SQLException e) {
+//            // Or whatever is the correct way for you to handle this exception
+//            e.printStackTrace();
+//        }
+
         RangeFilter dbRangeFilter = null;
         try {
             PreparedStatement typeStatement = connection.prepareStatement("SELECT get_type_of_filter(?);");

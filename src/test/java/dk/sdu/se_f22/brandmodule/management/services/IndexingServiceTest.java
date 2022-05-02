@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.brandmodule.management.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-//import com.sun.prism.shader.Solid_TextureYV12_AlphaTest_Loader;
 import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

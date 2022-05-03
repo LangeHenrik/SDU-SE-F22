@@ -18,6 +18,7 @@ class  FilteredTokens {
     private Date timeStamp;
     private static ArrayList<String> tokenStrings;
     private static ArrayList<Token> stringTokens;
+    //IStemmer stemming = new Stemmer; // method name stem
     IMockCMSIndex mockindex = new MockCMSIndex(); // used for mocking Index-module
     ArrayList<Token> mocktokens = new ArrayList<>();  //used for mocking Index-module
     MockFacade mockfacade = new MockFacade(); //used for mocking Stop,Irr & Stem-modules
@@ -67,7 +68,7 @@ class  FilteredTokens {
 
         //tokens.set(classstopwords.methodprovided(tokenStrings));
         //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokenStrings));
-        //tokens.set(classstem.methodprovided(tokenStrings));
+        //tokens.set(Stemming.stem(tokenStrings));
 
         //For unit-testing
         mockfacade.mockUseStopW(tokenStrings);

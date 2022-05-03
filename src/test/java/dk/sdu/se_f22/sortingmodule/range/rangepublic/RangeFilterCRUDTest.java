@@ -34,6 +34,16 @@ public class RangeFilterCRUDTest {
         rangeFilterCRUD = new RangeFilterCRUD();
     }
 
+    @AfterAll
+    public static void teardown() {
+        try {
+            new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+        } catch (SQLException e) {
+            System.out.println("error when resetting database state, pooled connection threw sql exception:");
+            e.printStackTrace();
+        }
+    }
+
     @Nested
     @DisplayName("CRUD Creator")
     class CRUDCreatorTest {
@@ -276,17 +286,28 @@ public class RangeFilterCRUDTest {
     }
 
 
-    @Disabled("Until database.delete has been implemented")
+//    @Disabled("Until database.delete has been implemented")
     @Nested
     @DisplayName("CRUD Deleter")
     class CRUDDeleterTest {
+        @BeforeAll
+        static void setup(){
+            // NOTE: commenting the below out, makes 9 tests pass out of the blue?
+            try {
+                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+            } catch (SQLException e) {
+                System.out.println("error when resetting database state, pooled connection threw sql exception:");
+                e.printStackTrace();
+            }
+        }
+
         @ParameterizedTest
         @DisplayName("Delete valid doubleFilter")
-        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
         void deleteValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
             RangeFilter rangeFilterFromDataBase = null;
             try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+                rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             } catch (InvalidFilterTypeException e) {
@@ -297,7 +318,7 @@ public class RangeFilterCRUDTest {
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
             try {
-                Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilter,
+                Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilterFromDataBase,
                         "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
                                 "or check the filter id's");
                 Assertions.assertThrows(IdNotFoundException.class,
@@ -311,11 +332,11 @@ public class RangeFilterCRUDTest {
 
         @ParameterizedTest
         @DisplayName("Delete valid timeFilter")
-        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
         void deleteValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
             RangeFilter rangeFilterFromDataBase = null;
             try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+                rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             } catch (InvalidFilterTypeException e) {
@@ -339,11 +360,11 @@ public class RangeFilterCRUDTest {
 
         @ParameterizedTest
         @DisplayName("Delete valid longFilter")
-        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
         void deleteValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) {
             RangeFilter rangeFilterFromDataBase = null;
             try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
+                rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
             } catch (InvalidFilterException e) {
                 fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
             } catch (InvalidFilterTypeException e) {
@@ -545,6 +566,15 @@ public class RangeFilterCRUDTest {
     @Nested
     @DisplayName("CRUD Update")
     class CRUDUpdateTest {
+        @AfterAll
+        public static void teardown() {
+            try {
+                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+            } catch (SQLException e) {
+                System.out.println("error when resetting database state, pooled connection threw sql exception:");
+                e.printStackTrace();
+            }
+        }
 
         @Nested
         @DisplayName("Valid updates")
@@ -595,12 +625,12 @@ public class RangeFilterCRUDTest {
 
                 }
 
-//                @ParameterizedTest(name = "{0}")
-//                @DisplayName("Updating the description but not changing the name should not throw an exception")
-//                @MethodSource("provideRangeFilterForTest")
-//                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
-//                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName(), rangefilter.getDescription() + " mfied3"));
-//                }
+                @ParameterizedTest(name = "{0}")
+                @DisplayName("Updating the description but not changing the name should not throw an exception")
+                @MethodSource("provideRangeFilterForTest")
+                void updatingTheDescriptionButNotChangingTheNameShouldNotThrowAnException(RangeFilter rangefilter) {
+                    Assertions.assertDoesNotThrow(() -> rangeFilterCRUD.update(rangefilter,rangefilter.getName(), rangefilter.getDescription() + " mfied3"));
+                }
 
                 @Nested
                 @DisplayName("Updating dbValues should not throw an exception")
@@ -1160,8 +1190,8 @@ public class RangeFilterCRUDTest {
                 @Nested
                 @DisplayName("Incompatible types should not alter database")
                 class incompatibleTypesShouldNotAlterDatabase {
-                    @BeforeEach
-                    public void setup(){
+                    @BeforeAll
+                    public static void setup(){
                         // NOTE: commenting the below out, makes 9 tests pass out of the blue?
                         try {
                             new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
@@ -1653,16 +1683,6 @@ public class RangeFilterCRUDTest {
                         return 0;
                     }
                 }
-            }
-        }
-
-        @AfterAll
-        public static void teardown() {
-            try {
-                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-            } catch (SQLException e) {
-                System.out.println("error when resetting database state, pooled connection threw sql exception:");
-                e.printStackTrace();
             }
         }
     }

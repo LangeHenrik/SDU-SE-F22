@@ -26,11 +26,9 @@ public class Database implements DatabaseInterface {
         int results = 0;
         int ID = 0;
 
-        // By using our AutoClosingConnection we do not have to manually handle closing the connection
+        // By using try-with-ressources we do not have to manually handle closing the connection
         // Thanks AutoCloseable
-        try(AutoClosingConnection autoClosingConnection = new AutoClosingConnection()){
-            Connection connection = autoClosingConnection.getConnection();
-
+        try(Connection connection = DBConnection.getPooledConnection()) {
             switch (filter.getType()) {
                 case DOUBLE -> {
                     statement = connection.prepareStatement(
@@ -93,8 +91,7 @@ public class Database implements DatabaseInterface {
     @Override
     public RangeFilter read(int id) throws UnknownFilterTypeException {
         RangeFilter dbRangeFilter = null;
-        try(AutoClosingConnection autoClosingConnection = new AutoClosingConnection()){
-            Connection connection = autoClosingConnection.getConnection();
+        try(Connection connection = DBConnection.getPooledConnection()) {
             // First get the type of the filter by calling the stored function:
             // "SELECT get_type_of_filter(filter_id);"
             // where filter_id is the id we are interested in retrieving
@@ -190,9 +187,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public RangeFilter update(RangeFilter filter) throws SQLException, InvalidFilterTypeException {
-
-        try(AutoClosingConnection autoClosingConnection = new AutoClosingConnection()) {
-            Connection connection = autoClosingConnection.getConnection();
+        try(Connection connection = DBConnection.getPooledConnection()) {
 
             PreparedStatement statement = null;
 
@@ -263,9 +258,7 @@ public class Database implements DatabaseInterface {
         }
 
         PreparedStatement statement = null;
-        try(AutoClosingConnection autoClosingConnection = new AutoClosingConnection()) {
-            Connection connection = autoClosingConnection.getConnection();
-
+        try(Connection connection = DBConnection.getPooledConnection()) {
             switch (dbRangeFilter.getType()) {
                 // IDEA: Refactor so that the switch determines the name of the view to delete from.
                 // That can then be put into SQL string below.
@@ -318,8 +311,7 @@ public class Database implements DatabaseInterface {
     @Override
     public List<RangeFilter> readAllFilters() {
         List<RangeFilter> outList = new ArrayList<>();
-        try(AutoClosingConnection autoClosingConnection = new AutoClosingConnection()) {
-            Connection connection = autoClosingConnection.getConnection();
+        try(Connection connection = DBConnection.getPooledConnection()) {
 
             // it is deliberate that they are all in the same try catch block since if one fails, they will all fail.
             // This is desired behaviour, and also mimicks what would happen for the case where we add the exception to the method signature.

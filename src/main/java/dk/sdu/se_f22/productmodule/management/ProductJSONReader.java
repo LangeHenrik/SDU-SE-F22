@@ -215,7 +215,6 @@ public class ProductJSONReader {
     private int findLastOccurence(String whatToFind, String line){
         int index = line.length();
         boolean foundIt = false;
-        //System.out.println("Searching: " + line + "\t\t" +  " of length " + index +" for; \"" + whatToFind + "\"");
         
         for(int i = index; i > 0; i--){
             if(line.substring(i - 1,i).contains(whatToFind)){
@@ -225,7 +224,6 @@ public class ProductJSONReader {
             index--;
         }
         if(!foundIt) {
-            //System.out.println("No occourence found returning line length");
             index = line.length() + 1;
         }
         
@@ -243,7 +241,6 @@ public class ProductJSONReader {
             }
         }
         
-        //System.out.println("Found " + occurences + " occurences of: " + whatToCount + " at line: " + currentLineNumber);
         return occurences;
     }
     

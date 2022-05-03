@@ -1,5 +1,8 @@
 package dk.sdu.se_f22.productmodule.management;
 
+import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -217,7 +220,7 @@ public class ProductManager implements IProductManager, Runnable{
         
         //Right here is where the XXXX.updateIndex() call to the module from Group 2.2 goes (see below):
         
-        //ProductIndexInfrastructure.getInstance().getProductIndex().indexProducts(updatedProductArray);
+        ProductIndexInfrastructure.getInstance().getProductIndex().indexProducts(updatedProductArray);
         
         return backgroundThread.isAlive();
     }
@@ -304,14 +307,6 @@ public class ProductManager implements IProductManager, Runnable{
         }
         return toReturn;
     }
-
-    /*public void print(){
-        //Prints each products name and price.
-
-        for(Product p : productArray){
-            System.out.println(p);
-        }
-    }*/
     
     @Override
     public ArrayList<BaseProduct> readAllProducts() {
@@ -322,15 +317,6 @@ public class ProductManager implements IProductManager, Runnable{
         checkForUpdates();
         return baseProductArray;
     }
-
-    /*public void printAllProducts(){
-
-        //Prints a detailed description of each product.
-
-        for(Product p : productArray){
-            p.print();
-        }
-    }*/
     
     private ArrayList<BaseProduct> getFromSource(){
         try{

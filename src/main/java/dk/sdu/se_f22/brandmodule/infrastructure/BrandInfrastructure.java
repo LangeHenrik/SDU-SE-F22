@@ -54,7 +54,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     }
 
     @Override
-    public List<Brand> getBrandsFromSearchTokens(List<String> tokens) {
+    public List<Brand> queryIndex(List<String> tokens) {
         return index.searchBrandIndex(tokens);
     }
 

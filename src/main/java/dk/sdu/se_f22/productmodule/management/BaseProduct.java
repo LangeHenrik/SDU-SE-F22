@@ -11,7 +11,8 @@ import java.util.List;
  * It is possible to choose between 2 different getters to get the value either as numeric {@link BaseProduct#getAsNumeric(ProductAttribute)}
  * or as a string {@link BaseProduct#get(ProductAttribute)}<br>
  * Before being passed on to searchModule an instance of this class <b>must</b> be converted to the common class {@link dk.sdu.se_f22.sharedlibrary.models.Product} <br>
- * (A constructor is supplied for this {@link dk.sdu.se_f22.sharedlibrary.models.Product#Product(BaseProduct)}
+ * (A constructor is supplied for this {@link dk.sdu.se_f22.sharedlibrary.models.Product#Product(BaseProduct)}<br><br>
+ * <i>Formerly known as <b>Product</b></i>
  */
 public class BaseProduct { //initialize class
     

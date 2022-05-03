@@ -114,7 +114,6 @@ public class TemporaryConnectionTest {
 
     public static void testMethod() {
         CategoryFilter categoryFilter = new CategoryFilter();
-        CategoryDBConnection categoryDB = new CategoryDBConnection();
 
         ArrayList<String> liste = new ArrayList<String>();
         liste.add("Vejle");

@@ -14,16 +14,16 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
     public static CategoryDBConnection shared = new CategoryDBConnection();
     private static Connection connie = null;
 
-    public Connection connect() throws SQLException, IOException {
+    private Connection connect() throws SQLException, IOException {
         connie = DBConnection.getPooledConnection();
         return connie;
     }
 
-    public void closeConnection(){
+    private void closeConnection(){
         try {
             connie.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                 tmpList.add(tmpCategory);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException ioEx) {
             System.out.println(ioEx.getMessage());
         } finally {
@@ -101,7 +101,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                 System.out.println("Category with the id " + queryId + " wasnt found");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException ioEx) {
             System.out.println(ioEx.getMessage());
         } finally {
@@ -126,7 +126,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     }
                     return affectedRows;
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
@@ -154,7 +154,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     }
                     return affectedRows;
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
@@ -182,7 +182,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     }
                     return affectedRows;
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
@@ -242,7 +242,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } catch (IOException ioEx) {
                 System.out.println(ioEx.getMessage());
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
             CategoryDBConnection.shared.closeConnection();
         }
@@ -292,7 +292,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } catch (IOException ioEx) {
                 System.out.println(ioEx.getMessage());
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
             CategoryDBConnection.shared.closeConnection();
         }

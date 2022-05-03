@@ -28,9 +28,12 @@ public class CategoryFilter implements CategoryFilterInterface {
         for (Object oldProduct : searchHits.getProducts()) {
             if(oldProduct instanceof CategoryProduct){
                 CategoryProduct product = (CategoryProduct)oldProduct;
-                String[] fieldNameArray;
 
                 for(Category category : categories){
+                    if(category == null){
+                        System.out.println("Category wasn't found");
+                        break;
+                    }
                     if (category.getRequirementFieldName().toLowerCase().equals("category")) {
                         Pattern pattern = Pattern.compile("(^|[^\\w])\\/?(" + category.getRequirementValue() + ")\\/?([^\\w+]|$)", Pattern.CASE_INSENSITIVE);
                         Matcher matcher = pattern.matcher(product.getCategory());
@@ -60,32 +63,6 @@ public class CategoryFilter implements CategoryFilterInterface {
                             break;
                         } else {
                             System.out.println("Match not found:" + product.getName());
-                        }
-                    } else if (category.getRequirementFieldName().toLowerCase().equals("instock")) {
-                        if (category.getRequirementValue() != null) {
-                            for (String fieldInStock : product.getInStock()) {
-                                Pattern pattern = Pattern.compile(category.getRequirementValue());
-                                Matcher matcher = pattern.matcher(fieldInStock);
-                                boolean matchFound = matcher.matches();
-
-                                if (matchFound) {
-                                    System.out.println("Match found: " + product.getName());
-
-                                    newProducts.add(product);
-                                    break;
-                                } else {
-                                    System.out.println("Match not found:" + product.getName());
-                                }
-                            }
-                        } else {
-                            if (product.getInStock().isEmpty()) {
-                                System.out.println("Match found: " + product.getName());
-
-                                newProducts.add(product);
-                                break;
-                            } else {
-                                System.out.println("Match not found: " + product.getName());
-                            }
                         }
                     }
                 }

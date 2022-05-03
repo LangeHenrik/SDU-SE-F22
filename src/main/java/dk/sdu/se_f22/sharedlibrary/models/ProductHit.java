@@ -9,7 +9,7 @@ import java.util.UUID;
 
 /** The class proposed by group 4.4 to use as the return type of search hits.
  * <br>
- * It includes a constructor {@link ProductHit#ProductHit(Product)}, which simply takes a {@link Product} as its input,
+ * It includes a constructor {@link ProductHit#ProductHit(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
  * and then parses it into the correct attribute values.
  */
 public class ProductHit {
@@ -56,34 +56,34 @@ public class ProductHit {
     /** This parses the hard to use Product into a much more user friendly ProductHit.<br>
      * It is proposed by group 4.4 that this representation of a Product is used as the return type in searchHits.
      *
-     * @param product a product
+     * @param baseProduct a product
      * @throws DateTimeParseException if The dates are in a non parseable format
      * @throws NumberFormatException if any of the attributes, that are numeric, is unparseable
      */
-    public ProductHit(Product product) throws DateTimeParseException, NumberFormatException  {
-        String stringId = product.get(ProductAttribute.ID);
+    public ProductHit(BaseProduct baseProduct) throws DateTimeParseException, NumberFormatException  {
+        String stringId = baseProduct.get(ProductAttribute.ID);
         this.uuid = UUID.fromString(stringId);
 
-        this.averageUserReview = Double.parseDouble(product.get(ProductAttribute.AVERAGE_USER_REVIEW));
-        this.inStock = product.getLocations();
-        this.ean = Long.parseLong(product.get(ProductAttribute.EAN));
-        this.price = Double.parseDouble(product.get(ProductAttribute.PRICE));
-        this.publishedDate = Instant.parse(product.get(ProductAttribute.PUBLISHED_DATE) + 'Z');
-        this.expirationDate = Instant.parse(product.get(ProductAttribute.EXPIRATION_DATE) + 'Z');
-        this.category = product.get(ProductAttribute.CATEGORY);
-        this.name = product.get(ProductAttribute.NAME);
-        this.description = product.get(ProductAttribute.DESCRIPTION);
+        this.averageUserReview = Double.parseDouble(baseProduct.get(ProductAttribute.AVERAGE_USER_REVIEW));
+        this.inStock = baseProduct.getLocations();
+        this.ean = Long.parseLong(baseProduct.get(ProductAttribute.EAN));
+        this.price = Double.parseDouble(baseProduct.get(ProductAttribute.PRICE));
+        this.publishedDate = Instant.parse(baseProduct.get(ProductAttribute.PUBLISHED_DATE) + 'Z');
+        this.expirationDate = Instant.parse(baseProduct.get(ProductAttribute.EXPIRATION_DATE) + 'Z');
+        this.category = baseProduct.get(ProductAttribute.CATEGORY);
+        this.name = baseProduct.get(ProductAttribute.NAME);
+        this.description = baseProduct.get(ProductAttribute.DESCRIPTION);
 
-        if (!product.get(ProductAttribute.SIZE).equals("unavailable")){
-            this.size = product.get(ProductAttribute.SIZE);
+        if (!baseProduct.get(ProductAttribute.SIZE).equals("unavailable")){
+            this.size = baseProduct.get(ProductAttribute.SIZE);
         }
 
-        if (!product.get(ProductAttribute.CLOCKSPEED).equals("unavailable")){
-            this.clockspeed = Double.parseDouble(product.get(ProductAttribute.CLOCKSPEED));
+        if (!baseProduct.get(ProductAttribute.CLOCKSPEED).equals("unavailable")){
+            this.clockspeed = Double.parseDouble(baseProduct.get(ProductAttribute.CLOCKSPEED));
         }
 
-        if (!product.get(ProductAttribute.WEIGHT).equals("unavailable")){
-            this.weight = Double.parseDouble(product.get(ProductAttribute.WEIGHT));
+        if (!baseProduct.get(ProductAttribute.WEIGHT).equals("unavailable")){
+            this.weight = Double.parseDouble(baseProduct.get(ProductAttribute.WEIGHT));
         }
     }
 

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Product { //initialize class
+public class BaseProduct { //initialize class
     
     private final HashMap<ProductAttribute, String> productAttributes; //initialize hashmap to contain product attributes
     
-    public Product(){ //product constructor w.o. attribute input
+    public BaseProduct(){ //product constructor w.o. attribute input
         productAttributes = new HashMap<>(); //initialize hashmap
     }
     

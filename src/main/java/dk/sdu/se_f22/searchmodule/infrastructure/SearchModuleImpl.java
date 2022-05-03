@@ -52,7 +52,7 @@ public class SearchModuleImpl implements SearchModule {
 
         SearchHits searchHits = new SearchHits();
         searchHits.setContents(List.of());
-        searchHits.setProducts(queryIndexOfType(Product.class, tokens));
+        searchHits.setProducts(queryIndexOfType(BaseProduct.class, tokens));
         searchHits.setBrands(queryIndexOfType(Brand.class, tokens));
         //searchHits.setContents(queryIndexOfType(Content.class, tokens));
 

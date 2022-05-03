@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.productmodule.management;
 
-import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,12 +16,12 @@ public class ProductJSONReader {
         this.filepath = filepath;
     }
     
-    public ArrayList<Product> read() throws IOException{
+    public ArrayList<BaseProduct> read() throws IOException{
         return read(filepath);
     }
     
-    public ArrayList<Product> read(String filepath2) throws IOException{
-        ArrayList<Product> output = new ArrayList<>();
+    public ArrayList<BaseProduct> read(String filepath2) throws IOException{
+        ArrayList<BaseProduct> output = new ArrayList<>();
         currentLineNumber = 1;
         int amountOfProducts = 1;
         
@@ -37,12 +37,12 @@ public class ProductJSONReader {
         return output;
     }
     
-    private void readLines(ArrayList<Product> output, int amountOfProducts, BufferedReader br) throws IOException {
+    private void readLines(ArrayList<BaseProduct> output, int amountOfProducts, BufferedReader br) throws IOException {
         boolean containsArray;
         boolean containsProductStart;
         boolean newProduct;
         boolean containsData;
-        Product currentProduct = new Product();
+        BaseProduct currentBaseProduct = new BaseProduct();
         String line;
         
         br.readLine(); //Skipping the first line as to not break the array detection.
@@ -59,18 +59,18 @@ public class ProductJSONReader {
             
             if(containsArray){
                 
-                currentProduct.setLocations(calculateInStockArray(br));
+                currentBaseProduct.setLocations(calculateInStockArray(br));
                 
             }else if(newProduct){
                 
-                currentProduct.set(ProductAttribute.ID, String.valueOf(amountOfProducts));
-                output.add(currentProduct);
-                currentProduct = new Product();
+                currentBaseProduct.set(ProductAttribute.ID, String.valueOf(amountOfProducts));
+                output.add(currentBaseProduct);
+                currentBaseProduct = new BaseProduct();
                 amountOfProducts++;
                 
             }else if(!containsProductStart && containsData) {
                 
-                setProductAttribute(line, currentProduct);
+                setProductAttribute(line, currentBaseProduct);
                 
             }
         }
@@ -111,14 +111,14 @@ public class ProductJSONReader {
             return result;
     }
     
-    private void setProductAttribute(String line, Product p){
+    private void setProductAttribute(String line, BaseProduct p){
         
         String propertyName = getPropertyName(line);
         p.set(ProductAttribute.fromString(propertyName), getPropertyValue(line));
         
     }
     
-    public boolean write(ArrayList<Product> list, String filepath){
+    public boolean write(ArrayList<BaseProduct> list, String filepath){
         
         if(list == null || list.isEmpty()){
             throw new NullPointerException("Invalid List to write to file");
@@ -134,7 +134,7 @@ public class ProductJSONReader {
             
             builder.append("[");                    //The file works as an array of objects with certain attributes, thus an "array-starter" here. This, however, is ignored upon reading it.
             
-            for(Product p : list){                  //For each current product
+            for(BaseProduct p : list){                  //For each current product
                 builder.append("\n{");              //Open a new "object" to be written
                 
                 addProductToBuilder(productNumber, builder, p, (productNumber == list.size() - 1));
@@ -160,7 +160,7 @@ public class ProductJSONReader {
         return success;
     }
     
-    private int addProductToBuilder(int productNumber, StringBuilder builder, Product p, boolean isLast) {
+    private int addProductToBuilder(int productNumber, StringBuilder builder, BaseProduct p, boolean isLast) {
         ArrayList<String> inStockArray = new ArrayList<>();
         
         for(ProductAttribute pAttr : ProductAttribute.values()){    //Go through all known attributes
@@ -187,14 +187,14 @@ public class ProductJSONReader {
         return productNumber;
     }
     
-    private void addPropertyToBuilder(StringBuilder builder, Product p, ProductAttribute pAttr, String lineEnd) {
+    private void addPropertyToBuilder(StringBuilder builder, BaseProduct p, ProductAttribute pAttr, String lineEnd) {
         String propertyValue = p.get(pAttr) == null ? "" : p.get(pAttr);
         
         //Getting the correct formatting: "<attr name>": "<attr value>", (Comma if it's not the last line in the product)
         builder.append("\n").append("\t").append("\"").append(pAttr.alias).append("\":").append(" \"").append(propertyValue).append("\"").append(lineEnd);
     }
     
-    private void addArrayToBuilder(StringBuilder builder, Product p, ProductAttribute pAttr, String lineEnd,ArrayList<String> inStockArray) {
+    private void addArrayToBuilder(StringBuilder builder, BaseProduct p, ProductAttribute pAttr, String lineEnd, ArrayList<String> inStockArray) {
         builder.append("\n").append("\t").append("\"").append(pAttr.alias).append("\": ["); //Opening the array with formatting "<attr name>": [
         
         inStockArray.addAll(p.getLocations());
@@ -210,7 +210,7 @@ public class ProductJSONReader {
         builder.append("\n\t]").append(lineEnd);    //Finally closing the array using
     }
     
-    public boolean write(ArrayList<Product> list) throws IOException{
+    public boolean write(ArrayList<BaseProduct> list) throws IOException{
         return write(list, filepath);
     }
     

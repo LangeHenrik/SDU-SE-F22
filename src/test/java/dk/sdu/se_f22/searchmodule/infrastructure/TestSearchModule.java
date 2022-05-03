@@ -3,8 +3,8 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
+import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.jupiter.api.Test;
 
@@ -64,10 +64,10 @@ public class TestSearchModule {
         SearchModule searchModule = new SearchModuleImpl() {
             @Override
             public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
-                if(clazz == Product.class) {
-                    List<Product> productPages = new ArrayList<>();
-                    productPages.add(new Product());
-                    return (List<T>) productPages;
+                if(clazz == BaseProduct.class) {
+                    List<BaseProduct> baseProductPages = new ArrayList<>();
+                    baseProductPages.add(new BaseProduct());
+                    return (List<T>) baseProductPages;
                 }
                 else if(clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
@@ -93,7 +93,7 @@ public class TestSearchModule {
         }
 
         // Same here, although we don't have any attribute fields to test against, so we just check that an object is in the list
-        List<Product> products = searchResult.getProducts().stream().toList();
-        assertTrue(products.stream().findFirst().isPresent());
+        List<BaseProduct> baseProducts = searchResult.getProducts().stream().toList();
+        assertTrue(baseProducts.stream().findFirst().isPresent());
     }
 }

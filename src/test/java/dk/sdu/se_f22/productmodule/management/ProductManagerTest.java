@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.productmodule.management;
 
-import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
 
 import org.junit.jupiter.api.*;
 import java.io.FileWriter;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductManagerTest {
     
-    private Product product;
+    private BaseProduct baseProduct;
     private ProductManager productManager;
     
     @BeforeAll
@@ -28,9 +28,9 @@ class ProductManagerTest {
     
     @BeforeEach
     void setup(){
-        product = new Product();
+        baseProduct = new BaseProduct();
         for(ProductAttribute pa : ProductAttribute.values()){
-            product.set(pa, "test");
+            baseProduct.set(pa, "test");
         }
         productManager = new ProductManager("src/test/resources/dk/sdu/se_f22/productmodule/management/cheese.txt");
         System.out.println("============ INITIALIZING ============");
@@ -41,7 +41,7 @@ class ProductManagerTest {
     void create() {
         
         //creating product
-        assertTrue(productManager.create(product));
+        assertTrue(productManager.create(baseProduct));
         System.out.println("========== create() TEST DONE ============");
     }
     
@@ -52,12 +52,12 @@ class ProductManagerTest {
         //trying to createAll() using non-initialized, empty List
         assertFalse(productManager.createAll(new ArrayList<>()));
         
-        ArrayList<Product> List = new ArrayList<>();
+        ArrayList<BaseProduct> List = new ArrayList<>();
         
         assertFalse(productManager.createAll(List));
         
         //trying to createAll() after adding products to the List
-        List.add(product);
+        List.add(baseProduct);
         assertTrue(productManager.createAll(List));
         
         System.out.println("========== createAll() TEST DONE ============");
@@ -71,10 +71,10 @@ class ProductManagerTest {
         assertNull(productManager.readProduct(""));
         
         //setting product UUID
-        product.set(ProductAttribute.UUID, "25");
+        baseProduct.set(ProductAttribute.UUID, "25");
         
         //using read on a set product UUID
-        assertEquals(product.get(ProductAttribute.UUID), "25");
+        assertEquals(baseProduct.get(ProductAttribute.UUID), "25");
         System.out.println("========== read() TEST DONE ============");
     }
     
@@ -85,11 +85,11 @@ class ProductManagerTest {
         assertFalse(productManager.update("46", ProductAttribute.UUID, "50"));
         
         //adding product to productArray
-        productManager.create(product);
-        productManager.productArray.add(product);
+        productManager.create(baseProduct);
+        productManager.baseProductArray.add(baseProduct);
         
         //setting product UUID
-        product.set(ProductAttribute.UUID, "30");
+        baseProduct.set(ProductAttribute.UUID, "30");
         
         //testing if desired update occurred
         assertTrue(productManager.update("30", ProductAttribute.UUID, "50"));
@@ -104,11 +104,11 @@ class ProductManagerTest {
         assertFalse(productManager.remove("30"));
         
         //adding product to productArray
-        productManager.create(product);
-        productManager.productArray.add(product);
+        productManager.create(baseProduct);
+        productManager.baseProductArray.add(baseProduct);
         
         //setting product UUID
-        product.set(ProductAttribute.UUID, "30");
+        baseProduct.set(ProductAttribute.UUID, "30");
         
         //trying to remove product in productArray, using faulty UUID
         assertFalse(productManager.remove("45"));
@@ -128,37 +128,37 @@ class ProductManagerTest {
         String[] ids1 = {"35", "42", "1", "363"};
         
         //creating additional product objects
-        Product product1 = new Product();
-        Product product2 = new Product();
-        Product product3 = new Product();
-        Product product4 = new Product();
+        BaseProduct baseProduct1 = new BaseProduct();
+        BaseProduct baseProduct2 = new BaseProduct();
+        BaseProduct baseProduct3 = new BaseProduct();
+        BaseProduct baseProduct4 = new BaseProduct();
         
         for (ProductAttribute pa : ProductAttribute.values()) {
-            product1.set(pa, "test");
-            product2.set(pa, "test");
-            product3.set(pa, "test");
-            product4.set(pa, "test");
+            baseProduct1.set(pa, "test");
+            baseProduct2.set(pa, "test");
+            baseProduct3.set(pa, "test");
+            baseProduct4.set(pa, "test");
         }
         
         //trying to removeAll products in empty productArray
         assertFalse(productManager.removeAll(ids));
         
         //adding products to productArray
-        productManager.create(product1);
-        productManager.create(product2);
-        productManager.create(product3);
-        productManager.create(product4);
+        productManager.create(baseProduct1);
+        productManager.create(baseProduct2);
+        productManager.create(baseProduct3);
+        productManager.create(baseProduct4);
         
-        productManager.productArray.add(product1);
-        productManager.productArray.add(product2);
-        productManager.productArray.add(product3);
-        productManager.productArray.add(product4);
+        productManager.baseProductArray.add(baseProduct1);
+        productManager.baseProductArray.add(baseProduct2);
+        productManager.baseProductArray.add(baseProduct3);
+        productManager.baseProductArray.add(baseProduct4);
         
         //setting product UUIDs
-        product1.set(ProductAttribute.UUID, "35");
-        product2.set(ProductAttribute.UUID, "42");
-        product3.set(ProductAttribute.UUID, "1");
-        product4.set(ProductAttribute.UUID, "364");
+        baseProduct1.set(ProductAttribute.UUID, "35");
+        baseProduct2.set(ProductAttribute.UUID, "42");
+        baseProduct3.set(ProductAttribute.UUID, "1");
+        baseProduct4.set(ProductAttribute.UUID, "364");
         
         //testing removeAll with an array containing 1 non-matching UUID
         assertFalse(productManager.removeAll(ids1));

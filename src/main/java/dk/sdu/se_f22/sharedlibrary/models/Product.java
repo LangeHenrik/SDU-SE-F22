@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 
 import java.time.Instant;

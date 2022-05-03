@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
-import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterInterface;

@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.productmodule.management;
 
-import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;

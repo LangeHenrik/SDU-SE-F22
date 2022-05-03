@@ -5,7 +5,7 @@ import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
 import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
-import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 
 import java.util.ArrayList;
 import java.util.List;

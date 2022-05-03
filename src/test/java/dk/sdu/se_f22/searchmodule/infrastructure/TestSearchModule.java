@@ -3,7 +3,7 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
-import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.jupiter.api.Test;

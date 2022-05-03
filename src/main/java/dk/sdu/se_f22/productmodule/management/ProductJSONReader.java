@@ -1,7 +1,5 @@
 package dk.sdu.se_f22.productmodule.management;
 
-import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

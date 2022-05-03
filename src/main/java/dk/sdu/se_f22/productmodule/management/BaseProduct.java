@@ -1,6 +1,4 @@
-package dk.sdu.se_f22.sharedlibrary.models;
-
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+package dk.sdu.se_f22.productmodule.management;
 
 import org.jetbrains.annotations.Nullable;
 

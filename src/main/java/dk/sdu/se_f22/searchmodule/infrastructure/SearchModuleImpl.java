@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sharedlibrary.models.*;

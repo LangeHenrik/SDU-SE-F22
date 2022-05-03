@@ -85,12 +85,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName) throws IllegalImplementationException, SQLException, InvalidFilterTypeException {
+    public RangeFilter update(RangeFilter filter, String newName) throws IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException {
         return update(filter, newName, filter.getDescription());
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws IllegalImplementationException, SQLException, InvalidFilterTypeException {
+    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException {
         RangeFilter out = null;
         if (filter instanceof DoubleFilter doubleFilter){
             out = new DoubleFilter(
@@ -126,6 +126,9 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         // throw an exception if the filter is illegally implemented
         validateFilterImplementation(filter);
 
+        // Validate new values
+        validateFilterUpdate(out);
+
         // perform the update
         RangeFilter result = database.update(out);
 
@@ -159,7 +162,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException {
+    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof DoubleFilter)){
@@ -175,6 +178,9 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
                 dbMaxToSave
         );
 
+        // Validate new values
+        validateFilterUpdate(modified);
+
         RangeFilter updated = database.update(modified);
 
         try {
@@ -188,7 +194,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException {
+    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof LongFilter)){
@@ -204,6 +210,9 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
                 dbMaxToSave
         );
 
+        // Validate new values
+        validateFilterUpdate(modified);
+
         RangeFilter updated = database.update(modified);
 
         try {
@@ -217,7 +226,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException {
+    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof TimeFilter)){
@@ -232,6 +241,9 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
                 dbMinToSave,
                 dbMaxToSave
         );
+
+        // Validate new values
+        validateFilterUpdate(modified);
 
         RangeFilter updated = database.update(modified);
 
@@ -254,6 +266,24 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         if(!(filter instanceof RangeFilterClass)){
             throw new IllegalImplementationException("You are not allowed to implement RangeFilter interface\n" +
                     "Get the filters by calling read");
+        }
+    }
+
+    private void validateFilterUpdate(RangeFilter filter) throws InvalidFilterException, InvalidFilterTypeException {
+        Validator.NoSpecialCharacters(filter.getName());
+        Validator.NoSpecialCharacters(filter.getDescription());
+        if (filter instanceof DoubleFilter) {
+            Validator.NoNegativeValue(filter.getDbMinDouble());
+            Validator.NoNegativeValue(filter.getDbMaxDouble());
+            Validator.MaxLessThanMin(filter.getDbMinDouble(),filter.getDbMaxDouble());
+        }
+        if (filter instanceof LongFilter) {
+            Validator.NoNegativeValue(filter.getDbMinLong());
+            Validator.NoNegativeValue(filter.getDbMaxLong());
+            Validator.MaxLessThanMin(filter.getDbMinLong(),filter.getDbMaxLong());
+        }
+        if (filter instanceof TimeFilter) {
+            Validator.MaxLessThanMin(filter.getDbMinInstant(),filter.getDbMaxInstant());
         }
     }
 

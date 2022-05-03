@@ -276,7 +276,7 @@ public class RangeFilterCRUDTest {
     }
 
 
-    @Disabled("Delete not implemented")
+    @Disabled("Until database.delete has been implemented")
     @Nested
     @DisplayName("CRUD Deleter")
     class CRUDDeleterTest {
@@ -424,7 +424,7 @@ public class RangeFilterCRUDTest {
         @DisplayName("Delete long filter twice")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
         void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) {
-            //expected fail until database.create has been implemented
+            //expected fail until database.delete has been implemented
 
             RangeFilter rangeFilterFromDataBase = null;
             try {
@@ -1232,6 +1232,7 @@ public class RangeFilterCRUDTest {
             }
 
             @Nested
+            @Disabled("Will be implemented in sprint 6")
             @DisplayName("Updating invalid information should throw an exception")
             class updatingInvalidInformationShouldThrowAnException {
                 static List<RangeFilter> provideRangeFilterForTest() {

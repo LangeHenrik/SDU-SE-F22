@@ -453,11 +453,6 @@ class DatabaseTest {
         }
     }
 
-    @Disabled("not yet written")
-    @Test
-    void delete() {
-
-    }
 
     @Nested
     class Delete {

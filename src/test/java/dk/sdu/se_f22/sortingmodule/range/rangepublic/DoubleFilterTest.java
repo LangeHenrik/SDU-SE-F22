@@ -48,25 +48,17 @@ class DoubleFilterTest {
 
 
 
-            List<String> expectedResultStrings = new ArrayList<>();
             // HERE:
-            // The line below causes an out-of-bounds error,
-            // because we expect the array to contain all the possible attributes.
-            // However, at the moment the test is still a remnant of the mockResults which only contained doubles.
-
-            // Besides that, the expected results should definitely be read from a csv file,
+            // Expected results could be read from a csv file,
             // instead of being put in like this.
 
             // If it is to avoid accidental bricking of the test, then the other settings (max, and min)
             // could also be saved in a (separate) csv file
-            expectedResultStrings.add("1000.0,100.0,2");
-//        expectedResultStrings.add("2000.0,200.0,3");
-//        expectedResultStrings.add("3000.0,10.0,4");
-            expectedResultStrings.add("100.0,100.0,5");
-            expectedResultStrings.add("200.0,200.0,6");
-            expectedResultStrings.add("300.0,300.0,7");
 
-            Collection<ProductHit> expectedResults = Helpers.createMockResultsFromStringList(expectedResultStrings);
+            List<ProductHit> copy = List.copyOf(mockResults);
+            ArrayList<ProductHit> expectedResults = new ArrayList<>(copy);
+            expectedResults.remove(1);
+            expectedResults.remove(2);
 
             //crude check that the expectedResults are still the same as when the test was written
             assertEquals(4, expectedResults.size());

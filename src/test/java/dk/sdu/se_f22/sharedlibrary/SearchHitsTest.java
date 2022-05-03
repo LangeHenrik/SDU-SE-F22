@@ -13,8 +13,10 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 class SearchHitsTest {
     private SearchHits sh;
@@ -100,16 +102,43 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Product> productsHits = hits.getProducts();
 
-            Product product1 = new Product();
-            product1.set(ProductAttribute.ID, "1");
+            Product product1 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 1");
             productsHits.add(product1);
 
-            Product product2 = new Product();
-            product2.set(ProductAttribute.ID, "2");
+            Product product2 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 2");
             productsHits.add(product2);
 
-            Product product3 = new Product();
-            product3.set(ProductAttribute.ID, "3");
+            Product product3 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 3");
             productsHits.add(product3);
 
             assertNotEquals(productsHits, new SearchHits().getProducts());
@@ -134,9 +163,9 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Content> contentsHits = hits.getContents();
 
-            contentsHits.add(new Content(1));
-            contentsHits.add(new Content(2));
-            contentsHits.add(new Content(3));
+            contentsHits.add(new Content());
+            contentsHits.add(new Content());
+            contentsHits.add(new Content());
 
             assertNotEquals(contentsHits, new SearchHits().getContents());
         }
@@ -151,16 +180,43 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Product> productsHits = new ArrayList<>();
 
-            Product product1 = new Product();
-            product1.set(ProductAttribute.ID, "1");
+            Product product1 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 1");
             productsHits.add(product1);
 
-            Product product2 = new Product();
-            product2.set(ProductAttribute.ID, "2");
+            Product product2 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 2");
             productsHits.add(product2);
 
-            Product product3 = new Product();
-            product3.set(ProductAttribute.ID, "3");
+            Product product3 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 3");
             productsHits.add(product3);
 
             hits.setProducts(productsHits);
@@ -189,9 +245,9 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Content> contentsHits = new ArrayList<>();
 
-            contentsHits.add(new Content(1));
-            contentsHits.add(new Content(2));
-            contentsHits.add(new Content(3));
+            contentsHits.add(new Content());
+            contentsHits.add(new Content());
+            contentsHits.add(new Content());
 
             hits.setContents(contentsHits);
 
@@ -208,18 +264,45 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Product> productsHits = new ArrayList<>();
 
-            Product product1 = new Product();
-            product1.set(ProductAttribute.ID, "1");
+            Product product1 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 1");
             productsHits.add(product1);
             hits.addProduct(product1);
 
-            Product product2 = new Product();
-            product2.set(ProductAttribute.ID, "2");
+            Product product2 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 2");
             productsHits.add(product2);
             hits.addProduct(product2);
 
-            Product product3 = new Product();
-            product3.set(ProductAttribute.ID, "3");
+            Product product3 = new Product(
+                    new UUID(1, 1),
+                    2.2,
+                    new ArrayList<String>(),
+                    1,
+                    1.2,
+                    Instant.now(),
+                    Instant.now(),
+                    "cat",
+                    "name",
+                    "description 3");
             productsHits.add(product3);
             hits.addProduct(product3);
 
@@ -251,20 +334,19 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Content> contentsHits = new ArrayList<>();
 
-            Content content1 = new Content(1);
+            Content content1 = new Content();
             contentsHits.add(content1);
             hits.addContent(content1);
-            Content content2 = new Content(2);
+            Content content2 = new Content();
             contentsHits.add(content2);
             hits.addContent(content2);
-            Content content3 = new Content(3);
+            Content content3 = new Content();
             contentsHits.add(content3);
             hits.addContent(content3);
 
             assertNotEquals(contentsHits, new SearchHits().getContents());
         }
     }
-
 
     @DisplayName("Null set prohibiting")
     @Nested
@@ -277,7 +359,7 @@ class SearchHitsTest {
 
         @Test
         void NullBrandsSet() {
-            SearchHits hits =new SearchHits();
+            SearchHits hits = new SearchHits();
             assertThrows(NullPointerException.class, () -> hits.setBrands(null));
         }
 

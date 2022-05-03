@@ -5,6 +5,7 @@ import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.jupiter.api.Test;
 
@@ -89,7 +90,7 @@ public class TestSearchModule {
 
         // Same here, although we don't have any attribute fields to test against, so we
         // just check that an object is in the list
-        List<BaseProduct> baseProducts = searchResult.getProducts().stream().toList();
+        List<Product> baseProducts = searchResult.getProducts().stream().toList();
         assertTrue(baseProducts.stream().findFirst().isPresent());
     }
 }

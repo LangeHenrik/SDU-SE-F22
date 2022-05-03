@@ -1,17 +1,17 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+package dk.sdu.se_f22.searchmodule.infrastructure.tokenization;
 
+import dk.sdu.se_f22.searchmodule.infrastructure.util.RegexUtils;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Tokenizer {
-    private DelimiterSettings delimiterSettings = new DelimiterSettings();
-    private List<String> stringList = delimiterSettings.getDelimiters();
+    private final DelimiterSettings delimiterSettings = new DelimiterSettings();
+    private final List<String> stringList = delimiterSettings.getDelimiters();
 
     public List<String> tokenize(String s) {
-        if (stringList.size() == 0){
+        if (listIsEmpty()){
             LoggingProvider.getLogger(Tokenizer.class).error("There is no delimiters set!");
             return List.of(s);
         } else {
@@ -32,7 +32,7 @@ public class Tokenizer {
     }
 
     private String[] splitStringUsingDelimiters(String s) {
-        return s.split(SearchModuleUtils.convertDelimitersToRegex(stringList));
+        return s.split(RegexUtils.convertStringListToRegexString(stringList));
     }
 
     private boolean listIsEmpty() {

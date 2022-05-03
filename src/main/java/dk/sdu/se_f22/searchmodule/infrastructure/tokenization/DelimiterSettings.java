@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+package dk.sdu.se_f22.searchmodule.infrastructure.tokenization;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
@@ -113,7 +113,7 @@ public class DelimiterSettings {
     }
 
     private void customPrinter(String s){
-        System.out.println("[" + new Timestamp(System.currentTimeMillis()).toString() + "] [SEM-Infra, DelimiterSettings] " + s);
+        System.out.println("[" + new Timestamp(System.currentTimeMillis()) + "] [SEM-Infra, DelimiterSettings] " + s);
     }
 
 }

@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.searchmodule.infrastructure.util.RegexUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SearchModuleUtilsTest {
+class RegexUtilsTest {
 
     List<String> stringList;
 
@@ -22,6 +23,6 @@ class SearchModuleUtilsTest {
 
     @Test
     void convertDelimitersToRegex() {
-        assertEquals("\\ |\\||\\p{Punct}", SearchModuleUtils.convertDelimitersToRegex(stringList));
+        assertEquals("\\ |\\||\\p{Punct}", RegexUtils.convertStringListToRegexString(stringList));
     }
 }

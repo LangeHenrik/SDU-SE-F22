@@ -1,5 +1,7 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+package dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 
+import dk.sdu.se_f22.searchmodule.infrastructure.tokenization.DelimiterSettings;
+import dk.sdu.se_f22.searchmodule.infrastructure.IllegalChars;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

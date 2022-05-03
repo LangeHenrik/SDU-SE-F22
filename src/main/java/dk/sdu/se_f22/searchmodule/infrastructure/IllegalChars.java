@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
-import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
-import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.searchmodule.infrastructure.util.RegexUtils;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.sql.Connection;
@@ -14,7 +13,7 @@ import java.util.List;
 public class IllegalChars {
 
     public String removeForbiddenChars(String toSort) {
-        toSort = toSort.replaceAll(SearchModuleUtils.convertDelimitersToRegex(illegalCharsFromDB()), "");
+        toSort = toSort.replaceAll(RegexUtils.convertStringListToRegexString(illegalCharsFromDB()), "");
         return toSort;
     }
 
@@ -33,7 +32,7 @@ public class IllegalChars {
         try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement queryStatement = connection.prepareStatement("SELECT * FROM illegalChars");
             ResultSet queryResultSet = queryStatement.executeQuery();
-            List<String> strings = new ArrayList<String>();
+            List<String> strings = new ArrayList<>();
             while (queryResultSet.next()) {
                 String em = queryResultSet.getString("characters");
                 strings.add(em);

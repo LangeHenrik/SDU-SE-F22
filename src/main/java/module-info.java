@@ -27,4 +27,10 @@ module dk.sdu.se_f22 {
 
     opens dk.sdu.se_f22.searchmodule.infrastructure.GUI to javafx.fxml;
     exports dk.sdu.se_f22.searchmodule.infrastructure.GUI;
+    exports dk.sdu.se_f22.searchmodule.infrastructure.logger;
+    opens dk.sdu.se_f22.searchmodule.infrastructure.logger to javafx.fxml;
+    exports dk.sdu.se_f22.searchmodule.infrastructure.util;
+    opens dk.sdu.se_f22.searchmodule.infrastructure.util to javafx.fxml;
+    exports dk.sdu.se_f22.searchmodule.infrastructure.tokenization;
+    opens dk.sdu.se_f22.searchmodule.infrastructure.tokenization to javafx.fxml;
 }

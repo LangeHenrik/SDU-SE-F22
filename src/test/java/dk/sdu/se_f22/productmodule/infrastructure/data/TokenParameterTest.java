@@ -19,7 +19,7 @@ class TokenParameterTest {
 
     @BeforeEach
     void resetTokenParameter() {
-        tokenParameter = new TokenParameter(" ", "('./?!')");
+        tokenParameter = new TokenParameter(TokenParameterStore.DELIMITER_DEFAULT, TokenParameterStore.IGNORED_CHARS_DEFAULT);
     }
 
     @Test

@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.postgresql.util.PSQLException;
+import org.w3c.dom.ranges.Range;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -453,9 +454,19 @@ class DatabaseTest {
         }
     }
 
+    @Disabled("not yet written")
+    @Test
+    void delete() {
+
+    }
 
     @Nested
     class Delete {
+        @BeforeAll
+        public static void setup(){
+            resetDB();
+        }
+
         @Nested
         class DeleteValidFilters {
 
@@ -486,15 +497,6 @@ class DatabaseTest {
 
 
                 }
-                @BeforeAll
-                public static void refresh () {
-                try {
-                    new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-                } catch (SQLException e) {
-                    System.out.println("error when resetting database state, pooled connection threw sql exception:");
-                    e.printStackTrace();
-                }
-            }
             }
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName(" test delete Existing Timefilter")//  læs data fra databasen, slet, læs og c
@@ -563,10 +565,12 @@ class DatabaseTest {
                 min, Instant max) {
             RangeFilter TimeFilterFromDB;
 
+            RangeFilter TimeFilterFromDB = database.create(new TimeFilter(name, description, productAttribute, min, max));
 
             TimeFilterFromDB = new TimeFilter(id, name, description, productAttribute, min, max);
             //skal ikke kaste exception da filteret findes
             assertDoesNotThrow( () -> database.delete(TimeFilterFromDB.getId()));
+
             // skal kaste da filteret ikke findes længere
             Assertions.assertThrows(IdNotFoundException.class,
                     () -> database.delete(TimeFilterFromDB.getId()));
@@ -579,10 +583,12 @@ class DatabaseTest {
                 min, Long max) {
             RangeFilter LongFilterFromDB;
 
+            RangeFilter LongFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
 
             LongFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
             //skal ikke kaste exception da filteret findes
             assertDoesNotThrow( () -> database.delete(LongFilterFromDB.getId()));
+
             // skal kaste da filteret ikke findes længere
             Assertions.assertThrows(IdNotFoundException.class,
                     () -> database.delete(LongFilterFromDB.getId()));

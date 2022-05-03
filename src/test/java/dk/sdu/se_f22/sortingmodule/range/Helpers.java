@@ -44,6 +44,7 @@ public class Helpers {
             products.remove(0);
         }
 
+
         return createMockResultsFromStringList(products);
     }
 

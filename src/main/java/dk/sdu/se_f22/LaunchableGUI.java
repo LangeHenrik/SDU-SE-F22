@@ -24,7 +24,7 @@ public class LaunchableGUI {
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent parent = fxmlLoader.load();
 
-        Scene scene = new Scene(parent, 250, 150);
+        Scene scene = new Scene(parent, 600, 400);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setMinHeight(200);

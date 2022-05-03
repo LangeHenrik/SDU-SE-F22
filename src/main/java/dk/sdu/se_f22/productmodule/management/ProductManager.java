@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.productmodule.management;
 
-import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ public class ProductManager implements IProductManager, Runnable{
     
     private final ProductJSONReader jsonReader;
     
-    public ArrayList<Product> productArray;
-    private ArrayList<Product> updatedProductArray;
+    public ArrayList<BaseProduct> baseProductArray;
+    private ArrayList<BaseProduct> updatedBaseProductArray;
     private boolean backgroundThreadIsRunning = false;
     private final Thread backgroundThread;
     private boolean runBackgroundUpdates = true;
@@ -24,8 +24,8 @@ public class ProductManager implements IProductManager, Runnable{
         //If you want to alter an attribute on a product, you MUST do this through the CRUD functions in this class.
         
         jsonReader = new ProductJSONReader(sourcePath);
-        productArray = getFromSource();
-        updatedProductArray = null;
+        baseProductArray = getFromSource();
+        updatedBaseProductArray = null;
         
         backgroundThread = new Thread(this);
         backgroundThread.setPriority(Thread.MIN_PRIORITY);
@@ -40,30 +40,30 @@ public class ProductManager implements IProductManager, Runnable{
     }
     
     @Override
-    public boolean create(Product p) {
+    public boolean create(BaseProduct p) {
         
         //Adds new product to the productArray.
         //Returns whether this was possible or not.
         
         checkForUpdates();
-        boolean success = productArray.add(p);
+        boolean success = baseProductArray.add(p);
         updateSource();
         
         return success;
     }
     
     @Override
-    public boolean createAll(ArrayList<Product> pList){
+    public boolean createAll(ArrayList<BaseProduct> pList){
         checkForUpdates();
         
-        boolean success = productArray.addAll(pList);
+        boolean success = baseProductArray.addAll(pList);
         
         updateSource();
         return success;
     }
     
     @Override
-    public Product readProduct(String productId) {
+    public BaseProduct readProduct(String productId) {
         
         //This function returns a single product based on the UUID
         //Since the read() function doesn't alter any attribute values on the product
@@ -71,9 +71,9 @@ public class ProductManager implements IProductManager, Runnable{
         
         checkForUpdates();
         
-        Product toReturn = null;
+        BaseProduct toReturn = null;
         
-        for(Product p : productArray){
+        for(BaseProduct p : baseProductArray){
             if(p.get(ProductAttribute.UUID).equalsIgnoreCase(productId)){
                 toReturn = p;
                 break;
@@ -84,17 +84,17 @@ public class ProductManager implements IProductManager, Runnable{
     }
     
     @Override
-    public Product[] readProducts(String[] productIds) {
+    public BaseProduct[] readProducts(String[] productIds) {
         
         //This function returns an array of products based on an array of UUID's
         //The size of the return array should equal the size of the input ID array
         
         checkForUpdates();
         
-        Product[] returnArray = new Product[productIds.length];
+        BaseProduct[] returnArray = new BaseProduct[productIds.length];
         
         for(int i = 0; i < productIds.length; i++){
-            for(Product p : productArray){
+            for(BaseProduct p : baseProductArray){
                 
                 if(p.get(ProductAttribute.ID).equalsIgnoreCase(productIds[i])){
                     returnArray[i] = p;
@@ -115,7 +115,7 @@ public class ProductManager implements IProductManager, Runnable{
         
         boolean succes = false;
         
-        for(Product pT : productArray){
+        for(BaseProduct pT : baseProductArray){
             if(Objects.equals(pT.get(ProductAttribute.UUID), productId)){
                 succes = pT.set(a,s);
                 break;
@@ -128,7 +128,7 @@ public class ProductManager implements IProductManager, Runnable{
     }
     
     @Override
-    public boolean update(String productId, Product p) {
+    public boolean update(String productId, BaseProduct p) {
         
         //This function updates the attributes of a product based on its UUID
         //By replacing it entirely with a new one. Make sure this new product has all it's attributes set correctly.
@@ -138,7 +138,7 @@ public class ProductManager implements IProductManager, Runnable{
         
         boolean success = false;
         
-        for(Product pT : productArray){
+        for(BaseProduct pT : baseProductArray){
             if(pT.get(ProductAttribute.UUID).equalsIgnoreCase(productId)){
                 pT = p;
                 success = true;
@@ -160,9 +160,9 @@ public class ProductManager implements IProductManager, Runnable{
         boolean toReturn = false;
         
         
-        for(Product p : productArray){
+        for(BaseProduct p : baseProductArray){
             if (p.get(ProductAttribute.UUID).equalsIgnoreCase(productId)){
-                toReturn = productArray.remove(p);
+                toReturn = baseProductArray.remove(p);
                 break;
             }
         }
@@ -181,10 +181,10 @@ public class ProductManager implements IProductManager, Runnable{
         int counter = 0;
         
         for (String productId : productIds) {
-            for (Product p : productArray) {
+            for (BaseProduct p : baseProductArray) {
                 
                 if (p.get(ProductAttribute.UUID).equalsIgnoreCase(productId)) {
-                    productArray.remove(p);
+                    baseProductArray.remove(p);
                     counter++;
                     break;
                 }
@@ -219,7 +219,7 @@ public class ProductManager implements IProductManager, Runnable{
         
         //Right here is where the XXXX.updateIndex() call to the module from Group 2.2 goes (see below):
         
-        //ProductIndexInfrastructure.getInstance().getProductIndex().indexProducts(updatedProductArray);
+        ProductIndexInfrastructure.getInstance().getProductIndex().indexProducts(updatedBaseProductArray);
         
         return backgroundThread.isAlive();
     }
@@ -244,7 +244,7 @@ public class ProductManager implements IProductManager, Runnable{
         //This is done as such, to prevent the backgroundThread and external calls to reparse() to cause issues.
         
         try {
-            updatedProductArray = jsonReader.read();
+            updatedBaseProductArray = jsonReader.read();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -257,11 +257,11 @@ public class ProductManager implements IProductManager, Runnable{
         //Alternatively, use clone(). It might be more performant.
         
         boolean output = false;
-        if(updatedProductArray != null){
+        if(updatedBaseProductArray != null){
             
-            productArray.clear();
-            productArray.addAll(updatedProductArray);
-            updatedProductArray = null;
+            baseProductArray.clear();
+            baseProductArray.addAll(updatedBaseProductArray);
+            updatedBaseProductArray = null;
             output = true;
         }
         return output;
@@ -272,10 +272,10 @@ public class ProductManager implements IProductManager, Runnable{
         //This call rewrites the source file with the current productArray
         //This !.isEmpty and != null redundancy might not be necessary, but it's here just in case.
         
-        if(!productArray.isEmpty() || productArray != null) {
+        if(!baseProductArray.isEmpty() || baseProductArray != null) {
             
             try {
-                jsonReader.write(productArray);
+                jsonReader.write(baseProductArray);
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -306,35 +306,18 @@ public class ProductManager implements IProductManager, Runnable{
         }
         return toReturn;
     }
-
-    /*public void print(){
-        //Prints each products name and price.
-
-        for(Product p : productArray){
-            System.out.println(p);
-        }
-    }*/
     
     @Override
-    public ArrayList<Product> readAllProducts() {
+    public ArrayList<BaseProduct> readAllProducts() {
         
         //This function returns the entire product array. Using this function may result in errors,
         //rather use readAll()
         
         checkForUpdates();
-        return productArray;
+        return baseProductArray;
     }
-
-    /*public void printAllProducts(){
-
-        //Prints a detailed description of each product.
-
-        for(Product p : productArray){
-            p.print();
-        }
-    }*/
     
-    private ArrayList<Product> getFromSource(){
+    private ArrayList<BaseProduct> getFromSource(){
         try{
             return jsonReader.read();
         }catch (IOException e){

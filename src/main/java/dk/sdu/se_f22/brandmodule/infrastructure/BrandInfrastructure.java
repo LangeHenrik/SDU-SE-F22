@@ -1,34 +1,33 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
-import com.google.gson.GsonBuilder;
-import dk.sdu.se_f22.sharedlibrary.models.Brand;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Collections;
-import java.util.List;
-import com.google.gson.Gson;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import com.google.gson.*;
+import dk.sdu.se_f22.brandmodule.index.*;
+import dk.sdu.se_f22.brandmodule.stemming.*;
+import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
+import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {
 
-    private TokenizationParameters tokenizationParameters;
-    private Gson gson;
-    private File file;
+    protected TokenizationParameters tokenizationParameters;
+    private final Gson gson;
+    private final File file;
+    private final IndexInterface index;
+    private final IStemmer stemming;
 
     public BrandInfrastructure() {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(TokenizationParameters.class, new TokenizationParametersAdapter());
         builder.setPrettyPrinting();
         gson = builder.create();
         file = new File("src/main/resources/dk/sdu/se_f22/brandmodule/infrastructure/TokenizationParameters.json");
         loadTokenizationParameters();
+        index = new BrandIndex();
+        stemming = new Stemmer();
     }
 
-    public void loadTokenizationParameters(){
+    private void loadTokenizationParameters(){
         String jsonString;
         try {
             jsonString = Files.readString(file.toPath());
@@ -36,11 +35,17 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
             e.printStackTrace();
             return;
         }
-        this.tokenizationParameters = gson.fromJson(jsonString,TokenizationParameters.class);
+        JsonObject object = gson.fromJson(jsonString, JsonObject.class);
+        String delimiter = object.get("delimiterRegex").getAsString();
+        String ignore = object.get("ignoreRegex").getAsString();
+        this.tokenizationParameters = new TokenizationParameters(delimiter, ignore);
     }
 
-    public void saveTokenizationParameters() {
-        String jsonString = gson.toJson(tokenizationParameters);
+    private void saveTokenizationParameters() {
+        JsonObject object = new JsonObject();
+        object.addProperty("delimiterRegex", tokenizationParameters.delimiterRegex);
+        object.addProperty("ignoreRegex", tokenizationParameters.ignoreRegex);
+        String jsonString = gson.toJson(object);
         try {
             Files.write(file.toPath(), jsonString.getBytes());
         } catch (IOException e) {
@@ -49,22 +54,48 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
     }
 
     @Override
-    public List<Brand> getBrandsFromSearchTokens(List<String> tokens) {
-        return null;
+    public List<Brand> queryIndex(List<String> tokens) {
+        return index.searchBrandIndex(tokens);
     }
 
     @Override
     public void indexBrands(List<Brand> brands) {
+        for (Brand brand : brands) {
+            List<String> brandTokens = tokenizeBrand(brand).stream().toList();
 
+            index.indexBrandInformation(brand, filterTokens(brandTokens));
+        }
     }
+
+    private List<String> filterTokens(List<String> tokens) {
+        tokens = stemming.stem(tokens);
+        tokens = IrregularWords.INSTANCE.searchForIrregularWords(tokens);
+        // tokens = stopwords.
+        return tokens;
+    }
+
+    protected Set<String> tokenizeBrand(Brand b){
+        Set<String> tokens = new HashSet<>();
+        tokens.addAll(tokenizeString(b.getName()));
+        tokens.addAll(tokenizeString(b.getDescription()));
+        tokens.addAll(tokenizeString(b.getFounded()));
+        tokens.addAll(tokenizeString(b.getHeadquarters()));
+        for(String product : b.getProducts()){
+            tokens.addAll(tokenizeString(product));
+        }
+        return tokens;
+    }
+
+    protected List<String> tokenizeString(String s){
+        s = s.replaceAll(tokenizationParameters.ignoreRegex,"");
+        List<String> tokens = List.of(s.split(tokenizationParameters.delimiterRegex));
+        return tokens.stream().filter(x -> !x.isEmpty()).toList();
+    }
+
 
     @Override
     public void setTokenizationParameters(String delimiterRegex, String ignoreRegex) {
         this.tokenizationParameters = new TokenizationParameters(delimiterRegex, ignoreRegex);
         saveTokenizationParameters();
-    }
-
-    public TokenizationParameters getTokenizationParameters() {
-        return this.tokenizationParameters;
     }
 }

@@ -1,10 +1,10 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,13 +14,13 @@ class FilteredTokensTest {
     FilteredTokens f;
     FilteredTokens ftObjekt;
     ArrayList<Token> tokenTestToken;
-    ArrayList<String> tokenTestString;
+    static ArrayList<String> tokenTestString;
     ArrayList<Token> t;
     ArrayList<String> s;
     Token token;
     ArrayList<Token> tokenArrayList;
     Token test1;
-    ArrayList<Token> tokenArrayListTest = new ArrayList<>();
+    ArrayList<Token> tokenArrayListTest;
 
     @BeforeEach
     void setUp() {
@@ -51,12 +51,7 @@ class FilteredTokensTest {
 
     }
 
-    @Test
-    void tokenToString(ArrayList<Token> zack) {
-        String actualContent = ft.tokenToString(tokenTestToken).get(1);
-        String expectedContent = "house";
-        assertEquals(expectedContent, actualContent);
-    }
+
 
     @Test
     void stringToToken() {
@@ -67,11 +62,19 @@ class FilteredTokensTest {
 
         tokenArrayListTest = new ArrayList<>();
         tokenArrayListTest.add(test1);
-        tokenToString(tokenArrayListTest);
+        FilteredTokens.tokenToString(tokenArrayListTest);
 
         assertEquals(testString, tokenArrayListTest.get(0).getDocumentText());
         assertEquals(testInt, tokenArrayListTest.get(0).getOriginID());
 
+    }
+
+    @Test
+    void tokenToString(){
+        String test = "house";
+        String test2 = FilteredTokens.tokenToString(tokenTestToken).get(1);
+
+        assertTrue(test == test2);
     }
 
     @Test

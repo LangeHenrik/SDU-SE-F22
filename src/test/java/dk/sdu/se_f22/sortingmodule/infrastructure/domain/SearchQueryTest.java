@@ -39,24 +39,24 @@ class SearchQueryTest {
 
     @Test
     void addRangeTest() {
-        HashMap<Integer, String[]> h = new HashMap<>();
-        h.put(1, new String[]{"3", "8"});
-        h.put(2, new String[]{"19.4", "52.7"});
+        HashMap<Integer, long[]> h = new HashMap<>();
+        h.put(1, new long[]{3, 8});
+        h.put(2, new long[]{7, 52});
 
 
         SearchQuery s = new SearchQuery();
-        s.addRange(1, "3", "8");
-        s.addRange(2, "19.4", "52.7");
+        s.addRangeLong(1, 3, 8);
+        s.addRangeDouble(2, 19.4, 52.7);
 
-        Iterator<Map.Entry<Integer, String[]>> iteratorH = h.entrySet().iterator();
-        Iterator<Map.Entry<Integer, String[]>> iteratorS = s.getRange().entrySet().iterator();
+        Iterator<Map.Entry<Integer, long[]>> iteratorH = h.entrySet().iterator();
+        Iterator<Map.Entry<Integer, long[]>> iteratorS = s.getRangeLong().entrySet().iterator();
 
         while (iteratorH.hasNext()) {
-            Map.Entry<Integer, String[]> temp_H = iteratorH.next();
-            Map.Entry<Integer, String[]> temp_S = iteratorS.next();
+            Map.Entry<Integer, long[]> temp_H = iteratorH.next();
+            Map.Entry<Integer, long[]> temp_S = iteratorS.next();
 
             if (!temp_H.getKey().equals(temp_S.getKey()) &&
-                    !Arrays.toString(temp_H.getValue()).equals(Arrays.toString(temp_S.getValue()))) {
+                    !Arrays.equals((temp_H.getValue()), (temp_S.getValue()))) {
                 fail("addRangeTest failure.");
             }
         }
@@ -65,13 +65,13 @@ class SearchQueryTest {
     @Test
     void clearRangeTest() {
         SearchQuery s = new SearchQuery();
-        HashMap<Integer, String[]> h = new HashMap<>();
+        HashMap<Integer, long[]> h = new HashMap<>();
 
-        s.addRange(1, "3", "8");
-        s.addRange(2, "19.4", "52.7");
-        s.clearRange();
+        s.addRangeDouble(1, 3.9, 8.1);
+        s.addRangeDouble(2, 19.4, 52.7);
+        s.clearRangeDouble();
 
-        assertEquals(h, s.getRange());
+        assertEquals(h, s.getRangeDouble());
     }
 
     @Test

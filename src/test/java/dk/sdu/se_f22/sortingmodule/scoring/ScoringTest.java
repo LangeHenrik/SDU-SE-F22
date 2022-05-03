@@ -14,16 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScoringTest {
     Scoring scoring = new Scoring();
-    ArrayList<TestProduct> products;
+    ArrayList<Product> products;
 
     {
         try {
             products = new ArrayList<>(Arrays.asList(
-                    new TestProduct("Pizza",2000,5,10,
+                    new Product("Pizza",2000,5,10,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new TestProduct("Apple",1000,3,20,
+                    new Product("Apple",1000,3,20,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new TestProduct("Cheese",3000,4,30,
+                    new Product("Cheese",3000,4,30,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")))
             );
         } catch (ParseException e) {
@@ -77,35 +77,35 @@ class ScoringTest {
 
     @Test
     void scoreSort() {
-        ArrayList<TestProduct> controlProducts = new ArrayList<>();
+        ArrayList<Product> controlProducts = new ArrayList<>();
 
         try {
             controlProducts = new ArrayList<>(Arrays.asList(
-                    new TestProduct("Apple",1000,3,20,
+                    new Product("Apple",1000,3,20,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new TestProduct("Pizza",2000,5,10,
+                    new Product("Pizza",2000,5,10,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new TestProduct("Cheese",3000,4,30,
+                    new Product("Cheese",3000,4,30,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")))
             );
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        assertEquals(Arrays.toString(scoring.scoreSort(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(Arrays.toString(scoring.scoreSortAll(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
     void scoreSortPrice() {
-        ArrayList<TestProduct> controlProducts = new ArrayList<>();
+        ArrayList<Product> controlProducts = new ArrayList<>();
 
         try {
             controlProducts = new ArrayList<>(Arrays.asList(
-                    new TestProduct("Apple",1000,3,20,
+                    new Product("Apple",1000,3,20,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new TestProduct("Pizza",2000,5,10,
+                    new Product("Pizza",2000,5,10,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new TestProduct("Cheese",3000,4,30,
+                    new Product("Cheese",3000,4,30,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017"))
                     )
             );
@@ -118,15 +118,15 @@ class ScoringTest {
 
     @Test
     void scoreSortReview() {
-        ArrayList<TestProduct> controlProducts = new ArrayList<>();
+        ArrayList<Product> controlProducts = new ArrayList<>();
 
         try {
             controlProducts = new ArrayList<>(Arrays.asList(
-                    new TestProduct("Pizza",2000,5,10,
+                    new Product("Pizza",2000,5,10,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new TestProduct("Cheese",3000,4,30,
+                    new Product("Cheese",3000,4,30,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")),
-                    new TestProduct("Apple",1000,3,20,
+                    new Product("Apple",1000,3,20,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")))
             );
         } catch (ParseException e) {
@@ -138,15 +138,15 @@ class ScoringTest {
 
     @Test
     void scoreSortStock() {
-        ArrayList<TestProduct> controlProducts = new ArrayList<>();
+        ArrayList<Product> controlProducts = new ArrayList<>();
 
         try {
             controlProducts = new ArrayList<>(Arrays.asList(
-                    new TestProduct("Cheese",3000,4,30,
+                    new Product("Cheese",3000,4,30,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")),
-                    new TestProduct("Apple",1000,3,20,
+                    new Product("Apple",1000,3,20,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new TestProduct("Pizza",2000,5,10,
+                    new Product("Pizza",2000,5,10,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012"))
                     )
             );
@@ -159,15 +159,15 @@ class ScoringTest {
 
     @Test
     void scoreSortDate() {
-        ArrayList<TestProduct> controlProducts = new ArrayList<>();
+        ArrayList<Product> controlProducts = new ArrayList<>();
 
         try {
             controlProducts = new ArrayList<>(Arrays.asList(
-                    new TestProduct("Apple",1000,3,20,
+                    new Product("Apple",1000,3,20,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new TestProduct("Pizza",2000,5,10,
+                    new Product("Pizza",2000,5,10,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new TestProduct("Cheese",3000,4,30,
+                    new Product("Cheese",3000,4,30,
                             new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")))
             );
         } catch (ParseException e) {

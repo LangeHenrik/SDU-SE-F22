@@ -2,14 +2,14 @@ package dk.sdu.se_f22.sortingmodule.scoring;
 
 import java.util.Date;
 
-public class TestProduct {
+public class Product {
     private String name;
     private int price;
     private double review;
     private int stock;
     private Date releaseDate;
 
-    public TestProduct(String name, int price, double review, int stock, Date releaseDate) {
+    public Product(String name, int price, double review, int stock, Date releaseDate) {
         this.name = name;
         this.price = price;
         this.review = review;

@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.sql.*;
@@ -89,25 +90,50 @@ public class Scoring implements IScoring {
         }
     }
 
-    public List<ProductScore> wrapProduct (List<TestProduct> input) {
+    public List<ProductScore> wrapProduct (Collection<Product> input) {
+
         List<ProductScore> products = new ArrayList<>();
-        for (TestProduct testProduct : input) {
+
+        for (Product testProduct : input) {
             ProductScore productScore = new ProductScore(testProduct);
             products.add(productScore);
         }
+
         return products;
     }
 
-    public List<TestProduct> unWrapProduct (List<ProductScore> input) {
-        List<TestProduct> products = new ArrayList<>();
+    public List<Product> unWrapProduct (List<ProductScore> input) {
+
+        List<Product> products = new ArrayList<>();
+
         for (ProductScore productScore : input) {
             products.add(productScore.getProduct());
         }
+
         return products;
     }
 
     @Override
-    public List<TestProduct> scoreSort(List<TestProduct> input) {
+    public SearchHits scoreSort(SearchHits input, String type) {
+
+        switch (type) {
+            case "all" -> input.setProducts(scoreSortAll(input.getProducts()));
+            case "price" -> input.setProducts(scoreSortPrice(input.getProducts()));
+            case "review" -> input.setProducts(scoreSortReview(input.getProducts()));
+            case "stock" -> input.setProducts(scoreSortStock(input.getProducts()));
+            case "date" -> input.setProducts(scoreSortDate(input.getProducts()));
+            default -> {
+                System.out.println("error: invalid sort type");
+
+                return input;
+            }
+        }
+
+        return input;
+    }
+
+    @Override
+    public Collection<Product> scoreSortAll(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         price(products);
         review(products);
@@ -119,7 +145,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortPrice(List<TestProduct> input) {
+    public Collection<Product> scoreSortPrice(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         price(products);
         Collections.sort(products);
@@ -128,7 +154,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortReview(List<TestProduct> input) {
+    public Collection<Product> scoreSortReview(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         review(products);
         Collections.sort(products);
@@ -137,7 +163,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortStock(List<TestProduct> input) {
+    public Collection<Product> scoreSortStock(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         stock(products);
         Collections.sort(products);
@@ -146,7 +172,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortDate(List<TestProduct> input) {
+    public Collection<Product> scoreSortDate(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         date(products);
         Collections.sort(products);

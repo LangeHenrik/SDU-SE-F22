@@ -170,6 +170,17 @@ class DatabaseTest {
             resetDB();
         }
 
+        @Test
+        @DisplayName("Database Read all existing range filters")
+        void readAllFilters() {
+            List<RangeFilter> result = database.readAllFilters();
+            Assertions.assertAll("Read all filters from database and check if the values match",
+                    () -> Assertions.assertEquals(new DoubleFilter(1, "test name double", "test description", "price", 0, 10), result.get(0)),
+                    () -> Assertions.assertEquals(new LongFilter(2, "test name ean", "test description for long filter", "ean", 2, 100), result.get(1)),
+                    () -> Assertions.assertEquals(new TimeFilter(3, "test name time", "test description for time filter", "expirationDate", Instant.parse("2018-11-30T15:35:24Z"), Instant.parse("2022-11-30T15:35:24Z")), result.get(2))
+            );
+        }
+
         @Nested
         @DisplayName("Read valid filters from database")
         class readValidFiltersFromDatabase {
@@ -453,12 +464,7 @@ class DatabaseTest {
             }
         }
     }
-
-    @Disabled("not yet written")
-    @Test
-    void delete() {
-
-    }
+    
 
     @Nested
     class Delete {
@@ -563,16 +569,5 @@ class DatabaseTest {
             Assertions.assertThrows(IdNotFoundException.class,
                     () -> database.delete(LongFilterFromDB.getId()));
         }
-    }
-
-    @Test
-    @DisplayName("Database Read all existing range filters")
-    void readAllFilters() {
-        List<RangeFilter> result = database.readAllFilters();
-        Assertions.assertAll("Read all filters from database and check if the values match",
-                () -> Assertions.assertEquals(new DoubleFilter(1, "test name double", "test description", "price", 0, 10), result.get(0)),
-                () -> Assertions.assertEquals(new LongFilter(2, "test name ean", "test description for long filter", "ean", 2, 100), result.get(1)),
-                () -> Assertions.assertEquals(new TimeFilter(3, "test name time", "test description for time filter", "expirationDate", Instant.parse("2018-11-30T15:35:24Z"), Instant.parse("2022-11-30T15:35:24Z")), result.get(2))
-        );
     }
 }

@@ -1,4 +1,6 @@
 package dk.sdu.se_f22.brandmodule.management.persistence;
+import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
+import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructureInterface;
 import dk.sdu.se_f22.brandmodule.management.services.IJsonService;
 import dk.sdu.se_f22.brandmodule.management.services.JsonService;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
@@ -13,10 +15,13 @@ import java.util.Set;
 public class Persistence implements IPersistence {
     private Connection c = null;
     private IJsonService jsonService = null;
+    public BrandInfrastructureInterface BIM2 = null;
 
     public Persistence() {
         //Connect to database
         jsonService = new JsonService();
+        BIM2 = new BrandInfrastructure();
+
         try {
             c = DBConnection.getPooledConnection();
         }
@@ -46,7 +51,7 @@ public class Persistence implements IPersistence {
             ResultSet r = getBrandId.executeQuery();
 
             while(r.next()){
-                brandIdList.add(r.getInt(1));
+                brandIdList.add(r.getInt(0));
             }
 
             for (int i : brandIdList ){
@@ -156,7 +161,7 @@ public class Persistence implements IPersistence {
 
             // Insert products into database
             for (var product : products) {
-                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO ProductType (name) VALUES (?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name;");
+                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO producttype (name) VALUES (?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name;");
 
                 insertAllProducts.setString(1, product);
                 insertAllProducts.execute();
@@ -168,10 +173,10 @@ public class Persistence implements IPersistence {
 
                 // If id is set, update the brand in the database
                 if (brand.getId() == null) {
-                    insertAllBrands = c.prepareStatement("INSERT INTO Brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
+                    insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
                 }
                 else {
-                    insertAllBrands = c.prepareStatement("INSERT INTO Brand (name, description, founded, headquarters) VALUES (?,?,?,?) WHERE id = ? ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
+                    insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?,?,?,?) WHERE id = ? ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
                     insertAllBrands.setString(5, String.valueOf(brand.getId()));
                 }
 
@@ -218,6 +223,10 @@ public class Persistence implements IPersistence {
             rollback();
             return false;
         }
+
+        //Ensure that brands are indexed when loaded or changed
+        //Talk to BIM2 to make this work
+        //BIM2.indexBrands(getAllBrands());
 
         return true;
     }
@@ -271,7 +280,6 @@ public class Persistence implements IPersistence {
             indexInterval.setInt(1,indexingInterval);
             indexInterval.execute();
         } catch (SQLException e) {
-            System.out.println("you done goofed");
             e.printStackTrace();
         }
 
@@ -288,7 +296,6 @@ public class Persistence implements IPersistence {
             return r.getInt("brandindexinterval");
 
         } catch (SQLException e) {
-            System.out.println("you fucked up");
             e.printStackTrace();
         }
         return -1;

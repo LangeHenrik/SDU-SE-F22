@@ -162,4 +162,23 @@ public class Product {
         }
         throw new IllegalArgumentException(productAttribute + "does not exist as a double attribute: ");
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "uuid=" + uuid +
+                ", averageUserReview=" + averageUserReview +
+                ", price=" + price +
+                ", clockspeed=" + clockspeed +
+                ", weight=" + weight +
+                ", ean=" + ean +
+                ", size='" + size + '\'' +
+                ", category='" + category + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", publishedDate=" + publishedDate +
+                ", expirationDate=" + expirationDate +
+                ", inStock=" + inStock +
+                '}';
+    }
 }

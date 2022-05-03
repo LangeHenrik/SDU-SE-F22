@@ -128,6 +128,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M6</version>
+                <configuration>
+                    <excludeJUnit5Engines>
+                        <engine>junit-platform-suite</engine>
+                    </excludeJUnit5Engines>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
@@ -10,6 +11,8 @@ import java.util.List;
 
 public class Database implements DatabaseInterface {
     private Connection connection = null;
+
+    private final String[] queryAttributes = {"filterid", "name", "description", "productattribute", "min", "max"};
 
     private Connection getConn() throws SQLException {
         // Perhaps we should move this functionality to a connectionHandler class which can implement AutoCloseable
@@ -54,7 +57,7 @@ public class Database implements DatabaseInterface {
             case DOUBLE -> {
                 statement = getConn().prepareStatement(
                         "INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?);",
-                        new String[]{"filterid", "name", "description", "min", "max"}
+                        queryAttributes
                 );
                 statement.setString(1, filter.getName());
                 statement.setString(2, filter.getDescription());
@@ -65,7 +68,7 @@ public class Database implements DatabaseInterface {
             case LONG -> {
                 statement = getConn().prepareStatement(
                         "INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
-                        new String[]{"filterid", "name", "description", "min", "max"}
+                        queryAttributes
                 );
                 statement.setString(1, filter.getName());
                 statement.setString(2, filter.getDescription());
@@ -76,7 +79,7 @@ public class Database implements DatabaseInterface {
             case TIME -> {
                 statement = getConn().prepareStatement(
                         "INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
-                        new String[]{"filterid", "name", "description", "min", "max"}
+                        queryAttributes
                 );
                 statement.setString(1, filter.getName());
                 statement.setString(2, filter.getDescription());
@@ -284,7 +287,7 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public RangeFilter delete(int id) throws UnknownFilterTypeException {
+    public RangeFilter delete(int id) throws UnknownFilterTypeException, IdNotFoundException {
         // remember to close the connection after use
         // remember to use getConn instead of the connection attribute directly
         // to use the method getSpecificFilter though, you will need to create a local variable continaing your connection, see below example
@@ -295,45 +298,45 @@ public class Database implements DatabaseInterface {
 //            e.printStackTrace();
 //        }
 
-        RangeFilter dbRangeFilter = null;
-        try {
-            PreparedStatement typeStatement = connection.prepareStatement("SELECT get_type_of_filter(?);");
-            typeStatement.setInt(1, id);
-            ResultSet typeResult = typeStatement.executeQuery();
-            if (typeResult.next()) {
-                if (typeResult.getString(1) == null) {
-                    return dbRangeFilter;
-                }
-                ResultSet filterResultSet;
-                switch (typeResult.getString(1)) {
-                    case "Double":
-                        filterResultSet = getSpecificFilter(connection, "get_double_filter", id);
-                        dbRangeFilter = createDoubleFilterFromResultset(filterResultSet);
-                        PreparedStatement doubleDelete = connection.prepareStatement("DELETE FROM sortingrangedoubleview WHERE ID = ?;");
-                        doubleDelete.setInt(1, id);
-                        doubleDelete.executeQuery();
-                        break;
-                    case "Long":
-                        filterResultSet = getSpecificFilter(connection, "get_long_filter", id);
-                        dbRangeFilter = createLongFilterFromResultset(filterResultSet);
-                        PreparedStatement longDelete = connection.prepareStatement("DELETE FROM sortingrangelongview WHERE ID = ?;");
-                        longDelete.setInt(1, id);
-                        longDelete.executeQuery();
-                        break;
-                    case "Time":
-                        filterResultSet = getSpecificFilter(connection, "get_time_filter", id);
-                        dbRangeFilter = createTimeFilterFromResultset(filterResultSet);
-                        PreparedStatement timeDelete = connection.prepareStatement("DELETE FROM sortingrangetimeview WHERE ID = ?;");
-                        timeDelete.setInt(1, id);
-                        timeDelete.executeQuery();
-                        break;
-                    default:
-                        throw new UnknownFilterTypeException("The filter type retrieved from the database, does not match any implemented filters");
-                }
+        RangeFilter dbRangeFilter = read(id);
+        if (dbRangeFilter == null){
+            throw new IdNotFoundException("Couldn't find a filter with this ID: " + id);
+        }
+
+        PreparedStatement statement = null;
+        try{
+
+            switch (dbRangeFilter.getType()) {
+                case DOUBLE -> statement = getConn()
+                        .prepareStatement(
+                                "DELETE FROM sortingrangedoubleview WHERE filterId = ?;",
+                                queryAttributes
+                        );
+                case LONG -> statement = getConn()
+                            .prepareStatement(
+                                    "DELETE FROM sortingrangelongview WHERE filterId = ?;",
+                                    queryAttributes
+                            );
+                case TIME -> statement = getConn()
+                            .prepareStatement(
+                                    "DELETE FROM sortingrangetimeview WHERE filterId = ?;",
+                                    queryAttributes
+                            );
             }
-        } catch (SQLException e) {
+
+            statement.setInt(1, id);
+            int result_count = statement.executeUpdate();
+            if (result_count < 1){
+                closeConn();
+                throw new SQLException("Didn't delete filter");
+            }
+
+        } catch (SQLException e){
             e.printStackTrace();
         }
+
+        closeConn();
+
         return dbRangeFilter;
     }
 

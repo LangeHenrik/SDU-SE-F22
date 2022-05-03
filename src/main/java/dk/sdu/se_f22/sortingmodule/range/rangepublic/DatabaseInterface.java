@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
@@ -15,7 +16,7 @@ public interface DatabaseInterface {
 
     RangeFilter read(int id) throws UnknownFilterTypeException;
 
-    RangeFilter delete(int id) throws UnknownFilterTypeException;
+    RangeFilter delete(int id) throws UnknownFilterTypeException, IdNotFoundException;
 
     RangeFilter update(RangeFilter updatedFilter) throws SQLException, InvalidFilterTypeException;
 

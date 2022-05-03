@@ -202,7 +202,7 @@ AS
 $$
 
 BEGIN
-    DELETE FROM SortingRangeTimeFilters WHERE filterId= old.filterId;
+    DELETE FROM SortingRangeTimeFilters WHERE filterId = old.filterId;
     DELETE FROM SortingRangeFilters WHERE  filterId = old.filterId;
 
 

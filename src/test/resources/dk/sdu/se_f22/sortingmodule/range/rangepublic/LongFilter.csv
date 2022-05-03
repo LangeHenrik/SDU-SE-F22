@@ -1,0 +1,4 @@
+id,name,description,productAtrribute,min,max
+2,test name ean,test description for long filter,ean,2,100
+5,test name ean funf,five test description for long filter,longnumber,1,10
+8,test name ean acht,eight test description for long filter,longattribute,200,100000

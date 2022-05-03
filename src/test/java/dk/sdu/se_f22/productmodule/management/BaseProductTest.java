@@ -12,7 +12,7 @@ class BaseProductTest {
     
     @BeforeAll
     static void initialize(){
-        System.out.println("============ ProductTest TEST SETUP ============");
+        System.out.println("============ BaseProductTest TEST SETUP ============");
     }
     
     @BeforeEach
@@ -36,7 +36,6 @@ class BaseProductTest {
             for (ProductAttribute pA : ProductAttribute.values()) { //asserting pAs
                 if (p.get(pA) == null) { //if pA is null add i+1
                     i++;
-                    //System.out.println("i++ " + p.get(pA));
                 }
                 assertNotNull(pA);
             }
@@ -60,18 +59,10 @@ class BaseProductTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+    
         BaseProduct baseProduct = baseProductTestList.get(0);
         assertThrows(NumberFormatException.class, () -> baseProduct.getAsNumeric(ProductAttribute.NAME));
         assertThrows(NullPointerException.class, () -> baseProduct.getAsNumeric(ProductAttribute.SIZE));
-        
-        /*for (ProductAttribute pA : ProductAttribute.values()) {
-            for(Product p : productTestList) {
-                assertThrows(NumberFormatException.class, () -> p.getAsNumeric(pA));
-                //assertNull(p.getAsNumeric(pA));
-            }
-        }*/
-        
     }
     
     @Test
@@ -94,7 +85,7 @@ class BaseProductTest {
             //Testing if the city name is actually a name (No danish city has a name of less than 1 character)
             assertTrue(p.getLocations().get(0).length() > 1);
             
-            //Testing for duplicates - Product.getLocations() return a new ArrayList<String>
+            //Testing for duplicates - BaseProduct.getLocations() return a new ArrayList<String>
             ArrayList<String> currentArray = p.getLocations();
             ArrayList<String> arrayCopy = p.getLocations();
             for(String s1 : currentArray){

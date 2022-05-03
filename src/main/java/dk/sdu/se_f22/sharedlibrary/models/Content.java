@@ -7,10 +7,14 @@ public class Content {
     private String timestamp;
 
     public Content(int pageId, String html, String title, String timestamp) {
-
+        this.pageId = pageId;
+        this.html = html;
+        this.title = title;
+        this.timestamp = timestamp;
     }
 
     public Content(int pageId, Document html, String timestamp) {
-
+        this.pageId = pageId;
+        this.timestamp = timestamp;
     }
 }

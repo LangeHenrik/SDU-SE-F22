@@ -17,7 +17,7 @@ class TokenizerTest {
     @BeforeEach
     void setUp() {
         tk = new Tokenizer();
-        site = new HTMLSite(500, "This, is-a sample text");
+        site = new HTMLSite(500, "This, is-a sample -text");
     }
 
     @AfterEach

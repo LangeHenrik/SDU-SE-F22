@@ -38,7 +38,7 @@ class  FilteredTokens {
         return filteredTokens;
     }
 
-    static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
+    public static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
         tokenStrings = new ArrayList<>();
         for(Token t : tokens) {
             tokenStrings.add(t.getDocumentText());

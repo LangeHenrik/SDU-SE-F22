@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.productmodule.infrastructure.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class TokenParameter {
 
 
     public List<String> getIgnoredChars() {
-        return ignoredChars;
+        return new ArrayList<>(ignoredChars);
     }
 
     public void setIgnoredChars(List<String> ignoredChars) {

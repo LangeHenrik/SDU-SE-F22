@@ -3,8 +3,8 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +25,6 @@ public class TestSearchModule {
         indexingModule.indexingData.add(new MockIndexingData("Bar"));
         indexingModule.indexingData.add(new MockIndexingData("Foo"));
 
-
         SearchModuleImpl searchModule = new SearchModuleImpl();
         searchModule.addIndexingModule(indexingModule);
 
@@ -36,26 +35,22 @@ public class TestSearchModule {
         // Test querying of data
         assertArrayEquals(
                 helloQuery.toArray(),
-                List.of(new MockIndexingData("Hello")).toArray()
-        );
+                List.of(new MockIndexingData("Hello")).toArray());
 
         assertArrayEquals(
                 fooQuery.toArray(),
-                List.of(new MockIndexingData("Foo"), new MockIndexingData("Foo")).toArray()
-        );
+                List.of(new MockIndexingData("Foo"), new MockIndexingData("Foo")).toArray());
 
         // Test throwing
         assertThrows(
                 NoSuchElementException.class,
-                () -> searchModule.queryIndexOfType(String.class, List.of(""))
-        );
+                () -> searchModule.queryIndexOfType(String.class, List.of("")));
 
         // Test removal
         searchModule.removeIndexingModule(indexingModule);
         assertThrows(
                 NoSuchElementException.class,
-                () -> searchModule.queryIndexOfType(MockIndexingData.class, List.of(""))
-        );
+                () -> searchModule.queryIndexOfType(MockIndexingData.class, List.of("")));
     }
 
     @Test
@@ -64,19 +59,17 @@ public class TestSearchModule {
         SearchModule searchModule = new SearchModuleImpl() {
             @Override
             public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
-                if(clazz == Product.class) {
-                    List<Product> productPages = new ArrayList<>();
-                    productPages.add(new Product());
-                    return (List<T>) productPages;
-                }
-                else if(clazz == Brand.class) {
+                if (clazz == BaseProduct.class) {
+                    List<BaseProduct> baseProductPages = new ArrayList<>();
+                    baseProductPages.add(new BaseProduct());
+                    return (List<T>) baseProductPages;
+                } else if (clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
                     brand.setName("Test brand");
                     brandPages.add(brand);
                     return (List<T>) brandPages;
-                }
-                else {
+                } else {
                     return null;
                 }
             }
@@ -84,16 +77,19 @@ public class TestSearchModule {
 
         SearchHits searchResult = searchModule.search("Hello world");
 
-        // We cannot use assertArrayEquals because brand doesn't implement the comparable operator, so we just match
-        // the name on the first element to check whether the query method was called for brand pages
+        // We cannot use assertArrayEquals because brand doesn't implement the
+        // comparable operator, so we just match
+        // the name on the first element to check whether the query method was called
+        // for brand pages
 
         List<Brand> brands = searchResult.getBrands().stream().toList();
-        if(brands.stream().findFirst().isPresent()) {
+        if (brands.stream().findFirst().isPresent()) {
             assertEquals(brands.stream().findFirst().get().getName(), "Test brand");
         }
 
-        // Same here, although we don't have any attribute fields to test against, so we just check that an object is in the list
-        List<Product> products = searchResult.getProducts().stream().toList();
-        assertTrue(products.stream().findFirst().isPresent());
+        // Same here, although we don't have any attribute fields to test against, so we
+        // just check that an object is in the list
+        List<BaseProduct> baseProducts = searchResult.getProducts().stream().toList();
+        assertTrue(baseProducts.stream().findFirst().isPresent());
     }
 }

@@ -92,4 +92,16 @@ public class Brand {
     public void setProducts(ArrayList<String> products) {
         this.products = products;
     }
+
+    @Override
+    public String toString() {
+        return "Brand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", founded='" + founded + '\'' +
+                ", headquarters='" + headquarters + '\'' +
+                ", products=" + products +
+                '}';
+    }
 }

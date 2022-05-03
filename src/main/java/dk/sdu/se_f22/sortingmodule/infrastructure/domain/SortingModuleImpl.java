@@ -1,45 +1,62 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.utils.Color;
+import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
+import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
+import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 
+/**
+ * Implemented version of SortingModule
+ */
 public class SortingModuleImpl implements SortingModule {
-
+    /**
+     * The search query object, that holds query information
+     */
     private SearchQuery query;
+    /**
+     * Search text
+     */
+    private String searchString;
 
     public SortingModuleImpl() {
+        this.query = new SearchQuery();
+    }
 
+    @Override
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 
     @Override
     public void setCategory(ArrayList<Integer> categories) {
-        // TODO Auto-generated method stub
-        
+        this.query.setCategory(categories);
+
     }
 
     @Override
     public void addCategory(int category) {
-        // TODO Auto-generated method stub
-        
+        this.query.addCategory(category);
+
     }
 
     @Override
     public void clearCategory() {
-        // TODO Auto-generated method stub
-        
+        this.query.clearCategory();
     }
 
     @Override
     public void addRange(int rangeId, String startRange, String endRange) {
-        // TODO Auto-generated method stub
-        
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
     public void clearRange() {
-        // TODO Auto-generated method stub
-        
+        this.query.clearRange();
     }
 
     @Override
@@ -48,18 +65,44 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void setScoring(String scoring) {
-        // TODO Auto-generated method stub
-        
+    public void setScoring(int scoring) {
+        this.query.setScoring(scoring);
+
     }
 
     @Override
     public SearchHits search() {
-        // TODO Auto-generated method stub
-        return null;
+        // Save the query
+        this.saveSearch();
+
+        // Search
+        SearchModule searchModule = new SearchModuleImpl();
+        
+        SearchHits searchHits;
+        try {
+            searchHits = searchModule.search(this.searchString);
+        } catch (NoSuchElementException e) {
+            System.out.println(Color.YELLOW + "Something went wrong when searching!" + Color.RESET);
+            searchHits = new SearchHits();
+        }
+
+        // Filters
+        // Category
+        CategoryFilter categoryFilter = new CategoryFilter();
+        searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
+
+        // Range
+
+
+        // Scoring
+
+        // Pagination
+
+        // Return paginated SearchHits
+        return searchHits;
     }
-    
+
     private void saveSearch() {
-        // TODO Create save to database
+        SaveSearchQuery.saveSearch(this.query, this.searchString);
     }
 }

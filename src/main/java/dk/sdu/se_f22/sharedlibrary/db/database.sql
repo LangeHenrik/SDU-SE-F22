@@ -1,4 +1,3 @@
-
 /*
  -Drop alle tabellerne i starten af dokumentet.
     -  Drop tabeller som refererer til andre tabeller
@@ -6,7 +5,9 @@
 */
 -- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
-
+DROP TABLE IF EXISTS TokenBrandMap;
+-- Drop all other tables
+DROP TABLE IF EXISTS Tokens;
 -- Drop all other tables
 DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
@@ -27,6 +28,18 @@ CREATE TABLE Brand(
 CREATE TABLE ProductType(
     id   serial PRIMARY KEY,
     type VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE Tokens(
+    id serial PRIMARY KEY,
+    token VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE TokenBrandMap(
+    id serial PRIMARY KEY,
+    tokenId INTEGER NOT NULL REFERENCES Tokens (id),
+    brandId INTEGER NOT NULL REFERENCES Brand (id)
+
 );
 
 CREATE TABLE BrandProductTypeJunction(

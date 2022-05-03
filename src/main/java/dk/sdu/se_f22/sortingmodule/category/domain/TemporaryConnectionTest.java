@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
 import dk.sdu.se_f22.sortingmodule.category.CategoryProduct;
 

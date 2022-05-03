@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.BaseProduct;
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterCreator;
 import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilterInterface;
 
@@ -41,6 +41,6 @@ public class RangeMain{
         locations.add("Herning");
         baseProduct.setLocations(locations);
 
-        ProductHit productHit = new ProductHit(baseProduct);
+        Product product = new Product(baseProduct);
     }
 }

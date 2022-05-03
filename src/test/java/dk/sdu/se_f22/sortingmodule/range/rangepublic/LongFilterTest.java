@@ -48,17 +48,10 @@ class LongFilterTest {
             assertEquals(6, mockResults.size());
 
 
-            String[] attributeNames = {"price", "height", "stock"};
-
-            List<String> expectedResultStrings = new ArrayList<>();
-            expectedResultStrings.add("1000.0,100.0,2");
-//        expectedResultStrings.add("2000.0,200.0,3");
-//        expectedResultStrings.add("3000.0,10.0,4");
-            expectedResultStrings.add("100.0,100.0,5");
-            expectedResultStrings.add("200.0,200.0,6");
-            expectedResultStrings.add("300.0,300.0,7");
-
-            Collection<ProductHit> expectedResults = Helpers.createMockResultsFromStringList(expectedResultStrings);
+            List<ProductHit> copy = List.copyOf(mockResults);
+            ArrayList<ProductHit> expectedResults = new ArrayList<>(copy);
+            expectedResults.remove(1);
+            expectedResults.remove(2);
 
             //crude check that the expectedResults are still the same as when the test was written
             assertEquals(4, expectedResults.size());

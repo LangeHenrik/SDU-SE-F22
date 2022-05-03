@@ -1,0 +1,4 @@
+Id, Name, Description, ParentId, value, Fieldname
+3, Components, This category contains components, 0, components, category
+10, SSDs, This category contains SSDs, 3, ssds, category
+11, Horsens, This category contains products which are in stock in Horsens, 5, horsens, inStock

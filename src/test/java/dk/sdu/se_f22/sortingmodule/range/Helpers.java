@@ -60,6 +60,11 @@ public class Helpers {
             product.set(ProductAttribute.CLOCKSPEED, attributes[10]);
             product.set(ProductAttribute.WEIGHT, attributes[11]);
 
+            ArrayList<String> locations = new ArrayList<>();
+            locations.add("Charlottenlund");
+            locations.add("Herning");
+            product.setLocations(locations);
+
 
             mockResults.add(new ProductHit(product));
         }

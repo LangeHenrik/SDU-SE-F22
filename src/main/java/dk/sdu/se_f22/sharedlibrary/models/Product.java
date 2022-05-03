@@ -1,86 +1,184 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.UUID;
 
-public class Product { //initialize class
-    
-    private final HashMap<ProductAttribute, String> productAttributes; //initialize hashmap to contain product attributes
-    
-    public Product(){ //product constructor w.o. attribute input
-        productAttributes = new HashMap<>(); //initialize hashmap
+/** The class is used as the common representation of a product. <br>
+ * Is therefore the type used for products in {@link dk.sdu.se_f22.sharedlibrary.SearchHits}
+ * <br>
+ * It includes among others a constructor {@link Product#Product(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
+ * and then parses the attribute values from the {@link BaseProduct} supplied.<br>
+ * This class has a getter for each specific product attribute (i.e. {@link Product#getPrice()}).<br><br>
+ * <i>Formerly known as <b>ProductHit</b></i>
+ */
+public class Product {
+    UUID uuid;
+    double averageUserReview;
+    double price;
+    double clockspeed;
+    double weight;
+    long ean;
+    String size;
+    String category;
+    String name;
+    String description;
+    Instant publishedDate;
+    Instant expirationDate;
+    List<String> inStock;
+
+    /** The constructor for setting all attributes at once including those that are optional
+     */
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+        this(uuid, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
+        this.size = size;
+        this.clockspeed = clockspeed;
+        this.weight = weight;
     }
-    
-    public @Nullable String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
-        return productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
+
+    /**This constructor sets all the required value, but leaves the optional values as null.
+     * <br>
+     * Except for clockspeed and weight, which are doubles and thus not capable of being null.
+     */
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+        this.uuid = uuid;
+        this.averageUserReview = averageUserReview;
+        this.inStock = inStock;
+        this.ean = ean;
+        this.price = price;
+        this.publishedDate = publishedDate;
+        this.expirationDate = expirationDate;
+        this.category = category;
+        this.name = name;
+        this.description = description;
     }
-    
-    public double getAsNumeric(ProductAttribute pA){
-        /*if (get(pA).isEmpty()){
-            throw new NullPointerException("No value for " + pA.alias);
-        }*/
-        String pAttr = get(pA).replaceAll("\"","");
-        double result;
-        result = Double.parseDouble(pAttr);
-        
-        return result;
-    }
-    
-    public ArrayList<String> getLocations(){ //String array method returning the class attribute availableAt
-        return new ArrayList<>(List.of(this.get(ProductAttribute.IN_STOCK).split(",")));
-    } //returns an arraylist of the available shops
-    
-    public boolean set(ProductAttribute pA, String value){
-        if (value.isEmpty()){
-            productAttributes.put(pA, null);
-            return productAttributes.get(pA) == null;
+
+    /** This parses a {@link BaseProduct} into a Product.<br>
+     *
+     * @param baseProduct a product
+     * @throws DateTimeParseException if The dates supplied are in a non parseable format
+     * @throws NumberFormatException if any of the attributes, that are numeric, are unparseable
+     */
+    public Product(BaseProduct baseProduct) throws DateTimeParseException, NumberFormatException  {
+        String stringId = baseProduct.get(ProductAttribute.ID);
+        this.uuid = UUID.fromString(stringId);
+
+        this.averageUserReview = Double.parseDouble(baseProduct.get(ProductAttribute.AVERAGE_USER_REVIEW));
+        this.inStock = baseProduct.getLocations();
+        this.ean = Long.parseLong(baseProduct.get(ProductAttribute.EAN));
+        this.price = Double.parseDouble(baseProduct.get(ProductAttribute.PRICE));
+        this.publishedDate = Instant.parse(baseProduct.get(ProductAttribute.PUBLISHED_DATE) + 'Z');
+        this.expirationDate = Instant.parse(baseProduct.get(ProductAttribute.EXPIRATION_DATE) + 'Z');
+        this.category = baseProduct.get(ProductAttribute.CATEGORY);
+        this.name = baseProduct.get(ProductAttribute.NAME);
+        this.description = baseProduct.get(ProductAttribute.DESCRIPTION);
+
+        if (!baseProduct.get(ProductAttribute.SIZE).equals("unavailable")){
+            this.size = baseProduct.get(ProductAttribute.SIZE);
         }
-        
-        if(value.endsWith("\"")){
-            value = value.substring(0,value.length() - 1); //?
+
+        if (!baseProduct.get(ProductAttribute.CLOCKSPEED).equals("unavailable")){
+            this.clockspeed = Double.parseDouble(baseProduct.get(ProductAttribute.CLOCKSPEED));
         }
-        
-        productAttributes.put(pA,value); //assigns key and values to map
-        return productAttributes.get(pA).equalsIgnoreCase(value);
-    }
-    
-    public boolean setLocations(ArrayList<String> values){
-        
-        StringBuilder sB = new StringBuilder();
-        for(String s : values){
-            sB.append(s).append(",");
+
+        if (!baseProduct.get(ProductAttribute.WEIGHT).equals("unavailable")){
+            this.weight = Double.parseDouble(baseProduct.get(ProductAttribute.WEIGHT));
         }
-        productAttributes.put(ProductAttribute.IN_STOCK, sB.toString());
-        
-        return values.size() > 0; //checks if there is stock of the product in any shop
     }
-    
+
+    /**@param attributeName The name of the attribute to retrieve
+     * @return The value of the attribute referenced
+     * @throws IllegalArgumentException if the attribute input does not correspond to any of the attributes, whose value is a double
+     */
+    public double getDoubleValue(String attributeName){
+        return switch (attributeName) {
+            case ("price") -> this.getPrice();
+            case ("averageUserReview") -> this.getAverageUserReview();
+            case ("clockspeed") -> this.getClockspeed();
+            case ("weight") -> this.getWeight();
+            default -> throw new IllegalArgumentException(attributeName + "does not exist as a double attribute: ");
+        };
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public double getAverageUserReview() {
+        return averageUserReview;
+    }
+
+    public List<String> getInStock() {
+        return inStock;
+    }
+
+    public long getEan() {
+        return ean;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public Instant getPublishedDate() {
+        return publishedDate;
+    }
+
+    public Instant getExpirationDate() {
+        return expirationDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public double getClockspeed() {
+        return clockspeed;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public long getLongValue(String productAttribute) {
+        if(productAttribute.equals("ean")){
+            return this.getEan();
+        }
+        throw new IllegalArgumentException(productAttribute + "does not exist as a double attribute: ");
+    }
+
     @Override
-    public String toString(){ //overrides toString method, returning product name and price
-        return "Product: " + productAttributes.get(ProductAttribute.NAME) + " price: " + productAttributes.get(ProductAttribute.PRICE);
-    }
-    
-    public void print(){
-        System.out.println("Product : " + productAttributes.get(ProductAttribute.NAME)); //returns product name
-        
-        for(ProductAttribute pA : ProductAttribute.values()){ //runs through all product attributes
-            
-            if(pA == ProductAttribute.IN_STOCK){ //if product is in stock, prints the available locations
-                StringBuilder toPrint = new StringBuilder();
-                for(String s : getLocations()){
-                    toPrint.append(s).append("\t");
-                }
-                System.out.println("\t " + pA.alias + ": " + toPrint);
-                
-            }else {
-                
-                System.out.println("\t " + pA.alias + ": " + get(pA));
-            }
-        }
+    public String toString() {
+        return "Product{" +
+                "uuid=" + uuid +
+                ", averageUserReview=" + averageUserReview +
+                ", price=" + price +
+                ", clockspeed=" + clockspeed +
+                ", weight=" + weight +
+                ", ean=" + ean +
+                ", size='" + size + '\'' +
+                ", category='" + category + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", publishedDate=" + publishedDate +
+                ", expirationDate=" + expirationDate +
+                ", inStock=" + inStock +
+                '}';
     }
 }

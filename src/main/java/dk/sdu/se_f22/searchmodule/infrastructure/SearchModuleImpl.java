@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sharedlibrary.models.*;
@@ -52,7 +53,7 @@ public class SearchModuleImpl implements SearchModule {
 
         SearchHits searchHits = new SearchHits();
         searchHits.setContents(List.of());
-        searchHits.setProducts(queryIndexOfType(Product.class, tokens));
+        searchHits.setProducts(queryIndexOfType(BaseProduct.class, tokens));
         searchHits.setBrands(queryIndexOfType(Brand.class, tokens));
         //searchHits.setContents(queryIndexOfType(Content.class, tokens));
 

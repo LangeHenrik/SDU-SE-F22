@@ -7,11 +7,9 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Execution(ExecutionMode.CONCURRENT)
+//@Execution(ExecutionMode.CONCURRENT)
 // Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterClassTest {
-    // TODO write test class for Time filter
-
     @Test
     @Disabled
     void testEquals() {

@@ -9,10 +9,10 @@ import java.util.UUID;
 
 /** The class proposed by group 4.4 to use as the return type of search hits.
  * <br>
- * It includes a constructor {@link ProductHit#ProductHit(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
+ * It includes a constructor {@link Product#Product(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
  * and then parses it into the correct attribute values.
  */
-public class ProductHit {
+public class Product {
     UUID uuid;
     double averageUserReview;
     double price;
@@ -29,7 +29,7 @@ public class ProductHit {
 
     /** The constructor for setting all attributes at once including those that are optional
      */
-    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
         this(uuid, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
         this.size = size;
         this.clockspeed = clockspeed;
@@ -40,7 +40,7 @@ public class ProductHit {
      * <br>
      * Except for clockspeed and weight, which are doubles and thus not capable of being null.
      */
-    public ProductHit(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
         this.uuid = uuid;
         this.averageUserReview = averageUserReview;
         this.inStock = inStock;
@@ -60,7 +60,7 @@ public class ProductHit {
      * @throws DateTimeParseException if The dates are in a non parseable format
      * @throws NumberFormatException if any of the attributes, that are numeric, is unparseable
      */
-    public ProductHit(BaseProduct baseProduct) throws DateTimeParseException, NumberFormatException  {
+    public Product(BaseProduct baseProduct) throws DateTimeParseException, NumberFormatException  {
         String stringId = baseProduct.get(ProductAttribute.ID);
         this.uuid = UUID.fromString(stringId);
 

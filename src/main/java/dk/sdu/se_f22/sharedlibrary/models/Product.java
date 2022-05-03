@@ -90,19 +90,6 @@ public class Product {
         }
     }
 
-    /**@param attributeName The name of the attribute to retrieve
-     * @return The value of the attribute referenced
-     * @throws IllegalArgumentException if the attribute input does not correspond to any of the attributes, whose value is a double
-     */
-    public double getDoubleValue(String attributeName){
-        return switch (attributeName) {
-            case ("price") -> this.getPrice();
-            case ("averageUserReview") -> this.getAverageUserReview();
-            case ("clockspeed") -> this.getClockspeed();
-            case ("weight") -> this.getWeight();
-            default -> throw new IllegalArgumentException(attributeName + "does not exist as a double attribute: ");
-        };
-    }
 
     public UUID getUuid() {
         return uuid;
@@ -154,13 +141,6 @@ public class Product {
 
     public double getWeight() {
         return weight;
-    }
-
-    public long getLongValue(String productAttribute) {
-        if(productAttribute.equals("ean")){
-            return this.getEan();
-        }
-        throw new IllegalArgumentException(productAttribute + "does not exist as a double attribute: ");
     }
 
     @Override

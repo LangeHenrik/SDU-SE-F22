@@ -2,13 +2,29 @@ package dk.sdu.se_f22.sortingmodule.range;
 
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Helpers {
+    public static void resetDB(){
+        try {
+            System.out.println("Resetting range database");
+            Connection connection = DBConnection.getPooledConnection();
+            new DBMigration().runSQLFromFile(connection, "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/3.3_modifiedRangeFilters.sql");
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("error when resetting database state, pooled connection threw sql exception:");
+            e.printStackTrace();
+        }
+    }
+
     public static List<String> readFromCSV(String fileName) {
         List<String> out = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/SortingModule/Range/" + fileName))) {

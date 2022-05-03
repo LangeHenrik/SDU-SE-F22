@@ -268,6 +268,7 @@ public class Database implements DatabaseInterface {
         int results = statement.executeUpdate();
         if (results < 1) {
             closeConn();
+            System.out.println(filter);
             throw new SQLException("Nothing updated");
         }
 

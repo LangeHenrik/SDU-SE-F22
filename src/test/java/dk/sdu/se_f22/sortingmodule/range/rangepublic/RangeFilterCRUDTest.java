@@ -7,6 +7,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
+import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class RangeFilterCRUDTest {
 
     private RangeFilterCRUD rangeFilterCRUD;
 
+
     @BeforeEach
     public void setup() {
         rangeFilterCRUD = new RangeFilterCRUD();
@@ -36,17 +39,17 @@ public class RangeFilterCRUDTest {
 
     @AfterAll
     public static void teardown() {
-        try {
-            new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-        } catch (SQLException e) {
-            System.out.println("error when resetting database state, pooled connection threw sql exception:");
-            e.printStackTrace();
-        }
+        Helpers.resetDB();
     }
 
     @Nested
     @DisplayName("CRUD Creator")
     class CRUDCreatorTest {
+        @BeforeAll
+        static void setup(){
+            Helpers.resetDB();
+        }
+
         @Nested
         @DisplayName("Create Db filters")
         class createDbFilters {
@@ -293,12 +296,7 @@ public class RangeFilterCRUDTest {
         @BeforeAll
         static void setup(){
             // NOTE: commenting the below out, makes 9 tests pass out of the blue?
-            try {
-                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-            } catch (SQLException e) {
-                System.out.println("error when resetting database state, pooled connection threw sql exception:");
-                e.printStackTrace();
-            }
+            Helpers.resetDB();
         }
 
         @ParameterizedTest
@@ -471,6 +469,11 @@ public class RangeFilterCRUDTest {
     @Nested
     @DisplayName("CRUD Reader")
     class CRUDReaderTest {
+        @BeforeAll
+        static void setup(){
+            Helpers.resetDB();
+        }
+
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid double filter")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
@@ -566,14 +569,14 @@ public class RangeFilterCRUDTest {
     @Nested
     @DisplayName("CRUD Update")
     class CRUDUpdateTest {
+        @BeforeAll
+        public static void setup(){
+            Helpers.resetDB();
+        }
+
         @AfterAll
         public static void teardown() {
-            try {
-                new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-            } catch (SQLException e) {
-                System.out.println("error when resetting database state, pooled connection threw sql exception:");
-                e.printStackTrace();
-            }
+            Helpers.resetDB();
         }
 
         @Nested
@@ -583,21 +586,24 @@ public class RangeFilterCRUDTest {
 
             public static List<RangeFilter> provideRangeFilterForTest() {
                 RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
-                DBMigration dbMigration = new DBMigration();
 
                 if (listOfRangeFilters.size() >= 3) {
                     listOfRangeFilters = new ArrayList<>();
                 }
 
+                System.out.println("Running provide filters");
+
                 try {
                     //Cleaning the database to avoid duplicate keys
-                    dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+                    Helpers.resetDB();
 
                     //Adding RangeFilters to list
+                    System.out.println("creating filters in the db");
                     listOfRangeFilters.add(rangeFilterCRUD2.create("UpdateDoubleFilterTest", "drfghj", "Gulv", 1.0, 13.0));
                     listOfRangeFilters.add(rangeFilterCRUD2.create("UpdateLongFilterTest", "drfghj", "Gulvf", 10, 130));
                     listOfRangeFilters.add(rangeFilterCRUD2.create("UpdateTimeFilterTest", "drfghj", "Gulvc", Instant.parse("2018-11-30T15:35:24.00Z"), Instant.parse("2022-11-30T15:35:24.00Z")));
-                } catch (InvalidFilterException | InvalidFilterTypeException | SQLException e) {
+                } catch (InvalidFilterException | InvalidFilterTypeException e) {
+                    System.out.println("exception happened in provide filters");
                     e.printStackTrace();
                 }
                 return listOfRangeFilters;
@@ -833,7 +839,7 @@ public class RangeFilterCRUDTest {
                 void updatingBothNameAndDescriptionShouldChangeBothStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException {
                     String newName = rangefilter.getName() + "mfied6";
                     String newDescription = rangefilter.getDescription() + "mfied6";
-
+                    
                     rangeFilterCRUD.update(rangefilter, newName, newDescription);
 
                     RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
@@ -1193,12 +1199,7 @@ public class RangeFilterCRUDTest {
                     @BeforeAll
                     public static void setup(){
                         // NOTE: commenting the below out, makes 9 tests pass out of the blue?
-                        try {
-                            new DBMigration().runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-                        } catch (SQLException e) {
-                            System.out.println("error when resetting database state, pooled connection threw sql exception:");
-                            e.printStackTrace();
-                        }
+                        Helpers.resetDB();
                     }
 
                     @ParameterizedTest(name = "id: {0}")

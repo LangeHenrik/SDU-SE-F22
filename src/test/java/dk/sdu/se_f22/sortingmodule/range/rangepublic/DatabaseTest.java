@@ -1,41 +1,25 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
-import dk.sdu.se_f22.sharedlibrary.db.SeedDatabase;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
-import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.postgresql.util.PSQLException;
-import org.w3c.dom.ranges.Range;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.Instant;
 import java.util.List;
-import java.util.Timer;
 
+import static dk.sdu.se_f22.sortingmodule.range.Helpers.resetDB;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
     private Database database;
     private static final DBMigration dbMigration = new DBMigration();
-
-    private static void resetDB(){
-        try {
-           dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-        } catch (SQLException e) {
-            System.out.println("error when resetting database state, pooled connection threw sql exception:");
-            e.printStackTrace();
-        }
-    }
 
 
     @BeforeEach
@@ -46,13 +30,9 @@ class DatabaseTest {
 
     @Nested
     class create {
-        @BeforeEach
-        void setup() {
-            try {
-                dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        @BeforeAll
+        static void setup() {
+            resetDB();
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
@@ -137,27 +117,36 @@ class DatabaseTest {
             }
         }
 
-        @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
-        @DisplayName("Test creating two filters with the same name")
-        @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreatingTwoFiltersWithTheSameName(String name, String description, String productAttribute, double min, double max){
-            try {
-                RangeFilter createdFilter =
-                        new DoubleFilter(
-                                name,
-                                description,
-                                productAttribute,
-                                min,
-                                max);
-                database.create(createdFilter);
+        @Nested
+        @DisplayName("Double filters created twice allows beforeAll")
+        class doubleFiltersCreatedTwiceAllowsBeforeAll {
+            @BeforeAll
+            static void setup(){
+                resetDB();
+            }
+
+            @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
+            @DisplayName("Test creating two filters with the same name")
+            @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
+            void testCreatingTwoFiltersWithTheSameName(String name, String description, String productAttribute, double min, double max){
                 try {
+                    RangeFilter createdFilter =
+                            new DoubleFilter(
+                                    name,
+                                    description,
+                                    productAttribute,
+                                    min,
+                                    max);
                     database.create(createdFilter);
-                    fail("Should throw duplicate key exception");
-                } catch (PSQLException e){
-                    Assertions.assertTrue(e.getMessage().contains("ERROR: duplicate key value violates unique constraint \"sortingrangefilters_name_key\""));
+                    try {
+                        database.create(createdFilter);
+                        fail("Should throw duplicate key exception");
+                    } catch (PSQLException e){
+                        Assertions.assertTrue(e.getMessage().contains("ERROR: duplicate key value violates unique constraint \"sortingrangefilters_name_key\""));
+                    }
+                } catch (InvalidFilterTypeException | SQLException e) {
+                    fail(e);
                 }
-            } catch (InvalidFilterTypeException | SQLException e) {
-                fail(e);
             }
         }
     }
@@ -258,13 +247,9 @@ class DatabaseTest {
     @Nested
     @DisplayName("Update")
     class update {
-        @BeforeEach
-        void setup() {
-            try {
-                dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        @BeforeAll
+        static void setup() {
+            resetDB();
         }
 
         @Nested
@@ -520,7 +505,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("test delete of invalid filterId")
         @ValueSource(ints = {-1, -100, 1000, Integer.MIN_VALUE, Integer.MAX_VALUE})
-        void testdeleteOfInvalidFilterId ( int inputId) throws UnknownFilterTypeException, IdNotFoundException {
+        void testdeleteOfInvalidFilterId ( int inputId) {
             //opret filter med invalid id, forsøg at slette og få exception som expected
             Assertions.assertThrows(IdNotFoundException.class, () -> database.delete(inputId));
         }

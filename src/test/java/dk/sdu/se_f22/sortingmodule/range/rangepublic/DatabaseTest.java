@@ -472,12 +472,9 @@ class DatabaseTest {
 
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName(" Test Delete Existing Double Filter")
-            @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void testDeleteExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) throws UnknownFilterTypeException {
-
-                RangeFilter doubleFilterFromDB;
-
-                doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
+            @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
+            void testDeleteExistingDoubleFilter(String name, String description, String productAttribute, double min, double max) throws UnknownFilterTypeException, IdNotFoundException, SQLException, InvalidFilterTypeException {
+                RangeFilter doubleFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
                 Assertions.assertEquals(database.delete(doubleFilterFromDB.getId()), doubleFilterFromDB);
             }
 
@@ -485,72 +482,49 @@ class DatabaseTest {
             class ReadDeletedDoubleFilter {
                 @ParameterizedTest(name = "{0} : {1}")
                 @DisplayName("test read of deleted filter")
-                @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-                void testReadOfDeletedFilter(int id, String name , String description, String productAttribute, double min, double max) throws UnknownFilterTypeException {
-                    RangeFilter doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
-                    database.delete(id);
-                    try {
-                        assertNull(database.read(id));
-                    } catch (UnknownFilterTypeException e) {
-                        e.printStackTrace();
-                    }
-
-
+                @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
+                void testReadOfDeletedFilter(String name , String description, String productAttribute, double min, double max) throws UnknownFilterTypeException, SQLException, InvalidFilterTypeException, IdNotFoundException {
+                    RangeFilter doubleFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
+                    database.delete(doubleFilterFromDB.getId());
+                    Assertions.assertNull(database.read(doubleFilterFromDB.getId()));
                 }
             }
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName(" test delete Existing Timefilter")//  læs data fra databasen, slet, læs og c
-            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-            void testDeleteExistingTimeFilter(int id, String name, String description, String productAttribute, Instant
-                    min, Instant max)  {
+            @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
+            void testDeleteExistingTimeFilter(String name, String description, String productAttribute, Instant
+                    min, Instant max) throws IdNotFoundException, UnknownFilterTypeException, SQLException, InvalidFilterTypeException {
 
-                RangeFilter timeFilterFromDB;
-                try {
-                    timeFilterFromDB = new TimeFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(database.delete(timeFilterFromDB.getId()), timeFilterFromDB);
-                    Assertions.assertThrows(UnknownFilterTypeException.class,
-                            () -> database.read(timeFilterFromDB.getId()));
-                } catch (UnknownFilterTypeException e) {
-                    e.printStackTrace();
-                    fail("failed because filtertype unknown not found");
-                }
+                RangeFilter timeFilterFromDB = database.create(new TimeFilter(name, description, productAttribute, min, max));
+                Assertions.assertEquals(database.delete(timeFilterFromDB.getId()), timeFilterFromDB);
+                Assertions.assertNull(database.read(timeFilterFromDB.getId()));
             }
 
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName("test delete Existing Longfilter")//  læs data fra databasen, slet, læs og c
-            @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-            void testDeleteExistingLongFilter(int id, String name, String description, String productAttribute, Long
-                    min, Long max) {
+            @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
+            void testDeleteExistingLongFilter(String name, String description, String productAttribute, Long
+                    min, Long max) throws IdNotFoundException, SQLException, InvalidFilterTypeException, UnknownFilterTypeException {
 
-                RangeFilter longFilterFromDB;
-                try {
-                    longFilterFromDB = new LongFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertEquals(longFilterFromDB, database.delete(longFilterFromDB.getId()));
-                } catch (UnknownFilterTypeException e) {
-                    e.printStackTrace();
-                    fail("failed because filtertype unknown not found");
-                }
+                RangeFilter longFilterFromDB = database.create(new LongFilter(name, description, productAttribute, min, max));
+                Assertions.assertEquals(longFilterFromDB, database.delete(longFilterFromDB.getId()));
             }
-
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("test delete of invalid filterId")
         @ValueSource(ints = {-1, -100, 1000, Integer.MIN_VALUE, Integer.MAX_VALUE})
-        void testdeleteOfInvalidFilterId ( int inputId) throws UnknownFilterTypeException {
+        void testdeleteOfInvalidFilterId ( int inputId) throws UnknownFilterTypeException, IdNotFoundException {
             //opret filter med invalid id, forsøg at slette og få exception som expected
-            assertNull(database.delete(inputId));
+            Assertions.assertThrows(IdNotFoundException.class, () -> database.delete(inputId));
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test delete double filter twice")
-        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-        void testDeleteDoubleFilterTwice(int id, String name, String description, String productAttribute, double
-                min, double max) {
-            RangeFilter doubleFilterFromDB;
-
-
-            doubleFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
+        @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
+        void testDeleteDoubleFilterTwice(String name, String description, String productAttribute, double
+                min, double max) throws SQLException, InvalidFilterTypeException {
+            RangeFilter doubleFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
             //skal ikke kaste exception da filteret findes
             assertDoesNotThrow( () -> database.delete(doubleFilterFromDB.getId()));
             // skal kaste da filteret ikke findes længere
@@ -560,14 +534,12 @@ class DatabaseTest {
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test delete time filter twice")
-        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-        void testDeleteTimeFilterTwice(int id, String name, String description, String productAttribute, Instant
-                min, Instant max) {
-            RangeFilter TimeFilterFromDB;
+        @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
+        void testDeleteTimeFilterTwice(String name, String description, String productAttribute, Instant
+                min, Instant max) throws SQLException, InvalidFilterTypeException {
 
             RangeFilter TimeFilterFromDB = database.create(new TimeFilter(name, description, productAttribute, min, max));
 
-            TimeFilterFromDB = new TimeFilter(id, name, description, productAttribute, min, max);
             //skal ikke kaste exception da filteret findes
             assertDoesNotThrow( () -> database.delete(TimeFilterFromDB.getId()));
 
@@ -578,14 +550,12 @@ class DatabaseTest {
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test delete Long filter twice")
-        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-        void testDeleteLongFilterTwice(int id, String name, String description, String productAttribute, Long
-                min, Long max) {
-            RangeFilter LongFilterFromDB;
+        @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
+        void testDeleteLongFilterTwice(String name, String description, String productAttribute, Long
+                min, Long max) throws SQLException, InvalidFilterTypeException {
 
             RangeFilter LongFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
 
-            LongFilterFromDB = new DoubleFilter(id, name, description, productAttribute, min, max);
             //skal ikke kaste exception da filteret findes
             assertDoesNotThrow( () -> database.delete(LongFilterFromDB.getId()));
 

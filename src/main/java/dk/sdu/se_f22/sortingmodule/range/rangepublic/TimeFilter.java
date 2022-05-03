@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -61,6 +61,7 @@ class TimeFilter extends RangeFilterClass {
             return false;
         }
 
+        //noinspection RedundantIfStatement
         if (instantsDifferNullSafe(otherFilter.getUserMaxInstant(), this.getUserMaxInstant())) {
             return false;
         }
@@ -91,14 +92,14 @@ class TimeFilter extends RangeFilterClass {
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    Collection<ProductHit> filterList(Collection<ProductHit> inputs) {
+    Collection<Product> filterList(Collection<Product> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max
-        List<ProductHit> filteredResults = new ArrayList<>();
+        List<Product> filteredResults = new ArrayList<>();
 
 
         // loop over all the products in the list and access the correct attribute:
-        for (ProductHit productHit : inputs) {
+        for (Product productHit : inputs) {
             // We use an if else, because it will be faster for only 2 elements
             // if more attributes are added, change implementation to a switch like in DoubleFilter
             if(this.getProductAttribute().equals("publishedDate")){

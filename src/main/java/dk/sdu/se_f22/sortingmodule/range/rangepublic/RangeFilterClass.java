@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
@@ -39,7 +39,7 @@ abstract class RangeFilterClass implements RangeFilter{
      * uses non-strict mode, equivalent to useFilter(inputs, false), but the exception is silently handled here,
      * which is convenient, since it should never be thrown when strict is false.
      */
-    public Collection<ProductHit> useFilter(Collection<ProductHit> inputs) {
+    public Collection<Product> useFilter(Collection<Product> inputs) {
         try {
             return useFilter(inputs, false);
         } catch (InvalidAttributeException e) {
@@ -50,9 +50,9 @@ abstract class RangeFilterClass implements RangeFilter{
         return inputs;
     }
 
-    abstract Collection<ProductHit> filterList(Collection<ProductHit> inputs);
+    abstract Collection<Product> filterList(Collection<Product> inputs);
 
-    public Collection<ProductHit> useFilter(Collection<ProductHit> inputs, boolean strict) throws InvalidAttributeException {
+    public Collection<Product> useFilter(Collection<Product> inputs, boolean strict) throws InvalidAttributeException {
         if (!(validAttributes.contains(this.getProductAttribute()))) {
             if(strict){
                 throw new InvalidAttributeException(this.getProductAttribute(), validAttributes);

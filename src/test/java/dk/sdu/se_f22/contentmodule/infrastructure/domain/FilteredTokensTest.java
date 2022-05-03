@@ -73,10 +73,4 @@ class FilteredTokensTest {
         assertEquals(testInt, tokenArrayListTest.get(0).getOriginID());
 
     }
-
-    @Test
-    void filterTokens() {
-        
-
-    }
 }

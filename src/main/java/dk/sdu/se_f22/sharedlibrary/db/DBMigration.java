@@ -28,7 +28,7 @@ public class DBMigration {
 
     public static void main(String[] args) {
         DBMigration migrator = new DBMigration();
-        migrator.migrate();
+        migrator.migrateFresh();
     }
 
     /**
@@ -73,8 +73,6 @@ public class DBMigration {
             boolean migrationStatus;
 
             for (String fileName : fileList) {
-                fileName = fileName.toLowerCase();
-
                 // Ensure the file is a sql file
                 if (!this.validateFile(fileName)) {
                     continue;

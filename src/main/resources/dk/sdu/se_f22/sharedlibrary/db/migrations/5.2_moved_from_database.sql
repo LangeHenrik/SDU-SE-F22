@@ -1,8 +1,3 @@
-/*
- -Drop alle tabellerne i starten af dokumentet.
-    -  Drop tabeller som refererer til andre tabeller
-    -   Drop resten af tabellerne
-*/
 -- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
 DROP TABLE IF EXISTS TokenBrandMap;

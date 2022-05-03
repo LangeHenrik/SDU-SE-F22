@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.Collection;
 import java.util.List;

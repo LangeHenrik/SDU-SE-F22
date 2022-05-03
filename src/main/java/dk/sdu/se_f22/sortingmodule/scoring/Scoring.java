@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.scoring;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.sql.*;
 import java.util.*;
@@ -31,7 +32,7 @@ public class Scoring implements IScoring {
 
     private void review(List<ProductScore> input) {
         for (ProductScore product : input) {
-            double review = product.getProduct().getReview();
+            double review = product.getProduct().getAverageUserReview();
             try (var connection = DBConnection.getPooledConnection();
                  var statement = connection.prepareStatement("SELECT * FROM reviews");
                  var sqlReturnValues = statement.executeQuery()) {
@@ -94,8 +95,8 @@ public class Scoring implements IScoring {
 
         List<ProductScore> products = new ArrayList<>();
 
-        for (Product testProduct : input) {
-            ProductScore productScore = new ProductScore(testProduct);
+        for (Product product : input) {
+            ProductScore productScore = new ProductScore(product);
             products.add(productScore);
         }
 
@@ -134,7 +135,9 @@ public class Scoring implements IScoring {
 
     @Override
     public Collection<Product> scoreSortAll(Collection<Product> input) {
+
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+
         price(products);
         review(products);
         stock(products);

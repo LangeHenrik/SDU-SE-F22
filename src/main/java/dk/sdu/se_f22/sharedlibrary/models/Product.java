@@ -8,10 +8,11 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
-/** The class proposed by group 4.4 to use as the return type of search hits.
+/** The class is used as the common representation of a product. <br>
+ * Is therefore the type used for products in {@link dk.sdu.se_f22.sharedlibrary.SearchHits}
  * <br>
- * It includes a constructor {@link Product#Product(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
- * and then parses it into the correct attribute values.
+ * It includes among others a constructor {@link Product#Product(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
+ * and then parses the attribute values from the {@link BaseProduct} supplied.
  */
 public class Product {
     UUID uuid;
@@ -54,12 +55,11 @@ public class Product {
         this.description = description;
     }
 
-    /** This parses the hard to use Product into a much more user friendly ProductHit.<br>
-     * It is proposed by group 4.4 that this representation of a Product is used as the return type in searchHits.
+    /** This parses a {@link BaseProduct} into a Product.<br>
      *
      * @param baseProduct a product
-     * @throws DateTimeParseException if The dates are in a non parseable format
-     * @throws NumberFormatException if any of the attributes, that are numeric, is unparseable
+     * @throws DateTimeParseException if The dates supplied are in a non parseable format
+     * @throws NumberFormatException if any of the attributes, that are numeric, are unparseable
      */
     public Product(BaseProduct baseProduct) throws DateTimeParseException, NumberFormatException  {
         String stringId = baseProduct.get(ProductAttribute.ID);

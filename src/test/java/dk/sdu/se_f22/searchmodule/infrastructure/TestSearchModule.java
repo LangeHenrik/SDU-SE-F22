@@ -126,7 +126,7 @@ public class TestSearchModule {
         }
 
         // Same here, although we don't have any attribute fields to test against, so we just check that an object is in the list
-        List<Brand> products = searchResult.getProducts().stream().toList();
+        List<Product> products = searchResult.getProducts().stream().toList();
         assertTrue(products.stream().findFirst().isPresent());
     }
   

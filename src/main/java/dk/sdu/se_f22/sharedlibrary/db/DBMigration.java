@@ -54,6 +54,9 @@ public class DBMigration {
     public void migrate() {
         String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/";
 
+        // Run default SeedDatabase
+        
+
         try (
             Connection connection = DBConnection.getPooledConnection();
         ) {

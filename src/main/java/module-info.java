@@ -1,4 +1,4 @@
-module dk.sdu.se_f22 {
+open module dk.sdu.se_f22 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;

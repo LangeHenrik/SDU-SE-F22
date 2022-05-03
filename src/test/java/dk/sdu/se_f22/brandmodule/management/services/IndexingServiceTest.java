@@ -48,14 +48,14 @@ public class IndexingServiceTest {
         }, 0, indexInterval);
 
         // Delay to test the thread
-        /*
+
         for (int i = 0; i < indexInterval * 750; i++) {
             for (int j = 0; j < indexInterval * 100; j++) {
                 for (int k = 0; k < indexInterval * 50; k++) {
                 }
             }
         }
-        */
+
 
         // Check if it is right (including af buffer of 1/4th of the indexing interval
         // ms)

@@ -89,6 +89,7 @@ class TimeFilter extends RangeFilterClass {
     }
 
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     Collection<ProductHit> filterList(Collection<ProductHit> inputs) {
         // Filter inputs based on min and max value.
@@ -105,8 +106,7 @@ class TimeFilter extends RangeFilterClass {
                     continue;
                 }
                 // below suppressed because it improves readability
-            } else //noinspection StatementWithEmptyBody
-                if (this.getProductAttribute().equals("expirationDate")) {
+            } else if (this.getProductAttribute().equals("expirationDate")) {
                 if (checkValue(productHit.getExpirationDate())){
                     continue;
                 }
@@ -138,6 +138,7 @@ class TimeFilter extends RangeFilterClass {
      * @return - true if the value is outside the range specified by the filter
      */
     private boolean checkValue(Instant value) {
+        // Perhaps check for nullas well?
         if (this.userMin != this.userMax) {
             return value.isBefore(this.userMin) || value.isAfter(this.userMax);
         }

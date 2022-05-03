@@ -137,15 +137,15 @@ public class RangeFilterCRUDTest {
                     Assertions.assertAll("Check that the 3 different filter types throw with empty description.",
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
-                                            .create("Testing empty product attribute", "sample name", input, minDouble, maxDouble)
+                                            .create("sample name", "Testing empty product attribute", input, minDouble, maxDouble)
                             ),
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
-                                            .create("Testing empty product attribute", "sample name", input, minLong, maxLong)
+                                            .create("sample name", "Testing empty product attribute", input, minLong, maxLong)
                             ),
                             () -> Assertions.assertThrows(InvalidFilterException.class,
                                     () -> rangeFilterCRUD
-                                            .create("Testing empty product attribute", "sample name", input, minInstant, maxInstant)
+                                            .create("sample name", "Testing empty product attribute", input, minInstant, maxInstant)
                             )
                     );
                 }
@@ -549,14 +549,14 @@ public class RangeFilterCRUDTest {
         @Nested
         @DisplayName("Valid updates")
         class validUpdates {
-            private static final List<RangeFilter> listOfRangeFilters = new ArrayList<>();
+            private static List<RangeFilter> listOfRangeFilters = new ArrayList<>();
 
             public static List<RangeFilter> provideRangeFilterForTest() {
                 RangeFilterCRUD rangeFilterCRUD2 = new RangeFilterCRUD();
                 DBMigration dbMigration = new DBMigration();
 
                 if (listOfRangeFilters.size() >= 3) {
-                    return listOfRangeFilters;
+                    listOfRangeFilters = new ArrayList<>();
                 }
 
                 try {
@@ -709,6 +709,8 @@ public class RangeFilterCRUDTest {
                 @MethodSource("provideRangeFilterForTest")
                 void updatingValidNameShouldChangeTheNameStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException, SQLException, InvalidFilterTypeException {
                     String newName = rangefilter.getName() + "mfied4";
+                    System.out.println(rangeFilterCRUD.read(rangefilter.getId()));
+
                     rangeFilterCRUD.update(rangefilter, newName);
 
                     RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
@@ -753,15 +755,16 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Updating both name and description should change both stored in db")
                 @MethodSource("provideRangeFilterForTest")
                 void updatingBothNameAndDescriptionShouldChangeBothStoredInDb(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, IllegalImplementationException, SQLException, InvalidFilterTypeException {
-                    String newName = rangefilter.getDescription() + "mfied6";
+                    String newName = rangefilter.getName() + "mfied6";
                     String newDescription = rangefilter.getDescription() + "mfied6";
+
                     rangeFilterCRUD.update(rangefilter, newName, newDescription);
 
                     RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
 
                     assertAll(
                             () -> assertEquals(newDescription, modifiedFilter.getDescription()),
-                            () -> assertEquals(newDescription, modifiedFilter.getName()),
+                            () -> assertEquals(newName, modifiedFilter.getName()),
 
                             () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
                             () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
@@ -1202,18 +1205,18 @@ public class RangeFilterCRUDTest {
                     }
 
                     @Test
-                    @DisplayName("Updating double filter with min greater than max should throw exception")
-                    void updatingInstantFilterWithMinGreaterThanMaxShouldThrowException() throws UnknownFilterTypeException, IdNotFoundException {
+                    @DisplayName("Updating long filter with min greater than max should throw exception")
+                    void updatingLongFilterWithMinGreaterThanMaxShouldThrowException() throws UnknownFilterTypeException, IdNotFoundException {
                         RangeFilter rangeFilter = rangeFilterCRUD.read(2);
                         Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangeFilter, 1030, 9));
                     }
 
                     @Test
-                    @DisplayName("Updating double filter with min greater than max should throw exception")
+                    @DisplayName("Updating Time filter with min greater than max should throw exception")
                     void updatingTimeFilterWithMinGreaterThanMaxShouldThrowException() throws UnknownFilterTypeException, IdNotFoundException {
                         RangeFilter rangeFilter = rangeFilterCRUD.read(3);
                         //315569260 is 10 years in seconds
-                        Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangeFilter, rangeFilter.getDbMinInstant().plusSeconds(315569260), rangeFilter.getDbMaxInstant()));
+                        Assertions.assertThrows(InvalidFilterException.class, () -> rangeFilterCRUD.update(rangeFilter, rangeFilter.getDbMinInstant().plusSeconds(3), rangeFilter.getDbMinInstant()));
                     }
                 }
             }

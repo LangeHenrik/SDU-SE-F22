@@ -19,7 +19,7 @@ public class SearchQuery {
      * List of range filters
      */
     private HashMap<Integer, Double[]> rangeDouble;
-    private HashMap<Integer, long[]> rangeLong;
+    private HashMap<Integer, Long[]> rangeLong;
     private HashMap<Integer, Instant[]> rangeInstant;
 
     /**
@@ -77,7 +77,7 @@ public class SearchQuery {
     }
 
     public void addRangeLong(int rangeId, long startRange, long endRange) {
-        this.rangeLong.put(rangeId, new long[] { startRange, endRange });
+        this.rangeLong.put(rangeId, new Long[] {startRange, endRange });
     }
 
     public void addRangeInstant(int rangeId, Instant startRange, Instant endRange) {
@@ -135,12 +135,22 @@ public class SearchQuery {
         return this.rangeDouble;
     }
 
-    public Map<Integer, long[]> getRangeLong() {
+    public Map<Integer, Long[]> getRangeLong() {
         return this.rangeLong;
     }
 
     public Map<Integer, Instant[]> getRangeInstant() {
         return this.rangeInstant;
+    }
+
+    public ArrayList<Map> getAllRanges() {
+        ArrayList<Map> mapList = new ArrayList<>();
+
+        mapList.add(this.rangeDouble);
+        mapList.add(this.rangeLong);
+        mapList.add(this.rangeInstant);
+
+        return mapList;
     }
 
     public int getScoring() {

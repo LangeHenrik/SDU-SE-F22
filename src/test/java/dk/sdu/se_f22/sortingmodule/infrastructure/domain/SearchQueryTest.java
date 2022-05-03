@@ -39,21 +39,21 @@ class SearchQueryTest {
 
     @Test
     void addRangeTest() {
-        HashMap<Integer, long[]> h = new HashMap<>();
-        h.put(1, new long[]{3, 8});
-        h.put(2, new long[]{7, 52});
+        HashMap<Integer, Long[]> h = new HashMap<>();
+        h.put(1, new Long[]{3L, 8L});
+        h.put(2, new Long[]{7L, 52L});
 
 
         SearchQuery s = new SearchQuery();
         s.addRangeLong(1, 3, 8);
         s.addRangeDouble(2, 19.4, 52.7);
 
-        Iterator<Map.Entry<Integer, long[]>> iteratorH = h.entrySet().iterator();
-        Iterator<Map.Entry<Integer, long[]>> iteratorS = s.getRangeLong().entrySet().iterator();
+        Iterator<Map.Entry<Integer, Long[]>> iteratorH = h.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Long[]>> iteratorS = s.getRangeLong().entrySet().iterator();
 
         while (iteratorH.hasNext()) {
-            Map.Entry<Integer, long[]> temp_H = iteratorH.next();
-            Map.Entry<Integer, long[]> temp_S = iteratorS.next();
+            Map.Entry<Integer, Long[]> temp_H = iteratorH.next();
+            Map.Entry<Integer, Long[]> temp_S = iteratorS.next();
 
             if (!temp_H.getKey().equals(temp_S.getKey()) &&
                     !Arrays.equals((temp_H.getValue()), (temp_S.getValue()))) {
@@ -65,7 +65,7 @@ class SearchQueryTest {
     @Test
     void clearRangeTest() {
         SearchQuery s = new SearchQuery();
-        HashMap<Integer, long[]> h = new HashMap<>();
+        HashMap<Integer, Long[]> h = new HashMap<>();
 
         s.addRangeDouble(1, 3.9, 8.1);
         s.addRangeDouble(2, 19.4, 52.7);

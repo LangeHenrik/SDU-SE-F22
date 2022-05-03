@@ -73,7 +73,7 @@ public class DBMigration {
             boolean migrationStatus;
 
             for (String fileName : fileList) {
-                // fileName = fileName.toLowerCase();
+                fileName = fileName.toLowerCase();
 
                 // Ensure the file is a sql file
                 if (!this.validateFile(fileName)) {

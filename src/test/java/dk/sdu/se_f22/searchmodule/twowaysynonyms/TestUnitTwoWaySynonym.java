@@ -12,7 +12,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TestUnitTwoWaySynonym {
-    static Connection conn = DBConnection.getConnection();
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     static String _defaultSynonym;
     static ArrayList<Synonym> _defaultRelatedSynonymCollection;
@@ -159,7 +158,7 @@ public class TestUnitTwoWaySynonym {
     }
 
     private static void TruncateDB() {
-        try {
+        try (var conn = DBConnection.getPooledConnection()) {
             Statement stmt = conn.createStatement();
             stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY");
         } catch (SQLException e) {

@@ -38,7 +38,6 @@ class ProductTest {
             for (ProductAttribute pA : ProductAttribute.values()) { //asserting pAs
                 if (p.get(pA) == null) { //if pA is null add i+1
                     i++;
-                    //System.out.println("i++ " + p.get(pA));
                 }
                 assertNotNull(pA);
             }
@@ -66,14 +65,6 @@ class ProductTest {
         Product product = productTestList.get(0);
         assertThrows(NumberFormatException.class, () -> product.getAsNumeric(ProductAttribute.NAME));
         assertThrows(NullPointerException.class, () -> product.getAsNumeric(ProductAttribute.SIZE));
-        
-        /*for (ProductAttribute pA : ProductAttribute.values()) {
-            for(Product p : productTestList) {
-                assertThrows(NumberFormatException.class, () -> p.getAsNumeric(pA));
-                //assertNull(p.getAsNumeric(pA));
-            }
-        }*/
-        
     }
     
     @Test

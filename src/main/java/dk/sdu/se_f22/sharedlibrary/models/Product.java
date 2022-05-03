@@ -17,13 +17,10 @@ public class Product { //initialize class
     }
     
     public @Nullable String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
-        return productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
+        return productAttributes.get(pA); //returns hashmap of pA's
     }
     
-    public double getAsNumeric(ProductAttribute pA){
-        /*if (get(pA).isEmpty()){
-            throw new NullPointerException("No value for " + pA.alias);
-        }*/
+    public double getAsNumeric(ProductAttribute pA) { //returns product attribute as a double
         String pAttr = get(pA).replaceAll("\"","");
         double result;
         result = Double.parseDouble(pAttr);
@@ -36,13 +33,13 @@ public class Product { //initialize class
     } //returns an arraylist of the available shops
     
     public boolean set(ProductAttribute pA, String value){
+        if(value.endsWith("\"")){
+            value = value.substring(0,value.length() - 1); //?
+        }
+        
         if (value.isEmpty()){
             productAttributes.put(pA, null);
             return productAttributes.get(pA) == null;
-        }
-        
-        if(value.endsWith("\"")){
-            value = value.substring(0,value.length() - 1); //?
         }
         
         productAttributes.put(pA,value); //assigns key and values to map

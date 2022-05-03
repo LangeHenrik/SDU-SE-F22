@@ -102,12 +102,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>dk.sdu</groupId>
-            <artifactId>SE_F22</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
             <version>4.0.16-alpha</version>

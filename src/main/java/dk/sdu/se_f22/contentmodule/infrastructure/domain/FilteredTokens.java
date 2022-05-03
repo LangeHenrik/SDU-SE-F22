@@ -1,5 +1,9 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.contentmodule.infrastructure.mockCMSInfra.IMockCMSIndex;
+import dk.sdu.se_f22.contentmodule.infrastructure.mockCMSInfra.MockCMSIndex;
+import dk.sdu.se_f22.contentmodule.infrastructure.mockCMSInfra.MockFacade;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,15 +18,16 @@ class  FilteredTokens {
     private Date timeStamp;
     private static ArrayList<String> tokenStrings;
     private static ArrayList<Token> stringTokens;
-    //IStopWords stopwords = new StopWords;
+    IMockCMSIndex mockindex = new MockCMSIndex(); // used for mocking Index-module
+    ArrayList<Token> mocktokens = new ArrayList<>();  //used for mocking Index-module
+    MockFacade mockfacade = new MockFacade(); //used for mocking Stop,Irr & Stem-modules
     //IIrregularWords irregularWords = new IrregularWords();
-    //IStemmer stemming = new Stemmer; // method name stem
-    //interfaceSearch indexSearch = new interfaceSearch; //Search() returns Arraylist of Integers, takes Arraylist of Strings
-    //index() void - method for indexing
 
     public FilteredTokens(ArrayList<Token> tokens) {
         this.tokens = tokens;
     }
+
+
 
     public FilteredTokens(int idToken, String filteredTokens){
         this.idToken = idToken;
@@ -37,7 +42,7 @@ class  FilteredTokens {
         return filteredTokens;
     }
 
-    public static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
+    static ArrayList<String> tokenToString(ArrayList<Token> tokens) {
         tokenStrings = new ArrayList<>();
         for(Token t : tokens) {
             tokenStrings.add(t.getDocumentText());
@@ -60,9 +65,14 @@ class  FilteredTokens {
     ArrayList<Token> filterTokens(ArrayList<Token> tokens) {
         tokenToString(tokens);
 
-        //tokens.set(StopWords.filter(tokenStrings));
+        //tokens.set(classstopwords.methodprovided(tokenStrings));
         //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokenStrings));
-        //tokens.set(Stemming.stem(tokenStrings));
+        //tokens.set(classstem.methodprovided(tokenStrings));
+
+        //For unit-testing
+        mockfacade.mockUseStopW(tokenStrings);
+        mockfacade.mockUseIrr(tokenStrings);
+        mockfacade.mockUseStem(tokenStrings);
 
         stringToToken(tokenStrings);
 
@@ -78,6 +88,11 @@ class  FilteredTokens {
 
     }*/ //This method is probably not nessecery
 
-
-
+    /* Just a method for testing
+    ArrayList<Token> mockFilterTokens(ArrayList<Token> mocktokens){  //a method for mocking and testing
+        mockfacade.mockUseStopW(mocktokens);
+        mockfacade.mockUseIrr(mocktokens);
+        mockfacade.mockUseStem(mocktokens);
+        return mocktokens;
+    }*/
 }

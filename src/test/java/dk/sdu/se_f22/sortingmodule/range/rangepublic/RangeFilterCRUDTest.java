@@ -720,12 +720,35 @@ public class RangeFilterCRUDTest {
 
                             () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
                             () -> assertEquals(rangefilter.getDescription(), modifiedFilter.getDescription()),
-                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
-                            () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
-                            () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
-                            () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
-                            () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute())
                     );
+                    if (rangefilter instanceof DoubleFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+
+                        );
+                    }
+                    if (rangefilter instanceof LongFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinLong(), modifiedFilter.getDbMinLong()),
+                                () -> assertEquals(rangefilter.getDbMaxLong(), modifiedFilter.getDbMaxLong()),
+                                () -> assertEquals(rangefilter.getUserMaxLong(), modifiedFilter.getUserMaxLong()),
+                                () -> assertEquals(rangefilter.getUserMinLong(), modifiedFilter.getUserMinLong())
+
+                        );
+                    }
+                    if (rangefilter instanceof TimeFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinInstant(), modifiedFilter.getDbMinInstant()),
+                                () -> assertEquals(rangefilter.getDbMaxInstant(), modifiedFilter.getDbMaxInstant()),
+                                () -> assertEquals(rangefilter.getUserMaxInstant(), modifiedFilter.getUserMaxInstant()),
+                                () -> assertEquals(rangefilter.getUserMinInstant(), modifiedFilter.getUserMinInstant())
+
+                        );
+                    }
                 }
 
                 @ParameterizedTest
@@ -742,12 +765,35 @@ public class RangeFilterCRUDTest {
 
                             () -> assertEquals(rangefilter.getName(), modifiedFilter.getName()),
                             () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
-                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
-                            () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
-                            () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
-                            () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
-                            () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute())
                     );
+                    if (rangefilter instanceof DoubleFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+
+                        );
+                    }
+                    if (rangefilter instanceof LongFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinLong(), modifiedFilter.getDbMinLong()),
+                                () -> assertEquals(rangefilter.getDbMaxLong(), modifiedFilter.getDbMaxLong()),
+                                () -> assertEquals(rangefilter.getUserMaxLong(), modifiedFilter.getUserMaxLong()),
+                                () -> assertEquals(rangefilter.getUserMinLong(), modifiedFilter.getUserMinLong())
+
+                        );
+                    }
+                    if (rangefilter instanceof TimeFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinInstant(), modifiedFilter.getDbMinInstant()),
+                                () -> assertEquals(rangefilter.getDbMaxInstant(), modifiedFilter.getDbMaxInstant()),
+                                () -> assertEquals(rangefilter.getUserMaxInstant(), modifiedFilter.getUserMaxInstant()),
+                                () -> assertEquals(rangefilter.getUserMinInstant(), modifiedFilter.getUserMinInstant())
+
+                        );
+                    }
                 }
 
 
@@ -767,12 +813,35 @@ public class RangeFilterCRUDTest {
                             () -> assertEquals(newName, modifiedFilter.getName()),
 
                             () -> assertEquals(rangefilter.getType(), modifiedFilter.getType()),
-                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute()),
-                            () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
-                            () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
-                            () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
-                            () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+                            () -> assertEquals(rangefilter.getProductAttribute(), modifiedFilter.getProductAttribute())
                     );
+                    if (rangefilter instanceof DoubleFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinDouble(), modifiedFilter.getDbMinDouble()),
+                                () -> assertEquals(rangefilter.getDbMaxDouble(), modifiedFilter.getDbMaxDouble()),
+                                () -> assertEquals(rangefilter.getUserMaxDouble(), modifiedFilter.getUserMaxDouble()),
+                                () -> assertEquals(rangefilter.getUserMinDouble(), modifiedFilter.getUserMinDouble())
+
+                        );
+                    }
+                    if (rangefilter instanceof LongFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinLong(), modifiedFilter.getDbMinLong()),
+                                () -> assertEquals(rangefilter.getDbMaxLong(), modifiedFilter.getDbMaxLong()),
+                                () -> assertEquals(rangefilter.getUserMaxLong(), modifiedFilter.getUserMaxLong()),
+                                () -> assertEquals(rangefilter.getUserMinLong(), modifiedFilter.getUserMinLong())
+
+                        );
+                    }
+                    if (rangefilter instanceof TimeFilter) {
+                        assertAll(
+                                () -> assertEquals(rangefilter.getDbMinInstant(), modifiedFilter.getDbMinInstant()),
+                                () -> assertEquals(rangefilter.getDbMaxInstant(), modifiedFilter.getDbMaxInstant()),
+                                () -> assertEquals(rangefilter.getUserMaxInstant(), modifiedFilter.getUserMaxInstant()),
+                                () -> assertEquals(rangefilter.getUserMinInstant(), modifiedFilter.getUserMinInstant())
+
+                        );
+                    }
                 }
 
                 @Nested

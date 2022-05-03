@@ -213,10 +213,10 @@ public class TwoWaySynonym implements DatabaseOperator {
             return synonyms;
         } catch (SQLTimeoutException throwables){
             System.out.println("Driver timed out, statement execution took too long");
-            return null;
+            return new ArrayList<>();
         } catch (SQLException throwables){
             System.out.println("Query could not be executed");
-            return null;
+            return new ArrayList<>();
         }
     }
 

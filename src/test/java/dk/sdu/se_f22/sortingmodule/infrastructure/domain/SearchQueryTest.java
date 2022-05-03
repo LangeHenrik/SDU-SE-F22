@@ -2,8 +2,8 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +15,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(7);
         s.setCategory(a);
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -24,7 +24,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(2);
         s.addCategory(2);
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -34,35 +34,44 @@ class SearchQueryTest {
         s.addCategory(1);
         s.addCategory(2);
         s.clearCategory();
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
     void addRangeTest() {
+        HashMap<Integer, String[]> h = new HashMap<>();
+        h.put(1, new String[]{"3", "8"});
+        h.put(2, new String[]{"19.4", "52.7"});
+
+
         SearchQuery s = new SearchQuery();
-        ArrayList<Integer> a = new ArrayList<>();
+        s.addRange(1, "3", "8");
+        s.addRange(2, "19.4", "52.7");
 
-        fail();
+        Iterator<Map.Entry<Integer, String[]>> iteratorH = h.entrySet().iterator();
+        Iterator<Map.Entry<Integer, String[]>> iteratorS = s.getRange().entrySet().iterator();
 
-        s.addRange(1, 2, 3);
-        s.addRange(2,4,1);
-        s.clearRange();
+        while (iteratorH.hasNext()) {
+            Map.Entry<Integer, String[]> temp_H = iteratorH.next();
+            Map.Entry<Integer, String[]> temp_S = iteratorS.next();
 
-        // TODO: Add ranges to a, for testing that a and s is the same
-
-        assertEquals(a, s.range);
+            if (!temp_H.getKey().equals(temp_S.getKey()) &&
+                    !Arrays.toString(temp_H.getValue()).equals(Arrays.toString(temp_S.getValue()))) {
+                fail("addRangeTest failure.");
+            }
+        }
     }
 
     @Test
     void clearRangeTest() {
         SearchQuery s = new SearchQuery();
-        ArrayList<Integer> a = new ArrayList<>();
+        HashMap<Integer, String[]> h = new HashMap<>();
 
-        s.addRange(1, 2, 3);
-        s.addRange(2,4,1);
+        s.addRange(1, "3", "8");
+        s.addRange(2, "19.4", "52.7");
         s.clearRange();
 
-        assertEquals(a, s.range);
+        assertEquals(h, s.getRange());
     }
 
     @Test
@@ -70,23 +79,23 @@ class SearchQueryTest {
         SearchQuery s = new SearchQuery();
         int[] values = {1,2};
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
 
         values[0] = 654;
         values[1] = 68469826;
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
 
         values[0] = -48;
         values[1] = 867;
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
     }
 
     @Test
     void setScoringTest() {
         SearchQuery s = new SearchQuery();
         s.setScoring(5);
-        assertEquals(5, s.scoring);
+        assertEquals(5, s.getScoring());
     }
 }

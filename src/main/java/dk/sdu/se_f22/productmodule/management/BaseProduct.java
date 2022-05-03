@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**This is the class used <b>internally in the product module</b>.<br>
+ * Before being passed on to searchModule <b>must</b> be converted to the common class {@link dk.sdu.se_f22.sharedlibrary.models.Product}
+ */
 public class BaseProduct { //initialize class
     
     private final HashMap<ProductAttribute, String> productAttributes; //initialize hashmap to contain product attributes

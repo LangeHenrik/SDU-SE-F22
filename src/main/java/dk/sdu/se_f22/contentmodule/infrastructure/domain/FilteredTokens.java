@@ -17,7 +17,8 @@ class  FilteredTokens {
     //IStopWords stopwords = new StopWords;
     //IIrregularWords irregularWords = new IrregularWords();
     //IStemmer stemming = new Stemmer; // method name stem
-    //interfaceSearch indexSearch = new interfaceSearch; //Search() returns Arraylist of Integers, takes Arraylist of Strings
+    //InterfaceOutgoing indexNSearch = new InterfaceOutgoing;
+    //Search() returns Arraylist of Integers, takes Arraylist of Strings
     //index() void - method for indexing
 
     public FilteredTokens(ArrayList<Token> tokens) {
@@ -62,7 +63,7 @@ class  FilteredTokens {
 
         //tokens.set(StopWords.filter(tokenStrings));
         //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokenStrings));
-        //tokens.set(Stemming.stem(tokenStrings));
+        //tokens.set(Stemmer.stem(tokenStrings));
 
         stringToToken(tokenStrings);
 
@@ -70,14 +71,8 @@ class  FilteredTokens {
         return stringTokens;
     }
 
-    /*void setTokens(ArrayList<Token> tokenslist) {   //This method should be changed to a method for passing the tokens on to the Index module
-        tokens = new ArrayList<>();
-        tokens.addAll(tokenslist);
-
-        mockindex.mockIndex(mocktokens); //used for mocking the method for indexing tokens
-
-    }*/ //This method is probably not nessecery
-
-
-
+    /* //method for passing the tokens on to the Index module
+    void index(ArrayList<Token> stringTokens) {
+        indexNsearch.index(stringTokens);
+    }*/
 }

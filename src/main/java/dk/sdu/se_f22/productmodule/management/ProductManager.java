@@ -220,7 +220,7 @@ public class ProductManager implements IProductManager, Runnable{
         
         //Right here is where the XXXX.updateIndex() call to the module from Group 2.2 goes (see below):
         
-        ProductIndexInfrastructure.getInstance().getProductIndex().indexProducts(updatedProductArray);
+        ProductIndexInfrastructure.getInstance().getProductIndex().indexProducts(updatedBaseProductArray);
         
         return backgroundThread.isAlive();
     }

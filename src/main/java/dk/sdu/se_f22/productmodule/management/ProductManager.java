@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.productmodule.management;
 
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.io.*;
 import java.util.ArrayList;

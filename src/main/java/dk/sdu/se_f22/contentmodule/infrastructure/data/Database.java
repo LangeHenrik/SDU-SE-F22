@@ -4,67 +4,38 @@ package dk.sdu.se_f22.contentmodule.infrastructure.data;
 import java.sql.*;
 import java.util.ArrayList;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
 public class Database implements DatabaseInterface {
-    private static Database instance;
-    private Connection conn = null;
-
-    private Database(){setupDatabase();}
-
-    public static Database getInstance(){
-        if (instance == null){
-            instance = new Database();
-        }
-        return instance;
+    public void saveFilteredTokens(ArrayList<String> tokens) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    public ArrayList<String> loadFilteredTokens() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-    public void setupDatabase() {
-        //fill in database name and password
-        final String url = "jdbc:postgresql://localhost:5432/testdb"; //
-        final String user = "postgres";
-        final String password = "2406";
-
-        try {
-            conn = DriverManager.getConnection(url, user, password);
-
-            if (conn != null) {
-                System.out.println("Successfully connected to test database.");
-
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to connect to test database.");
-            e.printStackTrace();
-        } finally {
-            if(conn == null){System.exit(-1);}
+    public void printTokens(ArrayList<String> tokens) {
+        for (int i = 0; i < tokens.toArray().length; i++) {
+            System.out.println(tokens.get(i));
         }
     }
 
-    public void executeQuery(String query) {
-        PreparedStatement insertstatement;
-        try{
-            //String query="create table "+table_name+" (token_id SERIAL, token char(20), primary key(token_id));";
-            System.out.println(query);
-            insertstatement=conn.prepareStatement(query);
-            insertstatement.execute();
-            insertstatement.close();
-            System.out.println("Query success");
-        }catch (SQLException e) {
-            System.out.println(e);
-        }
+    @Override
+    public void createTable(String table_name) {
+        // TODO Auto-generated method stub
+        
     }
 
-    public String getParameters() {
-        PreparedStatement loadstatement;
-        String chars = "";
-        try {
-            loadstatement=conn.prepareStatement("SELECT * FROM cms_tokenparameters");
-            ResultSet queryResultSet = loadstatement.executeQuery();
-            while (queryResultSet.next()) {
-                chars = chars + queryResultSet.getString(("limitedchar"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return chars;
+    @Override
+    public void saveTokens(String table_name, ArrayList<String> tokens) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public ArrayList<String> loadTokens(String table_name) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

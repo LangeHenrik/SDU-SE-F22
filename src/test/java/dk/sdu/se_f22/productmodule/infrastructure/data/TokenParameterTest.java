@@ -1,11 +1,9 @@
 package dk.sdu.se_f22.productmodule.infrastructure.data;
 
-import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +18,7 @@ class TokenParameterTest {
     private TokenParameter tokenParameter;
 
     @BeforeEach
-    void resetTokenParamter() {
+    void resetTokenParameter() {
         tokenParameter = new TokenParameter(" ", "('./?!')");
     }
 
@@ -29,6 +27,9 @@ class TokenParameterTest {
         List<String> ignoredChars = new ArrayList<>(List.of("@", "=", "?"));
         List<String> ignoredCharsVerify = new ArrayList<>(List.of("@", "=", "?"));
         tokenParameter.setIgnoredChars(ignoredChars);
+
+        // Sorting is only done here, since the IterableEquals also compared order, and since we don't care about the order in the actual
+        // implementation, we just sort and verify they match element wise.
         Collections.sort(ignoredChars);
         Collections.sort(ignoredCharsVerify);
 
@@ -42,6 +43,9 @@ class TokenParameterTest {
         tokenParameter.setIgnoredChars(ignoredChars);
 
         List<String> ignoredChars2 = tokenParameter.getIgnoredChars();
+
+        // Sorting is only done here, since the IterableEquals also compared order, and since we don't care about the order in the actual
+        // implementation, we just sort and verify they match element wise.
         Collections.sort(ignoredCharsVerify);
         Collections.sort(ignoredChars2);
 
@@ -58,24 +62,28 @@ class TokenParameterTest {
 
     @Test
     void save() {
+        // Save the default token parameter.
         tokenParameter.save();
+        // Now check load again, since we know it has been saved.
         load();
     }
 
     @Test
     void load() {
-        TokenParameter loadedTokenParamter = TokenParameterStore.loadTokenParameter();
+        TokenParameter loadedTokenParameter = TokenParameterStore.loadTokenParameter();
 
         try {
             PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement("SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;");
             ResultSet result =  stmt.executeQuery();
 
             if (result.next()) {
-                assertEquals(loadedTokenParamter.getDelimiter(), result.getString("delimiter"));
-                assertEquals(loadedTokenParamter.getIgnoredChars(), Arrays.asList(result.getString("ignored_chars").split("")));
+                // If hit was found, compared the actual object returned by the load method to the DB values.
+                assertEquals(loadedTokenParameter.getDelimiter(), result.getString("delimiter"));
+                assertEquals(loadedTokenParameter.getIgnoredChars(), Arrays.asList(result.getString("ignored_chars").split("")));
             } else {
-                assertEquals(loadedTokenParamter.getDelimiter(), " "); // Default value
-                assertEquals(loadedTokenParamter.getIgnoredChars(), Arrays.asList("('./?!')".split(""))); // Default value
+                // Else check that it properly returns a TokenParameter object with default values.
+                assertEquals(loadedTokenParameter.getDelimiter(), TokenParameterStore.DELIMITER_DEFAULT); // Default value
+                assertEquals(loadedTokenParameter.getIgnoredChars(), Arrays.asList(TokenParameterStore.IGNORED_CHARS_DEFAULT.split(""))); // Default value
             }
         } catch (SQLException e) {
             fail(e.getMessage());

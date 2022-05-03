@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 class TokenParameterStore  {
+	public static String DELIMITER_DEFAULT = " ";
+	public static String IGNORED_CHARS_DEFAULT = " ";
 
 	public static void saveTokenParameter(TokenParameter tp) {
 		StringBuilder sb = new StringBuilder();
@@ -45,7 +47,7 @@ class TokenParameterStore  {
 			ex.printStackTrace();
 		}
 
-		return new TokenParameter(" ", "('./?!')");
+		return new TokenParameter(DELIMITER_DEFAULT, IGNORED_CHARS_DEFAULT);
 	}
 
 

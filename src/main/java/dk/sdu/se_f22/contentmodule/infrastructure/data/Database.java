@@ -52,4 +52,19 @@ public class Database implements DatabaseInterface {
             System.out.println(e);
         }
     }
+
+    public String getParameters() {
+        PreparedStatement loadstatement;
+        String chars = "";
+        try {
+            loadstatement=conn.prepareStatement("SELECT * FROM cms_tokenparameters");
+            ResultSet queryResultSet = loadstatement.executeQuery();
+            while (queryResultSet.next()) {
+                chars = chars + queryResultSet.getString(("limitedchar"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return chars;
+    }
 }

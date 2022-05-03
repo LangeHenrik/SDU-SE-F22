@@ -17,6 +17,8 @@ class  FilteredTokens {
     //IStopWords stopwords = new StopWords;
     //IIrregularWords irregularWords = new IrregularWords();
     //IStemmer stemming = new Stemmer; // method name stem
+    //interfaceSearch indexSearch = new interfaceSearch; //Search() returns Arraylist of Integers, takes Arraylist of Strings
+    //index() void - method for indexing
 
     public FilteredTokens(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -75,5 +77,7 @@ class  FilteredTokens {
         mockindex.mockIndex(mocktokens); //used for mocking the method for indexing tokens
 
     }*/ //This method is probably not nessecery
+
+
 
 }

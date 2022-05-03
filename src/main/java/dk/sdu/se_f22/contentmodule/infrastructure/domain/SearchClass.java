@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
+
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 
 import java.lang.reflect.Array;

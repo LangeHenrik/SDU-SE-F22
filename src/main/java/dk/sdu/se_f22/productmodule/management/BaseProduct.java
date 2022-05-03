@@ -7,7 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**This is the class used <b>internally in the product module</b>.<br>
- * Before being passed on to searchModule <b>must</b> be converted to the common class {@link dk.sdu.se_f22.sharedlibrary.models.Product}
+ * This class uses a getter which takes a {@link ProductAttribute} to choose what attribute to get.
+ * It is possible to choose between 2 different getters to get the value either as numeric {@link BaseProduct#getAsNumeric(ProductAttribute)}
+ * or as a string {@link BaseProduct#get(ProductAttribute)}<br>
+ * Before being passed on to searchModule an instance of this class <b>must</b> be converted to the common class {@link dk.sdu.se_f22.sharedlibrary.models.Product} <br>
+ * (A constructor is supplied for this {@link dk.sdu.se_f22.sharedlibrary.models.Product#Product(BaseProduct)}
  */
 public class BaseProduct { //initialize class
     

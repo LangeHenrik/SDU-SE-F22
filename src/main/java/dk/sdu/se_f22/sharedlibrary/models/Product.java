@@ -12,7 +12,8 @@ import java.util.UUID;
  * Is therefore the type used for products in {@link dk.sdu.se_f22.sharedlibrary.SearchHits}
  * <br>
  * It includes among others a constructor {@link Product#Product(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
- * and then parses the attribute values from the {@link BaseProduct} supplied.
+ * and then parses the attribute values from the {@link BaseProduct} supplied.<br>
+ * This class has a getter for each specific product attribute (i.e. {@link Product#getPrice()}).
  */
 public class Product {
     UUID uuid;

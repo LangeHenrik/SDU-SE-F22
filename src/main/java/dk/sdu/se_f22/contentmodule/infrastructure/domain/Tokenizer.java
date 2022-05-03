@@ -12,14 +12,14 @@ class Tokenizer {
     public static ArrayList<Token> tokenizeHTMLBodyText(HTMLSite site) {
         ArrayList<Token> tokens = new ArrayList<>();
 
-        String [] splittedStrings = site.getDocumentText().split(" ");
+        String [] splittedStrings = site.getDocumentText().split("[-.,;:_ ]");
 
 
         for (String s: splittedStrings){
-
-           {
-
-               tokens.add(new Token(s.toLowerCase(Locale.ROOT), site.getId()));
+            {
+                if (s != "") {
+                    tokens.add(new Token(s.toLowerCase(Locale.ROOT), site.getId()));
+                }
             }
         }
         return tokens;

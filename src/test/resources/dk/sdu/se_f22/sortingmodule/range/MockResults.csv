@@ -5,3 +5,4 @@ id,average user review,ean,price,published date,expiration date,category,name,de
 2c8ee936-cabc-11ec-9d64-0242ac120002,3.8,12345672,2000,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,pc,testPCUltra,ultra testy,unavailable,unavailable,unavailable
 2c8ee936-cabc-11ec-9d64-0242ac120002,4.8,12345673,10,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,monitor,testMonitor,test monitoring,unavailable,unavailable,unavailable
 2c8ee936-cabc-11ec-9d64-0242ac120002,3.9,12345674,999,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,hdd,testHDD,test capacity boi,unavailable,unavailable,unavailable
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.9,12345675,1001,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,sshd,testSSHD,test capacity boi 2.0,unavailable,unavailable,unavailable

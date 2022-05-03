@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 
@@ -80,10 +80,10 @@ class DoubleFilter extends RangeFilterClass {
 
 
     @Override
-    Collection<ProductHit> filterList(Collection<ProductHit> inputs){
+    Collection<Product> filterList(Collection<Product> inputs){
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max
-        List<ProductHit> filteredResults = new ArrayList<>();
+        List<Product> filteredResults = new ArrayList<>();
 
         int attributeNumber = switch (this.getProductAttribute()) {
             case "price" -> 1;
@@ -94,7 +94,7 @@ class DoubleFilter extends RangeFilterClass {
         };
 
         // loop over all the products in the list and access the correct attribute:
-        for (ProductHit productHit : inputs) {
+        for (Product productHit : inputs) {
             // We use the switch on numbers instead of the string, since we run the switch for each element in the list
             // This version has the highest likelihood of getting compiled to a TableSwitch, which is very fast
             switch (attributeNumber) {

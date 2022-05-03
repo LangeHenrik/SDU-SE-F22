@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -39,26 +39,40 @@ class LongFilterTest {
         void useFilter() {
             // The cause for the fail is known.
             // See DoubleFilterTest of the same method for explanation
-            LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
-            internalFilter.setUserMax(1000);
-            internalFilter.setUserMin(0);
-            List<ProductHit> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
+            LongFilter internalFilter = new LongFilter(0, "test name", "test description", "ean", 12345673, 12345675);
+//            internalFilter.setUserMax(1000);
+//            internalFilter.setUserMin(0);
+            // Not necessary, but should be tested in a separate test.
+            List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
-            assertEquals(6, mockResults.size());
+            assertEquals(7, mockResults.size());
 
 
-            List<ProductHit> copy = List.copyOf(mockResults);
-            ArrayList<ProductHit> expectedResults = new ArrayList<>(copy);
-            expectedResults.remove(1);
+            List<Product> copy = List.copyOf(mockResults);
+            ArrayList<Product> expectedResults = new ArrayList<>(copy);
+            expectedResults.remove(3);
             expectedResults.remove(2);
+            expectedResults.remove(1);
+            expectedResults.remove(0);
+            // equivalent to repeating expectedresults.remove(0) 4 times
+            // This has been done to improve readability
 
-            //crude check that the expectedResults are still the same as when the test was written
-            assertEquals(4, expectedResults.size());
+            Collection<Product> filteredResults = internalFilter.useFilter(mockResults);
 
-            Collection<ProductHit> filteredResults = internalFilter.useFilter(mockResults);
+            assertEquals(expectedResults, filteredResults,  () -> {
+                StringBuilder out = new StringBuilder("Expected results: length=" + expectedResults.size() + "\n");
+                for (Product product: expectedResults){
+                    out.append(product).append("\n");
+                }
 
-            assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults);
+                out.append("\nActual results: length=").append(filteredResults.size()).append("\n");
+                for (Product product: filteredResults){
+                    out.append(product).append("\n");
+                }
+
+                return out.toString();
+            });
         }
 
         @Test
@@ -67,9 +81,9 @@ class LongFilterTest {
             LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000);
             internalFilter.setUserMin(0);
-            Collection<ProductHit> emptyResults = new ArrayList<>();
+            Collection<Product> emptyResults = new ArrayList<>();
 
-            Collection<ProductHit> filteredResults = internalFilter.useFilter(emptyResults);
+            Collection<Product> filteredResults = internalFilter.useFilter(emptyResults);
 
             assertEquals(emptyResults, filteredResults);
         }

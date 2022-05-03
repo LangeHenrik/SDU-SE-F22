@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 
@@ -79,14 +79,14 @@ class LongFilter extends RangeFilterClass{
     }
 
     @Override
-    Collection<ProductHit> filterList(Collection<ProductHit> inputs) {
+    Collection<Product> filterList(Collection<Product> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max
-        List<ProductHit> filteredResults = new ArrayList<>();
+        List<Product> filteredResults = new ArrayList<>();
 
 
         // loop over all the products in the list and access the correct attribute:
-        for (ProductHit productHit : inputs) {
+        for (Product productHit : inputs) {
             // Since there currently is only one attribute of type long, we can simply check on that
 
             // The else is redundant but kept in for readability

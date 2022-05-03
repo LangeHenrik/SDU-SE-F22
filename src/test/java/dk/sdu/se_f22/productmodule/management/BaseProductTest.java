@@ -1,7 +1,5 @@
 package dk.sdu.se_f22.productmodule.management;
 
-import dk.sdu.se_f22.sharedlibrary.models.Product;
-
 import org.junit.jupiter.api.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,7 +7,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProductTest {
+class BaseProductTest {
     private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
     
     @BeforeAll
@@ -24,14 +22,14 @@ class ProductTest {
     
     @Test
     void get() {
-        ArrayList<Product> productTestList = new ArrayList<>(); //initializing test arraylist
+        ArrayList<BaseProduct> baseProductTestList = new ArrayList<>(); //initializing test arraylist
         try { //trying read function
-            productTestList = reader.read();
+            baseProductTestList = reader.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        for (Product p : productTestList) { //running through test list
+        for (BaseProduct p : baseProductTestList) { //running through test list
             int i = 0; //int for counting null attributes
             p.print();
             
@@ -44,10 +42,10 @@ class ProductTest {
             }
             assertFalse(i>2);
         }
-        assertFalse(productTestList.isEmpty());
+        assertFalse(baseProductTestList.isEmpty());
         
         String currentUUIDInspected;
-        for(Product p : productTestList){
+        for(BaseProduct p : baseProductTestList){
             assertNotNull(currentUUIDInspected = p.get(ProductAttribute.UUID)); //Does each product have an UUID?
             assertEquals(36, currentUUIDInspected.length());            //Does each product's UUID have 36 characters? (It must)
         }
@@ -56,16 +54,16 @@ class ProductTest {
     
     @Test
     void getAsNumeric(){
-        ArrayList<Product> productTestList = new ArrayList<>(); //initializing test arraylist
+        ArrayList<BaseProduct> baseProductTestList = new ArrayList<>(); //initializing test arraylist
         try {                                                   //trying read function
-            productTestList = reader.read();
+            baseProductTestList = reader.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        Product product = productTestList.get(0);
-        assertThrows(NumberFormatException.class, () -> product.getAsNumeric(ProductAttribute.NAME));
-        assertThrows(NullPointerException.class, () -> product.getAsNumeric(ProductAttribute.SIZE));
+        BaseProduct baseProduct = baseProductTestList.get(0);
+        assertThrows(NumberFormatException.class, () -> baseProduct.getAsNumeric(ProductAttribute.NAME));
+        assertThrows(NullPointerException.class, () -> baseProduct.getAsNumeric(ProductAttribute.SIZE));
         
         /*for (ProductAttribute pA : ProductAttribute.values()) {
             for(Product p : productTestList) {
@@ -79,14 +77,14 @@ class ProductTest {
     @Test
     void getLocations() {
         
-        ArrayList<Product> productTestList = new ArrayList<>(); //initializing test arraylist
+        ArrayList<BaseProduct> baseProductTestList = new ArrayList<>(); //initializing test arraylist
         try {                                                   //trying read function
-            productTestList = reader.read();
+            baseProductTestList = reader.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        for(Product p : productTestList) {
+        for(BaseProduct p : baseProductTestList) {
             
             assertNotEquals(p.getLocations(), null);
             assertFalse(p.getLocations().isEmpty());
@@ -116,15 +114,15 @@ class ProductTest {
     @Test
     void set() {
         
-        ArrayList<Product> productTestList = new ArrayList<>(); //initializing test arraylist
+        ArrayList<BaseProduct> baseProductTestList = new ArrayList<>(); //initializing test arraylist
         try {                                                   //trying read function
-            productTestList = reader.read();
+            baseProductTestList = reader.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
         String baseTestString = "hello there";
         
-        for(Product p : productTestList){
+        for(BaseProduct p : baseProductTestList){
             for(ProductAttribute pA : ProductAttribute.values()){
                 
                 String previousValue = p.get(pA);
@@ -140,11 +138,11 @@ class ProductTest {
     
     @Test
     void setLocations() {
-        Product testProduct = new Product();
+        BaseProduct testBaseProduct = new BaseProduct();
         
         ArrayList<String> namesTest = new ArrayList<>(List.of("Some","Body","Once","Told","me","The","World","Was"));
-        assertTrue(testProduct.setLocations(new ArrayList<>(namesTest)));
-        assertEquals(namesTest, testProduct.getLocations());
+        assertTrue(testBaseProduct.setLocations(new ArrayList<>(namesTest)));
+        assertEquals(namesTest, testBaseProduct.getLocations());
     }
     
     @AfterEach

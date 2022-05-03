@@ -2,7 +2,6 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 
 import java.util.Collection;
 import java.util.List;

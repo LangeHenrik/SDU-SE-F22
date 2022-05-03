@@ -2,10 +2,8 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
-import org.w3c.dom.ranges.Range;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.time.Instant;
 import java.util.List;
 

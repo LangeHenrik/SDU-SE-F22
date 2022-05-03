@@ -1,13 +1,10 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
-import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.zip.CheckedOutputStream;
 
 class DoubleFilter extends RangeFilterClass {
     private final double DB_MIN;

@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 import java.sql.SQLException;
 import java.time.Instant;

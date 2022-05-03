@@ -41,7 +41,11 @@ public class Word {
             // If the character is a normal vowel, it obviously isn't a consonant.
             case 'a', 'e', 'i', 'o', 'u', 'æ', 'ø', 'å': return false;
             // If the character is a y, we need to check for the character's index minus one and return the reverse.
-            case 'y': return !isCons(idx - 1);
+            case 'y': {
+                if (idx == 0) return true;
+                return !isCons(idx - 1);
+            }
+
             default: return true;
         }
     }
@@ -96,6 +100,8 @@ public class Word {
     }
 
     public boolean containsVowel(int startIndex, int endIndex) {
+        if (endIndex < 0) return false;
+        if (startIndex > endIndex) return false;
         String stem = getWordString().substring(startIndex, endIndex);
         for (int i = 0; i < stem.length(); i++) {
             if (this.isVowel(i)) return true;
@@ -112,6 +118,7 @@ public class Word {
 
     // *o - the stem ends cvc, where the second c is not W, X or Y (e.g. -WIL, -HOP).
     public boolean endsWithCVC() {
+        if (this.getWordString().length() <= 2) return false;
 
         if (isCons(word.length() - 1) && isVowel(this.getWordString().length() - 2) && isCons(this.getWordString().length() - 3)) {
             switch (this.getWordString().charAt(this.getWordString().length() - 1)) {

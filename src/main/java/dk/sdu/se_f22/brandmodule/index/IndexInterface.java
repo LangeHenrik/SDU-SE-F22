@@ -3,7 +3,7 @@ import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import java.util.List;
 
 public interface IndexInterface {
-    public Brand searchBrandIndex(List<String> tokens);
+    public List<Brand> searchBrandIndex(List<String> tokens);
 
     public void indexBrandInformation(Brand brand, List<String> tokens);
 }

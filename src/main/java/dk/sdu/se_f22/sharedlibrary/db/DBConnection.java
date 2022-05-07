@@ -45,7 +45,6 @@ public class DBConnection {
 
         // We use a connection pool, to reuse database connections
         connectionPool = new BasicDataSource();
-        connectionPool.setDriverClassName("org.postgresql.Driver");
 
         // Connections settings
         connectionPool.setUrl(url);

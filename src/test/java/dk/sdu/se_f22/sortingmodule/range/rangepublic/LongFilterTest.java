@@ -34,7 +34,6 @@ class LongFilterTest {
 
         @Test
         @DisplayName("filter a list of actual products")
-        @Disabled("LongFilter.useFilter() is not implemented yet, but the test is written")
         void useFilter() {
             LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000);

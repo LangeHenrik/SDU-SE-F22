@@ -51,7 +51,7 @@ public class Persistence implements IPersistence {
             ResultSet r = getBrandId.executeQuery();
 
             while(r.next()){
-                brandIdList.add(r.getInt(1));
+                brandIdList.add(r.getInt(0));
             }
 
             for (int i : brandIdList ){

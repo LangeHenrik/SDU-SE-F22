@@ -28,7 +28,7 @@ public class DBMigration {
 
     public static void main(String[] args) {
         DBMigration migrator = new DBMigration();
-        migrator.migrate();
+        migrator.migrateFresh();
     }
 
     /**
@@ -54,6 +54,9 @@ public class DBMigration {
     public void migrate() {
         String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/";
 
+        // Run default SeedDatabase
+        
+
         try (
             Connection connection = DBConnection.getPooledConnection();
         ) {
@@ -71,8 +74,6 @@ public class DBMigration {
             boolean migrationStatus;
 
             for (String fileName : fileList) {
-                fileName = fileName.toLowerCase();
-
                 // Ensure the file is a sql file
                 if (!this.validateFile(fileName)) {
                     continue;
@@ -145,7 +146,7 @@ public class DBMigration {
      * @author v-nemeth
      * @author Mikkel Albrechtsen (The0mikkel)
      */
-    private boolean runSQLFromFile(Connection connection, String SQLFileName) {
+    public boolean runSQLFromFile(Connection connection, String SQLFileName) {
         // Begin transaction
         try {
             connection.setAutoCommit(false);

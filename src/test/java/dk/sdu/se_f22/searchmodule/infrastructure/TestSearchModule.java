@@ -5,8 +5,8 @@ import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockFilteringModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,11 +96,12 @@ public class TestSearchModule {
         SearchModule searchModule = new SearchModuleImpl() {
             @Override
             public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
-                if (clazz == Product.class) {
-                    List<Product> productPages = new ArrayList<>();
-                    productPages.add(new Product());
-                    return (List<T>) productPages;
-                } else if (clazz == Brand.class) {
+                if(clazz == BaseProduct.class) {
+                    List<BaseProduct> baseProductPages = new ArrayList<>();
+                    baseProductPages.add(new BaseProduct());
+                    return (List<T>) baseProductPages;
+                }
+                else if(clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
                     brand.setId(123);
@@ -113,8 +114,6 @@ public class TestSearchModule {
             }
         };
 
-
-
         SearchHits searchResult = searchModule.search("Hello world");
 
         // We cannot use assertArrayEquals because brand doesn't implement the comparable operator, so we just match
@@ -126,10 +125,10 @@ public class TestSearchModule {
         }
 
         // Same here, although we don't have any attribute fields to test against, so we just check that an object is in the list
-        List<Brand> products = searchResult.getProducts().stream().toList();
-        assertTrue(products.stream().findFirst().isPresent());
+        List<BaseProduct> baseProducts = searchResult.getProducts().stream().toList();
+        assertTrue(baseProducts.stream().findFirst().isPresent());
     }
-  
+
     void getDelimitersTest() {
         try {
             Connection connection = DBConnection.getPooledConnection();

@@ -71,6 +71,7 @@ public class SortingModuleImpl implements SortingModule {
         this.query.addRangeInstant(rangeId, startRange, endRange);
     }
 
+    @Override
     public void clearRange() {
         this.query.clearAllRanges();
     }
@@ -84,6 +85,16 @@ public class SortingModuleImpl implements SortingModule {
     public void setScoring(int scoring) {
         this.query.setScoring(scoring);
 
+    }
+
+    @Override
+    public List<RangeFilter> getAvailableRangeFilters() {
+        return this.query.getAvailableRangeFilters();
+    }
+
+    @Override
+    public SearchHits paginateHits(SearchHits searchHits) {
+        return this.query.paginateHits(searchHits);
     }
 
     @Override
@@ -158,9 +169,5 @@ public class SortingModuleImpl implements SortingModule {
 
     private void saveSearch() {
         SaveSearchQuery.saveSearch(this.query, this.searchString);
-    }
-
-    public List<RangeFilter> getAvailableRangeFilters() {
-        return this.query.getAvailableRangeFilters();
     }
 }

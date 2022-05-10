@@ -1,21 +1,21 @@
 package dk.sdu.se_f22.productmodule.index;
 
 
-// Requires ProductHit from group 4.4 and works it gets approved and merged
+// Requires Product from group 4.4 and works it gets approved and merged
 
 import java.sql.*;
 import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     private int categoryHits = 0;
     private int nameHits = 0;
     private int descriptionHits = 0;
-    private List<ProductHit> sortedList = new ArrayList<>();
+    private List<Product> sortedList = new ArrayList<>();
 
     private String url = "localhost";
     private int port = 5432;
@@ -51,9 +51,9 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     }
 
     // Method for finding amount of hits within a product by a token, then returning an indexed list by the hits
-    public List<ProductHit> indexProductsByToken(List<ProductHit> products, List<String> tokens) {
+    public List<Product> indexProductsByToken(List<Product> products, List<String> tokens) {
 
-        for(ProductHit p : products){
+        for(Product p : products){
             String[] categoryWords = p.getCategory().toLowerCase().split("/");
             String[] nameWords = p.getName().toLowerCase().split(" ");
             String[] descriptionWords = p.getDescription().toLowerCase().split(" ");
@@ -86,7 +86,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
 
-    public void updateProduct(String id, ProductHit product){
+    public void updateProduct(String id, Product product){
         try {
             PreparedStatement updateStatement = connection.prepareStatement(
                     "UPDATE product set averageUserReview = ?, instock = ?, ean = ?, price = ?, publisheddate = ?, expirationdate = ?, category = ?, name = ?, description = ?, weight = ? WHERE id = ?");
@@ -120,7 +120,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     }
 
 
-    public void createProduct(ProductHit product){
+    public void createProduct(Product product){
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("INSERT into products (uuid,averageuserreview,instock" +
@@ -148,16 +148,16 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     }
 
 
-    public List<ProductHit> getProducts(){
-        List<ProductHit> productHitList = new ArrayList<>();
+    public List<Product> getProducts(){
+        List<Product> ProductList = new ArrayList<>();
         try {
             PreparedStatement p = connection.prepareStatement("select * from products");
             ResultSet resultSet = p.executeQuery();
             while(resultSet.next()){
-                productHitList.add(new ProductHit(UUID.fromString(resultSet.getString(1)),
+                ProductList.add(new Product(UUID.fromString(resultSet.getString(1)),
                         resultSet.getDouble(2),
                         List.of(resultSet.getArray(3).toString()),
-                        resultSet.getLong(4),
+                        resultSet.getInt(4),
                         resultSet.getDouble(5),
                         resultSet.getTimestamp(6).toInstant(),
                         resultSet.getTimestamp(7).toInstant(),
@@ -171,7 +171,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return productHitList;
+        return ProductList;
     }
 }
 

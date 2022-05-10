@@ -19,5 +19,5 @@
    <Label layoutX="123.0" layoutY="105.0" prefHeight="17.0" prefWidth="65.0" text="Brand hits:" />
    <Label layoutX="215.0" layoutY="104.0" text="Product hits: " />
    <Label fx:id="brandHitsCounter" layoutX="181.0" layoutY="104.0" prefHeight="17.0" prefWidth="19.0" />
-   <Label fx:id="productHitsCounter" layoutX="286.0" layoutY="104.0" prefHeight="17.0" prefWidth="19.0" />
+   <Label fx:id="ProductsCounter" layoutX="286.0" layoutY="104.0" prefHeight="17.0" prefWidth="19.0" />
 </AnchorPane>

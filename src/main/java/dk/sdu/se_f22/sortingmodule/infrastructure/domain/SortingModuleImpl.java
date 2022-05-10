@@ -108,6 +108,27 @@ public class SortingModuleImpl implements SortingModule {
         searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
 
         // Range
+        RangeFilterCRUD filterCRUD = new RangeFilterCRUD();
+        List<RangeFilter> selectedFilters = new ArrayList<>();
+
+        for (Map.Entry<Integer, Double[]> tempEntry : this.query.getRangeDouble().entrySet()) {
+            try {
+                selectedFilters.add(filterCRUD.read(tempEntry.getKey()));
+
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(tempEntry.getValue()[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(tempEntry.getValue()[1]);
+
+            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        try {
+            RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
+        } catch (IllegalImplementationException e) {
+            e.printStackTrace();
+        }
 
         // Scoring
 

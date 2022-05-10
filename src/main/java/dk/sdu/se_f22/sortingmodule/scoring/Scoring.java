@@ -1,8 +1,12 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Date;
 
@@ -12,14 +16,15 @@ public class Scoring implements IScoring {
         for (ProductScore product : input) {
             double price = product.getProduct().getPrice();
             try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM prices ORDER BY bracket");
+                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'price' ORDER BY bracket");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
-                    if (price <= sqlReturnValues.getDouble(2)) {
-                        product.setScore(-sqlReturnValues.getInt(3) + product.getScore());
+                    double priceCompare = sqlReturnValues.getDouble(3);
+                    if (price < priceCompare) {
+                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(-sqlReturnValues.getInt(3) + product.getScore());
+                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
                     }
                 }
             } catch (SQLException e) {
@@ -30,16 +35,16 @@ public class Scoring implements IScoring {
 
     private void review(List<ProductScore> input) {
         for (ProductScore product : input) {
-            double review = product.getProduct().getReview();
+            double review = product.getProduct().getAverageUserReview();
             try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM reviews");
+                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'review';");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
-                    if (review <= sqlReturnValues.getDouble(2)) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                    if (review < sqlReturnValues.getDouble(3)) {
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                     }
                 }
             } catch (SQLException ex) {
@@ -50,16 +55,16 @@ public class Scoring implements IScoring {
 
     private void stock(List<ProductScore> input) {
         for (ProductScore product : input) {
-            int stock = product.getProduct().getStock();
-            try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM stocks");
-                 var sqlReturnValues = statement.executeQuery()) {
+            int stock = product.getProduct().getInStock().size();
+            try {var connection = DBConnection.getPooledConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'stock'");
+                var sqlReturnValues = statement.executeQuery();
                 while (sqlReturnValues.next()){
-                    if (stock <= sqlReturnValues.getInt(2)) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                    if (stock <= sqlReturnValues.getInt(3)) {
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                     }
                 }
             } catch (SQLException ex) {
@@ -70,17 +75,18 @@ public class Scoring implements IScoring {
 
     private void date(List<ProductScore> input) {
         for (ProductScore product : input) {
-            Date newDate = new Date();
-            int date = (int)(((newDate.getTime()-product.getProduct().getReleaseDate().getTime())/31556736)/1000);
+            Instant date = product.getProduct().getPublishedDate();
+
             try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM dates");
+                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'date'");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
-                    if (date <= sqlReturnValues.getInt(2)) {
-                        product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
+                    Instant newInstant = Instant.now().minusSeconds((long) sqlReturnValues.getInt(3) *60*60*24*365);
+                    if (date.isAfter(newInstant)) {
+                        product.setScore(-sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
+                        product.setScore(-sqlReturnValues.getInt(4)+product.getScore());
                     }
                 }
             } catch (SQLException ex) {
@@ -89,37 +95,66 @@ public class Scoring implements IScoring {
         }
     }
 
-    public List<ProductScore> wrapProduct (List<TestProduct> input) {
+
+    public List<ProductScore> wrapProduct (Collection<Product> input) {
+
         List<ProductScore> products = new ArrayList<>();
-        for (TestProduct testProduct : input) {
-            ProductScore productScore = new ProductScore(testProduct);
+
+        for (Product product : input) {
+            ProductScore productScore = new ProductScore(product);
             products.add(productScore);
         }
+
         return products;
     }
 
-    public List<TestProduct> unWrapProduct (List<ProductScore> input) {
-        List<TestProduct> products = new ArrayList<>();
+    public List<Product> unWrapProduct (List<ProductScore> input) {
+
+        List<Product> products = new ArrayList<>();
+
         for (ProductScore productScore : input) {
             products.add(productScore.getProduct());
         }
+
         return products;
     }
 
     @Override
-    public List<TestProduct> scoreSort(List<TestProduct> input) {
+    public SearchHits scoreSort(SearchHits input, String type) {
+
+        switch (type) {
+            case "all" -> input.setProducts(scoreSortAll(input.getProducts()));
+            case "price" -> input.setProducts(scoreSortPrice(input.getProducts()));
+            case "review" -> input.setProducts(scoreSortReview(input.getProducts()));
+            case "stock" -> input.setProducts(scoreSortStock(input.getProducts()));
+            case "date" -> input.setProducts(scoreSortDate(input.getProducts()));
+            default -> {
+                System.out.println("error: invalid sort type");
+
+                return input;
+            }
+        }
+
+        return input;
+    }
+
+    @Override
+    public Collection<Product> scoreSortAll(Collection<Product> input) {
+
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+
         price(products);
         review(products);
         stock(products);
         date(products);
+
         Collections.sort(products);
 
         return unWrapProduct(products);
     }
 
     @Override
-    public List<TestProduct> scoreSortPrice(List<TestProduct> input) {
+    public Collection<Product> scoreSortPrice(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         price(products);
         Collections.sort(products);
@@ -128,7 +163,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortReview(List<TestProduct> input) {
+    public Collection<Product> scoreSortReview(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         review(products);
         Collections.sort(products);
@@ -137,7 +172,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortStock(List<TestProduct> input) {
+    public Collection<Product> scoreSortStock(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         stock(products);
         Collections.sort(products);
@@ -146,7 +181,7 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public List<TestProduct> scoreSortDate(List<TestProduct> input) {
+    public Collection<Product> scoreSortDate(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
         date(products);
         Collections.sort(products);

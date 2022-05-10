@@ -67,4 +67,34 @@ public class Database implements DatabaseInterface {
         }
         return chars;
     }
+
+//    public int getPageID(int html_id) {
+//        PreparedStatement loadstatement;
+//        int pageid = 0;
+//        try {
+//            loadstatement=conn.prepareStatement("SELECT * FROM cms_htmlpages WHERE html_id = "+html_id+"");
+//            ResultSet queryResultSet = loadstatement.executeQuery();
+//            while (queryResultSet.next()) {
+//                pageid = queryResultSet.getInt("page_id");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e);
+//        }
+//        return pageid;
+//    }
+//
+//    public int getParameterID(char parameter) {
+//        PreparedStatement loadstatement;
+//        int parameterid = 0;
+//        try {
+//            loadstatement=conn.prepareStatement("SELECT * FROM cms_parameterslist WHERE parameter = "+parameter+"");
+//            ResultSet queryResultSet = loadstatement.executeQuery();
+//            while (queryResultSet.next()) {
+//                parameterid = queryResultSet.getInt("parameter_id");
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e);
+//        }
+//        return parameterid;
+//    }
 }

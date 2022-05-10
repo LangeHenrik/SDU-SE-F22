@@ -11,6 +11,7 @@ class Tokenizer {
     public static ArrayList<Token> tokenizeHTMLBodyText(HTMLSite site) {
         ArrayList<Token> tokens = new ArrayList<>();
         String convertedsite = site.getDocumentText();
+        Database database = Database.getInstance();
 
         int bindestreg, komma, underscore, kolon, punktum, semikolon, mellemrum;
         bindestreg = komma = underscore = kolon = punktum = semikolon = mellemrum = 0;
@@ -18,6 +19,8 @@ class Tokenizer {
         for (int i = 0; i < convertedsite.length(); i++) {
             switch(convertedsite.charAt(i)) {
                 case '-':
+//                    System.out.println("Bindestreg test: "+database.getPageID(site.getId()) + " - " + database.getParameterID('-'));
+//                    database.executeQuery("INSERT INTO cms_usedparameters (page_id, parameter_id) VALUES ("+database.getPageID(site.getId())+", "+database.getParameterID('-')+"");
                     bindestreg++;
                     break;
                 case ',':

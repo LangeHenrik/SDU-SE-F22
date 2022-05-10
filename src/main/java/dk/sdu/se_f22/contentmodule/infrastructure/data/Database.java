@@ -42,15 +42,17 @@ public class Database implements DatabaseInterface {
     public void executeQuery(String query) {
         PreparedStatement insertstatement;
         try{
-            //String query="create table "+table_name+" (token_id SERIAL, token char(20), primary key(token_id));";
-            System.out.println(query);
             insertstatement=conn.prepareStatement(query);
             insertstatement.execute();
             insertstatement.close();
-            System.out.println("Query success");
         }catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public void logParameters(int pageid, int parameterid) {
+        Database database = Database.getInstance();
+        database.executeQuery("INSERT INTO cms_usedparameters (page_id, parameter_id) VALUES (" + pageid + ", " + parameterid + ")");
     }
 
     public String getParameters() {
@@ -68,33 +70,33 @@ public class Database implements DatabaseInterface {
         return chars;
     }
 
-//    public int getPageID(int html_id) {
-//        PreparedStatement loadstatement;
-//        int pageid = 0;
-//        try {
-//            loadstatement=conn.prepareStatement("SELECT * FROM cms_htmlpages WHERE html_id = "+html_id+"");
-//            ResultSet queryResultSet = loadstatement.executeQuery();
-//            while (queryResultSet.next()) {
-//                pageid = queryResultSet.getInt("page_id");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e);
-//        }
-//        return pageid;
-//    }
-//
-//    public int getParameterID(char parameter) {
-//        PreparedStatement loadstatement;
-//        int parameterid = 0;
-//        try {
-//            loadstatement=conn.prepareStatement("SELECT * FROM cms_parameterslist WHERE parameter = "+parameter+"");
-//            ResultSet queryResultSet = loadstatement.executeQuery();
-//            while (queryResultSet.next()) {
-//                parameterid = queryResultSet.getInt("parameter_id");
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e);
-//        }
-//        return parameterid;
-//    }
+    public int getPageID(int html_id) {
+        PreparedStatement loadstatement;
+        int pageid = 0;
+        try {
+            loadstatement=conn.prepareStatement("SELECT * FROM cms_htmlpages WHERE html_id = "+html_id+"");
+            ResultSet queryResultSet = loadstatement.executeQuery();
+            while (queryResultSet.next()) {
+                pageid = queryResultSet.getInt("page_id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return pageid;
+    }
+
+    public int getParameterID(char parameter) {
+        PreparedStatement loadstatement;
+        int parameterid = 0;
+        try {
+            loadstatement=conn.prepareStatement("SELECT * FROM cms_parameterslist WHERE parameter = '"+parameter+"'");
+            ResultSet queryResultSet = loadstatement.executeQuery();
+            while (queryResultSet.next()) {
+                parameterid = queryResultSet.getInt("parameter_id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return parameterid;
+    }
 }

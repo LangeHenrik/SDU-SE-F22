@@ -143,8 +143,6 @@ public class Persistence implements IPersistence {
             return false;
         }
 
-        setAutoCommit(true);
-
         return true;
     }
 

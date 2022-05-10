@@ -102,18 +102,10 @@ public class OneWayController implements Initializable {
     @FXML
     public void insertItemReadItemTextField(ActionEvent actionEvent) {
         if (insertNameAddItemTextfield.getText() == null ) {
-            try {
                 DatabaseAPI.addItem(String.valueOf(insertNameAddItemTextfield));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         } else {
-            try {
                 int superId = Integer.parseInt(insertNameAddItemTextfield.getText());
                 DatabaseAPI.addItem(insertNameAddItemTextfield.getText());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -124,11 +116,7 @@ public class OneWayController implements Initializable {
             CN_status.setText("Invalid name");
             return;
         }
-        try {
             DatabaseAPI.updateName(id,CN_newName.getText());
-        } catch (SQLException e) {
-            CN_status.setText("Something went Wrong, try again");
-        }
     }
 
 

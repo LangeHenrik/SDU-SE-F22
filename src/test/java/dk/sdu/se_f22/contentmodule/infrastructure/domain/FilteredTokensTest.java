@@ -52,8 +52,8 @@ class FilteredTokensTest {
     }
 
     @Test
-    void tokenToString(ArrayList<Token> zack) {
-        String actualContent = ft.tokenToString(tokenTestToken).get(1);
+    void tokenToString() {
+        String actualContent = FilteredTokens.tokenToString(tokenTestToken).get(1);
         String expectedContent = "house";
         assertEquals(expectedContent, actualContent);
     }
@@ -67,7 +67,7 @@ class FilteredTokensTest {
 
         tokenArrayListTest = new ArrayList<>();
         tokenArrayListTest.add(test1);
-        tokenToString(tokenArrayListTest);
+        FilteredTokens.tokenToString(tokenArrayListTest);
 
         assertEquals(testString, tokenArrayListTest.get(0).getDocumentText());
         assertEquals(testInt, tokenArrayListTest.get(0).getOriginID());
@@ -76,7 +76,7 @@ class FilteredTokensTest {
 
     @Test
     void filterTokens() {
-        
+
 
     }
 }

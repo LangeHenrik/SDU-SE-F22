@@ -31,6 +31,9 @@ public class CategoryCRUD implements CategoryCRUDInterface{
             case "description":
                 DBConnection.updateDescription(idToChance, updatedString);
                 break;
+            case "requirement_value":
+                DBConnection.updateRequirementsValue(idToChance, updatedString);
+                break;
             default:
                 System.out.println("Field name: " + fieldName + " isn't supported");
         }

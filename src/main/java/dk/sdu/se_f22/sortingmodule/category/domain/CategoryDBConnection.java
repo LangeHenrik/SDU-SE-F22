@@ -193,6 +193,35 @@ public class CategoryDBConnection{
         return 0;
     }
 
+    protected int updateRequirementsValue(int idToChange, String changeTo) {
+        String sql = "UPDATE Requirements_values SET value = ? WHERE id = (SELECT requirements_id FROM categories WHERE id = ?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pStatement = conn.prepareStatement(sql)) {
+            if (changeTo.length() > 0) {
+                try {
+                    pStatement.setString(1,changeTo);
+                    pStatement.setInt(2,idToChange);
+
+                    int affectedRows = pStatement.executeUpdate();
+                    if (affectedRows == 0) {
+                        System.out.println("That ID does not exist");
+                    }
+                    return affectedRows;
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                System.out.println("Requirements ID must be an integer beyond 0");
+            }
+        } catch (IOException ioEx) {
+            System.out.println(ioEx.getMessage());
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return 0;
+    }
+
     protected void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
         boolean notValid = false;
 

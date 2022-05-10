@@ -68,7 +68,7 @@ public class BrandIndex implements IndexInterface {
             PreparedStatement queryStatement = null;
             ResultSet queryResultSet = null;
             for (int i = 0; i < tokens.size(); i++) {
-                queryStatement = connection.prepareStatement("SELECT id FROM productType WHERE name = ?");
+                queryStatement = connection.prepareStatement("SELECT id FROM productType WHERE type = ?");
 
                 queryStatement.setString(1, tokens.get(i));
 
@@ -91,7 +91,7 @@ public class BrandIndex implements IndexInterface {
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {
         try(Connection connection = DBConnection.getPooledConnection()) {
-            PreparedStatement mapInsert = connection.prepareStatement("INSERT INTO tokenbrandmap(brandid, productid) VALUES (?,?)");
+            PreparedStatement mapInsert = connection.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?)");
             PreparedStatement tokenInsert = connection.prepareStatement("INSERT INTO tokens(token) VALUES (?)");
             PreparedStatement queryToken = connection.prepareStatement("SELECT token FROM tokens");
 

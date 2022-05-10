@@ -86,6 +86,11 @@ class BrandIndexTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        BrandIndex brandIndex = new BrandIndex();
+        System.out.println(brandIndex.searchBrandIndex(tempList));
+        System.out.println(knownBrand);
+
     }
 
 

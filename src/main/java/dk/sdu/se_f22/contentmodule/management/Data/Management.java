@@ -22,11 +22,13 @@ public class Management {
         }
     }
 
-    public static void Create(String html) throws SQLException {
+    public static int Create(String html) throws SQLException {
         Scanner s;
 
         try {
-            dat.executeVoidReturn("INSERT INTO pages (html, timestamp) VALUES ( '" + html + "', NOW());");
+            var res = dat.Execute("INSERT INTO pages (html, timestamp) OUTPUT Inserted.ID VALUES ( '" + html + "', NOW());");
+            res.next();
+            return res.getInt(1);
         } catch (Exception e) {
             StringBuilder scriptString = new StringBuilder();
             try {
@@ -39,8 +41,10 @@ public class Management {
                 throw new RuntimeException(ex);
             }
 
-            dat.executeVoidReturn(scriptString.toString());
+
         }
+
+        return 0;
     }
 
     public static String getPageString(int id) throws SQLException {

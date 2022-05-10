@@ -1,10 +1,10 @@
-package ui.screens.LoginScreens;
-import DB.Database;
-import ui.Logic.switchScreen;
-import ui.customs.CustomText;
-import ui.customs.CustomTextFieldRefined;
-import ui.customs.menuBarParts.TopMenu;
-import ui.customs.menuBarParts.menuCustomButtons;
+package dk.sdu.se_f22.contentmodule.index.ui.screens.LoginScreens;
+import dk.sdu.se_f22.contentmodule.index.DB.Database;
+import dk.sdu.se_f22.contentmodule.index.ui.Logic.switchScreen;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.CustomText;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.CustomTextFieldRefined;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts.TopMenu;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts.menuCustomButtons;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 

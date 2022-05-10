@@ -1,12 +1,12 @@
-package ui.screens;
+package dk.sdu.se_f22.contentmodule.index.ui.screens;
 
-import DB.Database;
+import dk.sdu.se_f22.contentmodule.index.DB.Database;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import ui.customs.*;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.*;
 
 public class screentest {
     private boolean startButton;

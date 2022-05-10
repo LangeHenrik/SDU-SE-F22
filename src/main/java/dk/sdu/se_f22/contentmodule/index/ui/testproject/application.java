@@ -1,13 +1,13 @@
-package ui.testproject;
+package dk.sdu.se_f22.contentmodule.index.ui.testproject;
 
-import DB.*;
-import ui.Logic.Logic;
+import dk.sdu.se_f22.contentmodule.index.DB.*;
+import dk.sdu.se_f22.contentmodule.index.ui.Logic.Logic;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import ui.mock.crud;
+import dk.sdu.se_f22.contentmodule.index.ui.mock.crud;
 
 public class application extends Application {
 

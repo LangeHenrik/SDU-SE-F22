@@ -1,4 +1,4 @@
-package ui.customs;
+package dk.sdu.se_f22.contentmodule.index.ui.customs;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

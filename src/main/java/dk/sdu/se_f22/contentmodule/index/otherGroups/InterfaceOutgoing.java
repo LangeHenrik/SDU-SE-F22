@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.contentmodule.index.otherGroups;
 
-import crud.MinionSearch.interfaceSearch;
+import dk.sdu.se_f22.contentmodule.index.crud.MinionSearch.interfaceSearch;
 import dk.sdu.se_f22.contentmodule.index.crud.addPage;
 import dk.sdu.se_f22.contentmodule.index.DB.Database;
 

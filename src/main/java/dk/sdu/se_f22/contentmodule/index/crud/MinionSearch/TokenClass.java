@@ -1,6 +1,6 @@
-package crud.MinionSearch;
+package dk.sdu.se_f22.contentmodule.index.crud.MinionSearch;
 
-import DB.Database;
+import dk.sdu.se_f22.contentmodule.index.DB.Database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

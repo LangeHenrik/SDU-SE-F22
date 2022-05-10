@@ -1,12 +1,12 @@
-package ui.screens;
+package dk.sdu.se_f22.contentmodule.index.ui.screens;
 
-import DB.Database;
-import crud.GruSearch.Search;
+import dk.sdu.se_f22.contentmodule.index.DB.Database;
+import dk.sdu.se_f22.contentmodule.index.crud.GruSearch.Search;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import ui.customs.CustomButton;
-import ui.customs.CustomTextField;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.CustomButton;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.CustomTextField;
 
 public class mainScreen {
     private StackPane mainPane;

@@ -1,6 +1,6 @@
-package ui.screens.base;
+package dk.sdu.se_f22.contentmodule.index.ui.screens.base;
 
-import ui.Logic.switchScreen;
+import dk.sdu.se_f22.contentmodule.index.ui.Logic.switchScreen;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;

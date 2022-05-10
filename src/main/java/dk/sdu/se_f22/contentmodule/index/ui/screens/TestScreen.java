@@ -1,6 +1,6 @@
-package ui.screens;
+package dk.sdu.se_f22.contentmodule.index.ui.screens;
 
-import ui.customs.NormalFormat;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.NormalFormat;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;

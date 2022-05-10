@@ -1,4 +1,4 @@
-package ui.screens.menubar;
+package dk.sdu.se_f22.contentmodule.index.ui.screens.menubar;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,8 +6,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import ui.customs.menuBarParts.menuCustomButtons;
-import ui.customs.menuBarParts.underMenu;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts.menuCustomButtons;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts.underMenu;
 
 import java.util.ArrayList;
 

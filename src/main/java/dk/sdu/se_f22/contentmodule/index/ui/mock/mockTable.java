@@ -1,6 +1,6 @@
-package ui.mock;
+package dk.sdu.se_f22.contentmodule.index.ui.mock;
 
-import DB.*;
+import dk.sdu.se_f22.contentmodule.index.DB.*;
 
 class mockTable {
 

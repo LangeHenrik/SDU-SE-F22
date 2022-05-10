@@ -1,12 +1,12 @@
-package ui.Logic;
-import DB.Database;
+package dk.sdu.se_f22.contentmodule.index.ui.Logic;
+import dk.sdu.se_f22.contentmodule.index.DB.Database;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import ui.screens.LoginScreens.AdvancedLoginScreen;
-import ui.screens.LoginScreens.SimpleLoginScreen;
-import ui.screens.base.BaseScreen;
-import ui.screens.screens.startScreen;
+import dk.sdu.se_f22.contentmodule.index.ui.screens.LoginScreens.AdvancedLoginScreen;
+import dk.sdu.se_f22.contentmodule.index.ui.screens.LoginScreens.SimpleLoginScreen;
+import dk.sdu.se_f22.contentmodule.index.ui.screens.base.BaseScreen;
+import dk.sdu.se_f22.contentmodule.index.ui.screens.screens.startScreen;
 
 public class Logic {
     private Database db;
@@ -15,7 +15,7 @@ public class Logic {
     private AdvancedLoginScreen als;
     private SimpleLoginScreen sls;
     private BaseScreen base;
-    private ui.screens.screens.startScreen startScreen;
+    private startScreen startScreen;
 
     private Scene scene;
 

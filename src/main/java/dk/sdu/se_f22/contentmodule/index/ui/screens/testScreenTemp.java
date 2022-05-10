@@ -1,5 +1,5 @@
-package ui.screens;
-import ui.Logic.switchScreen;
+package dk.sdu.se_f22.contentmodule.index.ui.screens;
+import dk.sdu.se_f22.contentmodule.index.ui.Logic.switchScreen;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;

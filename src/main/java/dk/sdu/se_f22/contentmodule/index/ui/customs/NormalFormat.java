@@ -1,4 +1,4 @@
-package ui.customs;
+package dk.sdu.se_f22.contentmodule.index.ui.customs;
 
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;

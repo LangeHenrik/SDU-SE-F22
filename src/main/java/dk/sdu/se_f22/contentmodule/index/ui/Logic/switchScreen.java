@@ -1,6 +1,6 @@
-package ui.Logic;
+package dk.sdu.se_f22.contentmodule.index.ui.Logic;
 
-import ui.customs.menuBarParts.TopMenu;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts.TopMenu;
 import javafx.stage.Stage;
 
 public class switchScreen {

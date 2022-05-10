@@ -1,4 +1,4 @@
-package ui.screens;
+package dk.sdu.se_f22.contentmodule.index.ui.screens;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;

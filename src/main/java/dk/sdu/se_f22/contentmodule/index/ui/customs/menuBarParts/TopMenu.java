@@ -1,6 +1,6 @@
-package ui.customs.menuBarParts;
+package dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts;
 
-import ui.customs.CustomText;
+import dk.sdu.se_f22.contentmodule.index.ui.customs.CustomText;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;

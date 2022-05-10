@@ -1,4 +1,4 @@
-package crud.MinionSearch;
+package dk.sdu.se_f22.contentmodule.index.crud.MinionSearch;
 
 class SortingClass implements Comparable<SortingClass>{
 // id = page_id

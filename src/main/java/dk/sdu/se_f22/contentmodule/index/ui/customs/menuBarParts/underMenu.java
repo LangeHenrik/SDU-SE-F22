@@ -1,4 +1,4 @@
-package ui.customs.menuBarParts;
+package dk.sdu.se_f22.contentmodule.index.ui.customs.menuBarParts;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;

@@ -1,10 +1,10 @@
-package ui.mock;
+package dk.sdu.se_f22.contentmodule.index.ui.mock;
 
-import DB.*;
-import crud.GruSearch.Search;
-import crud.delete;
-import crud.addPage;
-import crud.update;
+import dk.sdu.se_f22.contentmodule.index.DB.*;
+import dk.sdu.se_f22.contentmodule.index.crud.GruSearch.Search;
+import dk.sdu.se_f22.contentmodule.index.crud.delete;
+import dk.sdu.se_f22.contentmodule.index.crud.addPage;
+import dk.sdu.se_f22.contentmodule.index.crud.update;
 
 import java.util.HashMap;
 

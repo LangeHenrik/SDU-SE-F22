@@ -1,5 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,5 +162,11 @@ public class SearchQuery {
 
     public int[] getPagination() {
         return this.pagination;
+    }
+
+    public List<RangeFilter> getAvailableRangeFilters() {
+        RangeFilterCRUD tempRFC = new RangeFilterCRUD();
+        System.out.println(tempRFC.readAll());
+        return tempRFC.readAll();
     }
 }

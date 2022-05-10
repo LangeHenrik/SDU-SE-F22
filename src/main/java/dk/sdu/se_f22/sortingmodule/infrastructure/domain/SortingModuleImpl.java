@@ -11,6 +11,7 @@ import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
@@ -118,5 +119,9 @@ public class SortingModuleImpl implements SortingModule {
 
     private void saveSearch() {
         SaveSearchQuery.saveSearch(this.query, this.searchString);
+    }
+
+    public List<RangeFilter> getAvailableRangeFilters() {
+        return this.query.getAvailableRangeFilters();
     }
 }

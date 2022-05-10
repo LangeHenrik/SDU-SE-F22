@@ -39,7 +39,7 @@ class RangeFilterClassTest {
             Assertions.assertFalse(doubleFilter.equals(o));
         }
 
-        @ParameterizedTest (name = "{0}" + "+1"Cl + ",{1},{2},{3},{4},{5}")
+        @ParameterizedTest (name = "{0}" + "+1" + ",{1},{2},{3},{4},{5}")
         @DisplayName("Filters with different ids")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
         void filtersWithDifferentIds(int id, String name, String description, String productAttribute, double min, double max) {

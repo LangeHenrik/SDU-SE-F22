@@ -31,9 +31,10 @@ public class OneWayImplementation implements OneWayInterface {
     public static void main(String[] args) {
         List<String> tokens = new LinkedList<>();
         tokens.add("Humans");
+        tokens.add("motordrevet");
         OneWayImplementation owi = new OneWayImplementation();
         tokens = owi.filter(tokens);
-        for (Item items : owi.createItemArray()){
+        for (String items : tokens){
             System.out.println(items+"\n");
         }
     }

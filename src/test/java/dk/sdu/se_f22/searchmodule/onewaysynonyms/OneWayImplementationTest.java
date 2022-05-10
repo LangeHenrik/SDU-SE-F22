@@ -12,20 +12,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OneWayImplementationTest {
     OneWayImplementation owi;
+    List<String> tokens;
 
     @BeforeEach
     void setUp() {
         owi = new OneWayImplementation();
-    }
-
-    @Test
-    void filter() {
-        List<String> tokens = new LinkedList<>();
+        tokens = new LinkedList<>();
         tokens.add("Humans");
         tokens.add("Peter");
         tokens.add("Lau");
         tokens.add("Emre");
         tokens.add("Eibert");
+    }
+
+    @Test
+    void filter() {
 
         List<String> dbTokens = new LinkedList<>();
         dbTokens.add("Humans");
@@ -36,6 +37,31 @@ class OneWayImplementationTest {
         assertArrayEquals(tokens.toArray(), dbTokens.toArray());
     }
 
+    @Test
+    void filterMultipleItems(){
+        boolean bool = false;
+        tokens.add("motordrevet");
+        tokens.add("racerbil");
+        tokens.add("personbil");
+        tokens.add("lastbil");
+
+        List<String> dbTokens = new LinkedList<>();
+        dbTokens.add("Humans");
+        dbTokens.add("motordrevet");
+
+        dbTokens = owi.filter(dbTokens);
+
+        for (String item : tokens) {
+            for (String item2 : dbTokens){
+                if (item.equals(item2)){
+                    bool = true;
+                    break;
+                }
+            }
+        }
+        assertTrue(bool);
+
+    }
     @Test
     void createItemArray() {
         Item[] items = {

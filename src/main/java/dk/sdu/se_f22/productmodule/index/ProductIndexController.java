@@ -7,17 +7,28 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.ArrayList;
+
 public class ProductIndexController {
 
     @FXML
-    private void onSearchButton(){
+    private void onSearchButton1(){
+        String searchString = searchField1.getText();
         homepage.setVisible(false);
         resultPage.setVisible(true);
+        searchResults.getItems().add("*Result for: " + searchString + "*");
+    }
+
+    @FXML
+    private void onSearchButton2(){
+        String searchString = searchField2.getText();
+        searchResults.getItems().add("*Result for: " + searchString + "*");
     }
 
     @FXML
     private void onFeelingLucky(){
-        //to be implemented
+        homepage.setVisible(false);
+        luckyPage.setVisible(true);
     }
 
     @FXML
@@ -25,6 +36,9 @@ public class ProductIndexController {
 
     @FXML
     private AnchorPane resultPage;
+
+    @FXML
+    private AnchorPane luckyPage;
 
     @FXML
     private TextField searchField1;

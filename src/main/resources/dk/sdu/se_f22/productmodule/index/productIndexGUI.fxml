@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.productmodule.index.ProductIndexController">
    <children>
-      <AnchorPane fx:id="homepage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
+      <AnchorPane fx:id="homepage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;">
          <children>
             <ImageView fitHeight="124.0" fitWidth="234.0" layoutX="183.0" layoutY="104.0" preserveRatio="true">
                <image>
@@ -23,13 +23,13 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="searchButton1" layoutX="189.0" layoutY="234.0" mnemonicParsing="false" onAction="#onSearchButton" text="GUIgle Search" />
+            <Button fx:id="searchButton1" layoutX="189.0" layoutY="234.0" mnemonicParsing="false" onAction="#onSearchButton1" text="GUIgle Search" />
             <Button fx:id="feelingLucky" layoutX="300.0" layoutY="234.0" mnemonicParsing="false" onAction="#onFeelingLucky" text="I'm Feeling Lucky" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="resultPage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="resultPage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Button fx:id="searchButton2" layoutX="480.0" layoutY="6.0" mnemonicParsing="false" onAction="#onSearchButton" text="GUIgle Search">
+            <Button fx:id="searchButton2" layoutX="480.0" layoutY="6.0" mnemonicParsing="false" onAction="#onSearchButton2" text="GUIgle Search">
                <font>
                   <Font size="14.0" />
                </font>
@@ -49,6 +49,15 @@
                   <ListView fx:id="searchResults" prefHeight="337.0" prefWidth="567.0" />
                </children>
             </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="luckyPage" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <ImageView fitHeight="347.0" fitWidth="383.0" layoutX="128.0" layoutY="27.0" preserveRatio="true">
+               <image>
+                  <Image url="@Lucky.jpg" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>

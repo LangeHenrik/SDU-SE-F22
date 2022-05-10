@@ -19,4 +19,9 @@ public class Content {
         this.pageId = pageId;
         this.timestamp = timestamp;
     }
+
+    //This is here to make sure SearchHitsTest's test works
+    public Content() {
+
+    }
 }

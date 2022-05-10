@@ -15,6 +15,7 @@ class ManagementTest {
         try {
             int id = Management.Create("This is a test HTML page");
             assertEquals("This is a test HTML page", Management.getPageString(id));
+            Management.Delete(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -25,6 +26,7 @@ class ManagementTest {
         try {
             int id = Management.Create("This is a test HTML page");
             assertEquals("This is a test HTML page", Management.getPageString(id));
+            Management.Delete(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,6 +37,7 @@ class ManagementTest {
         try {
             int id = Management.Create("do you get page document?");
             assert (Management.GetPageDocument(id) != null);
+            Management.Delete(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

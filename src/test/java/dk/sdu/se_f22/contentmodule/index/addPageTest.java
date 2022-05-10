@@ -1,4 +1,4 @@
-package DB;
+package dk.sdu.se_f22.contentmodule.index;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -79,9 +79,9 @@ class LongFilter extends RangeFilterClass{
             //assumes that hashmaps return null when key is not found
             //if it returns an Exception instead, then simply add the product to filteredResults
             try {
-//                long attributeValue = searchResultMock.getAttributes().get(this.getProductAttribute());
+                long attributeValue = searchResultMock.getAttributes().get(this.getProductAttribute()).longValue();
                 // Uncommented because searchresult needs more work to figure how to get the actual long value
-                long attributeValue = 0;
+//                long attributeValue = 0;
                 if ((attributeValue < this.userMin || attributeValue > this.userMax)) {
                     continue;
                 }//guard clause

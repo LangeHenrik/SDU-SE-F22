@@ -1,9 +1,13 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
+import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructureInterface;
+import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearchImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.searchmodule.twowaysynonyms.TwoWaySynonym;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
@@ -22,21 +26,44 @@ public class SearchModuleImpl implements SearchModule {
     public SearchModuleImpl() {
         this.indexingModules = new HashMap<>();
         this.filteringModules = new HashSet<>();
+
+        // Add modules
+        addIndexingModule((BrandInfrastructureInterface) new BrandInfrastructure());
+        addIndexingModule(new ProductInfSearchImpl());
+
+        addFilteringModule(TwoWaySynonym.getInstance());
+
         delimiterSettings.addDelimiter(" ");
     }
 
+
+    /**
+     * Get parameterized type i.e. the thing between the angle brackets
+     * Example, here the found class would be Foo:
+     *         class SomeIndexingModule implements IndexingModule<Foo>
+     * This is achieved through a recursive depth-first-search of the inheritance tree
+     */
+    private Class<?> getParameterizedTypeOfIndexingModule(Class<?> clazz) {
+        for(var i : clazz.getGenericInterfaces()) {
+            if(i instanceof Class) {
+                if(getParameterizedTypeOfIndexingModule((Class<?>)i) != null)
+                    return getParameterizedTypeOfIndexingModule((Class<?>)i);
+            } else {
+                var paramType = (ParameterizedType) i;
+                if(paramType.getRawType().equals(IndexingModule.class)) {
+                    return Arrays.stream(paramType.getActualTypeArguments()).map(Arrays::asList)
+                            .flatMap(List::stream)
+                            .map(Class.class::cast)
+                            .findFirst()
+                            .orElseThrow();
+                }
+            }
+        }
+        return null;
+    }
+
     public <T extends IndexingModule<?>> void addIndexingModule(T index) {
-        // Get parameterized type i.e. the thing between the angle brackets
-        // Example, here the found class would be Foo:
-        //      class SomeIndexingModule implements IndexingModule<Foo>
-        Class<?> indexDataType = Arrays.stream(index.getClass().getGenericInterfaces())
-                .map(ParameterizedType.class::cast)
-                .map(ParameterizedType::getActualTypeArguments)
-                .map(Arrays::asList)
-                .flatMap(List::stream)
-                .map(Class.class::cast)
-                .findFirst()
-                .orElseThrow();
+        Class<?> indexDataType = getParameterizedTypeOfIndexingModule(index.getClass());
 
         indexingModules.put(indexDataType, index);
     }

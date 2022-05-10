@@ -8,7 +8,7 @@ public class Database {
 
     private Database() throws SQLException {
         DriverManager.registerDriver(new org.postgresql.Driver());
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","______");
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","Olsen2001");
     }
 
     protected ResultSet Execute(String str) throws SQLException {

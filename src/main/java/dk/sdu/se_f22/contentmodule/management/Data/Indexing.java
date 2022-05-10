@@ -19,7 +19,7 @@ public class Indexing {
     public static void scheduleTimer(long interval) {
         timer.scheduleAtFixedRate(timerTask, 0, interval);
         try {
-            FileWriter myWriter = new FileWriter("intervals.txt");
+            FileWriter myWriter = new FileWriter("src/main/resources/dk/sdu/se_f22/contentmodule/management/intervals.txt");
             String text = "New index update: "+ interval + " at: "+ new Date();
             myWriter.write(text);
             myWriter.close();

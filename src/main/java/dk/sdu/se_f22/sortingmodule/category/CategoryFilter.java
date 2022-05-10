@@ -22,7 +22,7 @@ public class CategoryFilter implements CategoryFilterInterface {
         Collection<Product> newProducts = new ArrayList<>();
         List<Category> categories = new ArrayList<>();
 
-        if(categoryIDs.isEmpty()){
+        if (categoryIDs.isEmpty()) {
             return searchHits;
         }
 
@@ -41,7 +41,9 @@ public class CategoryFilter implements CategoryFilterInterface {
                         break;
                     }
                     if (category.getRequirementFieldName().toLowerCase().equals("category")) {
-                        Pattern pattern = Pattern.compile("(^|[^\\w])\\/?(" + category.getRequirementValue() + ")\\/?([^\\w+]|$)", Pattern.CASE_INSENSITIVE);
+                        Pattern pattern = Pattern.compile(
+                                "(^|[^\\w])\\/?(" + category.getRequirementValue() + ")\\/?([^\\w+]|$)",
+                                Pattern.CASE_INSENSITIVE);
                         Matcher matcher = pattern.matcher(product.getCategory());
                         boolean matchFound = matcher.find();
 

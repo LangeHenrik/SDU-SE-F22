@@ -1,4 +1,4 @@
-module dk.sdu.se_f22 {
+open module dk.sdu.se_f22 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -14,7 +14,6 @@ module dk.sdu.se_f22 {
     requires org.postgresql.jdbc;
     requires validatorfx;
     requires com.google.gson;
-
-    opens dk.sdu.se_f22 to javafx.fxml;
+    requires org.jetbrains.annotations;
     exports dk.sdu.se_f22;
 }

@@ -19,5 +19,9 @@ public class SortingModuleDemo {
         System.out.println("Products: " + data.getProducts().toString());
         System.out.println("Brands: " + data.getBrands().toString());
         System.out.println("Content: " + data.getContents().toString());
+
+        // TODO maybe change when range module is
+        //  updated, otherwise just uncomment when needed.
+        // System.out.println(module.getAvailableRangeFilters());
     }
 }

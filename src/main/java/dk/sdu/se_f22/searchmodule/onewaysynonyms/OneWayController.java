@@ -16,7 +16,9 @@ import java.util.ResourceBundle;
 public class OneWayController implements Initializable {
 
     @FXML
-    public TextField insertSuperIDAddItemTextfield, insertNameAddItemTextfield, CN_oldName, CN_newName, GI_Item, SearchBar;
+    public TextField insertSuperIDAddItemTextfield, insertNameAddItemTextfield,
+            CN_oldName, CN_newName, GI_Item, SearchBar,
+            AI_ID, AI_Name, AI_SuperID;
 
     @FXML
     public ListView IDListView, ItemNameListView, SuperIDListView;
@@ -26,7 +28,7 @@ public class OneWayController implements Initializable {
     @FXML
     public Button CN_enter, SearchButton, clearButton;
     @FXML
-    public Label CN_status, ST_Status;
+    public Label CN_status, ST_status, AI_status;
 
     @FXML
     public TabPane TP_images;
@@ -70,25 +72,28 @@ public class OneWayController implements Initializable {
             }
             for (Item item : items) {
                 if (item.getName().toLowerCase().equals(input) || item.getId() == i) {
-                    updateListView(item);
-                    ST_Status.setText("Successful search");
+                    IDListView.getItems().add(item.getId());
+                    ItemNameListView.getItems().add(item.getName());
+                    SuperIDListView.getItems().add(item.getSuperId());
+                    ST_status.setText("Successful search");
                     break;
-                } else ST_Status.setText("Invalid search");
+                } else ST_status.setText("Invalid search");
             }
         }
     }
 
-    private void updateListView(Item item) {
-        IDListView.getItems().add(item.getId());
-        ItemNameListView.getItems().add(item.getName());
-        SuperIDListView.getItems().add(item.getSuperId());
+    public void addItem(ActionEvent actionEvent){
+        if (isInt(AI_SuperID.getText()) & Integer.parseInt(AI_SuperID.getText())>0){
+            DatabaseAPI.addItem(AI_Name.getText(),Integer.parseInt(AI_SuperID.getText()));
+            AI_status.setText("Item Added");
+        }else AI_status.setText("Invalid Input");
     }
 
     private boolean isInt(String text) {
         try {
             int i = Integer.parseInt(text);
             return true;
-        } catch (NumberFormatException ex) {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -165,7 +170,7 @@ public class OneWayController implements Initializable {
             return;
         }
         DatabaseAPI.updateName(id, CN_newName.getText());
-        CN_status.setText("Updated Name to :" + CN_newName.getText());
+        CN_status.setText("Updated Name to: " + CN_newName.getText());
     }
 
 

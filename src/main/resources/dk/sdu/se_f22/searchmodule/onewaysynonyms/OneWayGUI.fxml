@@ -42,7 +42,7 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                        <Label fx:id="ST_Status" layoutX="377.0" layoutY="58.0" prefHeight="17.0" prefWidth="151.0" />
+                        <Label fx:id="ST_status" layoutX="377.0" layoutY="58.0" prefHeight="17.0" prefWidth="151.0" />
                         <Button fx:id="clearButton" layoutX="377.0" layoutY="135.0" mnemonicParsing="false" onAction="#SearchTab" text="Clear" />
                             </children>
                         </AnchorPane>
@@ -110,9 +110,19 @@
                                                 </AnchorPane>
                                             </content>
                                         </Tab>
-                                        <Tab text="Untitled Tab 2">
+                                        <Tab text="Add Item">
                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="107.0" layoutY="2.0" text="Name" />
+                                          <Label disable="true" layoutX="31.0" layoutY="2.0" text="ID" visible="false" />
+                                          <TextField fx:id="AI_Name" layoutX="68.0" layoutY="23.0" prefHeight="25.0" prefWidth="110.0" />
+                                          <TextField fx:id="AI_ID" disable="true" layoutX="14.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" visible="false" />
+                                          <Button fx:id="AI_Enter" layoutX="263.0" layoutY="23.0" mnemonicParsing="false" onAction="#addItem" text="Enter" />
+                                          <Label layoutX="192.0" layoutY="2.0" text="SuperID" />
+                                          <TextField fx:id="AI_SuperID" layoutX="191.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" />
+                                          <Label fx:id="AI_status" layoutX="345.0" layoutY="27.0" prefHeight="17.0" prefWidth="108.0" />
+                                       </children></AnchorPane>
                                             </content>
                                         </Tab>
                                     </tabs>

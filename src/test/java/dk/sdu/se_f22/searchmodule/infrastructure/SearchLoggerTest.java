@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
@@ -33,7 +34,7 @@ class SearchLoggerTest {
         }
 
         var mySearchHits = new SearchHits();
-        var myProduct = new Product();
+        var myProduct = new BaseProduct();
         var myBrand = new Brand();
         myBrand.setId(123);
 

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
@@ -17,7 +18,7 @@ public class SearchLogger {
     private static final Logger logger = LoggingProvider.getLogger(SearchLogger.class);
 
     public static void logSearch(String search, SearchHits searchHits, List<String> filterTokens) {
-        List<Product> products = (List<Product>) searchHits.getProducts();
+        List<BaseProduct> products = (List<BaseProduct>) searchHits.getProducts();
         List<Brand> brands = (List<Brand>) searchHits.getBrands();
         //List<Content> contents = (List<Content>) searchHits.getContents();
 
@@ -37,7 +38,7 @@ public class SearchLogger {
             // Insert search result id's
             insertValues(products, id,
                     "INSERT INTO productsearches(productid, searchid) VALUES (?, ?);",
-                    Product::toString);
+                    BaseProduct::toString);
 
             insertValues(brands, id,
                     "INSERT INTO brandsearches(brandid, searchid) VALUES (?, ?);",

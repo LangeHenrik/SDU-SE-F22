@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sharedlibrary.models;
 
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -14,9 +15,9 @@ import java.util.UUID;
  * It includes among others a constructor {@link Product#Product(BaseProduct)}, which simply takes a {@link BaseProduct} as its input,
  * and then parses the attribute values from the {@link BaseProduct} supplied.<br>
  * This class has a getter for each specific product attribute (i.e. {@link Product#getPrice()}).<br><br>
- * <i>Formerly known as <b>ProductHit</b></i>
+ * <i>Formerly known as <b>Product</b></i>
  */
-public class Product {
+public class Product implements Comparable<Product> {
     UUID uuid;
     double averageUserReview;
     double price;
@@ -30,6 +31,7 @@ public class Product {
     Instant publishedDate;
     Instant expirationDate;
     List<String> inStock;
+    int hitNum;
 
     /** The constructor for setting all attributes at once including those that are optional
      */
@@ -90,6 +92,20 @@ public class Product {
         }
     }
 
+    /**
+     * OBS!!!
+     * This constructor is for internal testing of Product, in the product Indexing test suit
+     * Should not be used in any other cases than for testing purposes.
+     */
+    public Product(String name, String description, String category){
+        this.name = name;
+        this.description = description;
+        this.category = category;
+    }
+
+
+
+
 
     public UUID getUuid() {
         return uuid;
@@ -143,6 +159,9 @@ public class Product {
         return weight;
     }
 
+    public void setHitNum(int hitNum){ this.hitNum = hitNum; }
+    public int getHitNum(){ return this.hitNum; }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -160,5 +179,21 @@ public class Product {
                 ", expirationDate=" + expirationDate +
                 ", inStock=" + inStock +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull Product o) {
+        int output = 0;
+
+        if(this.hitNum > o.getHitNum()){
+            output = 1;
+        }else
+        if(this.hitNum < o.getHitNum()){
+            output = -1;
+        }else{
+            output = 0;
+        }
+
+        return output;
     }
 }

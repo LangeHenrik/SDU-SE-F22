@@ -20,11 +20,11 @@ public class RangeFilterFilterResults {
      * using the filters specified in rangeFilters param.
      */
     public static SearchHits filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters) throws IllegalImplementationException {
-        Collection productHits = searchHits.getProducts();
+        Collection Products = searchHits.getProducts();
 
         for (RangeFilter rangeFilter : rangeFilters) {
             if (rangeFilter instanceof RangeFilterClass filterCasted) {
-                productHits = filterCasted.useFilter(productHits);
+                Products = filterCasted.useFilter(Products);
             } else {
                 throw new IllegalImplementationException("You are not allowed to write your own implementation of RangeFilter\n" +
                         "Get the filters from the database by calling: IDBRangeFilterCRUD.readAll()");

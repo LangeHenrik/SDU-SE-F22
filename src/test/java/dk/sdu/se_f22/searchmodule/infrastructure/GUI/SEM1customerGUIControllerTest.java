@@ -76,7 +76,7 @@ public class SEM1customerGUIControllerTest {
         robot.sleep(1000);
 
         assertEquals("1", controller.getBrandHitsCounter().getText());
-        assertEquals("0", controller.getProductHitsCounter().getText());
+        assertEquals("0", controller.getProductsCounter().getText());
 
         searchBar.clear();
         robot.clickOn(searchBar);
@@ -85,7 +85,7 @@ public class SEM1customerGUIControllerTest {
         robot.sleep(1000);
 
         assertEquals("0", controller.getBrandHitsCounter().getText());
-        assertEquals("0", controller.getProductHitsCounter().getText());
+        assertEquals("0", controller.getProductsCounter().getText());
 
 
         searchBar.clear();
@@ -95,7 +95,7 @@ public class SEM1customerGUIControllerTest {
         robot.sleep(1000);
 
         assertEquals("0", controller.getBrandHitsCounter().getText());
-        assertEquals("1", controller.getProductHitsCounter().getText());
+        assertEquals("1", controller.getProductsCounter().getText());
 
 
         searchBar.clear();
@@ -105,6 +105,6 @@ public class SEM1customerGUIControllerTest {
         robot.sleep(1000);
 
         assertEquals("1", controller.getBrandHitsCounter().getText());
-        assertEquals("1", controller.getProductHitsCounter().getText());
+        assertEquals("1", controller.getProductsCounter().getText());
     }
 }

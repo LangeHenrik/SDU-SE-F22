@@ -17,7 +17,7 @@ public class SEM1customerGUIController {
     @FXML
     private Label brandHitsCounter;
     @FXML
-    private Label productHitsCounter;
+    private Label ProductsCounter;
 
     private SearchModuleImpl searchModule = new SearchModuleImpl();
 
@@ -49,7 +49,7 @@ public class SEM1customerGUIController {
                 }
             }
             brandHitsCounter.setText(String.valueOf(searchResults.getBrands().size()));
-            productHitsCounter.setText(String.valueOf(searchResults.getProducts().size()));
+            ProductsCounter.setText(String.valueOf(searchResults.getProducts().size()));
 
             if(!foundResult) {
                 System.out.println("No elements found");
@@ -65,7 +65,7 @@ public class SEM1customerGUIController {
         return brandHitsCounter;
     }
 
-    public Label getProductHitsCounter() {
-        return productHitsCounter;
+    public Label getProductsCounter() {
+        return ProductsCounter;
     }
 }

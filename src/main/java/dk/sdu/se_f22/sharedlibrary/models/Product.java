@@ -92,6 +92,17 @@ public class Product implements Comparable<Product> {
         }
     }
 
+    /**
+     * OBS!!!
+     * This constructor is for internal testing of Product, in the product Indexing test suit
+     * Should not be used in any other cases than for testing purposes.
+     */
+    public Product(String name, String description, String category){
+        this.name = name;
+        this.description = description;
+        this.category = category;
+    }
+
 
 
 

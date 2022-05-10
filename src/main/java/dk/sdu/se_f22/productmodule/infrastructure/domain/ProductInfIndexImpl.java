@@ -49,7 +49,6 @@ public class ProductInfIndexImpl implements ProductInfIndex{
             String data = baseProduct.get(attr);
             if (data != null && !data.equalsIgnoreCase("unavailable")) {
                 productData.addAll(List.of(data.split(delimiter)));
-
             }
         }
         productData.addAll(baseProduct.getLocations());

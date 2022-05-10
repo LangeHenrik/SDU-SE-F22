@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class IndexingTest {
     String text = "";
 
-    @Test
+    /*@Test
     void scheduleTimer() {
         Indexing.scheduleTimer(500);
         try (Scanner s = new Scanner(new FileInputStream(("intervals.txt")))) {
@@ -23,5 +23,5 @@ class IndexingTest {
             e.printStackTrace();
         }
         assertEquals("New index update: " + 500 + " at: " + new Date(), text);
-    }
+    }*/
 }

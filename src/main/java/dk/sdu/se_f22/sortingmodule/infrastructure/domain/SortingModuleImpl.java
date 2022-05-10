@@ -108,6 +108,45 @@ public class SortingModuleImpl implements SortingModule {
         searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
 
         // Range
+        RangeFilterCRUD filterCRUD = new RangeFilterCRUD();
+        List<RangeFilter> selectedFilters = new ArrayList<>();
+
+        this.query.getRangeDouble().forEach((Integer id, Double[] boundaries) -> {
+            try {
+                selectedFilters.add(filterCRUD.read(id));
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.query.getRangeLong().forEach((Integer id, Long[] boundaries) -> {
+            try {
+                selectedFilters.add(filterCRUD.read(id));
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.query.getRangeInstant().forEach((Integer id, Instant[] boundaries) -> {
+            try {
+                selectedFilters.add(filterCRUD.read(id));
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        try {
+            RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
+        } catch (IllegalImplementationException e) {
+            e.printStackTrace();
+        }
 
         // Scoring
 

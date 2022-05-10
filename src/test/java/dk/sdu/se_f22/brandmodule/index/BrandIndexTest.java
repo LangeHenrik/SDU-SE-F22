@@ -34,52 +34,52 @@ class BrandIndexTest {
             brandInsert.setString(3, knownBrand.getFounded());
             brandInsert.setString(4, knownBrand.getHeadquarters());
 
-            PreparedStatement prod1 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod1 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod1.setString(1, Products[0]);
 
-            PreparedStatement prod2 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod2 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod2.setString(1, Products[1]);
 
-            PreparedStatement prod3 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod3 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod3.setString(1, Products[2]);
 
-            PreparedStatement prod4 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod4 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod4.setString(1, Products[3]);
 
-            PreparedStatement prod5 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod5 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod5.setString(1, Products[4]);
 
-            PreparedStatement prod6 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod6 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod6.setString(1, Products[5]);
 
-            PreparedStatement prod7 = connection.prepareStatement("INSERT  INTO producttype (name) VALUES (?)");
+            PreparedStatement prod7 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
             prod7.setString(1, Products[6]);
 
-            PreparedStatement TBM1 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM1 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM1.setInt(1, 1);
             TBM1.setInt(2, 1);
 
-            PreparedStatement TBM2 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM2 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM2.setInt(1, 1);
             TBM2.setInt(2, 2);
 
-            PreparedStatement TBM3 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM3 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM3.setInt(1, 1);
             TBM3.setInt(2, 3);
 
-            PreparedStatement TBM4 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM4 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM4.setInt(1, 1);
             TBM4.setInt(2, 4);
 
-            PreparedStatement TBM5 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM5 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM5.setInt(1, 1);
             TBM5.setInt(2, 5);
 
-            PreparedStatement TBM6 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM6 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM6.setInt(1, 1);
             TBM6.setInt(2, 6);
 
-            PreparedStatement TBM7 = connection.prepareStatement("INSERT INTO tokenbrandmap (brand, product VALUES (?, ?))");
+            PreparedStatement TBM7 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
             TBM7.setInt(1, 1);
             TBM7.setInt(2, 7);
 

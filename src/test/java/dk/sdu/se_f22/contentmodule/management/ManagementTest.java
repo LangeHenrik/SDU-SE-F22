@@ -13,12 +13,8 @@ class ManagementTest {
     @Test
     void create() {
         try {
-            Management.Create("This is a test HTML page");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            assertEquals("This is a test HTML page", Management.getPageString(test_id));
+            int id = Management.Create("This is a test HTML page");
+            assertEquals("This is a test HTML page", Management.getPageString(id));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,9 +50,10 @@ class ManagementTest {
 
     @Test
     void delete() {
-        Management.Delete(test_id);
         try {
-            assertNull(Management.getPageString(test_id));
+            int id = Management.Create("This should be deleted");
+            Management.Delete(id);
+            assertNull(Management.getPageString(id));
         } catch (SQLException e) {
             e.printStackTrace();
         }

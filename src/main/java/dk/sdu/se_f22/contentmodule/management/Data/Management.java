@@ -2,6 +2,7 @@ package dk.sdu.se_f22.contentmodule.management.Data;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.ResultSet;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import dk.sdu.se_f22.sharedlibrary.models.Content;
 
 public class Management {
@@ -90,7 +92,7 @@ public class Management {
         }
     }
 
-    private static ResultSet GetResultSetFromId(int id) throws SQLException{
+    private static ResultSet GetResultSetFromId(int id) throws SQLException {
         return dat.Execute("SELECT * FROM pages WHERE id = " + id);
     }
 

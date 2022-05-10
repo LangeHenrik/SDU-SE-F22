@@ -35,6 +35,7 @@ class CategoryDBConnectionTest {
         assertEquals(categoryExpected, categoryActual);
     }
 
+    @DisplayName("Create category without parentId")
     @Test
     void CreateCategoryTest() {
         DBConnection.createCategory("TestName", "TestDescription", "TestReqValue", 1);
@@ -58,7 +59,7 @@ class CategoryDBConnectionTest {
                     ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
             );
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -70,16 +71,16 @@ class CategoryDBConnectionTest {
         try (PreparedStatement querystatement1 = DBConnection.connect().prepareStatement(sql1)) {
             querystatement1.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         try(PreparedStatement querystatement2 = DBConnection.connect().prepareStatement(sql2)){
             querystatement2.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

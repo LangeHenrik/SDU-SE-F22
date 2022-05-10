@@ -3,7 +3,7 @@ CREATE TABLE scores(
     type varchar(6),
     bracket DOUBLE PRECISION,
     weight int
-    );
+);
 
 INSERT INTO scores (type, bracket, weight) VALUES
     ('price',1000,1),

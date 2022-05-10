@@ -5,6 +5,8 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Date;
 
@@ -18,7 +20,7 @@ public class Scoring implements IScoring {
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
                     double priceCompare = sqlReturnValues.getDouble(3);
-                    if (price <= priceCompare) {
+                    if (price < priceCompare) {
                         product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
                         break;
                     } else if (sqlReturnValues.isLast()) {
@@ -38,7 +40,7 @@ public class Scoring implements IScoring {
                  var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'review';");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
-                    if (review <= sqlReturnValues.getDouble(3)) {
+                    if (review < sqlReturnValues.getDouble(3)) {
                         product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
@@ -50,10 +52,10 @@ public class Scoring implements IScoring {
             }
         }
     }
-/*
+
     private void stock(List<ProductScore> input) {
         for (ProductScore product : input) {
-            int stock = product.getProduct().getStock();
+            int stock = product.getProduct().getInStock().size();
             try {var connection = DBConnection.getPooledConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'stock'");
                 var sqlReturnValues = statement.executeQuery();
@@ -73,13 +75,14 @@ public class Scoring implements IScoring {
 
     private void date(List<ProductScore> input) {
         for (ProductScore product : input) {
-            Date newDate = new Date();
-            int date = (int)(((newDate.getTime()-product.getProduct().getReleaseDate().getTime())/31556736)/1000);
+            Instant date = product.getProduct().getPublishedDate();
+
             try (var connection = DBConnection.getPooledConnection();
                  var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'date'");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
-                    if (date <= sqlReturnValues.getInt(3)) {
+                    Instant newInstant = Instant.now().minusSeconds((long) sqlReturnValues.getInt(3) *60*60*24*365);
+                    if (date.isAfter(newInstant)) {
                         product.setScore(-sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
@@ -92,7 +95,6 @@ public class Scoring implements IScoring {
         }
     }
 
- */
 
     public List<ProductScore> wrapProduct (Collection<Product> input) {
 
@@ -143,11 +145,9 @@ public class Scoring implements IScoring {
 
         price(products);
         review(products);
-        /*
         stock(products);
         date(products);
 
-         */
         Collections.sort(products);
 
         return unWrapProduct(products);
@@ -174,7 +174,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortStock(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
-        //stock(products);
+        stock(products);
         Collections.sort(products);
 
         return unWrapProduct(products);
@@ -183,7 +183,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortDate(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
-        //date(products);
+        date(products);
         Collections.sort(products);
 
         return unWrapProduct(products);

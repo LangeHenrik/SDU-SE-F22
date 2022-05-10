@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.scoring;
+package dk.sdu.se_f22.sortingmodule.range.database.scoring;
 
 import java.util.List;
 

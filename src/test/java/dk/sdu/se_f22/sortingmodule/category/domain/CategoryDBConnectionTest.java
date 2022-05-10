@@ -34,7 +34,7 @@ class CategoryDBConnectionTest {
         assertEquals(categoryExpected, categoryActual);
     }
 
-    @DisplayName("Create category without parentId")
+    @DisplayName("Create category")
     @Test
     void CreateCategoryTest() {
         DBConnection.createCategory("TestName", "TestDescription", "TestReqValue", 1);
@@ -60,7 +60,35 @@ class CategoryDBConnectionTest {
         } catch (SQLException | IOException e) {
             System.out.println(e.getMessage());
         }
+    }
 
+    @DisplayName("Create category parentId")
+    @Test
+    void CreateCategoryTestParentId() {
+        DBConnection.createCategory("TestName", "TestDescription", "TestReqValue",1, 1);
+        
+        String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
+                "INNER JOIN requirements_values \n" +
+                "on categories.requirements_id = requirements_values.id \n" +
+                "INNER JOIN requirements_fieldnames \n" +
+                "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
+                "WHERE name = 'TestName'";
+
+        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+            ResultSet queryResultSet = queryStatement.executeQuery();
+
+            queryResultSet.next();
+
+            assertAll("Should return value from database",
+                    ()->assertEquals("TestName",queryResultSet.getString("name")),
+                    ()->assertEquals("TestDescription",queryResultSet.getString("description")),
+                    ()->assertEquals(1,queryResultSet.getInt("parent_id")),
+                    ()->assertEquals("name",queryResultSet.getString("fieldname")),
+                    ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
+            );
+        } catch (SQLException | IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @AfterEach

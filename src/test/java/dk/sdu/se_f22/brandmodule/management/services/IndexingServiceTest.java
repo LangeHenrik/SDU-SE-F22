@@ -17,8 +17,8 @@ public class IndexingServiceTest {
 
     }
 
+
     @Test
-    @Disabled("Test seems broken")
     void indexingIntervalTimeTest() throws InterruptedException {
         // Variables that are used in the TimerTask
         final long[] start = new long[1];

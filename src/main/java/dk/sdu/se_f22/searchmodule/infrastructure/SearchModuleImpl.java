@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
-import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructureInterface;
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearchImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
@@ -14,6 +13,7 @@ import dk.sdu.se_f22.searchmodule.twowaysynonyms.TwoWaySynonym;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.ParameterizedType;
@@ -111,7 +111,7 @@ public class SearchModuleImpl implements SearchModule {
 
         SearchHits searchHits = new SearchHits();
         searchHits.setContents(List.of());
-        searchHits.setProducts(queryIndexOfType(BaseProduct.class, tokens));
+        searchHits.setProducts(queryIndexOfType(BaseProduct.class, tokens).stream().map(Product::new).toList());
         searchHits.setBrands(queryIndexOfType(Brand.class, tokens));
         //searchHits.setContents(queryIndexOfType(Content.class, tokens));
 

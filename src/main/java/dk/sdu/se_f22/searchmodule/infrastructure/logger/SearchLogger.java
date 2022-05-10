@@ -18,7 +18,7 @@ public class SearchLogger {
     private static final Logger logger = LoggingProvider.getLogger(SearchLogger.class);
 
     public static void logSearch(String search, SearchHits searchHits, List<String> filterTokens) {
-        List<BaseProduct> products = (List<BaseProduct>) searchHits.getProducts();
+        List<Product> products = (List<Product>) searchHits.getProducts();
         List<Brand> brands = (List<Brand>) searchHits.getBrands();
         //List<Content> contents = (List<Content>) searchHits.getContents();
 
@@ -38,7 +38,7 @@ public class SearchLogger {
             // Insert search result id's
             insertValues(products, id,
                     "INSERT INTO productsearches(productid, searchid) VALUES (?, ?);",
-                    BaseProduct::toString);
+                    Product::toString);
 
             insertValues(brands, id,
                     "INSERT INTO brandsearches(brandid, searchid) VALUES (?, ?);",
@@ -56,11 +56,11 @@ public class SearchLogger {
     private static <T> void insertValues(List<T> elements, int id, String sql, Function<T, String> getElementID) {
         try(Connection connection = DBConnection.getPooledConnection()) {
             for (T elem : elements) {
-                PreparedStatement brandInsertStatement = connection.prepareStatement(sql);
-                brandInsertStatement.setString(1, getElementID.apply(elem));
-                brandInsertStatement.setInt(2, id);
-                brandInsertStatement.execute();
-                brandInsertStatement.close();
+                PreparedStatement insertStatement = connection.prepareStatement(sql);
+                insertStatement.setString(1, getElementID.apply(elem));
+                insertStatement.setInt(2, id);
+                insertStatement.execute();
+                insertStatement.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();

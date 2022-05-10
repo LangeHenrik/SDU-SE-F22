@@ -1,29 +1,27 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockFilteringModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
-import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
-import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import org.junit.Before;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSearchModule {
     private SearchModule searchModule;
@@ -88,6 +86,24 @@ public class TestSearchModule {
         );
     }
 
+    public static BaseProduct createExampleBaseproduct() {
+        var product = new BaseProduct();
+        product.set(ProductAttribute.ID, UUID.randomUUID().toString());
+        product.set(ProductAttribute.AVERAGE_USER_REVIEW, "123.0");
+        product.set(ProductAttribute.IN_STOCK, "hello");
+        product.set(ProductAttribute.EAN, "123");
+        product.set(ProductAttribute.PRICE, "123");
+        product.set(ProductAttribute.PUBLISHED_DATE, "2022-05-10T07:51:31.631793829");
+        product.set(ProductAttribute.EXPIRATION_DATE, "2022-05-10T07:51:31.631793829");
+        product.set(ProductAttribute.CATEGORY, "hello");
+        product.set(ProductAttribute.NAME, "hello");
+        product.set(ProductAttribute.DESCRIPTION, "hello");
+        product.set(ProductAttribute.SIZE, "unavailable");
+        product.set(ProductAttribute.CLOCKSPEED, "unavailable");
+        product.set(ProductAttribute.WEIGHT, "unavailable");
+        return product;
+    }
+
     @Test
     @SuppressWarnings("unchecked")
     public void testSearch() {
@@ -96,7 +112,7 @@ public class TestSearchModule {
             public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
                 if (clazz == BaseProduct.class) {
                     List<BaseProduct> baseProductPages = new ArrayList<>();
-                    baseProductPages.add(new BaseProduct());
+                    baseProductPages.add(createExampleBaseproduct());
                     return (List<T>) baseProductPages;
                 } else if (clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
@@ -125,7 +141,7 @@ public class TestSearchModule {
 
         // Same here, although we don't have any attribute fields to test against, so we
         // just check that an object is in the list
-        List<BaseProduct> baseProducts = searchResult.getProducts().stream().toList();
+        List<Product> baseProducts = searchResult.getProducts().stream().toList();
         assertTrue(baseProducts.stream().findFirst().isPresent());
     }
 

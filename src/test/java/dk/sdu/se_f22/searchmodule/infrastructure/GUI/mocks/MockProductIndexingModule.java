@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.infrastructure.GUI.mocks;
 
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.searchmodule.infrastructure.TestSearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
@@ -14,7 +15,7 @@ public class MockProductIndexingModule implements IndexingModule<BaseProduct> {
     private Map<String, BaseProduct> data = new HashMap<>();
 
     public MockProductIndexingModule() {
-        data.put("Test1", new BaseProduct());
+        data.put("Test1", TestSearchModule.createExampleBaseproduct());
     }
 
     @Override

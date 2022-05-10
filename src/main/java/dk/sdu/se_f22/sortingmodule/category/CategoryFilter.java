@@ -1,8 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.category;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
-import dk.sdu.se_f22.sortingmodule.category.domain.CategoryDBConnection;
+import dk.sdu.se_f22.sortingmodule.category.domain.CategoryCRUDInterface;
+import dk.sdu.se_f22.sortingmodule.category.domain.CategoryCRUD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CategoryFilter implements CategoryFilterInterface {
+    CategoryCRUDInterface DBCrud;
+
+    public CategoryFilter(){
+        this.DBCrud = new CategoryCRUD();
+    }
 
     public SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
         Collection<CategoryProduct> newProducts = new ArrayList<>();
@@ -21,7 +26,7 @@ public class CategoryFilter implements CategoryFilterInterface {
         }
 
         for (Integer categoryID : categoryIDs) {
-            Category tmpCategory = CategoryDBConnection.shared.getCategoryById(categoryID);
+            Category tmpCategory = DBCrud.getCategoryById(categoryID);
             categories.add(tmpCategory);
         }
 
@@ -73,9 +78,5 @@ public class CategoryFilter implements CategoryFilterInterface {
         searchHits.setProducts(newProducts);
 
         return searchHits;
-    }
-
-    public List getAllCategories() {
-        return CategoryDBConnection.shared.getAllCategories();
     }
 }

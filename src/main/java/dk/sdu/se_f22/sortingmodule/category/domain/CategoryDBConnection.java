@@ -2,16 +2,14 @@ package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.category.Category;
-import dk.sdu.se_f22.sortingmodule.category.CategoryCRUDInterface;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDBConnection implements CategoryCRUDInterface {
+public class CategoryDBConnection{
 
-    public static CategoryDBConnection shared = new CategoryDBConnection();
     private static Connection connie = null;
 
     private Connection connect() throws SQLException, IOException {
@@ -27,12 +25,12 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         }
     }
 
-    public int deleteCategory(int id) {
+    protected int deleteCategory(int id) {
         String SQL = "DELETE FROM categories WHERE id = ?";
 
         int affectedrows = 0;
 
-        try (Connection conn = this.shared.connect();
+        try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             pstmt.setInt(1, id);
@@ -47,12 +45,12 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         return affectedrows;
     }
 
-    public List getAllCategories(){
+    protected List getAllCategories(){
         List<Category> tmpList = new ArrayList();
         Category tmpCategory;
         String sql = "SELECT * FROM categories";
 
-        try(PreparedStatement queryStatement = this.shared.connect().prepareStatement(sql)) {
+        try(PreparedStatement queryStatement = this.connect().prepareStatement(sql)) {
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             while(queryResultSet.next()){
@@ -69,13 +67,13 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         } catch (IOException ioEx) {
             System.out.println(ioEx.getMessage());
         } finally {
-            this.shared.closeConnection();
+            this.closeConnection();
         }
 
         return tmpList;
     }
 
-    public Category getCategoryById(int queryId){
+    protected Category getCategoryById(int queryId){
         Category tmpCategory = null;
         String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
                 "INNER JOIN requirements_values \n" +
@@ -84,7 +82,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                 "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE categories.id = ?";
 
-        try(PreparedStatement queryStatement = this.shared.connect().prepareStatement(sql)) {
+        try(PreparedStatement queryStatement = this.connect().prepareStatement(sql)) {
             queryStatement.setInt(1, queryId);
             ResultSet queryResultSet = queryStatement.executeQuery();
 
@@ -105,15 +103,15 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         } catch (IOException ioEx) {
             System.out.println(ioEx.getMessage());
         } finally {
-            this.shared.closeConnection();
+            this.closeConnection();
         }
 
         return tmpCategory;
     }
 
-    public int updateName(int idToChange, String changeTo) {
+    protected int updateName(int idToChange, String changeTo) {
         String sql = "UPDATE Categories SET name = ? WHERE id = ?";
-        try (Connection conn = CategoryDBConnection.shared.connect();
+        try (Connection conn = this.connect();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo.length() > 0) {
                 try {
@@ -139,9 +137,9 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         return 0;
     }
 
-    public int updateDescription(int idToChange, String changeTo) {
+    protected int updateDescription(int idToChange, String changeTo) {
         String sql = "UPDATE Categories SET description = ? WHERE id = ?";
-        try (Connection conn = CategoryDBConnection.shared.connect();
+        try (Connection conn = this.connect();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo.length() > 0) {
                 try {
@@ -167,9 +165,9 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         return 0;
     }
 
-    public int updateParentID(int idToChange, int changeTo) {
+    protected int updateParentID(int idToChange, int changeTo) {
         String sql = "UPDATE Categories SET parent_id = ? WHERE id = ?";
-        try (Connection conn = CategoryDBConnection.shared.connect();
+        try (Connection conn = this.connect();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo > 0) {
                 try {
@@ -195,7 +193,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         return 0;
     }
 
-    public void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
+    protected void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
         boolean notValid = false;
 
         if (name.length() < 0 && name.length() > 40)
@@ -208,14 +206,14 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         if (notValid = false) {
             try {
                 int checkRows = 0;
-                PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+                PreparedStatement checkRowsStatement = this.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
                 checkRowsStatement.setInt(1, requirementsFieldName);
                 ResultSet rsCheckRows = checkRowsStatement.executeQuery();
                 rsCheckRows.next();
                 checkRows = rsCheckRows.getInt("rows");
 
                 if (checkRows == 1) {
-                    PreparedStatement createStatement = this.shared.connect().prepareStatement(
+                    PreparedStatement createStatement = this.connect().prepareStatement(
                             "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
                             Statement.RETURN_GENERATED_KEYS
                     );
@@ -227,7 +225,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     int generatedKey = 0;
                     if (rs.next()) {
                         generatedKey = rs.getInt(1);
-                        PreparedStatement createCategoryStatement = this.shared.connect().prepareStatement(
+                        PreparedStatement createCategoryStatement = this.connect().prepareStatement(
                                 "INSERT INTO categories(name, description, parent_id, requirements_id) VALUES (?,?,?,?)"
                         );
                         createCategoryStatement.setString(1, name);
@@ -244,11 +242,11 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
-            CategoryDBConnection.shared.closeConnection();
+            this.closeConnection();
         }
     }
 
-    public void createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
+    protected void createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
         boolean notValid = false;
 
         if (name.length() < 0 && name.length() > 40)
@@ -259,14 +257,14 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
         if (notValid = false) {
             try {
                 int checkRows = 0;
-                PreparedStatement checkRowsStatement = this.shared.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+                PreparedStatement checkRowsStatement = this.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
                 checkRowsStatement.setInt(1, requirementsFieldname);
                 ResultSet rsCheckRows = checkRowsStatement.executeQuery();
                 rsCheckRows.next();
                 checkRows = rsCheckRows.getInt("rows");
 
                 if (checkRows == 1) {
-                    PreparedStatement createStatement = this.shared.connect().prepareStatement(
+                    PreparedStatement createStatement = this.connect().prepareStatement(
                             "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
                             Statement.RETURN_GENERATED_KEYS
                     );
@@ -278,7 +276,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
                     int generatedKey = 0;
                     if (rs.next()) {
                         generatedKey = rs.getInt(1);
-                        PreparedStatement createCategoryStatement = this.shared.connect().prepareStatement(
+                        PreparedStatement createCategoryStatement = this.connect().prepareStatement(
                                 "INSERT INTO categories(name, description, requirements_id) VALUES (?,?,?)"
                         );
                         createCategoryStatement.setString(1, name);
@@ -294,7 +292,7 @@ public class CategoryDBConnection implements CategoryCRUDInterface {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
-            CategoryDBConnection.shared.closeConnection();
+            this.closeConnection();
         }
     }
 }

@@ -18,38 +18,67 @@ public class DatabaseAPI {
     }
     //for adding superItem
 
-    public static void addItem(String itemName) throws SQLException {
+    public static void addItem(String itemName){
         PreparedStatement insertStatement = null;
-        insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-        insertStatement.setString(1, itemName);
-        insertStatement.setString(2, "0");
-        insertStatement.execute();
+
+        try {
+            insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+            insertStatement.setString(1,itemName);
+            insertStatement.setInt(2,0);
+            insertStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Item: " + itemName + " was added");
+        } catch (SQLException e) {
+            System.out.println("Could not add: " + itemName);
+            e.printStackTrace();
+        }
     }
 
     //for adding subItem
 
-    public static void addItem(String itemName, int superId) throws SQLException {
+    public static void addItem(String itemName, int superId) {
         PreparedStatement insertStatement = null;
-        insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-        insertStatement.setString(1, itemName);
-        insertStatement.setInt(2, superId);
-        insertStatement.execute();
+        try {
+            insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+            insertStatement.setString(1,itemName);
+            insertStatement.setInt(2, superId);
+            insertStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Item: " + itemName + " with super ID: " + superId +  " was added");
+        } catch (SQLException e) {
+            System.out.println("Could not add " + itemName + " with super ID: " + superId);
+            e.printStackTrace();
+        }
     }
 
-    public static void updateSuperId(String name, int superId) throws SQLException {
+    public static void updateSuperId(String name, int superId) {
         PreparedStatement updateStatement = null;
-        updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE name=?");
-        updateStatement.setInt(1, superId);
-        updateStatement.setString(2, name);
-        updateStatement.execute();
+        try {
+            updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE name=?");
+            updateStatement.setInt(1, superId);
+            updateStatement.setString(2, name);
+            updateStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Updated Super ID: " + superId);
+        } catch (SQLException e) {
+            System.out.println("Could not update Super ID: " + superId);
+            e.printStackTrace();
+        }
     }
 
-    public static void updateName(int id, String name) throws SQLException {
+    public static void updateName(int id, String name){
         PreparedStatement updateStatement = null;
-        updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
-        updateStatement.setString(1, name);
-        updateStatement.setInt(2, id);
-        updateStatement.execute();
+        try {
+            updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
+            updateStatement.setString(1, name);
+            updateStatement.setInt(2, id);
+            updateStatement.execute();
+            System.out.println("Transaction was a succes");
+            System.out.println("Updated Name: " + name);
+        } catch (SQLException e) {
+            System.out.println("Unable to update name: " + name);
+            e.printStackTrace();
+        }
     }
 
     public static Item[] readEntireDB() {
@@ -58,6 +87,7 @@ public class DatabaseAPI {
             PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items");
             ResultSet quaryResultSet = null;
             quaryResultSet = quaryStatement.executeQuery();
+
             while (quaryResultSet.next()) {
                 items.add(new Item(quaryResultSet.getInt(1), quaryResultSet.getString(2), quaryResultSet.getInt(3)));
             }
@@ -70,8 +100,10 @@ public class DatabaseAPI {
                 }
             }
             Item[] item = items.toArray(new Item[items.size()]);
+            System.out.println("The read was a succes");
             return item;
         } catch (SQLException e) {
+            System.out.println("Cant read :/");
             e.printStackTrace();
         }
         return null;

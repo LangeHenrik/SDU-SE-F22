@@ -58,7 +58,6 @@ public class TestSearchModule {
         indexingModule.indexingData.add(new MockIndexingData("Bar"));
         indexingModule.indexingData.add(new MockIndexingData("Foo"));
 
-
         SearchModuleImpl searchModule = new SearchModuleImpl();
         searchModule.addIndexingModule(indexingModule);
 
@@ -69,13 +68,11 @@ public class TestSearchModule {
         // Test querying of data
         assertArrayEquals(
                 helloQuery.toArray(),
-                List.of(new MockIndexingData("Hello")).toArray()
-        );
+                List.of(new MockIndexingData("Hello")).toArray());
 
         assertArrayEquals(
                 fooQuery.toArray(),
-                List.of(new MockIndexingData("Foo"), new MockIndexingData("Foo")).toArray()
-        );
+                List.of(new MockIndexingData("Foo"), new MockIndexingData("Foo")).toArray());
 
         // Test non-existing module for datatype
         assertEquals(
@@ -97,12 +94,11 @@ public class TestSearchModule {
         SearchModule searchModule = new SearchModuleImpl() {
             @Override
             public <T> List<T> queryIndexOfType(Class<T> clazz, List<String> tokens) {
-                if(clazz == BaseProduct.class) {
+                if (clazz == BaseProduct.class) {
                     List<BaseProduct> baseProductPages = new ArrayList<>();
                     baseProductPages.add(new BaseProduct());
                     return (List<T>) baseProductPages;
-                }
-                else if(clazz == Brand.class) {
+                } else if (clazz == Brand.class) {
                     List<Brand> brandPages = new ArrayList<>();
                     Brand brand = new Brand();
                     brand.setId(123);
@@ -117,15 +113,18 @@ public class TestSearchModule {
 
         SearchHits searchResult = searchModule.search("Hello world");
 
-        // We cannot use assertArrayEquals because brand doesn't implement the comparable operator, so we just match
-        // the name on the first element to check whether the query method was called for brand pages
+        // We cannot use assertArrayEquals because brand doesn't implement the
+        // comparable operator, so we just match
+        // the name on the first element to check whether the query method was called
+        // for brand pages
 
         List<Brand> brands = searchResult.getBrands().stream().toList();
         if (brands.stream().findFirst().isPresent()) {
             assertEquals(brands.stream().findFirst().get().getName(), "Test brand");
         }
 
-        // Same here, although we don't have any attribute fields to test against, so we just check that an object is in the list
+        // Same here, although we don't have any attribute fields to test against, so we
+        // just check that an object is in the list
         List<BaseProduct> baseProducts = searchResult.getProducts().stream().toList();
         assertTrue(baseProducts.stream().findFirst().isPresent());
     }

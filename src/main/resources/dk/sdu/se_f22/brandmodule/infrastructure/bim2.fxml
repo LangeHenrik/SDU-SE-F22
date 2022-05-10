@@ -48,7 +48,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Founded" />
-                                    <TextField fx:id="foundedField" onTextChange="" />
+                                    <TextField fx:id="foundedField" />
                                  </children>
                               </VBox>
                               <VBox>
@@ -132,27 +132,37 @@
                <content>
                   <FlowPane alignment="CENTER" columnHalignment="CENTER">
                      <children>
-                        <VBox alignment="TOP_CENTER" spacing="10.0">
+                        <HBox spacing="50.0">
                            <children>
-                              <VBox>
+                              <VBox alignment="TOP_CENTER" spacing="10.0">
                                  <children>
-                                    <HBox alignment="BOTTOM_LEFT">
+                                    <VBox>
                                        <children>
-                                          <Label text="Tokens" />
-                                          <HBox alignment="TOP_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
+                                          <HBox alignment="BOTTOM_LEFT">
                                              <children>
-                                                <Button mnemonicParsing="false" onMouseClicked="#addToken" text="Add token" />
-                                                <Button mnemonicParsing="false" onMouseClicked="#removeToken" text="Remove" />
+                                                <Label text="Tokens" />
+                                                <HBox alignment="TOP_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" onMouseClicked="#addToken" text="Add token" />
+                                                      <Button mnemonicParsing="false" onMouseClicked="#removeToken" text="Remove" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </HBox>
+                                          <ListView fx:id="queryTokensListView" prefHeight="200.0" prefWidth="200.0" />
                                        </children>
-                                    </HBox>
-                                    <ListView fx:id="queryTokensListView" prefHeight="200.0" prefWidth="200.0" />
+                                    </VBox>
+                                    <Button mnemonicParsing="false" onMouseClicked="#queryIndex" text="Search" />
                                  </children>
                               </VBox>
-                              <Button mnemonicParsing="false" onMouseClicked="#queryIndex" text="Search" />
+                              <VBox>
+                                 <children>
+                                    <Label text="Results" />
+                                    <ListView fx:id="queryResultsListView" prefHeight="200.0" prefWidth="200.0" />
+                                 </children>
+                              </VBox>
                            </children>
-                        </VBox>
+                        </HBox>
                      </children>
                   </FlowPane>
                </content>

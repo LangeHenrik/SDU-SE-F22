@@ -1,14 +1,18 @@
 package dk.sdu.se_f22.brandmodule.infrastructure;
 
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import org.w3c.dom.events.MouseEvent;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javafx.collections.FXCollections.observableList;
 
 public class Bim2Controller {
 	BrandInfrastructureInterface brandInfrastructure;
@@ -25,9 +29,12 @@ public class Bim2Controller {
 
 	@FXML
 	ListView<String> queryTokensListView;
+	@FXML
+	ListView<Brand> queryResultsListView;
 
-	Brand selectedBrand;
+	private Brand selectedBrand;
 
+	private LocalDateTime brandClickedLast;
 
 	@FXML
 	public void initialize() {
@@ -35,18 +42,34 @@ public class Bim2Controller {
 
 		productsListView.setEditable(true);
 		productsListView.setCellFactory(TextFieldListCell.forListView());
+
 		queryTokensListView.setEditable(true);
 		queryTokensListView.setCellFactory(TextFieldListCell.forListView());
+
+		ChangeListener<String> listener = (obs, oldText, newText) -> updateBrand();
+
+		nameField.textProperty().addListener(listener);
+		descriptionField.textProperty().addListener(listener);
+		foundedField.textProperty().addListener(listener);
+		headquartersField.textProperty().addListener(listener);
 	}
 
 	@FXML
 	public void onBrandClicked() {
 		selectedBrand = brandsListView.getSelectionModel().getSelectedItem();
+		nameField.setText(selectedBrand.getName());
+		descriptionField.setText(selectedBrand.getDescription());
+		foundedField.setText(selectedBrand.getFounded());
+		headquartersField.setText(selectedBrand.getHeadquarters());
+		productsListView.setItems(observableList(selectedBrand.getProducts()));
+		brandClickedLast = LocalDateTime.now().plusSeconds(1);
 	}
 
 	@FXML
 	public void addProduct() {
-		productsListView.getItems().add("New Product");
+		String toAdd = "New Product";
+		productsListView.getItems().add(toAdd);
+		productsListView.getSelectionModel().select(toAdd);
 	}
 
 	@FXML
@@ -57,23 +80,22 @@ public class Bim2Controller {
 	}
 
 	public void updateBrand() {
+		if (!brandClickedLast.isBefore(LocalDateTime.now())) return;
 		if (selectedBrand == null) return;
 		selectedBrand.setName(nameField.getText());
 		selectedBrand.setDescription(descriptionField.getText());
 		selectedBrand.setFounded(foundedField.getText());
 		selectedBrand.setHeadquarters(headquartersField.getText());
 		selectedBrand.setProducts(productsListView.getItems());
+		brandsListView.refresh();
 	}
 
 	@FXML
 	public void addBrand() {
-		String name = nameField.getText();
-		String description = descriptionField.getText();
-		String founded = foundedField.getText();
-		String headquarters = headquartersField.getText();
-		List<String> products = productsListView.getItems();
-		Brand toAdd = new Brand(name, description, founded, headquarters, products);
+		Brand toAdd = new Brand("", "", "", "");
 		brandsListView.getItems().add(toAdd);
+		brandsListView.getSelectionModel().select(toAdd);
+		selectedBrand = toAdd;
 	}
 
 	@FXML
@@ -110,6 +132,7 @@ public class Bim2Controller {
 	@FXML
 	public void queryIndex() {
 		List<String> tokens = queryTokensListView.getItems();
-		brandInfrastructure.queryIndex(tokens);
+		List<Brand> results = brandInfrastructure.queryIndex(tokens);
+		queryResultsListView.setItems(observableList(results));
 	}
 }

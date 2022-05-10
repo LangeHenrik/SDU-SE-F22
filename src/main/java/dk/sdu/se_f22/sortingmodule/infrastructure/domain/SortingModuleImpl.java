@@ -111,17 +111,35 @@ public class SortingModuleImpl implements SortingModule {
         RangeFilterCRUD filterCRUD = new RangeFilterCRUD();
         List<RangeFilter> selectedFilters = new ArrayList<>();
 
-        for (Map.Entry<Integer, Double[]> tempEntry : this.query.getRangeDouble().entrySet()) {
+        this.query.getRangeDouble().forEach((Integer id, Double[] boundaries) -> {
             try {
-                selectedFilters.add(filterCRUD.read(tempEntry.getKey()));
-
-                selectedFilters.get(selectedFilters.size() - 1).setUserMin(tempEntry.getValue()[0]);
-                selectedFilters.get(selectedFilters.size() - 1).setUserMax(tempEntry.getValue()[1]);
-
+                selectedFilters.add(filterCRUD.read(id));
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();
             }
-        }
+        });
+
+        this.query.getRangeLong().forEach((Integer id, Long[] boundaries) -> {
+            try {
+                selectedFilters.add(filterCRUD.read(id));
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+                e.printStackTrace();
+            }
+        });
+
+        this.query.getRangeInstant().forEach((Integer id, Instant[] boundaries) -> {
+            try {
+                selectedFilters.add(filterCRUD.read(id));
+                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+                e.printStackTrace();
+            }
+        });
 
 
         try {

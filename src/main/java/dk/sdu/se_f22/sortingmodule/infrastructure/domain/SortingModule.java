@@ -77,6 +77,13 @@ public interface SortingModule {
      * Return modified SearchHits with pagination
      */
     public SearchHits paginateHits(SearchHits searchHits);
+  
+     /**
+     * Get all category filters
+     *
+     * @return List with all category filters
+     */
+    public List getAllCategories();
 
     /**
      * Run search, and get the hits the search creates, that is filtered and paginated

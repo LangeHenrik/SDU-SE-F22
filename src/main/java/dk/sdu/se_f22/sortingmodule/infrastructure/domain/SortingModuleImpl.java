@@ -96,6 +96,12 @@ public class SortingModuleImpl implements SortingModule {
     public SearchHits paginateHits(SearchHits searchHits) {
         return this.query.paginateHits(searchHits);
     }
+  
+    @Override
+    public List getAllCategories() {
+        CategoryFilter categoryFilter = new CategoryFilter();
+        return categoryFilter.getAllCategories();
+    }
 
     @Override
     public SearchHits search() {

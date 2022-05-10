@@ -16,7 +16,9 @@ public class Helpers {
     public static void resetDB(){
         try(Connection connection = DBConnection.getPooledConnection()) {
             System.out.println("Resetting range database");
-            new DBMigration().runSQLFromFile(connection, "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/3.3_modifiedRangeFilters.sql");
+            DBMigration runner = new DBMigration();
+            runner.runSQLFromFile(connection, "src/test/resources/dk/sdu/se_f22/sortingmodule/range/sql_sqripts/5.3_range_clear_table_data.sql");
+            runner.runSQLFromFile(connection, "src/test/resources/dk/sdu/se_f22/sortingmodule/range/sql_sqripts/5.4_range_insert_table_default_data.sql");
         } catch (SQLException e) {
             System.out.println("error when resetting database state, pooled connection threw sql exception:");
             e.printStackTrace();

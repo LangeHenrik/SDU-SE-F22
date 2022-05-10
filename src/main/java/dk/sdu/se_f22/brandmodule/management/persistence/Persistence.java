@@ -21,7 +21,11 @@ public class Persistence implements IPersistence {
         //Connect to database
         jsonService = new JsonService();
         BIM2 = new BrandInfrastructure();
-        c = DBConnection.getConnection();
+        try {
+            c = DBConnection.getPooledConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -138,6 +142,8 @@ public class Persistence implements IPersistence {
             rollback();
             return false;
         }
+
+        setAutoCommit(true);
 
         return true;
     }

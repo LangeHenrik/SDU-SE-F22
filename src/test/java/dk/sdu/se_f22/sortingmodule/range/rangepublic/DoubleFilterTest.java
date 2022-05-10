@@ -46,8 +46,6 @@ class DoubleFilterTest {
             //crude check that the mockresults are what we expect, and have not been changed
             assertEquals(7, mockResults.size());
 
-
-
             // HERE:
             // Expected results could be read from a csv file,
             // instead of being put in like this.
@@ -78,9 +76,6 @@ class DoubleFilterTest {
             });
         }
 
-
-        
-
         @Test
         @DisplayName("Filtering an empty list of results")
         void filteringAnEmptyListOfResults() {
@@ -93,7 +88,59 @@ class DoubleFilterTest {
 
             assertEquals(emptyResults, filteredResults);
         }
+
+        @Nested
+        @DisplayName("Set userMin and userMax")
+        class SetUserMinAndMax {
+
+            @Nested
+            @DisplayName("Set valid userMin and userMax")
+            class SetValidUserMinAndUserMax {
+
+                @Test
+                @DisplayName("Set valid DoubleFilter userMin and userMax")
+                void setValidDoubleFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set valid LongFilter userMin and userMax")
+                void setValidLongFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set valid TimeFilter userMin and userMax")
+                void setValidTimeFilterUserMinAndUserMax () {
+
+                }
+            }
+
+            @Nested
+            @DisplayName("Set invalid userMin and userMax")
+            class SetInvalidUserMinAndUserMax {
+
+                @Test
+                @DisplayName("Set invalid DoubleFilter userMin and userMax")
+                void setInvalidDoubleFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set invalid LongFilter userMin and userMax")
+                void setInvalidLongFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set invalid TimeFilter userMin and userMax")
+                void setInvalidTimeFilterUserMinAndUserMax () {
+
+                }
+            }
+        }
     }
+
 
     //todo test setters
 }

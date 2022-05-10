@@ -28,7 +28,7 @@ public class SearchModuleImpl implements SearchModule {
         this.filteringModules = new HashSet<>();
 
         // Add modules
-        addIndexingModule((BrandInfrastructureInterface) new BrandInfrastructure());
+        addIndexingModule(new BrandInfrastructure());
         addIndexingModule(new ProductInfSearchImpl());
 
         addFilteringModule(TwoWaySynonym.getInstance());

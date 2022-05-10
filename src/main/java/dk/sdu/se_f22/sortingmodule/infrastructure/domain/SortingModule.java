@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 
@@ -65,6 +66,13 @@ public interface SortingModule {
      * @param scoring Scoring method
      */
     public void setScoring(int scoring);
+
+    /**
+     * Get all category filters
+     *
+     * @return List with all category filters
+     */
+    public List getAllCategories();
 
     /**
      * Run search, and get the hits the search creates, that is filtered and paginated

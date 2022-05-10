@@ -87,6 +87,12 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
+    public List getAllCategories() {
+        CategoryFilter categoryFilter = new CategoryFilter();
+        return categoryFilter.getAllCategories();
+    }
+
+    @Override
     public SearchHits search() {
         // Save the query
         this.saveSearch();

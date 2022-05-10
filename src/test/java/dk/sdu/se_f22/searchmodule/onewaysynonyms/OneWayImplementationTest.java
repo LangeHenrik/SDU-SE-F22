@@ -39,7 +39,7 @@ class OneWayImplementationTest {
 
     @Test
     void filterMultipleItems(){
-        boolean bool = false;
+        boolean bool;
         tokens.add("motordrevet");
         tokens.add("racerbil");
         tokens.add("personbil");
@@ -51,15 +51,16 @@ class OneWayImplementationTest {
 
         dbTokens = owi.filter(dbTokens);
 
-        for (String item : tokens) {
-            for (String item2 : dbTokens){
+        for (String item : dbTokens) {
+            bool = false;
+            for (String item2 : tokens){
                 if (item.equals(item2)){
                     bool = true;
                     break;
                 }
             }
+            assertTrue(bool,"Unexpected Item in DB or Item missing");
         }
-        assertTrue(bool);
 
     }
     @Test

@@ -107,31 +107,6 @@ public class SortingModuleImpl implements SortingModule {
         searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
 
         // Range
-        RangeFilterCRUD filterCRUD = new RangeFilterCRUD();
-        List<RangeFilter> selectedFilters = new ArrayList<>();
-
-        for (Map.Entry<Integer, Double[]> tempEntry : this.query.getRangeDouble().entrySet()) {
-            try {
-                selectedFilters.add(filterCRUD.read(tempEntry.getKey()));
-
-                for (Double d : tempEntry.getValue()) {
-
-                }
-            } catch (IdNotFoundException | UnknownFilterTypeException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
-        try {
-            SearchHits resultingContent = RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
-        } catch (IllegalImplementationException e) {
-            e.printStackTrace();
-        }
-
-
-
 
         // Scoring
 

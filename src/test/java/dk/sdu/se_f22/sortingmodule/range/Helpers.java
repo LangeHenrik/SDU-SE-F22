@@ -1,7 +1,5 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilter;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -9,7 +7,7 @@ import java.util.*;
 public class Helpers {
     public static List<String> readFromCSV(String fileName) {
         List<String> out = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/SortingModule/Range/" + fileName))) {
+        try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/sortingmodule/range/" + fileName))) {
             while(scanner.hasNextLine()){
                 out.add(scanner.nextLine());
             }
@@ -57,25 +55,6 @@ public class Helpers {
         return attributeMap;
     }
 
-    public static List<RangeFilter> readRangeFiltersFromFile(String fileName){
-        List<RangeFilter> mockResults = new ArrayList<>();
-
-        List<String> filters = Helpers.readFromCSV(fileName);
-
-        String[] attributeNames = filters.get(0).split(",");
-
-
-        for (String filter : filters) {
-            String[] filterSplit = filter.split(",");
-            if (Objects.equals(attributeNames[0], filterSplit[0])) {
-                continue;
-            }
-
-            mockResults.add(new RangeFilter(Integer.parseInt(filterSplit[0]), Double.parseDouble(filterSplit[1]), Double.parseDouble(filterSplit[2])));
-        }
-
-        return mockResults;
-    }
 
     public static String formatArrays(Object[] expected, Object[] actual){
         return "\nexpected\n" + Arrays.toString(expected) + "\n" +

@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.category;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.category.domain.CategoryDBConnection;
 
 import java.util.ArrayList;
@@ -13,10 +13,10 @@ import java.util.regex.Pattern;
 public class CategoryFilter implements CategoryFilterInterface {
 
     public SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
-        Collection<CategoryProduct> newProducts = new ArrayList<>();
+        Collection<Product> newProducts = new ArrayList<>();
         List<Category> categories = new ArrayList<>();
 
-        if(categoryIDs.isEmpty()){
+        if (categoryIDs.isEmpty()) {
             return searchHits;
         }
 
@@ -26,13 +26,15 @@ public class CategoryFilter implements CategoryFilterInterface {
         }
 
         for (Object oldProduct : searchHits.getProducts()) {
-            if(oldProduct instanceof CategoryProduct){
-                CategoryProduct product = (CategoryProduct)oldProduct;
+            if (oldProduct instanceof Product) {
+                Product product = (Product) oldProduct;
                 String[] fieldNameArray;
 
-                for(Category category : categories){
+                for (Category category : categories) {
                     if (category.getRequirementFieldName().toLowerCase().equals("category")) {
-                        Pattern pattern = Pattern.compile("(^|[^\\w])\\/?(" + category.getRequirementValue() + ")\\/?([^\\w+]|$)", Pattern.CASE_INSENSITIVE);
+                        Pattern pattern = Pattern.compile(
+                                "(^|[^\\w])\\/?(" + category.getRequirementValue() + ")\\/?([^\\w+]|$)",
+                                Pattern.CASE_INSENSITIVE);
                         Matcher matcher = pattern.matcher(product.getCategory());
                         boolean matchFound = matcher.find();
 

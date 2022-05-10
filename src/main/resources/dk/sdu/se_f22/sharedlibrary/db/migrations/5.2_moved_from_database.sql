@@ -1,8 +1,3 @@
-/*
- -Drop alle tabellerne i starten af dokumentet.
-    -  Drop tabeller som refererer til andre tabeller
-    -   Drop resten af tabellerne
-*/
 -- Drop dependent tables
 DROP TABLE IF EXISTS BrandProductTypeJunction;
 DROP TABLE IF EXISTS TokenBrandMap;
@@ -13,6 +8,7 @@ DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
 DROP TABLE IF EXISTS StemmingException;
+DROP TABLE IF EXISTS irregularwords;
 
  --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
  --og kalder hver gruppes seedDatabase()-metode
@@ -54,4 +50,9 @@ CREATE TABLE Config(
 CREATE TABLE StemmingException (
     id SERIAL PRIMARY KEY,
     exceptionName varchar(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE irregularwords(
+  word VARCHAR PRIMARY KEY,
+  index INT NOT NULL
 );

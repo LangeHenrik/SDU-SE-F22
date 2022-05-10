@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.productmodule.index.ProductIndexController">
    <children>
-      <AnchorPane fx:id="homepage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="homepage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
          <children>
             <ImageView fitHeight="124.0" fitWidth="234.0" layoutX="183.0" layoutY="104.0" preserveRatio="true">
                <image>
@@ -26,7 +27,7 @@
             <Button fx:id="feelingLucky" layoutX="300.0" layoutY="234.0" mnemonicParsing="false" onAction="#onFeelingLucky" text="I'm Feeling Lucky" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="resultPage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
+      <AnchorPane fx:id="resultPage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;">
          <children>
             <Button fx:id="searchButton2" layoutX="480.0" layoutY="6.0" mnemonicParsing="false" onAction="#onSearchButton" text="GUIgle Search">
                <font>
@@ -43,7 +44,11 @@
                   <Image url="@GUIgle_logo.png" />
                </image>
             </ImageView>
-            <TextArea fx:id="searchResults" layoutX="14.0" layoutY="49.0" prefHeight="338.0" prefWidth="573.0" />
+            <VBox layoutX="14.0" layoutY="49.0" prefHeight="335.0" prefWidth="567.0">
+               <children>
+                  <ListView fx:id="searchResults" prefHeight="337.0" prefWidth="567.0" />
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
    </children>

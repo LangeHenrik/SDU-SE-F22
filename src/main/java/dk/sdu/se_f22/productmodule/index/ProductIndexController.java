@@ -2,6 +2,7 @@ package dk.sdu.se_f22.productmodule.index;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -12,7 +13,6 @@ public class ProductIndexController {
     private void onSearchButton(){
         homepage.setVisible(false);
         resultPage.setVisible(true);
-        searchResults.setText("test test test");
     }
 
     @FXML
@@ -42,6 +42,6 @@ public class ProductIndexController {
     private Button feelingLucky;
 
     @FXML
-    private TextArea searchResults;
+    private ListView searchResults;
 
 }

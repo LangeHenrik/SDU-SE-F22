@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterClassTest {
     @Test
-    @Disabled
+    @Disabled("not written yet")
     void testEquals() {
         // This test should be split up into many tests to test each step/level of the equals method
 

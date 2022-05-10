@@ -1,8 +1,17 @@
 @startuml
 
-interface Filterable {
-    + filter(tokens): String[]
+interface BrandGetter {
+    + query(tokens: List<String>): List<Integer>
 }
+
+interface Filterable {
+    + filter(tokens: ArrayList<String>): ArrayList<String>
+}
+
+interface IndexingModule {
+    + queryIndex(tokens: List<String>): List<T>
+}
+
 
 interface SearchModule {
     + search(query: String): SearchResult
@@ -12,21 +21,66 @@ interface SearchModule {
     + addIgnoredCharacter(c: Character)
     + removeDelimiter(delimiter: String)
     + removeIgnoredCharacter(c: Character)
+    + SearchHits search(query: String)
 }
 
-class DatabaseConnection {
-    - url: String
-    - username: String
-    - password: String
-    - hasSSL: boolean
-    - connection: Connection
+class ReplaceForbbidenChars {
+    - illegalCharsClass: IllegalChars
+    - illegalChars: List<String>
 
-    + isConnected(): boolean
-    + connect(): boolean
-    + disconnect()
-    + makeQuery(statement: PreparedStatement): ResultSet
+    + removeForbiddenChars(toSort: String): String
+    + getIllegalChars(): List<String>
+    + setIllegalChars(illegalChars: List<String>): void
+    + addIllegalChars(illegalChar: String): void
+}
+
+class SearchModuleImpl implements SearchModule {
+    - indexingModules: Set<IndexingModule<?>>
+    - filteringModules: Set<Filterable>
+    - ss: Delimiter
+    - addIndexingModule(index: T): void
+    - removeIndexingmModule(index: T): void
+    + queryIndexOfType(clazz: Class<T>, tokens: List<String>): List<T>
+    + search(query: String): SearchHits
+    - tokenize(mystring): String[]
+    - saveSettingsToDB()
+    - readSettingsFromDB()
+}
+
+class SearchModuleUtils {
+    + {static}convertDelimitersToRegex(stringList: List<String>): String
+    - {static}addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+}
+
+class DelimiterSettings {
+    - delimiters: List<String>
+    + getDelimiters(): List<String>
+    + addDelimiters(String): void
+    + removeDelimiter(String): boolean
+}
+
+class TokenFiltration {
+    +filter(tokens: ArrayList<String>): ArrayList<String>
+}
+
+class Tokenization {
+    - searchModuleUtils: SearchModuleUtils
+    - ss: SearchSettings
+    - stringList: List<String>
+    +tokenize(s: String): list<String>
+}
+
+class DBConnection {
+    - url: String
+    - user: String
+    - password: String
+    - {static} conn: Connection
+    - {static} dbConnection: DBConnection
+
+    - DBConnection()
+    - loadConfig(): void
+    + {static} getConnection(): Connection
     ' see https://stackoverflow.com/a/36710057
-    + getLogger(moduleName): Logger
 }
 
 class Exception {
@@ -37,57 +91,20 @@ class DatabaseConnectionException extends Exception {
     // Throws when the database connection failed //
 }
 
-class SearchModuleImpl implements SearchModule {
-    - delimiters: String[]
-    - ignoredCharacters: Character[]
-    - databaseConnection: DatabaseConnection
-    - logger: Logger
-    - tokenize(mystring): String[]
-    - saveSettingsToDB()
-    - readSettingsFromDB()
+class IllegalChars{
+    +addChar(character: String): void
+    +illegalCharsFromDB(): List<String>
+    +removeChar((character: String): void
 }
 
-class SearchResult {
-    - contentPageIds: ArrayList<Content>
-    - productPageIds: ArrayList<Product>
-    - brandPageIds: ArrayList<Brand>
-    + getContentPageIds(): ArrayList<Content>
-    + getProductPageIds(): ArrayList<Product>
-    + getBrandPageIds(): ArrayList<Brand>
-}
 
-class Connection {
-    // from postgresql jdbc //
-}
-
-class PreparedStatement {
-    // from postgresql jdbc //
-}
-
-class ResultSet {
-    // from postgresql jdbc //
-}
-
-class Logger {
-    // from log4j //
-}
-
-SearchResult <- SearchModule
+Tokenization -> SearchModuleUtils
+Tokenization --> DelimiterSettings
+SearchHits <- SearchModule
 Filterable <- SearchModuleImpl
-SearchModuleImpl -> DatabaseConnection
-DatabaseConnectionException <-- DatabaseConnection: //<<throws>>//
+SearchModuleImpl -> DBConnection
+DatabaseConnectionException <-- DBConnection: //<<throws>>//
 DatabaseConnectionException <-- SearchModuleImpl: //<<throws>>//
-
-SearchModuleImpl --> Logger
-DatabaseConnection -> Logger
-
-DatabaseConnection -> ResultSet
-DatabaseConnection -> PreparedStatement
-DatabaseConnection -> Connection
-
-ResultSet --[hidden]> PreparedStatement
-PreparedStatement -[hidden]> Connection
-
-
+IllegalChars -> ReplaceForbbidenChars
 
 @enduml

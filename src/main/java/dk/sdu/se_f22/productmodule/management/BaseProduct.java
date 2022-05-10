@@ -23,7 +23,7 @@ public class BaseProduct { //initialize class
     }
     
     public @Nullable String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
-        return productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
+        return productAttributes.get(pA) == null || productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
     }
     
     public double getAsNumeric(ProductAttribute pA){

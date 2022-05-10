@@ -46,7 +46,7 @@ public class ProductInfIndexImpl implements ProductInfIndex{
         List<String> productData = new ArrayList<>();
         for (ProductAttribute attr : ProductAttribute.values()) {
             String data = product.get(attr);
-            if (!data.equalsIgnoreCase("unavailable")) {
+            if (data != null && !data.equalsIgnoreCase("unavailable")) {
                 productData.addAll(List.of(product.get(attr).split(delimiter)));
             }
         }

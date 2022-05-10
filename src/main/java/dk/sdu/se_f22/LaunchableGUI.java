@@ -29,6 +29,7 @@ public class LaunchableGUI {
         stage.setScene(scene);
         stage.setMinHeight(200);
         stage.setMinWidth(340);
+        stage.setTitle(file.getName().split("\\.")[0]);
         stage.show();
     }
 

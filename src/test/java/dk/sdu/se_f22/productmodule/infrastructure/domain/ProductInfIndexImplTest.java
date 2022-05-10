@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.productmodule.infrastructure.domain;
 
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
+import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +23,7 @@ public class ProductInfIndexImplTest {
 
 	@Test
 	void validateTokenizer() throws Exception {
-		Product product = new Product();
+		BaseProduct product = new BaseProduct();
 
 
 		List<String> tokens = Whitebox.invokeMethod(productIndex, "tokenize", product);

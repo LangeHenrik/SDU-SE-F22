@@ -45,6 +45,7 @@ public class DBMigration {
     public DBMigration (boolean printText) {
         this.batch = 0;
         this.printText = printText;
+
     }
 
     /**
@@ -73,8 +74,6 @@ public class DBMigration {
             boolean migrationStatus;
 
             for (String fileName : fileList) {
-                fileName = fileName.toLowerCase();
-
                 // Ensure the file is a sql file
                 if (!this.validateFile(fileName)) {
                     continue;
@@ -147,7 +146,7 @@ public class DBMigration {
      * @author v-nemeth
      * @author Mikkel Albrechtsen (The0mikkel)
      */
-    private boolean runSQLFromFile(Connection connection, String SQLFileName) {
+    public boolean runSQLFromFile(Connection connection, String SQLFileName) {
         // Begin transaction
         try {
             connection.setAutoCommit(false);

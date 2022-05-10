@@ -19,10 +19,13 @@ public class Validator {
 
     public static void NoSpecialCharacters(String s) throws InvalidFilterException{
         String[] characters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
+        if(s == null || s.isEmpty()) {
+            throw new InvalidFilterException("String was empty.");
+        }
 
         for (String c : characters){
-            if (s.equals(c)) {
-                throw new InvalidFilterException("Contained only a special character.");
+            if (s.substring(0,1).equals(c)) {
+                throw new InvalidFilterException("String contained only a special character.");
             }
         }
     }

@@ -61,7 +61,7 @@ public class TemporaryConnectionTest {
         // CategoryDBConnection.shared.createCategory("Lenovo", "Beskrivelse", "Lenovo", 1);
 
         testMethod();
-
+        CategoryDBConnection.shared.createCategory("Allan","bob","Steve",2);
         /*
         String category = "Components/Processors/Storage/SSDs";
         String notCategory = "fsaafa/dada/dad";
@@ -111,6 +111,7 @@ public class TemporaryConnectionTest {
         }
          */
     }
+
 
     public static void testMethod() {
         CategoryFilter categoryFilter = new CategoryFilter();

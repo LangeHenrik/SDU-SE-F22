@@ -198,12 +198,12 @@ public class CategoryDBConnection{
 
         if (name.length() < 0 && name.length() > 40)
             notValid = true;
-        if (description == null)
+        if (description.length() < 0)
             notValid = true;
         if (getCategoryById(parentID) == null)
             notValid = true;
 
-        if (notValid = false) {
+        if (notValid == false) {
             try {
                 int checkRows = 0;
                 PreparedStatement checkRowsStatement = this.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
@@ -249,12 +249,12 @@ public class CategoryDBConnection{
     protected void createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
         boolean notValid = false;
 
-        if (name.length() < 0 && name.length() > 40)
+        if (name.length() > 0 && name.length() > 40)
             notValid = true;
-        if (description == null)
+        if (description.length() < 0)
             notValid = true;
 
-        if (notValid = false) {
+        if (notValid == false) {
             try {
                 int checkRows = 0;
                 PreparedStatement checkRowsStatement = this.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");

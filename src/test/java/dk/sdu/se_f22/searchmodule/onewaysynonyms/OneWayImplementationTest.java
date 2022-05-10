@@ -35,6 +35,10 @@ class OneWayImplementationTest {
 
 
         assertArrayEquals(tokens.toArray(), dbTokens.toArray());
+        dbTokens.clear();
+        dbTokens = owi.filter(dbTokens);
+        tokens.clear();
+        assertEquals(dbTokens,tokens);
     }
 
     @Test

@@ -143,7 +143,9 @@ public static void deleteItems(boolean version, int id, String name) {
             statement = connection.prepareStatement("SELECT id FROM items WHERE name=?");
             statement.setString(1,name);
             result = statement.executeQuery();
-            id = result.getInt(1);
+            while(result.next()){
+                id = result.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

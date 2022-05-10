@@ -45,10 +45,10 @@ class ValidatorTest {
         );
     }
 
-    @ParameterizedTest(name = "{0}")
+    @ParameterizedTest(name = "Min {0} Max {1}")
     // the 0 and 0 is for the index in the csv input, 
     // if using three or more values in one row add more brackets
-    @DisplayName("Max less than min")
+    @DisplayName("Max less than min throws exception")
     @MethodSource("doublesProvider") // References the stream of doubles below
         // e.g. "1:2", "2:4" where ':' is the delimiter
     void maxLessThanMin(double min, double max) {

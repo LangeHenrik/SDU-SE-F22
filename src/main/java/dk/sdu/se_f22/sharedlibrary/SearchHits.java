@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary;
 
+import dk.sdu.se_f22.sharedlibrary.models.Brand;
+import dk.sdu.se_f22.sharedlibrary.models.Content;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
@@ -14,14 +16,14 @@ import java.util.Collection;
  * Designed as singleton
  */
 public final class SearchHits {
-    private Collection products;
-    private Collection brands;
-    private Collection contents;
+    private Collection<Product> products;
+    private Collection<Brand> brands;
+    private Collection<Content> contents;
 
     public SearchHits() {
-        this.products = new ArrayList();
-        this.brands = new ArrayList();
-        this.contents = new ArrayList();
+        this.products = new ArrayList<Product>();
+        this.brands = new ArrayList<Brand>();
+        this.contents = new ArrayList<Content>();
     }
 
     /**
@@ -29,7 +31,7 @@ public final class SearchHits {
      * 
      * @return Collection
      */
-    public Collection getProducts() {
+    public Collection<Product> getProducts() {
         return this.products;
     }
 
@@ -38,7 +40,7 @@ public final class SearchHits {
      * 
      * @return Collection
      */
-    public Collection getBrands() {
+    public Collection<Brand> getBrands() {
         return this.brands;
     }
 
@@ -47,7 +49,7 @@ public final class SearchHits {
      * 
      * @return Collection
      */
-    public Collection getContents() {
+    public Collection<Content> getContents() {
         return this.contents;
     }
 
@@ -57,7 +59,7 @@ public final class SearchHits {
      * @param products
      * @throws NullPointerException
      */
-    public void setProducts(Collection products) throws NullPointerException {
+    public void setProducts(Collection<Product> products) throws NullPointerException {
         if (products == null) {
             throw new NullPointerException();
         }
@@ -70,7 +72,7 @@ public final class SearchHits {
      * @param brands
      * @throws NullPointerException
      */
-    public void setBrands(Collection brands) throws NullPointerException {
+    public void setBrands(Collection<Brand> brands) throws NullPointerException {
         if (brands == null) {
             throw new NullPointerException();
         }
@@ -83,10 +85,37 @@ public final class SearchHits {
      * @param contents
      * @throws NullPointerException
      */
-    public void setContents(Collection contents) throws NullPointerException {
+    public void setContents(Collection<Content> contents) throws NullPointerException {
         if (contents == null) {
             throw new NullPointerException();
         }
         this.contents = contents;
+    }
+
+    /**
+     * Add a product to product hits 
+     * 
+     * @param product
+     */
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
+
+    /**
+     * Add a brand to brand hits
+     * 
+     * @param brand
+     */
+    public void addBrand(Brand brand) {
+        this.brands.add(brand);
+    }
+
+    /**
+     * Add a content to content hits
+     * 
+     * @param content
+     */
+    public void addContent(Content content) {
+        this.contents.add(content);
     }
 }

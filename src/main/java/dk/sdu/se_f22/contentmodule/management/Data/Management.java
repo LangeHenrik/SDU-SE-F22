@@ -28,21 +28,23 @@ public class Management {
         Scanner s;
 
         try {
-            var res = dat.Execute("INSERT INTO pages (html, timestamp) OUTPUT Inserted.ID VALUES ( '" + html + "', NOW());");
+            var res = dat.Execute("INSERT INTO pages (html, timestamp) VALUES ( '" + html + "', NOW()) RETURNING id;");
             res.next();
             return res.getInt(1);
         } catch (Exception e) {
-            StringBuilder scriptString = new StringBuilder();
+            e.printStackTrace();
+            /*StringBuilder scriptString = new StringBuilder();
             try {
                 s = new Scanner(new FileInputStream("src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt"));
 
                 while (s.hasNext()) {
                     scriptString.append(s.nextLine());
                 }
+                dat.executeVoidReturn(scriptString.toString());
             } catch (FileNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
-
+            */
 
         }
 

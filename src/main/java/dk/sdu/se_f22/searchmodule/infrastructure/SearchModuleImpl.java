@@ -7,6 +7,9 @@ import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
+import dk.sdu.se_f22.searchmodule.infrastructure.logger.SearchLogger;
+import dk.sdu.se_f22.searchmodule.infrastructure.tokenization.DelimiterSettings;
+import dk.sdu.se_f22.searchmodule.infrastructure.tokenization.Tokenizer;
 import dk.sdu.se_f22.searchmodule.twowaysynonyms.TwoWaySynonym;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
@@ -21,7 +24,7 @@ public class SearchModuleImpl implements SearchModule {
     private static final Logger logger = LoggingProvider.getLogger(SearchModuleImpl.class);
     private final Set<Filterable> filteringModules;
     private final Map<Class<?>, IndexingModule<?>> indexingModules;
-    private DelimiterSettings delimiterSettings = new DelimiterSettings();
+    private final DelimiterSettings delimiterSettings = new DelimiterSettings();
 
     public SearchModuleImpl() {
         this.indexingModules = new HashMap<>();

@@ -1,17 +1,11 @@
 package dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 
-import dk.sdu.se_f22.searchmodule.infrastructure.SearchLog;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.db.LoggingProvider;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
-import java.util.NoSuchElementException;
 
 public class SEM1customerGUIController {
 

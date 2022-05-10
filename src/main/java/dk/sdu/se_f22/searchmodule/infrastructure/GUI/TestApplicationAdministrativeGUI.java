@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+package dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,3 +22,4 @@ public class TestApplicationAdministrativeGUI extends Application {
         launch();
     }
 }
+

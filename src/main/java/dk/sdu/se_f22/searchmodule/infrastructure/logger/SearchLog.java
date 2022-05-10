@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+package dk.sdu.se_f22.searchmodule.infrastructure.logger;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class SearchLog {
     private final List<String> products;
     private final List<String> contents;
 
-    public SearchLog(int id, String searchString, String timeSearched, List<String> brands, List<String> products, List<String> contents) {
+    public SearchLog(String searchString, String timeSearched, List<String> brands, List<String> products, List<String> contents) {
         this.searchString = searchString;
         this.timeSearched = timeSearched;
 

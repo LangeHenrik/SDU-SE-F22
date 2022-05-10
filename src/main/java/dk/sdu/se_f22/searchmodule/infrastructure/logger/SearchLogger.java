@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.infrastructure;
+package dk.sdu.se_f22.searchmodule.infrastructure.logger;
 
 
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
@@ -98,7 +98,6 @@ public class SearchLogger {
 
             while(querySearchesResultSet.next()) {
                 SearchLog search = new SearchLog(
-                        querySearchesResultSet.getInt("id"),
                         querySearchesResultSet.getString("searchString"),
                         querySearchesResultSet.getString("timeSearched"),
                         brands,

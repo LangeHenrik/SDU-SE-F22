@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import dk.sdu.se_f22.searchmodule.infrastructure.tokenization.DelimiterSettings;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

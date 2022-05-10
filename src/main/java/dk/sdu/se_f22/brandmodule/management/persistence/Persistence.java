@@ -21,13 +21,7 @@ public class Persistence implements IPersistence {
         //Connect to database
         jsonService = new JsonService();
         BIM2 = new BrandInfrastructure();
-
-        try {
-            c = DBConnection.getPooledConnection();
-        }
-        catch (SQLException e) {
-
-        }
+        c = DBConnection.getConnection();
     }
 
     @Override

@@ -1,12 +1,10 @@
 package dk.sdu.se_f22.productmodule.infrastructure.data;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 class TokenParameterStore  {
 

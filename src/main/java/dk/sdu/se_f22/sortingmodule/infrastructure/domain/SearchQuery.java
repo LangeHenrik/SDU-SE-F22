@@ -166,7 +166,6 @@ public class SearchQuery {
 
     public List<RangeFilter> getAvailableRangeFilters() {
         RangeFilterCRUD tempRFC = new RangeFilterCRUD();
-        System.out.println(tempRFC.readAll());
         return tempRFC.readAll();
     }
 }

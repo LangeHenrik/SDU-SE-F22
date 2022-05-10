@@ -1263,7 +1263,6 @@ public class RangeFilterCRUDTest {
             }
 
             @Nested
-            @Disabled("Will be implemented in sprint 6")
             @DisplayName("Updating invalid information should throw an exception")
             class updatingInvalidInformationShouldThrowAnException {
                 static List<RangeFilter> provideRangeFilterForTest() {
@@ -1323,7 +1322,6 @@ public class RangeFilterCRUDTest {
             }
 
             @Nested
-            @Disabled("Will be implemented in sprint 6")
             @DisplayName("Updating with invalid information should not be updated in database")
             class updatingWithInvalidInformationShouldNotBeUpdatedInDatabase {
                 static List<RangeFilter> provideRangeFilterForTest() {
@@ -1348,7 +1346,7 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Invalid description should not save in database")
                 @MethodSource("provideRangeFilterForTest")
                 void invalidDescriptionShouldNotSaveInDatabase(RangeFilter rangefilter) throws UnknownFilterTypeException, IdNotFoundException, SQLException, InvalidFilterTypeException, IllegalImplementationException {
-                    String newDescription = "%*////";
+                    String newDescription = "%Fefgllll";
                     try {
                         rangeFilterCRUD.update(rangefilter,newDescription);
                     } catch (InvalidFilterException e) {
@@ -1362,7 +1360,7 @@ public class RangeFilterCRUDTest {
                 @DisplayName("Invalid name and description should not save in database")
                 @MethodSource("provideRangeFilterForTest")
                 void invalidNameAndDescriptionShouldNotSaveInDatabase(RangeFilter rangefilter) throws SQLException, InvalidFilterTypeException, IllegalImplementationException, UnknownFilterTypeException, IdNotFoundException {
-                    String newName = "/%   ";
+                    String newName = "/12fgh";
                     String newDescription = "%";
                     try {
                         rangeFilterCRUD.update(rangefilter,newDescription);

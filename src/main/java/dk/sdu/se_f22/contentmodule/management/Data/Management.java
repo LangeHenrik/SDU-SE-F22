@@ -54,8 +54,7 @@ public class Management {
         try {
             result.next();
             return result.getString(2);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {;
             return null;
         }
     }

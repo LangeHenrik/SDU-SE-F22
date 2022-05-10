@@ -58,9 +58,11 @@ class ManagementTest {
         try {
             int id = Management.Create("This should be deleted");
             Management.Delete(id);
-            assertThrowsExactly(PSQLException, Management.getPageString(id));
+            Management.getPageString(id);
+        } catch (PSQLException e) {
+            assertTrue(true);
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
     }
 }

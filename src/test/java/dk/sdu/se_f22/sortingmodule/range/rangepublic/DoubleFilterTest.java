@@ -1,8 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class DoubleFilterTest {
 
     @Test
-    @Disabled
-
     void getType() {
+        DoubleFilter doubleFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
+        assertEquals(FilterTypes.DOUBLE, doubleFilter.getType());
     }
 
     @Test
-    @Disabled
+    @Disabled("test not yet written")
     void testEquals() {
     }
 
@@ -36,34 +35,47 @@ class DoubleFilterTest {
 
         @Test
         @DisplayName("filter a list of actual products")
-        void useFilter() throws InvalidFilterTypeException {
+        void useFilter() {
+            // The reason for the test fail is known, go to the comment starting with HERE
             DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000.0);
             internalFilter.setUserMin(0.0);
-            List<RangeSearchResultMock> mockResults = Helpers.readMockResultsFromFile("MockResults.csv");
+            List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
+            // the last 3 attributes of the product (size, clockspeed and weight) should be set to "unavailable" if they are not applicable
 
             //crude check that the mockresults are what we expect, and have not been changed
-            assertEquals(6, mockResults.size());
+            assertEquals(7, mockResults.size());
 
 
-            String[] attributeNames = {"price", "height", "stock"};
 
-            List<String> expectedResultStrings = new ArrayList<>();
-            expectedResultStrings.add("1000.0,100.0,2");
-//        expectedResultStrings.add("2000.0,200.0,3");
-//        expectedResultStrings.add("3000.0,10.0,4");
-            expectedResultStrings.add("100.0,100.0,5");
-            expectedResultStrings.add("200.0,200.0,6");
-            expectedResultStrings.add("300.0,300.0,7");
+            // HERE:
+            // Expected results could be read from a csv file,
+            // instead of being put in like this.
 
-            Collection<RangeSearchResultMock> expectedResults = Helpers.createMockResultsFromStringList(expectedResultStrings, attributeNames);
+            // If it is to avoid accidental bricking of the test, then the other settings (max, and min)
+            // could also be saved in a (separate) csv file
 
-            //crude check that the expectedResults are still the same as when the test was written
-            assertEquals(4, expectedResults.size());
+            List<Product> copy = List.copyOf(mockResults);
+            ArrayList<Product> expectedResults = new ArrayList<>(copy);
+            // Remember that the list indexes change when items are removed
+            expectedResults.remove(6);
+            expectedResults.remove(3);
 
-            Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(mockResults);
+            Collection<Product> filteredResults = internalFilter.useFilter(mockResults);
 
-            assertEquals(expectedResults, filteredResults,  expectedResults.toString() + filteredResults);
+            assertEquals(expectedResults, filteredResults,  () -> {
+                StringBuilder out = new StringBuilder("Expected results:\n");
+                for (Product product: expectedResults){
+                    out.append(product).append("\n");
+                }
+
+                out.append("\nActual results:\n");
+                for (Product product: filteredResults){
+                    out.append(product).append("\n");
+                }
+
+                return out.toString();
+            });
         }
 
 
@@ -75,9 +87,9 @@ class DoubleFilterTest {
             DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
             internalFilter.setUserMax(1000.0);
             internalFilter.setUserMin(0.0);
-            Collection<RangeSearchResultMock> emptyResults = new ArrayList<>();
+            Collection<Product> emptyResults = new ArrayList<>();
 
-            Collection<RangeSearchResultMock> filteredResults = internalFilter.useFilter(emptyResults);
+            Collection<Product> filteredResults = internalFilter.useFilter(emptyResults);
 
             assertEquals(emptyResults, filteredResults);
         }

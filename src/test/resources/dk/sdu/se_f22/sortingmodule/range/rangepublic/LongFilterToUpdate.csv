@@ -1,0 +1,2 @@
+id,name,description,productAtrribute,min,max,uMin,uMax
+10001,TestUpdateLongName,TestUpdateLongDescription,TestUpdateLongAttribute,1,100,1000,100000

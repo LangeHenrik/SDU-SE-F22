@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.productmodule.irregularwords.Data;
+package dk.sdu.se_f22.productmodule.irregularwords;
 import java.util.ArrayList;
 import java.util.List;
 public interface IIrregularWords {

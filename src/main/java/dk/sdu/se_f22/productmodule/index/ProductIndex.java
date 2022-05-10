@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.*;
 import dk.sdu.se_f22.sharedlibrary.models.ProductHit;
 
-public class ProductIndex implements IProductIndex{
+public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     private int categoryHits = 0;
     private int nameHits = 0;

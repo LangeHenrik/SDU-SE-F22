@@ -10,34 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database implements DatabaseInterface {
-    private Connection connection = null;
-
     private final String[] queryAttributes = {"filterid", "name", "description", "productattribute", "min", "max"};
-
-    private Connection getConn() throws SQLException {
-        // Perhaps we should move this functionality to a connectionHandler class which can implement AutoCloseable
-        // This way we can use a try-with block in our code wherever we need a connection
-        // This would help ensure that we never forget to close a connection
-
-        // We need another class in order to actually implement the interface.
-        // That class however does not need to be complicated it can simply contain a method called getConnection
-        // Aside from the close method of course, which could simply close the connection
-        if (connection == null || connection.isClosed()) {
-            connection = DBConnection.getPooledConnection();
-        }
-
-        return connection;
-    }
-
-    private void closeConn() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * This method will take a filter of type RangeFilter and create one of the 3 LongFilter, DoubleFilter, TimeFilter
@@ -53,59 +26,59 @@ public class Database implements DatabaseInterface {
         int results = 0;
         int ID = 0;
 
-        switch (filter.getType()) {
-            case DOUBLE -> {
-                statement = getConn().prepareStatement(
-                        "INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?);",
-                        queryAttributes
-                );
-                statement.setString(1, filter.getName());
-                statement.setString(2, filter.getDescription());
-                statement.setString(3, filter.getProductAttribute());
-                statement.setDouble(4, filter.getDbMinDouble());
-                statement.setDouble(5, filter.getDbMaxDouble());
+        // By using try-with-ressources we do not have to manually handle closing the connection
+        // Thanks AutoCloseable
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            switch (filter.getType()) {
+                case DOUBLE -> {
+                    statement = connection.prepareStatement(
+                            "INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?);",
+                            queryAttributes
+                    );
+                    statement.setString(1, filter.getName());
+                    statement.setString(2, filter.getDescription());
+                    statement.setString(3, filter.getProductAttribute());
+                    statement.setDouble(4, filter.getDbMinDouble());
+                    statement.setDouble(5, filter.getDbMaxDouble());
+                }
+                case LONG -> {
+                    statement = connection.prepareStatement(
+                            "INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
+                            queryAttributes
+                    );
+                    statement.setString(1, filter.getName());
+                    statement.setString(2, filter.getDescription());
+                    statement.setString(3, filter.getProductAttribute());
+                    statement.setLong(4, filter.getDbMinLong());
+                    statement.setLong(5, filter.getDbMaxLong());
+                }
+                case TIME -> {
+                    statement = connection.prepareStatement(
+                            "INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
+                            queryAttributes
+                    );
+                    statement.setString(1, filter.getName());
+                    statement.setString(2, filter.getDescription());
+                    statement.setString(3, filter.getProductAttribute());
+                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
+                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
+                }
+                default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
             }
-            case LONG -> {
-                statement = getConn().prepareStatement(
-                        "INSERT INTO SortingRangeLongView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
-                        queryAttributes
-                );
-                statement.setString(1, filter.getName());
-                statement.setString(2, filter.getDescription());
-                statement.setString(3, filter.getProductAttribute());
-                statement.setLong(4, filter.getDbMinLong());
-                statement.setLong(5, filter.getDbMaxLong());
+
+            results = statement.executeUpdate();
+            keys = statement.getGeneratedKeys();
+
+            if (results == 0) {
+                throw new SQLException("No ID to return.");
             }
-            case TIME -> {
-                statement = getConn().prepareStatement(
-                        "INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
-                        queryAttributes
-                );
-                statement.setString(1, filter.getName());
-                statement.setString(2, filter.getDescription());
-                statement.setString(3, filter.getProductAttribute());
-                statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
-                statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
-            }
-            default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys.next();
+            int created_filter_id = generatedKeys.getInt("filterid");
+
+            return createFilterWithID(filter, created_filter_id); // Maybe returns as the specific filter type?
         }
-
-        results = statement.executeUpdate();
-        keys = statement.getGeneratedKeys();
-
-        if (results == 0) {
-            closeConn();
-            throw new SQLException("No ID to return.");
-        }
-
-        ResultSet generatedKeys = statement.getGeneratedKeys();
-        generatedKeys.next();
-        int created_filter_id = generatedKeys.getInt("filterid");
-
-        // Close db connection
-        closeConn();
-
-        return createFilterWithID(filter, created_filter_id); // Maybe returns as the specific filter type?
     }
 
 
@@ -118,17 +91,15 @@ public class Database implements DatabaseInterface {
     @Override
     public RangeFilter read(int id) throws UnknownFilterTypeException {
         RangeFilter dbRangeFilter = null;
-        try {
-            // Scratch the comment above, the plan has changed to this:
+        try(Connection connection = DBConnection.getPooledConnection()) {
             // First get the type of the filter by calling the stored function:
             // "SELECT get_type_of_filter(filter_id);"
             // where filter_id is the id we are interested in retrieving
-            PreparedStatement typeStatement = getConn().prepareStatement("SELECT get_type_of_filter(?);");
+            PreparedStatement typeStatement = connection.prepareStatement("SELECT get_type_of_filter(?);");
             typeStatement.setInt(1, id);
             ResultSet typeResult = typeStatement.executeQuery();
             if (typeResult.next()) {
                 if (typeResult.getString(1) == null) {
-                    closeConn();
                     return null;
                 }
                 // Then get the filter from the correct view by using the now known data type
@@ -137,19 +108,19 @@ public class Database implements DatabaseInterface {
                 //noinspection EnhancedSwitchMigration
                 switch (typeResult.getString(1)) {
                     case "Double":
-                        filterResultSet = getSpecificFilter(getConn(), "get_double_filter", id);
+                        filterResultSet = getSpecificFilter(connection, "get_double_filter", id);
                         if (filterResultSet.next()) {
                             dbRangeFilter = createDoubleFilterFromResultset(filterResultSet);
                         }
                         break;
                     case "Long":
-                        filterResultSet = getSpecificFilter(getConn(), "get_long_filter", id);
+                        filterResultSet = getSpecificFilter(connection, "get_long_filter", id);
                         if (filterResultSet.next()) {
                             dbRangeFilter = createLongFilterFromResultset(filterResultSet);
                         }
                         break;
                     case "Time":
-                        filterResultSet = getSpecificFilter(getConn(), "get_time_filter", id);
+                        filterResultSet = getSpecificFilter(connection, "get_time_filter", id);
                         if (filterResultSet.next()) {
                             dbRangeFilter = createTimeFilterFromResultset(filterResultSet);
                         }
@@ -169,9 +140,6 @@ public class Database implements DatabaseInterface {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        // Close connection
-        closeConn();
 
         return dbRangeFilter;
     }
@@ -219,85 +187,70 @@ public class Database implements DatabaseInterface {
 
     @Override
     public RangeFilter update(RangeFilter filter) throws SQLException, InvalidFilterTypeException {
+        try(Connection connection = DBConnection.getPooledConnection()) {
 
-        PreparedStatement statement = null;
+            PreparedStatement statement = null;
 
-        switch (filter.getType()) {
-            case DOUBLE -> {
-                statement = getConn().prepareStatement(
-                        "UPDATE SortingRangeDoubleView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
-                        new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
-                );
-                statement.setString(1, filter.getName());
-                statement.setString(2, filter.getDescription());
-                statement.setString(3, filter.getProductAttribute());
-                statement.setDouble(4, filter.getDbMinDouble());
-                statement.setDouble(5, filter.getDbMaxDouble());
-                statement.setInt(6, filter.getId());
-            }
-            case LONG -> {
-                statement = getConn().prepareStatement(
-                        "UPDATE SortingRangeLongView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
-                        new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
-                );
-                statement.setString(1, filter.getName());
-                statement.setString(2, filter.getDescription());
-                statement.setString(3, filter.getProductAttribute());
-                statement.setLong(4, filter.getDbMinLong());
-                statement.setLong(5, filter.getDbMaxLong());
-                statement.setInt(6, filter.getId());
+            switch (filter.getType()) {
+                case DOUBLE -> {
+                    statement = connection.prepareStatement(
+                            "UPDATE SortingRangeDoubleView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
+                            new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
+                    );
+                    statement.setString(1, filter.getName());
+                    statement.setString(2, filter.getDescription());
+                    statement.setString(3, filter.getProductAttribute());
+                    statement.setDouble(4, filter.getDbMinDouble());
+                    statement.setDouble(5, filter.getDbMaxDouble());
+                    statement.setInt(6, filter.getId());
+                }
+                case LONG -> {
+                    statement = connection.prepareStatement(
+                            "UPDATE SortingRangeLongView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
+                            new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
+                    );
+                    statement.setString(1, filter.getName());
+                    statement.setString(2, filter.getDescription());
+                    statement.setString(3, filter.getProductAttribute());
+                    statement.setLong(4, filter.getDbMinLong());
+                    statement.setLong(5, filter.getDbMaxLong());
+                    statement.setInt(6, filter.getId());
 
+                }
+                case TIME -> {
+                    statement = connection.prepareStatement(
+                            "UPDATE SortingRangeTimeView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
+                            new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
+                    );
+                    statement.setString(1, filter.getName());
+                    statement.setString(2, filter.getDescription());
+                    statement.setString(3, filter.getProductAttribute());
+                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
+                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
+                    statement.setInt(6, filter.getId());
+                }
+                default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
             }
-            case TIME -> {
-                statement = getConn().prepareStatement(
-                        "UPDATE SortingRangeTimeView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
-                        new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
-                );
-                statement.setString(1, filter.getName());
-                statement.setString(2, filter.getDescription());
-                statement.setString(3, filter.getProductAttribute());
-                statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
-                statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
-                statement.setInt(6, filter.getId());
+            int results = statement.executeUpdate();
+            if (results < 1) {
+                System.out.println(filter);
+                throw new SQLException("Nothing updated");
             }
-            default -> {
-                closeConn();
-                throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
+
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                return switch (filter.getType()) {
+                    case DOUBLE -> createDoubleFilterFromResultset(resultSet);
+                    case LONG -> createLongFilterFromResultset(resultSet);
+                    case TIME -> createTimeFilterFromResultset(resultSet);
+                };
             }
+            return null;
         }
-        int results = statement.executeUpdate();
-        if (results < 1) {
-            closeConn();
-            System.out.println(filter);
-            throw new SQLException("Nothing updated");
-        }
-
-        ResultSet resultSet = statement.getGeneratedKeys();
-        if (resultSet.next()) {
-            RangeFilter out = switch (filter.getType()) {
-                case DOUBLE -> createDoubleFilterFromResultset(resultSet);
-                case LONG -> createLongFilterFromResultset(resultSet);
-                case TIME -> createTimeFilterFromResultset(resultSet);
-            };
-
-            closeConn();
-            return out;
-        }
-        closeConn();
-        return null;
     }
 
     @Override
     public RangeFilter delete(int id) throws UnknownFilterTypeException, IdNotFoundException {
-        // remember to close the connection after use
-        // remember to use getConn instead of the connection attribute directly
-        // to use the method getSpecificFilter though, you will need to create a local variable continaing your connection, see below example
-//        try {
-//            Connection localConnection = getConn();
-//        } catch (SQLException e) {
-//            // Or whatever is the correct way for you to handle this exception
-//            e.printStackTrace();
-//        }
 
         RangeFilter dbRangeFilter = read(id);
         if (dbRangeFilter == null){
@@ -305,20 +258,36 @@ public class Database implements DatabaseInterface {
         }
 
         PreparedStatement statement = null;
-        try{
-
+        try(Connection connection = DBConnection.getPooledConnection()) {
             switch (dbRangeFilter.getType()) {
-                case DOUBLE -> statement = getConn()
+                // IDEA: Refactor so that the switch determines the name of the view to delete from.
+                // That can then be put into SQL string below.
+                // It seems stupid to do, but is okay since we have full control of the variable,
+                // such that this below is not inherently dangerous to injection:
+//                String selectedView = "";
+                // perform switch setting selectedView
+//                "DELETE FROM " + selectedView + " WHERE filterId = ?;"
+                // of course wrapped in the prepare statement such that:
+//                statement = connection
+//                        .prepareStatement(
+//                                "DELETE FROM " + selectedView + " WHERE filterId = ?;",
+//                                queryAttributes
+//                        );
+                // This approach is less error prone since it ensures that the sql statement is written once.
+                // Additionally, it becomes more readable (and a tiny bit shorter).
+                // - Thor
+                // (p.s. if you have read this but disagree, do not let the comment stick around, it looks ugly in Pull Requests)
+                case DOUBLE -> statement = connection
                         .prepareStatement(
                                 "DELETE FROM sortingrangedoubleview WHERE filterId = ?;",
                                 queryAttributes
                         );
-                case LONG -> statement = getConn()
+                case LONG -> statement = connection
                             .prepareStatement(
                                     "DELETE FROM sortingrangelongview WHERE filterId = ?;",
                                     queryAttributes
                             );
-                case TIME -> statement = getConn()
+                case TIME -> statement = connection
                             .prepareStatement(
                                     "DELETE FROM sortingrangetimeview WHERE filterId = ?;",
                                     queryAttributes
@@ -328,15 +297,12 @@ public class Database implements DatabaseInterface {
             statement.setInt(1, id);
             int result_count = statement.executeUpdate();
             if (result_count < 1){
-                closeConn();
                 throw new SQLException("Didn't delete filter");
             }
 
         } catch (SQLException e){
             e.printStackTrace();
         }
-
-        closeConn();
 
         return dbRangeFilter;
     }
@@ -345,25 +311,26 @@ public class Database implements DatabaseInterface {
     @Override
     public List<RangeFilter> readAllFilters() {
         List<RangeFilter> outList = new ArrayList<>();
-        try {
+        try(Connection connection = DBConnection.getPooledConnection()) {
+
             // it is deliberate that they are all in the same try catch block since if one fails, they will all fail.
             // This is desired behaviour, and also mimicks what would happen for the case where we add the exception to the method signature.
 
-            ResultSet doubleFilters = getConn().prepareStatement("SELECT * from sortingrangeDOUBLEview").executeQuery();
+            ResultSet doubleFilters = connection.prepareStatement("SELECT * from sortingrangeDOUBLEview").executeQuery();
             while (doubleFilters.next()) {
                 outList.add(
                         createDoubleFilterFromResultset(doubleFilters)
                 );
             }
 
-            ResultSet longFilters = getConn().prepareStatement("SELECT * from sortingrangeLONGview").executeQuery();
+            ResultSet longFilters = connection.prepareStatement("SELECT * from sortingrangeLONGview").executeQuery();
             while (longFilters.next()) {
                 outList.add(
                         createLongFilterFromResultset(longFilters)
                 );
             }
 
-            ResultSet timeFilters = getConn().prepareStatement("SELECT * from sortingrangeTIMEview").executeQuery();
+            ResultSet timeFilters = connection.prepareStatement("SELECT * from sortingrangeTIMEview").executeQuery();
             while (timeFilters.next()) {
                 outList.add(
                         createTimeFilterFromResultset(timeFilters)
@@ -375,8 +342,6 @@ public class Database implements DatabaseInterface {
 
         // sort the list by id
         outList.sort((o1, o2) -> o1.getId() - o2.getId());
-
-        closeConn();
 
         return outList;
     }

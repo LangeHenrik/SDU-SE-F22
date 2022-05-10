@@ -14,11 +14,9 @@ import java.util.*;
 
 public class Helpers {
     public static void resetDB(){
-        try {
+        try(Connection connection = DBConnection.getPooledConnection()) {
             System.out.println("Resetting range database");
-            Connection connection = DBConnection.getPooledConnection();
             new DBMigration().runSQLFromFile(connection, "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/3.3_modifiedRangeFilters.sql");
-            connection.close();
         } catch (SQLException e) {
             System.out.println("error when resetting database state, pooled connection threw sql exception:");
             e.printStackTrace();
@@ -43,6 +41,7 @@ public class Helpers {
         if (removeHeaders) {
             products.remove(0);
         }
+
 
         return createMockResultsFromStringList(products);
     }

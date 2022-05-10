@@ -6,7 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import dk.sdu.se_f22.sharedlibrary.models.Content;
 
 public class Management {
     static Database dat;
@@ -19,11 +22,13 @@ public class Management {
         }
     }
 
-    public static void Create(String html) throws SQLException {
+    public static int Create(String html) throws SQLException {
         Scanner s;
 
         try {
-            dat.executeVoidReturn("INSERT INTO pages (html, timestamp) VALUES ( '" + html + "', NOW());");
+            var res = dat.Execute("INSERT INTO pages (html, timestamp) OUTPUT Inserted.ID VALUES ( '" + html + "', NOW());");
+            res.next();
+            return res.getInt(1);
         } catch (Exception e) {
             StringBuilder scriptString = new StringBuilder();
             try {
@@ -36,8 +41,10 @@ public class Management {
                 throw new RuntimeException(ex);
             }
 
-            dat.executeVoidReturn(scriptString.toString());
+
         }
+
+        return 0;
     }
 
     public static String getPageString(int id) throws SQLException {
@@ -49,6 +56,27 @@ public class Management {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Content[] GetArrayOfContent(int[] ids) {
+        List<Content> contents = new ArrayList<Content>();
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM pages WHERE id IN (");
+        for (int i = 1; i < ids.length; i++) {
+            sb.append(", ").append(ids[i]);
+        }
+        sb.append(");");
+
+        try {
+            ResultSet rs = dat.Execute(sb.toString());
+            while (rs.next()) {
+                var title = Jsoup.parse(rs.getString(2)).getElementsByTag("title");
+                contents.add(new Content(rs.getInt(1), rs.getString(2), title.get(0).text(), rs.getString(3)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return (Content[]) contents.toArray();
     }
 
     public static Document GetPageDocument(int id) throws SQLException {

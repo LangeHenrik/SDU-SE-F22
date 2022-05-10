@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import java.time.Instant;
+import java.util.*;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.utils.Color;
@@ -9,6 +9,12 @@ import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterFilterResults;
 
 /**
  * Implemented version of SortingModule
@@ -50,13 +56,22 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void addRange(int rangeId, String startRange, String endRange) {
-        this.query.addRange(rangeId, startRange, endRange);
+    public void addRangeDouble(int rangeId, Double startRange, Double endRange) {
+        this.query.addRangeDouble(rangeId, startRange, endRange);
     }
 
     @Override
+    public void addRangeLong(int rangeId, long startRange, long endRange) {
+        this.query.addRangeLong(rangeId, startRange, endRange);
+    }
+
+    @Override
+    public void addRangeInstant(int rangeId, Instant startRange, Instant endRange) {
+        this.query.addRangeInstant(rangeId, startRange, endRange);
+    }
+
     public void clearRange() {
-        this.query.clearRange();
+        this.query.clearAllRanges();
     }
 
     @Override
@@ -92,7 +107,6 @@ public class SortingModuleImpl implements SortingModule {
         searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
 
         // Range
-
 
         // Scoring
 

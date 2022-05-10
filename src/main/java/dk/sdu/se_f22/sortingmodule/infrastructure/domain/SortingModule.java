@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
+import java.time.Instant;
 import java.util.ArrayList;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
@@ -41,7 +42,9 @@ public interface SortingModule {
      * @param startRange The start of the range - Formattet as a string, but should align with the data type the range require
      * @param endRange   The start of the range - Formattet as a string, but should align with the data type the range require
      */
-    public void addRange(int rangeId, String startRange, String endRange);
+    public void addRangeDouble(int rangeId, Double startRange, Double endRange);
+    public void addRangeLong(int rangeId, long startRange, long endRange);
+    public void addRangeInstant(int rangeId, Instant startRange, Instant endRange);
 
     /**
      * Remove all range filters from the search

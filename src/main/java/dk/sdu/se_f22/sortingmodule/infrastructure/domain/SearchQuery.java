@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,9 @@ public class SearchQuery {
     /**
      * List of range filters
      */
-    private HashMap<Integer, String[]> range;
+    private HashMap<Integer, Double[]> rangeDouble;
+    private HashMap<Integer, Long[]> rangeLong;
+    private HashMap<Integer, Instant[]> rangeInstant;
 
     /**
      * List of categories to filter by
@@ -30,7 +33,9 @@ public class SearchQuery {
     private int scoring = 0;
 
     public SearchQuery() {
-        this.range = new HashMap<>();
+        this.rangeDouble = new HashMap<>();
+        this.rangeLong = new HashMap<>();
+        this.rangeInstant = new HashMap<>();
         this.category = new ArrayList<>();
         this.scoring = 0;
     }
@@ -67,16 +72,40 @@ public class SearchQuery {
      * @param startRange The start of the range
      * @param endRange   The end of the range
      */
-    public void addRange(int rangeId, String startRange, String endRange) {
-        this.range.put(rangeId, new String[] { startRange, endRange });
+    public void addRangeDouble(int rangeId, double startRange, double endRange) {
+        this.rangeDouble.put(rangeId, new Double[] { startRange, endRange });
+    }
+
+    public void addRangeLong(int rangeId, long startRange, long endRange) {
+        this.rangeLong.put(rangeId, new Long[] {startRange, endRange });
+    }
+
+    public void addRangeInstant(int rangeId, Instant startRange, Instant endRange) {
+        this.rangeInstant.put(rangeId, new Instant[] { startRange, endRange });
     }
 
     /**
      * Reset the range filtering
      */
-    public void clearRange() {
-        this.range.clear();
+    public void clearRangeDouble() {
+        this.rangeDouble.clear();
     }
+
+    public void clearRangeLong() {
+        this.rangeLong.clear();
+    }
+
+    public void clearRangeInstant() {
+        this.rangeInstant.clear();
+    }
+
+    public void clearAllRanges() {
+        this.clearRangeDouble();
+        this.clearRangeLong();
+        this.clearRangeInstant();
+    }
+
+
 
     /**
      * Set the pagination information
@@ -102,8 +131,26 @@ public class SearchQuery {
         return this.category;
     }
 
-    public Map<Integer, String[]> getRange() {
-        return this.range;
+    public Map<Integer, Double[]> getRangeDouble() {
+        return this.rangeDouble;
+    }
+
+    public Map<Integer, Long[]> getRangeLong() {
+        return this.rangeLong;
+    }
+
+    public Map<Integer, Instant[]> getRangeInstant() {
+        return this.rangeInstant;
+    }
+
+    public ArrayList<Map> getAllRanges() {
+        ArrayList<Map> mapList = new ArrayList<>();
+
+        mapList.add(this.rangeDouble);
+        mapList.add(this.rangeLong);
+        mapList.add(this.rangeInstant);
+
+        return mapList;
     }
 
     public int getScoring() {

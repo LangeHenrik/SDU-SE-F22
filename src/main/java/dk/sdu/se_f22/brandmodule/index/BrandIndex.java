@@ -13,45 +13,30 @@ import java.util.List;
 
 public class BrandIndex implements IndexInterface {
 
-    Connection DBConn = DBConnection.getConnection();
+    Connection DBConn;
 
 
-    public BrandIndex(){}
+    public BrandIndex(){
+        try {
+            DBConn = DBConnection.getPooledConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
     public List<Brand> searchBrandIndex(List<String> tokens) {
         List<Brand> brandList = new ArrayList<>();
-        List<Integer> tempList = new ArrayList<>();
-        String finalQuery = "";
-
-        finalQuery = "SELECT * FROM TokenBrandMapTest LEFT JOIN BrandTest ON BrandTest.id = brandId WHERE productId = ?";
-
+        List<Integer> productIDList = getProductIDS(tokens);
+        String finalQuery = createFinalQuery(productIDList);
 
         try {
-            for (int i = 0; i < tokens.size(); i++) {
-                PreparedStatement queryStatement = null;
-
-                queryStatement = DBConn.prepareStatement("SELECT id FROM productType WHERE name = ?");
-
-                queryStatement.setString(1, tokens.get(i));
-                ResultSet queryResultSet = queryStatement.executeQuery();
-                while(queryResultSet.next()) {
-                    tempList.add(Integer.valueOf(queryResultSet.getInt("id")));
-                }
-                System.out.println(tempList);
-                queryResultSet.close();
-                queryStatement.close();
-            }
-
-            for (int i = 0; i < tempList.size(); i++) {
-                finalQuery += " AND name = ? ";
-            }
-
             PreparedStatement queryStatement = DBConn.prepareStatement(finalQuery);
+
             //Might be this
-            for (int i = 0; i < tempList.size(); i++) {
-                queryStatement.setString(i + 1, String.valueOf(tempList.get(i)));
+            for (int i = 0; i < productIDList.size(); i++) {
+                queryStatement.setString(i + 1, String.valueOf(productIDList.get(i)));
             }
 
             ResultSet queryResultSet = queryStatement.executeQuery();
@@ -73,10 +58,46 @@ public class BrandIndex implements IndexInterface {
         return brandList;
     }
 
+
+    public String createFinalQuery(List<Integer> productIDS){
+        String tempFinalQuery = "SELECT * FROM TokenBrandMapTest LEFT JOIN BrandTest ON BrandTest.id = brandId WHERE productId = ?";
+        for (int i = 0; i < productIDS.size(); i++) {
+            tempFinalQuery += " AND name = ? ";
+        }
+
+        return tempFinalQuery;
+    }
+
+    public List<Integer> getProductIDS(List<String> tokens){
+        List<Integer> tempList = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < tokens.size(); i++) {
+                PreparedStatement queryStatement = DBConn.prepareStatement("SELECT id FROM productType WHERE name = ?");
+
+                queryStatement.setString(1, tokens.get(i));
+
+                ResultSet queryResultSet = queryStatement.executeQuery();
+
+                while(queryResultSet.next()) {
+                    tempList.add(queryResultSet.getInt("id"));
+                }
+
+                queryResultSet.close();
+                queryStatement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tempList;
+    }
+
+
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {
         try {
-            PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?)");
+            PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, productid) VALUES (?,?)");
             PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?)");
             PreparedStatement queryToken = DBConn.prepareStatement("SELECT token FROM tokens");
 

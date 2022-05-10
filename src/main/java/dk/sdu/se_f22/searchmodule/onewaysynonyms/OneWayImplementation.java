@@ -9,7 +9,7 @@ public class OneWayImplementation implements OneWayInterface {
     public List<String> filter(List<String> tokens) {
         ItemCatalog itemCatalog = new ItemCatalog(createItemArray());
         int length = tokens.size();
-        for (int i = 0; i<length; i++) {
+        for (int i = 0; i < length; i++) {
             LinkedList<Item> items = null;
             try {
                 items = (itemCatalog.oneWaySynonymStrings(tokens.get(i)));
@@ -34,27 +34,19 @@ public class OneWayImplementation implements OneWayInterface {
         tokens.add("motordrevet");
         OneWayImplementation owi = new OneWayImplementation();
         tokens = owi.filter(tokens);
-        for (String items : tokens){
-            System.out.println(items+"\n");
+        for (String items : tokens) {
+            System.out.println(items + "\n");
         }
     }
 
     @Override
     public void createItem() {
-        try {
-            DatabaseAPI.addItem("Cake");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DatabaseAPI.addItem("Cake");
     }
 
     @Override
     public void changeItemPlacement() {
-        try {
-            DatabaseAPI.updateSuperId("Cake", 2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DatabaseAPI.updateSuperId("Cake", 2);
     }
 
     @Override
@@ -67,11 +59,7 @@ public class OneWayImplementation implements OneWayInterface {
 
     @Override
     public void changeItemName() {
-        try {
-            DatabaseAPI.updateName(1, "Football");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DatabaseAPI.updateName(1, "Football");
     }
 
     @Override

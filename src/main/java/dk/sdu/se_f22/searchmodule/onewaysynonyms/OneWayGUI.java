@@ -24,7 +24,6 @@ public class OneWayGUI extends Application {
     }
 
     public static void main(String[] args) {
-
         launch(args);
     }
 }

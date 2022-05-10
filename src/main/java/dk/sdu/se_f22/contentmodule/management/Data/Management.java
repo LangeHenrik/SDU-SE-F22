@@ -33,7 +33,7 @@ public class Management {
             return res.getInt(1);
         } catch (Exception e) {
             e.printStackTrace();
-            /*StringBuilder scriptString = new StringBuilder();
+            StringBuilder scriptString = new StringBuilder();
             try {
                 s = new Scanner(new FileInputStream("src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt"));
 
@@ -44,9 +44,7 @@ public class Management {
             } catch (FileNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
-            */
-
-        }
+       }
 
         return 0;
     }
@@ -87,7 +85,7 @@ public class Management {
         var result = GetResultSetFromId(id);
         try {
             result.next();
-            return Jsoup.parse(result.getString(3));
+            return Jsoup.parse(result.getString(2));
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

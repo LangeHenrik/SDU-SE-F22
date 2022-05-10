@@ -2,13 +2,13 @@ package dk.sdu.se_f22.contentmodule.management;
 
 import dk.sdu.se_f22.contentmodule.management.Data.*;
 import org.junit.jupiter.api.Test;
+import org.postgresql.util.PSQLException;
 
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagementTest {
-    private int test_id = 1;
 
     @Test
     void create() {
@@ -23,7 +23,8 @@ class ManagementTest {
     @Test
     void getPageString() {
         try {
-            assertEquals("This is a test HTML page", Management.getPageString(test_id));
+            int id = Management.Create("This is a test HTML page");
+            assertEquals("This is a test HTML page", Management.getPageString(id));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,7 +33,8 @@ class ManagementTest {
     @Test
     void getPageDocument() {
         try {
-            assert (Management.GetPageDocument(test_id) != null);
+            int id = Management.Create("do you get page document?");
+            assert (Management.GetPageDocument(id) != null);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,9 +42,12 @@ class ManagementTest {
 
     @Test
     void update() {
-        Management.Update(test_id, "Sucky sucky, five bucky");
+
         try {
-            assertEquals(Management.getPageString(test_id), "This is a test HTML page");
+            int id = Management.Create("Sucky sycky, four buddy");
+            Management.Update(id, "Sucky sucky, five bucky");
+            assertEquals(Management.getPageString(id), "Sucky sucky, five bucky");
+            Management.Delete(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,7 +58,7 @@ class ManagementTest {
         try {
             int id = Management.Create("This should be deleted");
             Management.Delete(id);
-            assertNull(Management.getPageString(id));
+            assertThrowsExactly(PSQLException, Management.getPageString(id));
         } catch (SQLException e) {
             e.printStackTrace();
         }

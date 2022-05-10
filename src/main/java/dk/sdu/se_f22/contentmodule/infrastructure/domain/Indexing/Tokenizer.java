@@ -1,15 +1,14 @@
-package dk.sdu.se_f22.contentmodule.infrastructure.domain;
+package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 
 import dk.sdu.se_f22.contentmodule.infrastructure.data.Database;
 
 import java.util.*;
 
 
-class Tokenizer {
+public class Tokenizer {
 
-
-    public static ArrayList<Token> tokenizeHTMLBodyText(HTMLSite site) {
-        ArrayList<Token> tokens = new ArrayList<>();
+    public HTMLSite tokenizeHTMLBodyText(HTMLSite site) {
+        ArrayList<String> tokens = new ArrayList<>();
         String convertedsite = site.getDocumentText();
         Database database = Database.getInstance();
 
@@ -41,6 +40,8 @@ class Tokenizer {
                 case ' ':
                     mellemrum++;
                     break;
+
+
             }
         }
 
@@ -49,14 +50,14 @@ class Tokenizer {
         String [] splittedStrings = convertedsite.split("["+Database.getInstance().getParameters()+"]");
 
 
-        for (String s: splittedStrings){
+        for (String word: splittedStrings){
             {
-                if (s != "") {
-                    tokens.add(new Token(s.toLowerCase(Locale.ROOT), site.getId()));
+                if (word != "") {
+                    tokens.add(word.toLowerCase(Locale.ROOT));
                 }
             }
         }
-        return tokens;
+        return new HTMLSite(site.getId(), site.getHtmlCode(), tokens);
     }
 }
 

@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing.HTMLSite;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

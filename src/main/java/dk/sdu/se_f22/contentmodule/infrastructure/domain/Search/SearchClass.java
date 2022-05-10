@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.contentmodule.infrastructure.domain;
+package dk.sdu.se_f22.contentmodule.infrastructure.domain.Search;
 
 
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchClass implements IndexingModule{
+
     @Override
     public List queryIndex(List tokens) {
-        ArrayList<Integer> matchingIDs;
-        return null;
+        ArrayList<Content> contents = new ArrayList<>();
+
+        return contents;
     }
 }

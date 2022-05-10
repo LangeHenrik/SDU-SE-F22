@@ -162,6 +162,7 @@
                     </excludeJUnit5Engines>
                     <argLine>
                         --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+                        --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>

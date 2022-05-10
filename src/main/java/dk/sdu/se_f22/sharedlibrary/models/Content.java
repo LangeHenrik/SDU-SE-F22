@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
+import org.jsoup.nodes.Document;
+
 public class Content {
     private int pageId;
     private String html;

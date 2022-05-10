@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RangeFilterClassTest {
 
     @Test
-    @Disabled
+    @Disabled("not written yet")
     void testEquals() {
     }
 }

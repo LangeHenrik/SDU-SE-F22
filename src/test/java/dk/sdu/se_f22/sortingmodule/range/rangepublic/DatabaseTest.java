@@ -33,7 +33,7 @@ class DatabaseTest {
         @BeforeEach
         void setup() {
             try {
-                dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/java/dk/sdu/se_f22/sharedlibrary/db/modifiedRangeFilters.sql");
+                dbMigration.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/3.3_modifiedRangeFilters.sql");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

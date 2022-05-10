@@ -30,8 +30,6 @@ public class BrandIndex implements IndexInterface {
                 queryStatement.setString(i + 1, String.valueOf(productIDList.get(i)));
             }
 
-
-
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             while (queryResultSet.next()) {
@@ -67,20 +65,21 @@ public class BrandIndex implements IndexInterface {
         List<Integer> tempList = new ArrayList<>();
 
         try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement queryStatement = null;
+            ResultSet queryResultSet = null;
             for (int i = 0; i < tokens.size(); i++) {
-                PreparedStatement queryStatement = connection.prepareStatement("SELECT id FROM productType WHERE name = ?");
+                queryStatement = connection.prepareStatement("SELECT id FROM productType WHERE name = ?");
 
                 queryStatement.setString(1, tokens.get(i));
 
-                ResultSet queryResultSet = queryStatement.executeQuery();
+                queryResultSet = queryStatement.executeQuery();
 
                 while(queryResultSet.next()) {
                     tempList.add(queryResultSet.getInt("id"));
                 }
-
-                queryResultSet.close();
-                queryStatement.close();
             }
+            queryResultSet.close();
+            queryStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

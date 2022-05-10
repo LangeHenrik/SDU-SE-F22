@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule.range.database.scoring;
+package dk.sdu.se_f22.sortingmodule.scoring;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 

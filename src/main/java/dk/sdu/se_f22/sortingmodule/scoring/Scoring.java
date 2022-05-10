@@ -50,7 +50,7 @@ public class Scoring implements IScoring {
             }
         }
     }
-
+/*
     private void stock(List<ProductScore> input) {
         for (ProductScore product : input) {
             int stock = product.getProduct().getStock();
@@ -91,6 +91,8 @@ public class Scoring implements IScoring {
             }
         }
     }
+
+ */
 
     public List<ProductScore> wrapProduct (Collection<Product> input) {
 
@@ -141,8 +143,11 @@ public class Scoring implements IScoring {
 
         price(products);
         review(products);
+        /*
         stock(products);
         date(products);
+
+         */
         Collections.sort(products);
 
         return unWrapProduct(products);
@@ -169,7 +174,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortStock(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
-        stock(products);
+        //stock(products);
         Collections.sort(products);
 
         return unWrapProduct(products);
@@ -178,7 +183,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortDate(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
-        date(products);
+        //date(products);
         Collections.sort(products);
 
         return unWrapProduct(products);

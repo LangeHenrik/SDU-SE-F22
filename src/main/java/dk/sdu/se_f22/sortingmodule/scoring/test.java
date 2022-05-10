@@ -11,7 +11,8 @@ public class test {
 
     public static void main(String[] args) throws ParseException {
         List<Product> products = new ArrayList<>();
-
+/*
+        products.add(new Product(1,3.2,new ArrayList<>(3),))
         products.add(new Product("Pizza",1895,2.3,1,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2020")));
         products.add(new Product("Stikkontakt",3000,3.6,17,new SimpleDateFormat("dd/MM/yyyy").parse("05/22/2028")));
         products.add(new Product("Burger",859,1,50,new SimpleDateFormat("dd/MM/yyyy").parse("05/22/1996")));
@@ -26,10 +27,12 @@ public class test {
         products.add(new Product("Cornflakes",2395,2.2,5,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2019")));
         products.add(new Product("Cake",3395,4.7,9,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2017")));
 
+ */
+
         IScoring scoring = new Scoring();
         //System.out.println(scoring.scoreSort(products));
         //System.out.println(scoring.readTable());
-        scoring.updateRow(16,"1500","bracket");
+       // scoring.updateRow(16,"1500","bracket");
         //scoring.deleteRow(28);
         //scoring.createRow("price",2000,2);
         System.out.println(scoring.readTable());

@@ -125,8 +125,9 @@ public class IrregularWords implements IIrregularWords {
                 return words;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            words.clear();
+            words.add(word);
+            return words;
         }
     }
 

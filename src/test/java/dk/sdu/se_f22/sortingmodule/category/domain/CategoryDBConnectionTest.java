@@ -1,8 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.category.domain;
 
-import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
 import dk.sdu.se_f22.sortingmodule.category.Category;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

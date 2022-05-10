@@ -91,6 +91,7 @@ class DoubleFilterTest {
 
         @Nested
         @DisplayName("Set userMin and userMax")
+        @Disabled("Not yet implemented")
         class SetUserMinAndMax {
 
             @Nested
@@ -118,6 +119,7 @@ class DoubleFilterTest {
 
             @Nested
             @DisplayName("Set invalid userMin and userMax")
+            @Disabled("Not yet implemented")
             class SetInvalidUserMinAndUserMax {
 
                 @Test

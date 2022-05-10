@@ -28,7 +28,7 @@ public class DBMigration {
 
     public static void main(String[] args) {
         DBMigration migrator = new DBMigration();
-        migrator.migrateFresh();
+        migrator.migrate();
     }
 
     /**

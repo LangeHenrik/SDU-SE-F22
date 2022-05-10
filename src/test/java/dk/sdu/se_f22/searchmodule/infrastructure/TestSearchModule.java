@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -167,12 +168,12 @@ public class TestSearchModule {
         }
         SearchModuleImpl searchModule = new SearchModuleImpl();
 
-        assertArrayEquals(new String[0], searchModule.getDelimiters().toArray());
+        assertArrayEquals(List.of(" ").toArray(), searchModule.getDelimiters().toArray());
 
         searchModule.addDelimiter("hello");
 
         var delimiters = searchModule.getDelimiters();
-        var expectedDelimiters = List.of("hello");
+        var expectedDelimiters = List.of(" ", "hello");
 
         assertArrayEquals(expectedDelimiters.toArray(), delimiters.toArray());
         searchModule.addDelimiter("hello");
@@ -195,11 +196,11 @@ public class TestSearchModule {
         SearchModuleImpl searchModule = new SearchModuleImpl();
 
         searchModule.addDelimiter("hello");
-        var expectedDelimiters = List.of("hello");
-
+        var expectedDelimiters = List.of(" ", "hello");
+        System.out.println(Arrays.toString(searchModule.getDelimiters().toArray()));
         assertArrayEquals(expectedDelimiters.toArray(), searchModule.getDelimiters().toArray());
 
         searchModule.removeDelimiter("hello");
-        assertArrayEquals(new String[0], searchModule.getDelimiters().toArray());
+        assertArrayEquals(List.of(" ").toArray(), searchModule.getDelimiters().toArray());
     }
 }

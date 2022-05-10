@@ -26,7 +26,7 @@ public class CategoryDBConnection{
     }
 
     protected int deleteCategory(int id) {
-        String SQL = "DELETE FROM categories WHERE id = ?";
+        String SQL = "DELETE FROM requirements_values WHERE id = (SELECT requirements_id FROM categories WHERE id = ?)";
 
         int affectedrows = 0;
 

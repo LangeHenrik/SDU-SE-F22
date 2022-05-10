@@ -1,13 +1,11 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Query class, that holds information about a search query from the user.
@@ -119,6 +117,32 @@ public class SearchQuery {
     public void setPagination(int page, int pageSize) {
         this.pagination[0] = page;
         this.pagination[1] = pageSize;
+    }
+
+    public SearchHits paginateHits(SearchHits searchHits) {
+        Collection tempProductList = new ArrayList<>();
+        Collection tempBrandList = new ArrayList<>();
+        Collection tempContentList = new ArrayList<>();
+
+        for (int i = pagination[0]*pagination[1]; i < (pagination[0] + 1)*pagination[1]; i++) {
+            if (i < searchHits.getProducts().size()) {
+                tempProductList.add(searchHits.getProducts().toArray()[i]);
+            }
+
+            if (i < searchHits.getBrands().size()) {
+                tempBrandList.add(searchHits.getBrands().toArray()[i]);
+            }
+
+            if (i < searchHits.getContents().size()) {
+                tempContentList.add(searchHits.getContents().toArray()[i]);
+            }
+        }
+
+        searchHits.setProducts(tempProductList);
+        searchHits.setBrands(tempBrandList);
+        searchHits.setContents(tempContentList);
+
+        return searchHits;
     }
 
     /**

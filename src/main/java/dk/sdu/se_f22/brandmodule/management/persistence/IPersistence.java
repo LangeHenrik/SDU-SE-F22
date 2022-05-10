@@ -13,4 +13,6 @@ public interface IPersistence {
     boolean databaseIndexer();
     boolean addOrUpdateBrands(List<Brand> brands);
     void seedDatabase();
+    void setIndexingInterval(int indexingInterval);
+    int  getIndexingInterval();
 }

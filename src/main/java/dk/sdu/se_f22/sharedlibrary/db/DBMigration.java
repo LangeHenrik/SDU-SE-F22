@@ -53,6 +53,9 @@ public class DBMigration {
     public void migrate() {
         String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/";
 
+        // Run default SeedDatabase
+        
+
         try (
             Connection connection = DBConnection.getPooledConnection();
         ) {
@@ -144,7 +147,7 @@ public class DBMigration {
      * @author v-nemeth
      * @author Mikkel Albrechtsen (The0mikkel)
      */
-    private boolean runSQLFromFile(Connection connection, String SQLFileName) {
+    public boolean runSQLFromFile(Connection connection, String SQLFileName) {
         // Begin transaction
         try {
             connection.setAutoCommit(false);

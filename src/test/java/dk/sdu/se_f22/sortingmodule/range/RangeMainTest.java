@@ -1,14 +1,5 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterIdException;
-import dk.sdu.se_f22.sortingmodule.range.rangefilter.RangeFilter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.*;
-
 // The class should filter correctly when using multiple ids.
 // Note that the filtering has been tested elsewhere and is thus not the main focus of testing this class.
 // The focus is therefore that multiple filters at the same time is handled correctly.

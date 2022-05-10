@@ -11,9 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+//hello
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScoringTest {
+
     Scoring scoring = new Scoring();
     ArrayList<Product> products;
 
@@ -288,4 +289,5 @@ class ScoringTest {
                 Id: 15 Type: stock Bracket: 50.0 Weight: 5
                 """);
     }
+
 }

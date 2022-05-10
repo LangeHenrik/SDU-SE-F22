@@ -27,7 +27,7 @@ public class Management {
         } catch (Exception e) {
             StringBuilder scriptString = new StringBuilder();
             try {
-                s = new Scanner(new FileInputStream("dk/sdu/se_f22/contentmodule/management/PostgresScript.txt"));
+                s = new Scanner(new FileInputStream("src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt"));
 
                 while (s.hasNext()) {
                     scriptString.append(s.nextLine());

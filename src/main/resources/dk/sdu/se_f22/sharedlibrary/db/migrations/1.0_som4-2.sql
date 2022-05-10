@@ -8,9 +8,9 @@ CREATE TABLE scores(
 INSERT INTO scores (type, bracket, weight) VALUES
     ('price',1000,1),
     ('price',2000,2),
-    ('price',3000,4),
-    ('price',4000,5),
-    ('price',5000,6),
+    ('price',3000,3),
+    ('price',4000,4),
+    ('price',5000,5),
     ('review',2.5,1),
     ('review',3.3,2),
     ('review',3.9,3),

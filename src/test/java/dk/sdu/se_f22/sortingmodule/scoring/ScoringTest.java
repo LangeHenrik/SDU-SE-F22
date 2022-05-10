@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
@@ -74,6 +75,11 @@ class ScoringTest {
             ex.printStackTrace();
         }
     }
+    //Temporary only here for main method in scoring package
+    @AfterAll
+    void tryAgain() {
+        setup();
+    }
 
     @Test
     void scoreSort() {
@@ -113,7 +119,7 @@ class ScoringTest {
             e.printStackTrace();
         }
 
-        assertEquals(Arrays.toString(scoring.scoreSortPrice(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(Arrays.toString(scoring.scoreSortPrice(controlProducts).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
@@ -133,7 +139,7 @@ class ScoringTest {
             e.printStackTrace();
         }
 
-        assertEquals(Arrays.toString(scoring.scoreSortReview(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(Arrays.toString(scoring.scoreSortReview(controlProducts).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
@@ -154,7 +160,7 @@ class ScoringTest {
             e.printStackTrace();
         }
 
-        assertEquals(Arrays.toString(scoring.scoreSortStock(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(Arrays.toString(scoring.scoreSortStock(controlProducts).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
@@ -174,9 +180,8 @@ class ScoringTest {
             e.printStackTrace();
         }
 
-        assertEquals(Arrays.toString(scoring.scoreSortDate(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(Arrays.toString(scoring.scoreSortDate(controlProducts).toArray()), Arrays.toString(controlProducts.toArray()));
     }
-
 
     @Test
     void createRow() {

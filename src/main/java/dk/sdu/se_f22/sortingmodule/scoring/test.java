@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
+import dk.sdu.se_f22.sharedlibrary.models.Product;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

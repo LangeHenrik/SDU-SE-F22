@@ -14,14 +14,15 @@ public class Scoring implements IScoring {
         for (ProductScore product : input) {
             double price = product.getProduct().getPrice();
             try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM prices ORDER BY bracket");
+                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'price' ORDER BY bracket");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
-                    if (price <= sqlReturnValues.getDouble(2)) {
-                        product.setScore(-sqlReturnValues.getInt(3) + product.getScore());
+                    double priceCompare = sqlReturnValues.getDouble(3);
+                    if (price <= priceCompare) {
+                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(-sqlReturnValues.getInt(3) + product.getScore());
+                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
                     }
                 }
             } catch (SQLException e) {
@@ -34,14 +35,14 @@ public class Scoring implements IScoring {
         for (ProductScore product : input) {
             double review = product.getProduct().getAverageUserReview();
             try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM reviews");
+                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'review';");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
-                    if (review <= sqlReturnValues.getDouble(2)) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                    if (review <= sqlReturnValues.getDouble(3)) {
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                     }
                 }
             } catch (SQLException ex) {
@@ -53,15 +54,15 @@ public class Scoring implements IScoring {
     private void stock(List<ProductScore> input) {
         for (ProductScore product : input) {
             int stock = product.getProduct().getStock();
-            try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM stocks");
-                 var sqlReturnValues = statement.executeQuery()) {
+            try {var connection = DBConnection.getPooledConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'stock'");
+                var sqlReturnValues = statement.executeQuery();
                 while (sqlReturnValues.next()){
-                    if (stock <= sqlReturnValues.getInt(2)) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                    if (stock <= sqlReturnValues.getInt(3)) {
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(sqlReturnValues.getInt(3)+product.getScore());
+                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                     }
                 }
             } catch (SQLException ex) {
@@ -75,14 +76,14 @@ public class Scoring implements IScoring {
             Date newDate = new Date();
             int date = (int)(((newDate.getTime()-product.getProduct().getReleaseDate().getTime())/31556736)/1000);
             try (var connection = DBConnection.getPooledConnection();
-                 var statement = connection.prepareStatement("SELECT * FROM dates");
+                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'date'");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
-                    if (date <= sqlReturnValues.getInt(2)) {
-                        product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
+                    if (date <= sqlReturnValues.getInt(3)) {
+                        product.setScore(-sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(-sqlReturnValues.getInt(3)+product.getScore());
+                        product.setScore(-sqlReturnValues.getInt(4)+product.getScore());
                     }
                 }
             } catch (SQLException ex) {

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.category;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.category.domain.CategoryCRUDInterface;
 import dk.sdu.se_f22.sortingmodule.category.domain.CategoryCRUD;
 
@@ -18,7 +19,7 @@ public class CategoryFilter implements CategoryFilterInterface {
     }
 
     public SearchHits filterProductsByCategory(SearchHits searchHits, List<Integer> categoryIDs) {
-        Collection<CategoryProduct> newProducts = new ArrayList<>();
+        Collection<Product> newProducts = new ArrayList<>();
         List<Category> categories = new ArrayList<>();
 
         if(categoryIDs.isEmpty()){
@@ -31,8 +32,8 @@ public class CategoryFilter implements CategoryFilterInterface {
         }
 
         for (Object oldProduct : searchHits.getProducts()) {
-            if(oldProduct instanceof CategoryProduct){
-                CategoryProduct product = (CategoryProduct)oldProduct;
+            if(oldProduct instanceof Product){
+                Product product = (Product)oldProduct;
 
                 for(Category category : categories){
                     if(category == null){

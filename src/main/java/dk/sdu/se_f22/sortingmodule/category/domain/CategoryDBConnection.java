@@ -12,7 +12,7 @@ public class CategoryDBConnection{
 
     private static Connection connie = null;
 
-    private Connection connect() throws SQLException, IOException {
+    protected Connection connect() throws SQLException, IOException {
         connie = DBConnection.getPooledConnection();
         return connie;
     }
@@ -243,6 +243,8 @@ public class CategoryDBConnection{
                 System.out.println(e.getMessage());
             }
             this.closeConnection();
+        } else {
+            System.out.println("Invalid input");
         }
     }
 
@@ -293,6 +295,8 @@ public class CategoryDBConnection{
                 System.out.println(e.getMessage());
             }
             this.closeConnection();
+        } else {
+            System.out.println("Invalid input");
         }
     }
 }

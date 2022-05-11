@@ -9,8 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import javax.print.attribute.standard.Finishings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +42,41 @@ class DoubleFilterTest {
         //The filter method should be tested such that it will only filter out the results that do not match.
         //
         //It must also be able to take an empty list.
+
+        @ParameterizedTest
+        @DisplayName("Changing product attribute actually changes attribute used for filtering")
+        @ValueSource(strings = {"price", "averageUserReview", "clockspeed","weight" })
+        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
+            //Creating filter through getTestFilter method
+            DoubleFilter filter = getTestFilter(productAttribute);
+            Double userMin = 10.0;
+            Double userMax = 100.0;
+            filter.setUserMin(userMin);
+            filter.setUserMax(userMax);
+
+            //Preparing input list
+            List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForDoubleFilterTest.csv", true);
+
+            // preparing the expected result list
+            // Inserting the product, that is within the range of usermin and usermax
+            ArrayList<Product> expectedResults = new ArrayList<>();
+            if(productAttribute.equals("price")) {
+                expectedResults.add(mockResults.get(0));
+            }
+            if(productAttribute.equals("averageUserReview")) {
+                expectedResults.add(mockResults.get(1));
+            }
+            if(productAttribute.equals("clockspeed")) {
+                expectedResults.add(mockResults.get(2));
+            }
+            if(productAttribute.equals("weight")) {
+                expectedResults.add(mockResults.get(3));
+            }
+
+            Collection<Product> filteredResults = filter.useFilter(mockResults);
+
+            Assertions.assertEquals(expectedResults,filteredResults);
+        }
 
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
@@ -175,6 +211,8 @@ class DoubleFilterTest {
             return out.stream();
         }
 
+
+        // TODO move to correct class
         @Nested
         @DisplayName("Set userMin and userMax")
         @Disabled("Not yet implemented")

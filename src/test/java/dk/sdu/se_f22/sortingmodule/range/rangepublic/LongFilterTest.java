@@ -43,6 +43,12 @@ class LongFilterTest {
         //
         //It must also be able to take an empty list.
 
+        @Disabled("Test does not make sense to make since LongFilters can only have 1 product attribute(ean)")
+        @Test
+        @DisplayName("Changing product attribute actually changes attribute used for filtering")
+        void changingProductAttributeActuallyChangesBeingFiltered() {
+        }
+
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")

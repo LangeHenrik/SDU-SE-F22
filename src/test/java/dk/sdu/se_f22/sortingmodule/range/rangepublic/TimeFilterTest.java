@@ -48,17 +48,18 @@ class TimeFilterTest {
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
         @ValueSource(strings = {"publishedDate", "expirationDate"})
         void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
-            //Creating filter with productattribute publishDate or experationDate
+            // Creating filter with productattribute publishDate or experationDate
             TimeFilter filter = getTestFilter(productAttribute);
             Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
             Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
             filter.setUserMin(userMin);
             filter.setUserMax(userMax);
-            //Preparing input list
-            List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForEnsuringProductAttribute.csv", true);
+            // Preparing input list
+            List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForTimeFilterTest.csv", true);
 
-            // preparing the expected result list
-            //Skrive condition bag xxx
+            // Preparing the expected result list
+            // Removes index one in the first if statement,
+            // because the productattribute is not inside the usermin and usermax range
             List<Product> copy = List.copyOf(mockResults);
             ArrayList<Product> expectedResults = new ArrayList<>(copy);
             if(productAttribute.equals("publishedDate")) {

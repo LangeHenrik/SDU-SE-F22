@@ -7,18 +7,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-class LongFilterTest {
+class TimeFilterTest {
 
     @Test
     void getType() {
-        LongFilter longFilter = new LongFilter(0, "test name", "test description", "ean", 0, 1000);
-        assertEquals(FilterTypes.LONG, longFilter.getType());
+        Instant dbMin = Instant.parse("2018-11-30T15:35:24.00Z");
+        Instant dbMax = Instant.parse("2022-11-30T15:35:24.00Z");
+        TimeFilter timeFilter = new TimeFilter(0, "test name", "test description", "publishedDate", dbMin, dbMax);
+        assertEquals(FilterTypes.TIME, timeFilter.getType());
     }
 
     @Test
@@ -37,29 +41,37 @@ class LongFilterTest {
         @Test
         @DisplayName("filter a list of actual products")
         void useFilter() {
-            // The cause for the fail is known.
-            // See DoubleFilterTest of the same method for explanation
-            LongFilter internalFilter = new LongFilter(0, "test name", "test description", "ean", 12345673, 12345675);
-//            internalFilter.setUserMax(1000);
-//            internalFilter.setUserMin(0);
-            // Not necessary, but should be tested in a separate test.
+            // preparing the filter
+            Instant dbMin = Instant.parse("2018-11-30T15:35:24.00Z");
+            Instant dbMax = Instant.parse("2022-11-30T15:35:24.00Z");
+            Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
+            Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
+            TimeFilter internalFilter = new TimeFilter(0, "test name", "test description", "publishedDate", dbMin, dbMax);
+//            internalFilter.setUserMin(userMin);
+//            internalFilter.setUserMax(userMax);
+
+            // preparing the input list
+            // Should be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
+            // Not up to the standard of our unit tests
             assertEquals(7, mockResults.size());
 
-
+            // preparing the expected result list
             List<Product> copy = List.copyOf(mockResults);
             ArrayList<Product> expectedResults = new ArrayList<>(copy);
-            expectedResults.remove(3);
-            expectedResults.remove(2);
-            expectedResults.remove(1);
+            expectedResults.remove(6);
+//            expectedResults.remove(3);
+//            expectedResults.remove(2);
+//            expectedResults.remove(1);
             expectedResults.remove(0);
-            // equivalent to repeating expectedresults.remove(0) 4 times
-            // This has been done to improve readability
+            // remember that remove, moves the index of subsequent elements
 
+            // Executing the action
             Collection<Product> filteredResults = internalFilter.useFilter(mockResults);
 
+            // verifying the result, and formatting it in a readable way in case the test fails
             assertEquals(expectedResults, filteredResults,  () -> {
                 StringBuilder out = new StringBuilder("Expected results: length=" + expectedResults.size() + "\n");
                 for (Product product: expectedResults){
@@ -78,13 +90,22 @@ class LongFilterTest {
         @Test
         @DisplayName("Filtering an empty list of results")
         void filteringAnEmptyListOfResults() {
-            LongFilter internalFilter = new LongFilter(0, "test name", "test description", "price", 0, 1000);
-            internalFilter.setUserMax(1000);
-            internalFilter.setUserMin(0);
+            // preparing the filter
+            Instant dbMin = Instant.parse("2018-11-30T15:35:24.00Z");
+            Instant dbMax = Instant.parse("2022-11-30T15:35:24.00Z");
+            Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
+            Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
+            TimeFilter internalFilter = new TimeFilter(0, "test name", "test description", "publishedDate", dbMin, dbMax);
+            internalFilter.setUserMin(userMin);
+            internalFilter.setUserMax(userMax);
+
+            // preparing the input list
             Collection<Product> emptyResults = new ArrayList<>();
 
+            // Executing the action
             Collection<Product> filteredResults = internalFilter.useFilter(emptyResults);
 
+            // Verifying the result
             assertEquals(new ArrayList<>(), filteredResults);
         }
     }

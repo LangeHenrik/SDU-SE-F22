@@ -13,12 +13,9 @@ class TimeFilter extends RangeFilterClass {
     private Instant userMin;
     private Instant userMax;
 
-    private static final List<String> validAttributes = List.of(new String[]{"publishedDate", "expirationDate"});
-
-
     public TimeFilter(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super(ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
-                List.of(new String[]{"ean"}));
+                List.of(new String[]{"publishedDate", "expirationDate"}));
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }
@@ -26,7 +23,7 @@ class TimeFilter extends RangeFilterClass {
 
     public TimeFilter(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super(NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
-                List.of(new String[]{"ean"}));
+                List.of(new String[]{"publishedDate", "expirationDate"}));
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }

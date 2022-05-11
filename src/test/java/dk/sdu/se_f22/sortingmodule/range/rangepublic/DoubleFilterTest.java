@@ -86,7 +86,7 @@ class DoubleFilterTest {
 
             Collection<Product> filteredResults = internalFilter.useFilter(emptyResults);
 
-            assertEquals(emptyResults, filteredResults);
+            assertEquals(new ArrayList<>(), filteredResults);
         }
 
         @Nested

@@ -119,11 +119,20 @@ class TimeFilterTest {
                 internalFilter.setUserMax(userMax);
             }
 
+            // preparing the expected result
+            Collection<Product> expectedResult;
+
+            if(inputList == null){
+                expectedResult = null;
+            }else {
+                expectedResult = new ArrayList<>();
+            }
+
             // Executing the action
             Collection<Product> filteredResults = internalFilter.useFilter(inputList);
 
             // Verifying the result
-            assertEquals(new ArrayList<>(), filteredResults);
+            assertEquals(expectedResult, filteredResults);
             // Currently fails if our method returns null.
             // When the desired behaviour of the method has been decided correct the test as needed
         }

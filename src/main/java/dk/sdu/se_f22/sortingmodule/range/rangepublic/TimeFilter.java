@@ -96,8 +96,6 @@ class TimeFilter extends RangeFilterClass {
 
         if(inputs == null){
             return null;
-            // TODO choose on of these and specify this behaviour in a docstring "somewhere"
-//            return filteredResults;
         }
 
         // loop over all the products in the list and access the correct attribute:

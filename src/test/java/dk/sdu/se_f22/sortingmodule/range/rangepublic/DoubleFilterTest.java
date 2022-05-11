@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import javax.print.attribute.standard.Finishings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -68,7 +69,8 @@ class DoubleFilterTest {
             Collection<Product> filteredResults = internalFilter.useFilter(mockResults);
 
             assertEquals(expectedResults, filteredResults,  () -> {
-                StringBuilder out = new StringBuilder("Expected results: length=" + expectedResults.size() + "\n");
+                String initialInfo = "\n" + internalFilter.getProductAttribute() + "\n";
+                StringBuilder out = new StringBuilder(initialInfo + "Expected results: length=" + expectedResults.size() + "\n");
                 for (Product product: expectedResults){
                     out.append(product).append("\n");
                 }

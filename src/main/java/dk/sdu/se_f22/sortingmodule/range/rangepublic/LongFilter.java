@@ -9,8 +9,10 @@ import java.util.List;
 class LongFilter extends RangeFilterClass{
     private final long DB_MIN;
     private final long DB_MAX;
-    private long userMin;
-    private long userMax;
+
+    private final long USER_NOT_SET_VALUE = - Long.MAX_VALUE;
+    private long userMin = USER_NOT_SET_VALUE;
+    private long userMax = USER_NOT_SET_VALUE;
 
     public LongFilter(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, long dbMin, long dbMax) {
         super(ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
@@ -122,11 +124,17 @@ class LongFilter extends RangeFilterClass{
      * @return true if the value is outside the range specified by the filter
      */
     private boolean checkValue(long value) {
-        if (this.userMin != this.userMax) {
+        // NOTE: The last check may not be necessary.
+        // Since they are both set, then they must be different
+        if (isSet(this.userMax) && isSet(this.userMin) && this.userMin != this.userMax) {
             return value < this.userMin || value > this.userMax;
         }
 
         return value < this.DB_MIN || value > this.DB_MAX;
+    }
+
+    private boolean isSet(long inputUserValue){
+        return inputUserValue != USER_NOT_SET_VALUE;
     }
 
     /**

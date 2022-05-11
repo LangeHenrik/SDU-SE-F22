@@ -46,12 +46,7 @@ class LongFilterTest {
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")
-        void useFilter() {
-            // The cause for the fail is known.
-            // See DoubleFilterTest of the same method for explanation
-            LongFilter internalFilter = getTestFilter();
-//            internalFilter.setUserMax(1000);
-//            internalFilter.setUserMin(0);
+        void useFilter(LongFilter internalFilter) {
             // Not necessary, but should be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 

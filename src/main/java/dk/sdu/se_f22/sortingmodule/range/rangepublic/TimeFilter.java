@@ -139,8 +139,8 @@ class TimeFilter extends RangeFilterClass {
      * @return - true if the value is outside the range specified by the filter
      */
     private boolean checkValue(Instant value) {
-        // Perhaps check for nullas well?
-        if (this.userMin != this.userMax) {
+        // Perhaps check for null as well?
+        if (this.userMin != this.userMax && this.userMax != null && this.userMin != null) {
             return value.isBefore(this.userMin) || value.isAfter(this.userMax);
         }
 

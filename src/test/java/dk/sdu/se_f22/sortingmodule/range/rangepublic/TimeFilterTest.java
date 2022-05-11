@@ -2,10 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,7 +20,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class TimeFilterTest {
 
-    private TimeFilter getFilter(String productAttribute) {
+    private static TimeFilter getTestFilter(String productAttribute) {
         Instant dbMin = Instant.parse("2018-11-30T15:35:24.00Z");
         Instant dbMax = Instant.parse("2022-11-30T15:35:24.00Z");
         return new TimeFilter(0, "test name", "test description", productAttribute, dbMin, dbMax);
@@ -32,7 +29,7 @@ class TimeFilterTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"publishedDate", "expirationDate"})
     void getType(String productAttribute) {
-        TimeFilter timeFilter = getFilter(productAttribute);
+        TimeFilter timeFilter = getTestFilter(productAttribute);
         assertEquals(FilterTypes.TIME, timeFilter.getType());
     }
 
@@ -57,13 +54,44 @@ class TimeFilterTest {
         // Although it brings the challenge that the method in that case could see on only one and still pass.
         // A single test that eliminates that possibility would solve that, and allow for all other tests being much cleaner.
         //
+        
+        @ParameterizedTest
+        @DisplayName("Changing product attribute actually changes attribute used for filtering")
+        @ValueSource(strings = {"publishedDate", "expirationDate"})
+        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
+            //Creating filter with productattribute publishDate or experationDate
+            TimeFilter filter = getTestFilter(productAttribute);
+            Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
+            Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
+            filter.setUserMin(userMin);
+            filter.setUserMax(userMax);
+
+            //Preparing input list
+            List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForEnsuringProductAttribute.csv", true);
+
+            // preparing the expected result list
+            //Skrive condition bag xxx
+            List<Product> copy = List.copyOf(mockResults);
+            ArrayList<Product> expectedResults = new ArrayList<>(copy);
+            if(productAttribute.equals("publishedDate")) {
+                expectedResults.remove(1);
+            }
+            if(productAttribute.equals("expirationDate")) {
+                expectedResults.remove(0);
+            }
+
+            Collection<Product> filteredResults = filter.useFilter(mockResults);
+
+            Assertions.assertEquals(expectedResults,filteredResults);
+        }
+        
 
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
         @ValueSource(strings = {"publishedDate", "expirationDate"})
         void useFilter(String productAttribute) {
             // preparing the filter
-            TimeFilter internalFilter = getFilter(productAttribute);
+            TimeFilter internalFilter = getTestFilter(productAttribute);
             Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
             Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
             // Below comments will be used in a seperate test where we test if it works for the filter to use the settings set by the user
@@ -110,7 +138,7 @@ class TimeFilterTest {
         @MethodSource("filteringAnEmptyListOfResultsArgument")
         void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) {
             // preparing the filter
-            TimeFilter internalFilter = getFilter(productAttribute);
+            TimeFilter internalFilter = getTestFilter(productAttribute);
             if (setUserMinAndMax) {
                 System.out.print("Setting userMin and userMax");
                 Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");

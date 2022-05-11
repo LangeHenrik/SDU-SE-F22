@@ -94,6 +94,11 @@ class TimeFilter extends RangeFilterClass {
         // Only filter and remove the input if it is below min or above max
         List<Product> filteredResults = new ArrayList<>();
 
+        if(inputs == null){
+            return null;
+            // TODO choose on of these and specify this behaviour in a docstring "somewhere"
+//            return filteredResults;
+        }
 
         // loop over all the products in the list and access the correct attribute:
         for (Product productHit : inputs) {

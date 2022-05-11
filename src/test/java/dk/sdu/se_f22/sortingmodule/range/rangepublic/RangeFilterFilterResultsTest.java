@@ -28,5 +28,9 @@ class RangeFilterFilterResultsTest {
     @Disabled("Not yet written")
     @DisplayName("Filter results with non empty lists")
     void filterResultsWithNonEmptyLists() {
+        // Create one of each different RangeFilter type
+        // Make csv file with products - make sure the products which is accepted by a filters min/max range also is accepted by the other filters min/max range
+        // 2 products should be removed by each filter
+        // Assert the filtered list is equal to the expected results
     }
 }

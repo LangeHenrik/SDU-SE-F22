@@ -42,19 +42,8 @@ class TimeFilterTest {
     @Nested
     @DisplayName("Use filter method")
     class useFilterMethod {
-        //The filter method should be tested such that it will only filter out the results that do not match.
-        // There should be tests to ensure that it works with both db settings (if no or a single user setting is present)
-        // Along with working with user settings when both are set.
-        // Thus there should be 4 (almost) equivalent tests. 1 with no user settings present. 1 for min and 1 for max being set.
-        // Then a final test where both usermin and max is set.
-        // Ensure that the userMin and max being set will have a difference in what is filtered out and what isn't
-        //
-        // This filter is small enough that we should be able to run it for both publishedDate and expirationDate
-        // Idea: Have the publishedDate and expirationDate be the same for the input objects. Would allow easy parameterization.
-        // Although it brings the challenge that the method in that case could see on only one and still pass.
-        // A single test that eliminates that possibility would solve that, and allow for all other tests being much cleaner.
-        //
-        
+        // Make a test that ensures that changing productAttribute actually changes the attribute being filtered
+
         @ParameterizedTest
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
         @ValueSource(strings = {"publishedDate", "expirationDate"})
@@ -65,7 +54,6 @@ class TimeFilterTest {
             Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
             filter.setUserMin(userMin);
             filter.setUserMax(userMax);
-
             //Preparing input list
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForEnsuringProductAttribute.csv", true);
 
@@ -84,26 +72,19 @@ class TimeFilterTest {
 
             Assertions.assertEquals(expectedResults,filteredResults);
         }
-        
+
 
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
-        @ValueSource(strings = {"publishedDate", "expirationDate"})
-        void useFilter(String productAttribute) {
-            // preparing the filter
-            TimeFilter internalFilter = getTestFilter(productAttribute);
-            Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
-            Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
-            // Below comments will be used in a seperate test where we test if it works for the filter to use the settings set by the user
-//            internalFilter.setUserMin(userMin);
-//            internalFilter.setUserMax(userMax);
-
+        @MethodSource("useFilterArguments")
+        void useFilter(TimeFilter internalFilter) {
             // preparing the input list
-            // Note: Should be tested in a separate test.
+            // Note: Helpers.readMockProductResultsFromFile Should be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
-            // Note: Not up to the standard of our unit tests
+            // Note: Not up to the standard of our unit tests, because of multiple asserts
+            // TODO refactor
             assertEquals(7, mockResults.size());
 
             // preparing the expected result list
@@ -131,6 +112,53 @@ class TimeFilterTest {
                 return out.toString();
             });
         }
+
+        static Stream<Arguments> useFilterArguments() {
+            // Could be refactored to simply return TimeFilters.
+            // However it is like this such that the test can easily be refactored to take more arguments if needed.
+
+            // The timestamps for the instants have been carefully chosen to ensure that they align with the products.
+            // The values chosen ensure that if something is off, and a value is used when filtering, when it is not supposed to
+            // then the test will fail
+            List<Arguments> out = new ArrayList<>();
+
+            // create the combination of desired inputs
+            String[] strings = {"publishedDate", "expirationDate"};
+
+            // Add filters for purely using db settings
+            for(String attribute: strings){
+                out.add(arguments(getTestFilter(attribute)));
+            }
+
+            // Add filters using a single user setting set
+            Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
+            Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
+            for(String attribute: strings){
+                TimeFilter filter = getTestFilter(attribute);
+                filter.setUserMax(userMax);
+                out.add(arguments(filter));
+
+                filter = getTestFilter(attribute);
+                filter.setUserMin(userMin);
+                out.add(arguments(filter));
+            }
+
+            // Add filters that set both usermin and max, in such a way that the list is different than simply dbmin and max
+            userMin = Instant.parse("2018-11-30T15:35:24.00Z");
+            userMax = Instant.parse("2022-11-30T15:35:24.00Z");
+            for(String attribute: strings){
+                Instant dbMin = Instant.parse("2017-11-30T15:35:24.00Z");
+                Instant dbMax = Instant.parse("2023-11-30T15:35:24.00Z");
+                TimeFilter filter = new TimeFilter(0, "test name", "test description", attribute, dbMin, dbMax);
+                filter.setUserMin(userMin);
+                filter.setUserMax(userMax);
+                out.add(arguments(filter));
+            }
+
+
+            return out.stream();
+        }
+
         //It must also be able to take an empty list, along with a null list
 
         @DisplayName("Filtering an empty list of results")
@@ -148,6 +176,7 @@ class TimeFilterTest {
             }
 
             // preparing the expected result
+            // Note: we create a new variable that doesn't reference inputlist since it might be modified during the action
             Collection<Product> expectedResult;
 
             if(inputList == null){
@@ -167,7 +196,6 @@ class TimeFilterTest {
 
         static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {
             List<Arguments> out = new ArrayList<>();
-
 
             // create the combination of desired inputs
             // The order of the for loops determine the order of test cases.

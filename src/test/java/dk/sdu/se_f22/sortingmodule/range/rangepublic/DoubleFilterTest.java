@@ -6,18 +6,26 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DoubleFilterTest {
+    static DoubleFilter getTestFilter(String productAttribute) {
+        return new DoubleFilter(0, "test name", "test description", productAttribute, 0.0, 1000.0);
+    }
 
     @Test
     void getType() {
-        DoubleFilter doubleFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
+        DoubleFilter doubleFilter = getTestFilter("price");
         assertEquals(FilterTypes.DOUBLE, doubleFilter.getType());
     }
 
@@ -33,13 +41,11 @@ class DoubleFilterTest {
         //
         //It must also be able to take an empty list.
 
-        @Test
         @DisplayName("filter a list of actual products")
-        void useFilter() {
+        @ParameterizedTest(name = "{0}")
+        @MethodSource("useFilterArguments")
+        void useFilter(DoubleFilter internalFilter) {
             // The reason for the test fail is known, go to the comment starting with HERE
-            DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
-            internalFilter.setUserMax(1000.0);
-            internalFilter.setUserMin(0.0);
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
             // the last 3 attributes of the product (size, clockspeed and weight) should be set to "unavailable" if they are not applicable
 
@@ -62,12 +68,12 @@ class DoubleFilterTest {
             Collection<Product> filteredResults = internalFilter.useFilter(mockResults);
 
             assertEquals(expectedResults, filteredResults,  () -> {
-                StringBuilder out = new StringBuilder("Expected results:\n");
+                StringBuilder out = new StringBuilder("Expected results: length=" + expectedResults.size() + "\n");
                 for (Product product: expectedResults){
                     out.append(product).append("\n");
                 }
 
-                out.append("\nActual results:\n");
+                out.append("\nActual results: length=").append(filteredResults.size()).append("\n");
                 for (Product product: filteredResults){
                     out.append(product).append("\n");
                 }
@@ -76,17 +82,95 @@ class DoubleFilterTest {
             });
         }
 
-        @Test
+        static Stream<Arguments> useFilterArguments() {
+            // Could be refactored to simply return DoubleFilters.
+            // However it is like this such that the test can easily be refactored to take more arguments if needed.
+
+            // The values chosen ensure that if something is off, and a value is used when filtering, when it is not supposed to
+            // then the test will fail
+            List<Arguments> out = new ArrayList<>();
+
+            // create the combination of desired inputs
+            String[] strings = {"price", "weight"};
+
+            // Add filters for purely using db settings
+            for(String attribute: strings){
+                out.add(arguments(getTestFilter(attribute)));
+            }
+
+            // Add filters using a single user setting set
+            double userMin = 10.0;
+            double userMax = 10.0;
+            for(String attribute: strings){
+                DoubleFilter filter = getTestFilter(attribute);
+                filter.setUserMax(userMax);
+                out.add(arguments(filter));
+
+                filter = getTestFilter(attribute);
+                filter.setUserMin(userMin);
+                out.add(arguments(filter));
+            }
+
+            // Add filters that set both usermin and max, in such a way that the list is different than simply dbmin and max
+            userMin = 0.0;
+            userMax = 1000.0;
+            for(String attribute: strings){
+                double dbMin = -100.0;
+                double dbMax = 10000.0;
+                DoubleFilter filter = new DoubleFilter(0, "test name", "test description", attribute, dbMin, dbMax);
+                filter.setUserMin(userMin);
+                filter.setUserMax(userMax);
+                out.add(arguments(filter));
+            }
+
+
+            return out.stream();
+        }
+
         @DisplayName("Filtering an empty list of results")
-        void filteringAnEmptyListOfResults() {
-            DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", "price", 0, 1000);
-            internalFilter.setUserMax(1000.0);
-            internalFilter.setUserMin(0.0);
-            Collection<Product> emptyResults = new ArrayList<>();
+        @ParameterizedTest(name = "{0} - setUserMinAndMax={1} - inputList={2}")
+        @MethodSource("filteringAnEmptyListOfResultsArgument")
+        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) {
+            DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", productAttribute, 0, 1000);
+            if(setUserMinAndMax){
+                internalFilter.setUserMax(100.0);
+                internalFilter.setUserMin(10.0);
+            }
 
-            Collection<Product> filteredResults = internalFilter.useFilter(emptyResults);
+            // preparing the expected result
+            // Note: we create a new variable that doesn't reference inputlist since it might be modified during the action
+            Collection<Product> expectedResult;
 
-            assertEquals(new ArrayList<>(), filteredResults);
+            if(inputList == null){
+                expectedResult = null;
+            }else {
+                expectedResult = new ArrayList<>();
+            }
+
+            Collection<Product> filteredResults = internalFilter.useFilter(inputList);
+
+            assertEquals(expectedResult, filteredResults);
+        }
+
+        static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {
+            List<Arguments> out = new ArrayList<>();
+
+            // create the combination of desired inputs
+            // The order of the for loops determine the order of test cases.
+            // Currently it will switch productAttribute first, then switch between using user settings or not. Then it will switch to the null list
+            for (boolean nullInsteadOfList : new boolean[]{false, true}) {
+                for (boolean setUserMinAndMax : new boolean[]{false, true}) {
+                    for (String attribute : new String[]{"price", "weight"}) {
+                        if(nullInsteadOfList){
+                            out.add(arguments(attribute, setUserMinAndMax, null));
+                        }else {
+                            out.add(arguments(attribute, setUserMinAndMax, new ArrayList<Product>()));
+                        }
+                    }
+                }
+            }
+
+            return out.stream();
         }
 
         @Nested

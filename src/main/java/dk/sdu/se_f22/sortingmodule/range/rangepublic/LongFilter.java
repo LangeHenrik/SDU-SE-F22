@@ -80,7 +80,11 @@ class LongFilter extends RangeFilterClass{
     Collection<Product> filterList(Collection<Product> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max
-      
+
+        if(inputs == null){
+            return null;
+        }
+
         List<Product> filteredResults = new ArrayList<>();
 
         // loop over all the products in the list and access the correct attribute:

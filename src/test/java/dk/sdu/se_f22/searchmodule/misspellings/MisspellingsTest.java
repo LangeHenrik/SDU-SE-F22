@@ -13,9 +13,7 @@ class MisspellingsTest {
 
     ArrayList<String> listWrong = new ArrayList<>();
     ArrayList<String> listCorrect = new ArrayList<>();
-
-
-
+    
     @BeforeEach
     void setUp() {
         try (Connection connection = DBConnection.getPooledConnection()) {

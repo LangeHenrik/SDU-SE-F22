@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.searchmodule.misspellings;
 
-import dk.sdu.se_f22.searchmodule.misspellings.Misspellings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

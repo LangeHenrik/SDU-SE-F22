@@ -13,7 +13,7 @@ class MisspellingsTest {
 
     ArrayList<String> listWrong = new ArrayList<>();
     ArrayList<String> listCorrect = new ArrayList<>();
-    
+
     @BeforeEach
     void setUp() {
         try (Connection connection = DBConnection.getPooledConnection()) {
@@ -32,7 +32,7 @@ class MisspellingsTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //Wrong methods for filter method
+        //Wrong words for filter method
         listWrong.add("HEJ");
         listWrong.add("HAJ");
         listWrong.add("HIJ");

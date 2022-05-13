@@ -21,12 +21,13 @@ class TokenizationTest {
     @BeforeEach
     void setUp() {
         DelimiterSettings ds = new DelimiterSettings();
-        try {
-            PreparedStatement stmt = DBConnection.getConnection().prepareStatement("DELETE FROM searchtokendelimiters");
+        try (Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM searchtokendelimiters");
             stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         ds.addDelimiter(".");
         ds.addDelimiter("!");
         ds.addDelimiter(" ");

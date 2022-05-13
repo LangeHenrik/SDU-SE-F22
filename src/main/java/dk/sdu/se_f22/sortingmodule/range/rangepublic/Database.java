@@ -28,7 +28,7 @@ public class Database implements DatabaseInterface {
 
         // By using try-with-ressources we do not have to manually handle closing the connection
         // Thanks AutoCloseable
-        try(Connection connection = DBConnection.getPooledConnection()) {
+        try (Connection connection = DBConnection.getPooledConnection()) {
             switch (filter.getType()) {
                 case DOUBLE -> {
                     statement = connection.prepareStatement(
@@ -91,7 +91,7 @@ public class Database implements DatabaseInterface {
     @Override
     public RangeFilter read(int id) throws UnknownFilterTypeException {
         RangeFilter dbRangeFilter = null;
-        try(Connection connection = DBConnection.getPooledConnection()) {
+        try (Connection connection = DBConnection.getPooledConnection()) {
             // First get the type of the filter by calling the stored function:
             // "SELECT get_type_of_filter(filter_id);"
             // where filter_id is the id we are interested in retrieving
@@ -187,7 +187,7 @@ public class Database implements DatabaseInterface {
 
     @Override
     public RangeFilter update(RangeFilter filter) throws SQLException, InvalidFilterTypeException {
-        try(Connection connection = DBConnection.getPooledConnection()) {
+        try (Connection connection = DBConnection.getPooledConnection()) {
 
             PreparedStatement statement = null;
 
@@ -253,12 +253,12 @@ public class Database implements DatabaseInterface {
     public RangeFilter delete(int id) throws UnknownFilterTypeException, IdNotFoundException {
 
         RangeFilter dbRangeFilter = read(id);
-        if (dbRangeFilter == null){
+        if (dbRangeFilter == null) {
             throw new IdNotFoundException("Couldn't find a filter with this ID: " + id);
         }
 
         PreparedStatement statement = null;
-        try(Connection connection = DBConnection.getPooledConnection()) {
+        try (Connection connection = DBConnection.getPooledConnection()) {
             switch (dbRangeFilter.getType()) {
                 // IDEA: Refactor so that the switch determines the name of the view to delete from.
                 // That can then be put into SQL string below.
@@ -283,24 +283,37 @@ public class Database implements DatabaseInterface {
                                 queryAttributes
                         );
                 case LONG -> statement = connection
-                            .prepareStatement(
-                                    "DELETE FROM sortingrangelongview WHERE filterId = ?;",
-                                    queryAttributes
-                            );
+                        .prepareStatement(
+                                "DELETE FROM sortingrangelongview WHERE filterId = ?;",
+                                queryAttributes
+                        );
                 case TIME -> statement = connection
-                            .prepareStatement(
-                                    "DELETE FROM sortingrangetimeview WHERE filterId = ?;",
-                                    queryAttributes
-                            );
+                        .prepareStatement(
+                                "DELETE FROM sortingrangetimeview WHERE filterId = ?;",
+                                queryAttributes
+                        );
             }
+
+            // proposed improvement bu Thor:
+//            String selectedView = "sortingrangedoubleview";
+//            // Doubleview has been chosen as default because it makes intelliJ happy when creating the delete statement below
+//            switch (dbRangeFilter.getType()) {
+//                case DOUBLE -> selectedView = "sortingrangedoubleview";
+//                case LONG -> selectedView = "sortingrangelongview";
+//                case TIME -> selectedView = "sortingrangetimeview";
+//                default -> selectedView = "";
+//            }
+//
+//            String query = "DELETE FROM " + selectedView + " WHERE filterId = ?;";
+//            statement = connection.prepareStatement(query, queryAttributes);
 
             statement.setInt(1, id);
             int result_count = statement.executeUpdate();
-            if (result_count < 1){
+            if (result_count < 1) {
                 throw new SQLException("Didn't delete filter");
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -311,7 +324,7 @@ public class Database implements DatabaseInterface {
     @Override
     public List<RangeFilter> readAllFilters() {
         List<RangeFilter> outList = new ArrayList<>();
-        try(Connection connection = DBConnection.getPooledConnection()) {
+        try (Connection connection = DBConnection.getPooledConnection()) {
 
             // it is deliberate that they are all in the same try catch block since if one fails, they will all fail.
             // This is desired behaviour, and also mimicks what would happen for the case where we add the exception to the method signature.

@@ -20,7 +20,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class TimeFilterTest {
 
-    private static TimeFilter getTestFilter(String productAttribute) {
+    static TimeFilter getTestFilter(String productAttribute) {
         Instant dbMin = Instant.parse("2018-11-30T15:35:24.00Z");
         Instant dbMax = Instant.parse("2022-11-30T15:35:24.00Z");
         return new TimeFilter(0, "test name", "test description", productAttribute, dbMin, dbMax);

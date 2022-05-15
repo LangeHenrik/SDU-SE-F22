@@ -12,44 +12,62 @@ public class MisspellingsController {
     private Misspellings misspelling;
 
     @FXML
-    private TextField misInput, corInput, misUpInput, deleteInput,
-            updateInput, updateCorrectionInput, filterInput;
+    private TextField misInput, corInput, deleteInput, updateInput, updateCorrectionInput, filterInput;
 
     @FXML
     private TextArea outputAdd, outputDelete, outputUpdate, outputFilter;
 
     public void initialize(){
+        outputAdd.setText("");
+        outputDelete.setText("");
+        deleteInput.setText("");
         misspelling = new Misspellings();
     }
 
     public void addMis(ActionEvent e){
         if (!misInput.getText().isEmpty() && !corInput.getText().isEmpty()){
-            misspelling.addMisspelling(misInput.getText(), corInput.getText());
-            outputAdd.setText("The misspelling: "+misInput.getText()+" has been added. The correct spelling is: "+corInput.getText());
-        } else{
-            outputAdd.setText("Write a misspelling and it's correct spelling");
+            if (misspelling.addMisspelling(misInput.getText(), corInput.getText())) {
+                outputAdd.appendText("The misspelling: \"" + misInput.getText() + "\" has been added. " +
+                        "The correct spelling is: \"" + corInput.getText() + "\"\n\n");
+            } else {
+                outputAdd.appendText("There was an error adding the misspelling.\n" +
+                        "It probably already exists or a space character was used.\n\n");
+            }
+        } else if ((!misInput.getText().isEmpty() && corInput.getText().isEmpty()) || (misInput.getText().isEmpty() && !corInput.getText().isEmpty())){
+            outputAdd.appendText("Need input in both fields.\n\n");
+        } else {
+            outputAdd.appendText("Need input.\n\n");
         }
 
     }
 
     public void deleteMis(ActionEvent e){
-        if (!misInput.getText().isEmpty() && misUpInput.getText().isEmpty() && corInput.getText().isEmpty()) {
-            misspelling.deleteMisspelling(misInput.getText());
-            outputDelete.setText("The misspelling: " + misUpInput.getText() + " has been deleted");
-        }else{
-            outputDelete.setText("You only have to write what misspelling you want to delete");
+        if (!deleteInput.getText().isEmpty()) {
+            if (misspelling.deleteMisspelling(deleteInput.getText())){
+                outputDelete.appendText("The misspelling: \"" + deleteInput.getText() + "\" has been deleted\n");
+            } else {
+                outputDelete.appendText("There was an error deleting the misspelling.\n" +
+                        "It possibly does not exist or there has been a spelling mistake.\n\n");
+            }
+
+        } else {
+            outputDelete.appendText("Need input.\n\n");
         }
     }
 
     public void updateMis(ActionEvent e){
-        if (!misInput.getText().isEmpty() && !misUpInput.getText().isEmpty()){
-            misspelling.updateMisspelling(misInput.getText(), misUpInput.getText());
-            outputUpdate.setText("The misspelling: "+misInput.getText()+" has been updated. The the new spelling is: "+misUpInput.getText());
-        }else if (!corInput.getText().isEmpty()){
-            outputUpdate.setText("You have to write what misspelling you want to update and what the new updated misspelling is");
-        }
-        else{
-            outputUpdate.setText("Write what misspelling you want to update and what misspelling it should be instead");
+        if (!updateInput.getText().isEmpty() && !updateCorrectionInput.getText().isEmpty()){
+            if (misspelling.updateMisspelling(updateCorrectionInput.getText(), updateInput.getText())) {
+                outputUpdate.appendText("The misspelling: \"" + updateInput.getText() + "\" has been updated. " +
+                        "The the new (mis)spelling is: \"" + updateCorrectionInput.getText() + "\"\n\n");
+            } else {
+                outputUpdate.appendText("There was an error updating the misspelling.\n" +
+                        "It possibly does not exist or there has been a spelling mistake.\n\n");
+            }
+        } else if ((!updateInput.getText().isEmpty() || updateCorrectionInput.getText().isEmpty()) || (updateInput.getText().isEmpty() || !updateCorrectionInput.getText().isEmpty())) {
+            outputUpdate.appendText("Need input in both fields.\n\n");
+        } else  {
+            outputUpdate.appendText("Need input.\n\n");
         }
     }
 
@@ -69,6 +87,8 @@ public class MisspellingsController {
                 outputString += wordsOut + " ";
             }
             outputFilter.setText(outputString);
+        } else {
+            outputFilter.setText("Need input.");
         }
     }
 

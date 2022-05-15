@@ -2,7 +2,6 @@ package dk.sdu.se_f22.searchmodule.misspellings;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
@@ -32,42 +31,33 @@ class MisspellingsTest {
                     connection.prepareStatement("INSERT INTO misspellings (wrong, correct) VALUES ('HAJ','HEJ') ");
             PreparedStatement filterTest2 =
                     connection.prepareStatement("INSERT INTO misspellings (wrong, correct) VALUES ('HIJ','HEJ') ");
-            filterTest1.execute();
-            filterTest2.execute();
             PreparedStatement testMisspelling =
                     connection.prepareStatement("INSERT INTO misspellings (wrong, correct) VALUES ('TestMisspelling','MisspellingTest') ");
             testMisspelling.execute();
+            filterTest1.execute();
+            filterTest2.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    @DisplayName("Tests the filter method by comparing two ArrayLists, to misspellings saved in the database during setup.")
+    @Test
+    void filterTest() {
         //Wrong words for filter method
         listWrong.add("HEJ");
         listWrong.add("HAJ");
         listWrong.add("HIJ");
         listWrong.add("HEJ");
+
         //Correct words for filter method
         listCorrect.add("HEJ");
         listCorrect.add("HEJ");
         listCorrect.add("HEJ");
         listCorrect.add("HEJ");
-    }
 
-    @AfterEach
-    void tearDown() {
-        listWrong.clear();
-        listCorrect.clear();
-        try (Connection connection = DBConnection.getPooledConnection()) {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("DELETE FROM misspellings");
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @DisplayName("Tests the filter method by comparing two ArrayLists, to misspellings saved in the database during setup.")
-    @Test
-    void filterTest() {
        assertEquals(listCorrect, misspelling.filter(listWrong));
    }
 

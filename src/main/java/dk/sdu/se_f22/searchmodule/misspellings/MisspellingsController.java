@@ -12,10 +12,11 @@ public class MisspellingsController {
     private Misspellings misspelling;
 
     @FXML
-    TextField misInput, corInput, misUpInput, filterInput;
+    private TextField misInput, corInput, misUpInput, deleteInput,
+            updateInput, updateCorrectionInput, filterInput;
 
     @FXML
-    TextArea output, outputFilter;
+    private TextArea outputAdd, outputDelete, outputUpdate, outputFilter;
 
     public void initialize(){
         misspelling = new Misspellings();
@@ -24,31 +25,31 @@ public class MisspellingsController {
     public void addMis(ActionEvent e){
         if (!misInput.getText().isEmpty() && !corInput.getText().isEmpty()){
             misspelling.addMisspelling(misInput.getText(), corInput.getText());
-            output.setText("The misspelling: "+misInput.getText()+" has been added. The correct spelling is: "+corInput.getText());
+            outputAdd.setText("The misspelling: "+misInput.getText()+" has been added. The correct spelling is: "+corInput.getText());
         } else{
-            output.setText("Write a misspelling and it's correct spelling");
+            outputAdd.setText("Write a misspelling and it's correct spelling");
         }
 
-    }
-
-    public void updateMis(ActionEvent e){
-        if (!misInput.getText().isEmpty() && !misUpInput.getText().isEmpty()){
-            misspelling.updateMisspelling(misInput.getText(), misUpInput.getText());
-            output.setText("The misspelling: "+misInput.getText()+" has been updated. The the new spelling is: "+misUpInput.getText());
-        }else if (!corInput.getText().isEmpty()){
-            output.setText("You have to write what misspelling you want to update and what the new updated misspelling is");
-        }
-        else{
-            output.setText("Write what misspelling you want to update and what misspelling it should be instead");
-        }
     }
 
     public void deleteMis(ActionEvent e){
         if (!misInput.getText().isEmpty() && misUpInput.getText().isEmpty() && corInput.getText().isEmpty()) {
             misspelling.deleteMisspelling(misInput.getText());
-            output.setText("The misspelling: " + misUpInput.getText() + " has been deleted");
+            outputDelete.setText("The misspelling: " + misUpInput.getText() + " has been deleted");
         }else{
-            output.setText("You only have to write what misspelling you want to delete");
+            outputDelete.setText("You only have to write what misspelling you want to delete");
+        }
+    }
+
+    public void updateMis(ActionEvent e){
+        if (!misInput.getText().isEmpty() && !misUpInput.getText().isEmpty()){
+            misspelling.updateMisspelling(misInput.getText(), misUpInput.getText());
+            outputUpdate.setText("The misspelling: "+misInput.getText()+" has been updated. The the new spelling is: "+misUpInput.getText());
+        }else if (!corInput.getText().isEmpty()){
+            outputUpdate.setText("You have to write what misspelling you want to update and what the new updated misspelling is");
+        }
+        else{
+            outputUpdate.setText("Write what misspelling you want to update and what misspelling it should be instead");
         }
     }
 

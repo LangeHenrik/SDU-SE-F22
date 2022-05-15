@@ -1,6 +1,8 @@
 package dk.sdu.se_f22.searchmodule.misspellings;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
@@ -9,10 +11,16 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MisspellingsTest {
-    Misspellings misspelling = new Misspellings();
 
+    Misspellings misspelling = new Misspellings();
     ArrayList<String> listWrong = new ArrayList<>();
     ArrayList<String> listCorrect = new ArrayList<>();
+
+    @BeforeAll
+    static void dbMigration(){
+        DBMigration migrator = new DBMigration();
+        migrator.migrate();
+    }
 
     @BeforeEach
     void setUp() {

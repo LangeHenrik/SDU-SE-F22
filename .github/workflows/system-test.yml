@@ -17,6 +17,7 @@ jobs:
           POSTGRES_PASSWORD: postgres_password
           POSTGRES_PORT: 5432
           POSTGRES_USER: postgres_user
+          MAVEN_OPTS: "--add-exports java.base/java.lang=ALL-UNNAMED --add-exports java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED"
         ports:
           - 5432:5432
         options: >-

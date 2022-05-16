@@ -222,7 +222,7 @@ public class CategoryDBConnection{
         return 0;
     }
 
-    protected void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
+    protected int createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
         boolean notValid = false;
 
         if (name.length() < 0 && name.length() > 40)
@@ -262,6 +262,8 @@ public class CategoryDBConnection{
                         createCategoryStatement.setInt(3, parentID);
                         createCategoryStatement.setInt(4, generatedKey);
                         createCategoryStatement.execute();
+
+                        return generatedKey;
                     }
                 } else {
                     System.out.println("There is no requirement status with ID: " + requirementsFieldName);
@@ -275,9 +277,10 @@ public class CategoryDBConnection{
         } else {
             System.out.println("Invalid input");
         }
+        return 0;
     }
 
-    protected void createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
+    protected int createCategory(String name, String description, String requirementsValue, int requirementsFieldname) {
         boolean notValid = false;
 
         if (name.length() > 0 && name.length() > 40)
@@ -314,6 +317,8 @@ public class CategoryDBConnection{
                         createCategoryStatement.setString(2, description);
                         createCategoryStatement.setInt(3, generatedKey);
                         createCategoryStatement.execute();
+
+                        return generatedKey;
                     }
                 } else {
                     System.out.println("There is no requirement status with ID: " + requirementsFieldname);
@@ -327,5 +332,6 @@ public class CategoryDBConnection{
         } else {
             System.out.println("Invalid input");
         }
+        return 0;
     }
 }

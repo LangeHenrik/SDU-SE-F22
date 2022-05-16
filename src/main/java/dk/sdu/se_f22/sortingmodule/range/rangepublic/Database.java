@@ -7,7 +7,9 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class Database implements DatabaseInterface {
     private final String[] queryAttributes = {"filterid", "name", "description", "productattribute", "min", "max"};
@@ -156,13 +158,16 @@ public class Database implements DatabaseInterface {
     }
 
     private TimeFilter createTimeFilterFromResultset(ResultSet filterResultSet) throws SQLException {
+        // We need to force use of UTC for the testrunner
+        java.util.Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         return new TimeFilter(
                 filterResultSet.getInt("FilterId"),
                 filterResultSet.getString("Name"),
                 filterResultSet.getString("Description"),
                 filterResultSet.getString("ProductAttribute"),
-                filterResultSet.getTimestamp("Min").toInstant(),
-                filterResultSet.getTimestamp("Max").toInstant()
+                filterResultSet.getTimestamp("Min", cal).toInstant(),
+                filterResultSet.getTimestamp("Max", cal).toInstant()
         );
     }
 

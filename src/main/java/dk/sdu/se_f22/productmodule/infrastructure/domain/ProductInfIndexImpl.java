@@ -15,6 +15,7 @@ public class ProductInfIndexImpl implements ProductInfIndex{
 
     @Override
     public void indexProducts(List<BaseProduct> baseProducts) {
+        if (baseProducts == null) return; // This should never be here, but this is due to the ProductManager#backgroundUpdate sends a null object, instead of just giving an empty list.
         for (BaseProduct baseProduct : baseProducts) {
             List<String> tokenizedProduct = tokenize(baseProduct);
             List<String> filteredTokens = tokenFilter(tokenizedProduct);

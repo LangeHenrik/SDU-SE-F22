@@ -91,6 +91,130 @@ class CategoryDBConnectionTest {
         }
     }
 
+    @DisplayName("Update category name")
+    @Test
+    void updateCategoryNameTest() {
+        int newCategoryID = DBConnection.createCategory("TestNameFake", "TestDescription", "TestReqValue",1, 1);
+
+        DBConnection.updateName(newCategoryID, "TestName");
+
+        String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
+                "INNER JOIN requirements_values \n" +
+                "on categories.requirements_id = requirements_values.id \n" +
+                "INNER JOIN requirements_fieldnames \n" +
+                "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
+                "WHERE name = 'TestName'";
+
+        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+            ResultSet queryResultSet = queryStatement.executeQuery();
+
+            queryResultSet.next();
+
+            assertAll("Should return value from database",
+                    ()->assertEquals("TestName",queryResultSet.getString("name")),
+                    ()->assertEquals("TestDescription",queryResultSet.getString("description")),
+                    ()->assertEquals(1,queryResultSet.getInt("parent_id")),
+                    ()->assertEquals("name",queryResultSet.getString("fieldname")),
+                    ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
+            );
+        } catch (SQLException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @DisplayName("Update category description")
+    @Test
+    void updateCategoryDescriptionTest() {
+        int newCategoryID = DBConnection.createCategory("TestName", "TestDescriptionFake", "TestReqValue",1, 1);
+
+        DBConnection.updateDescription(newCategoryID, "TestDescription");
+
+        String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
+                "INNER JOIN requirements_values \n" +
+                "on categories.requirements_id = requirements_values.id \n" +
+                "INNER JOIN requirements_fieldnames \n" +
+                "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
+                "WHERE name = 'TestName'";
+
+        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+            ResultSet queryResultSet = queryStatement.executeQuery();
+
+            queryResultSet.next();
+
+            assertAll("Should return value from database",
+                    ()->assertEquals("TestName",queryResultSet.getString("name")),
+                    ()->assertEquals("TestDescription",queryResultSet.getString("description")),
+                    ()->assertEquals(1,queryResultSet.getInt("parent_id")),
+                    ()->assertEquals("name",queryResultSet.getString("fieldname")),
+                    ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
+            );
+        } catch (SQLException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @DisplayName("Update category parentID")
+    @Test
+    void updateCategoryParentIDTest() {
+        int newCategoryID = DBConnection.createCategory("TestName", "TestDescription", "TestReqValue",2, 1);
+
+        DBConnection.updateParentID(newCategoryID, 1);
+
+        String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
+                "INNER JOIN requirements_values \n" +
+                "on categories.requirements_id = requirements_values.id \n" +
+                "INNER JOIN requirements_fieldnames \n" +
+                "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
+                "WHERE name = 'TestName'";
+
+        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+            ResultSet queryResultSet = queryStatement.executeQuery();
+
+            queryResultSet.next();
+
+            assertAll("Should return value from database",
+                    ()->assertEquals("TestName",queryResultSet.getString("name")),
+                    ()->assertEquals("TestDescription",queryResultSet.getString("description")),
+                    ()->assertEquals(1,queryResultSet.getInt("parent_id")),
+                    ()->assertEquals("name",queryResultSet.getString("fieldname")),
+                    ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
+            );
+        } catch (SQLException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @DisplayName("Update category requirementsValue")
+    @Test
+    void updateCategoryRequirementsValueTest() {
+        int newCategoryID = DBConnection.createCategory("TestName", "TestDescription", "TestReqValueFake",1, 1);
+
+        DBConnection.updateRequirementsValue(newCategoryID, "TestReqValue");
+
+        String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
+                "INNER JOIN requirements_values \n" +
+                "on categories.requirements_id = requirements_values.id \n" +
+                "INNER JOIN requirements_fieldnames \n" +
+                "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
+                "WHERE name = 'TestName'";
+
+        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+            ResultSet queryResultSet = queryStatement.executeQuery();
+
+            queryResultSet.next();
+
+            assertAll("Should return value from database",
+                    ()->assertEquals("TestName",queryResultSet.getString("name")),
+                    ()->assertEquals("TestDescription",queryResultSet.getString("description")),
+                    ()->assertEquals(1,queryResultSet.getInt("parent_id")),
+                    ()->assertEquals("name",queryResultSet.getString("fieldname")),
+                    ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
+            );
+        } catch (SQLException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     @AfterEach
     public void deleteRow() {
         String sql2 = "DELETE FROM requirements_values WHERE value = 'TestReqValue'";

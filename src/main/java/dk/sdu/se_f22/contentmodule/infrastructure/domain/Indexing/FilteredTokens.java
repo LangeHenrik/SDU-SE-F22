@@ -17,6 +17,8 @@ class  FilteredTokens {
 
 
 
+
+    //Ikke brug for ny instans (muligvis)
      HTMLSite siteWithFilteredTokens(HTMLSite site) {
         List<String> tokens = new ArrayList<>(site.getTokens());
 

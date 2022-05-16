@@ -6,9 +6,7 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.sql.*;
 import java.time.Instant;
-import java.time.temporal.ChronoField;
 import java.util.*;
-import java.util.Date;
 
 public class Scoring implements IScoring {
 
@@ -120,14 +118,14 @@ public class Scoring implements IScoring {
     }
 
     @Override
-    public SearchHits scoreSort(SearchHits input, String type) {
+    public SearchHits scoreSort(SearchHits input, ScoreSortType type) {
 
         switch (type) {
-            case "all" -> input.setProducts(scoreSortAll(input.getProducts()));
-            case "price" -> input.setProducts(scoreSortPrice(input.getProducts()));
-            case "review" -> input.setProducts(scoreSortReview(input.getProducts()));
-            case "stock" -> input.setProducts(scoreSortStock(input.getProducts()));
-            case "date" -> input.setProducts(scoreSortDate(input.getProducts()));
+            case ALL -> input.setProducts(scoreSortAll(input.getProducts()));
+            case PRICE -> input.setProducts(scoreSortPrice(input.getProducts()));
+            case REVIEW -> input.setProducts(scoreSortReview(input.getProducts()));
+            case STOCK -> input.setProducts(scoreSortStock(input.getProducts()));
+            case DATE -> input.setProducts(scoreSortDate(input.getProducts()));
             default -> {
                 System.out.println("error: invalid sort type");
 

@@ -121,27 +121,24 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
     public void createProduct(Product product){
+        // calling stored procedure within db
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("INSERT into products (uuid,averageuserreview,instock" +
-                            ",ean,price,publisheddate,expirationdate" +
-                            ",category,name,description,size,clockspeed,weight) " +
-                            "values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            preparedStatement.setObject(1,product.getUuid());
-            preparedStatement.setDouble(2,product.getAverageUserReview());
-            preparedStatement.setArray(3, connection.createArrayOf("VARCHAR",
-                    product.getInStock().toArray()));
-            preparedStatement.setLong(4,product.getEan());
-            preparedStatement.setDouble(5,product.getPrice());
-            preparedStatement.setTimestamp(6,Timestamp.from(product.getPublishedDate()));
-            preparedStatement.setTimestamp(7,Timestamp.from(product.getExpirationDate()));
-            preparedStatement.setString(8,product.getCategory());
-            preparedStatement.setString(9,product.getName());
-            preparedStatement.setString(10,product.getDescription());
-            preparedStatement.setString(11,product.getSize());
-            preparedStatement.setDouble(12,product.getClockspeed());
-            preparedStatement.setDouble(13,product.getWeight());
-            preparedStatement.execute();
+            CallableStatement cs = connection.prepareCall("CALL insertproduct(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            cs.setString(1,product.getUuid().toString());
+            cs.setDouble(2,product.getAverageUserReview());
+            cs.setArray(3,connection.createArrayOf("VARCHAR",product.getInStock().toArray()));
+            cs.setLong(4,product.getEan());
+            cs.setDouble(5,product.getPrice());
+            cs.setTimestamp(6,Timestamp.from(product.getPublishedDate()));
+            cs.setTimestamp(7,Timestamp.from(product.getExpirationDate()));
+            cs.setString(8,product.getCategory());
+            cs.setString(9,product.getName());
+            cs.setString(10,product.getDescription());
+            cs.setString(11,product.getSize());
+            cs.setDouble(12,product.getClockspeed());
+            cs.setDouble(13,product.getWeight());
+
+            cs.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -149,29 +146,51 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
     public List<Product> getProducts(){
-        List<Product> ProductList = new ArrayList<>();
+        List<Product> productList = new ArrayList<>();
+
         try {
-            PreparedStatement p = connection.prepareStatement("select * from products");
+            // query all products
+
+            PreparedStatement p = connection.prepareStatement("select product.productid," +
+                    "averageuserreview,ean,price,publisheddate,expirationdate,categories.category," +
+                    "name,description,storage.size,specs.clockspeed,product.weight from product\n" +
+                    "LEFT JOIN  productspecs on product.productid = productspecs.productid\n" +
+                    "LEFT JOIN  specs on productspecs.specid = specs.specid\n" +
+                    "LEFT JOIN  productstorage on productstorage.productid = product.productid\n" +
+                    "LEFT JOIN  storage on productstorage.storageid = storage.storageid\n" +
+                    "LEFT JOIN categories on categories.categoryid = product.categoryid;");
             ResultSet resultSet = p.executeQuery();
+
             while(resultSet.next()){
-                ProductList.add(new Product(UUID.fromString(resultSet.getString(1)),
-                        resultSet.getDouble(2),
-                        List.of(resultSet.getArray(3).toString()),
-                        resultSet.getInt(4),
-                        resultSet.getDouble(5),
-                        resultSet.getTimestamp(6).toInstant(),
-                        resultSet.getTimestamp(7).toInstant(),
-                        resultSet.getString(8),
-                        resultSet.getString(9),
-                        resultSet.getString(10),
-                        resultSet.getString(11),
-                        resultSet.getDouble(12),
-                        resultSet.getDouble(13)));
+                List<String> citylist = new ArrayList<>();
+
+                //iterate through cities in the city column of stock table for all products
+                PreparedStatement pcity = connection.prepareStatement("select city from stock" +
+                        " inner join productstock on productstock.stockid = stock.stockid " +
+                        "INNER JOIN product on product.productid = productstock.productid" +
+                        " WHERE product.productid = ?");
+                pcity.setString(1,resultSet.getString(1));
+                ResultSet citySet = pcity.executeQuery();
+
+                while(citySet.next()){
+                    citylist.add(citySet.getString(1));
+                }
+
+                // create product object
+                productList.add(new Product(UUID.fromString(resultSet.getString(1)),
+                        resultSet.getDouble(2), citylist,resultSet.getInt(3),
+                        resultSet.getDouble(4),resultSet.getTimestamp(5).toInstant(),
+                        resultSet.getTimestamp(6).toInstant(), resultSet.getString(7),
+                        resultSet.getString(8), resultSet.getString(9),
+                        resultSet.getString(10), resultSet.getDouble(11),
+                        resultSet.getDouble(12)
+                ));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return ProductList;
+        return productList;
     }
 }
 

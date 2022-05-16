@@ -17,17 +17,8 @@ class  FilteredTokens {
 
 
 
-
-
-
-
-
      HTMLSite siteWithFilteredTokens(HTMLSite site) {
         List<String> tokens = new ArrayList<>(site.getTokens());
-
-
-
-
 
 
         //tokens.set(StopWords.filter(tokens));
@@ -38,8 +29,6 @@ class  FilteredTokens {
         //save log data??
 
         List<String> filteredTokens = new ArrayList<>();
-
-
 
         return new HTMLSite(site.getId(), site.getHtmlCode(), filteredTokens);
     }

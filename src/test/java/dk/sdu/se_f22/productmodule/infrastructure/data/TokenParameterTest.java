@@ -72,9 +72,12 @@ class TokenParameterTest {
     void load() {
         TokenParameter loadedTokenParameter = TokenParameterStore.loadTokenParameter();
 
-        try {
-            PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement("SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;");
+        try (
+            PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement(
+            "SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;"
+            );
             ResultSet result =  stmt.executeQuery();
+        ) {
 
             if (result.next()) {
                 // If hit was found, compared the actual object returned by the load method to the DB values.

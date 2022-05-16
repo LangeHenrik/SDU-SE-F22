@@ -16,15 +16,14 @@ class TokenParameterStore  {
 			sb.append(ignored);
 		}
 		String ignoredChars = sb.toString();
-		try {
-			PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement
-					("INSERT INTO token_parameters(delimiter, ignored_chars, type) VALUES (?,?,?)");
+		try (PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement
+			("INSERT INTO token_parameters(delimiter, ignored_chars, type) VALUES (?,?,?)");) {
+
 			stmt.setString(1, tp.getDelimiter());
 			stmt.setString(2, ignoredChars);
 			stmt.setString(3, "Product");
 
 			stmt.execute();
-			stmt.close();
 		}
 		catch (SQLException ex) {
 			ex.printStackTrace();
@@ -32,14 +31,12 @@ class TokenParameterStore  {
 	}
 
 	public static TokenParameter loadTokenParameter() {
-		try{
-			PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement("SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;");
-			ResultSet queryResultSet = stmt.executeQuery();
+		try (PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement("SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;");
+			 ResultSet queryResultSet = stmt.executeQuery();) {
+
 			if(queryResultSet.next()){
 				return new TokenParameter(queryResultSet.getString("delimiter"),queryResultSet.getString("ignored_chars"));
 			}
-			queryResultSet.close();
-			stmt.close();
 		}
 		catch (SQLException ex) {
 			ex.printStackTrace();

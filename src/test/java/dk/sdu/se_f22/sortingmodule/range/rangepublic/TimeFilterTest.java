@@ -91,8 +91,6 @@ class TimeFilterTest {
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
-            // Note: Not up to the standard of our unit tests, because of multiple asserts
-            // TODO refactor
             assertEquals(7, mockResults.size());
 
             // preparing the expected result list

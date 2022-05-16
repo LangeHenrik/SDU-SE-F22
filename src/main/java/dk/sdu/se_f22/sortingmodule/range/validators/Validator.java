@@ -35,7 +35,7 @@ public class Validator {
             throw new InvalidFilterException("min cannot be greater than max");
         }
     }
-    public static void MaxLessThanMin(Long min, Long max) throws InvalidFilterException{
+    public static void MaxLessThanMin(long min, long max) throws InvalidFilterException{
         if (min > max) {
             throw new InvalidFilterException("min cannot be greater than max");
         }

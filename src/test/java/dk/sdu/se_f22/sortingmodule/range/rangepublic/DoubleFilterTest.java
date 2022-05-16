@@ -52,8 +52,8 @@ class DoubleFilterTest {
         void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
             //Creating filter through getTestFilter method
             DoubleFilter filter = getTestFilter(productAttribute);
-            Double userMin = 10.0;
-            Double userMax = 100.0;
+            double userMin = 10.0;
+            double userMax = 100.0;
             filter.setUserMin(userMin);
             filter.setUserMax(userMax);
 
@@ -269,7 +269,4 @@ class DoubleFilterTest {
             }
         }
     }
-
-
-    //todo test setters
 }

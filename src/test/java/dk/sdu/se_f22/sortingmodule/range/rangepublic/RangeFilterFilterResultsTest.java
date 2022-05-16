@@ -10,6 +10,8 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationExcepti
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +32,9 @@ class RangeFilterFilterResultsTest {
         mockFilters.add(new DoubleFilter("test name", "test description", "price", 1, 2));
     }
 
+    // Test that an exception is thrown if an illegal implementation is used
+    // Use the list of filters and add one more that is illegally implemented
+
     /**
      * @return A list containing 3 filters. <br>
      * 0 DoubleFilter "price" 0 1000 <br>
@@ -46,7 +51,7 @@ class RangeFilterFilterResultsTest {
         return out;
     }
 
-    private Brand[] getBrandArray(){
+    private Brand[] getBrandArray() {
         return new Brand[]{
                 new Brand("Gucci", "expensive", "early", "Somewhere"),
                 new Brand("Lenovo", "computer brand", "sometime", "asia"),
@@ -54,7 +59,7 @@ class RangeFilterFilterResultsTest {
         };
     }
 
-    private SearchHits getSearchHitsWithBrandAndContent(){
+    private SearchHits getSearchHitsWithBrandAndContent() {
         //Prepare the searchHits object by setting elements for the 2 other types of content
         SearchHits emptyHits = new SearchHits();
         // Set brands:
@@ -135,14 +140,46 @@ class RangeFilterFilterResultsTest {
         Assertions.assertEquals(expectedContent, result.getContents());
     }
 
-    @Test
-    @Disabled("Not yet written")
+    @ParameterizedTest(name = "Reverse filter order {0}")
     @DisplayName("Filter results with non empty lists")
-    void filterResultsWithNonEmptyLists() {
+    @ValueSource(booleans = {false, true})
+    void filterResultsWithNonEmptyLists(boolean reverseFilterList) throws IllegalImplementationException {
         // Create one of each different RangeFilter type
         // Make csv file with products - make sure the products which is accepted by a filters min/max range also is accepted by the other filters min/max range
         // 2 products should be removed by each filter
+        // For each filter there should be 2 safe products which are on the other side of the threshold and thus should not be removed
         // Assert the filtered list is equal to the expected results
 
+        SearchHits hits = getSearchHitsWithBrandAndContent();
+
+        // This is not good but is necessary due to a lacking implementation of equals methods in brands and content classes
+        Collection<Brand> expectedBrands = hits.getBrands();
+        Collection<Content> expectedContent = hits.getContents();
+
+        List<Product> products = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForRangeFilterFilterResultsTest.csv", true);
+        List<Product> expectedProducts = Helpers.readMockProductResultsFromFile("rangepublic/ExpectedProductsForRangeFilterFilterResultsTest.csv", true);
+
+
+        hits.setProducts(products);
+
+        List<RangeFilter> rangeFilters = getTestFilters();
+
+        if (reverseFilterList) {
+            List<RangeFilter> reversed = new ArrayList<>();
+            for (RangeFilter filter : rangeFilters) {
+                reversed.add(0, filter);
+            }
+
+            rangeFilters = reversed;
+        }
+
+        SearchHits result = RangeFilterFilterResults.filterResults(hits, rangeFilters);
+
+        // We use toString, because the equals method has not been overridden in Product.
+        // The toString comparison however will provide the exact same results as a properly implemented equals in this case
+        Assertions.assertEquals(expectedProducts.toString(), result.getProducts().toString());
+
+        Assertions.assertEquals(expectedBrands, result.getBrands());
+        Assertions.assertEquals(expectedContent, result.getContents());
     }
 }

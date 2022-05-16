@@ -20,6 +20,10 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class LongFilterTest {
 
+    /**
+     * The returned filter has a min of 12345673 and a max of 12345675. <br>
+     * It looks at the attribute: ean
+     */
     static LongFilter getTestFilter() {
         return new LongFilter(0, "test name", "test description", "ean", 12345673, 12345675);
     }

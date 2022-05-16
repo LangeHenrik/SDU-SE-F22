@@ -20,6 +20,13 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class TimeFilterTest {
 
+    /**
+     *The returned filter has: <br>
+     * min: 2018-11-30T15:35:24.00Z<br>
+     * max: 2022-11-30T15:35:24.00Z
+     *
+     * @param productAttribute can be either "publishedDate" or "expirationDate"
+     */
     static TimeFilter getTestFilter(String productAttribute) {
         Instant dbMin = Instant.parse("2018-11-30T15:35:24.00Z");
         Instant dbMax = Instant.parse("2022-11-30T15:35:24.00Z");

@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DoubleFilterTest {
+    /**
+     * The returned DoubleFilter has a min of 0 and a max of 1000
+     */
     static DoubleFilter getTestFilter(String productAttribute) {
         return new DoubleFilter(0, "test name", "test description", productAttribute, 0.0, 1000.0);
     }

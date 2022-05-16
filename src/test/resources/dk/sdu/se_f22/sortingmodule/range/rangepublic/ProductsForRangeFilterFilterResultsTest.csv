@@ -1,13 +1,13 @@
 id,average user review,ean,price,published date,expiration date,category,name,description,size,clockspeed,weight
-2c8ee936-cabc-11ec-9d64-0242ac120002,2.5,12345674,-1,2020-11-30T15:35:24.00,2024-11-30T15:35:24.00,pc,Double1,Should be removed,unavailable,2,1
-2c8ee936-cabc-11ec-9d64-0242ac120002,20.2,12345674,1000,2020-11-30T15:35:24.00,2025-11-30T15:35:23.00,monitor,Double2,kdjrg rdg,unavailable,3,2
-2c8ee936-cabc-11ec-9d64-0242ac120002,3.9,12345674,1001,2020-11-30T15:35:24.00,2025-11-30T15:35:24.00,hdd,Double3,Should be removed,unavailable,30,4
 2c8ee936-cabc-11ec-9d64-0242ac120002,2.9,12345674,0,2020-11-30T15:35:24.00,2025-11-30T15:35:25.00,sshd,Double4,test capacity boi 2.0,unavailable,4,90
-2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345674,745,2018-11-30T15:35:24.00,2026-11-30T15:35:24.00,pc,Time1,very testy,unavailable,unavailable,unavailable
-2c8ee936-cabc-11ec-9d64-0242ac120002,3.4,12345674,100,2022-11-30T15:35:24.00,2020-11-30T15:35:24.00,ssd,Time2,jhgyfjh ,unavailable,unavailable,unavailable
 2c8ee936-cabc-11ec-9d64-0242ac120002,3.4,12345674,100,2018-11-30T15:35:23.00,2020-11-30T15:35:24.00,ssd,Time3,Should be removed,unavailable,unavailable,unavailable
+2c8ee936-cabc-11ec-9d64-0242ac120002,3.9,12345674,1001,2020-11-30T15:35:24.00,2025-11-30T15:35:24.00,hdd,Double3,Should be removed,unavailable,30,4
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345674,745,2018-11-30T15:35:24.00,2026-11-30T15:35:24.00,pc,Time1,very testy,unavailable,unavailable,unavailable
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345675,54,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,Long2,very testyf,unavailable,unavailable,unavailable
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345672,54,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,Long4,Should be removed,unavailable,unavailable,unavailable
 2c8ee936-cabc-11ec-9d64-0242ac120002,3.4,12345674,100,2022-11-30T15:35:25.00,2020-11-30T15:35:24.00,ssd,Time4,Should be removed,unavailable,unavailable,unavailable
 2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345673,732,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,Long1,lhjy,unavailable,unavailable,unavailable
-2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345675,54,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,Long2,very testyf,unavailable,unavailable,unavailable
+2c8ee936-cabc-11ec-9d64-0242ac120002,20.2,12345674,1000,2020-11-30T15:35:24.00,2025-11-30T15:35:23.00,monitor,Double2,kdjrg rdg,unavailable,3,2
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.5,12345674,-1,2020-11-30T15:35:24.00,2024-11-30T15:35:24.00,pc,Double1,Should be removed,unavailable,2,1
+2c8ee936-cabc-11ec-9d64-0242ac120002,3.4,12345674,100,2022-11-30T15:35:24.00,2020-11-30T15:35:24.00,ssd,Time2,jhgyfjh ,unavailable,unavailable,unavailable
 2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345676,54,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,Long3,Should be removed,unavailable,unavailable,unavailable
-2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345672,54,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,Long4,Should be removed,unavailable,unavailable,unavailable

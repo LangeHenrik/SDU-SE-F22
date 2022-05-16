@@ -5,7 +5,6 @@ import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Content;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import dk.sdu.se_f22.sortingmodule.range.RangeSearchResultMock;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -22,16 +21,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Execution(ExecutionMode.CONCURRENT)
 // Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterFilterResultsTest {
-    private List<RangeSearchResultMock> mockResults;
-    private List<RangeFilter> mockFilters;
-
-    @BeforeEach
-    void setup() {
-        mockResults = new ArrayList<>();
-        mockFilters = new ArrayList<>();
-        mockFilters.add(new DoubleFilter("test name", "test description", "price", 1, 2));
-    }
-
     // Test that an exception is thrown if an illegal implementation is used
     // Use the list of filters and add one more that is illegally implemented
 

@@ -129,7 +129,7 @@ class DoubleFilterTest {
             });
         }
 
-        static Stream<Arguments> useFilterArguments() throws IlligalMinMaxException {
+        static Stream<Arguments> useFilterArguments() throws IllegalMinMaxException {
             // Could be refactored to simply return DoubleFilters.
             // However it is like this such that the test can easily be refactored to take more arguments if needed.
 
@@ -270,19 +270,15 @@ class DoubleFilterTest {
                 @ParameterizedTest
                 @ValueSource(doubles = {2.0, 3.5, 1000.0})
                 @DisplayName("Set valid DoubleFilter userMax")
-                void setValidDoubleFilterUserMax (double input) throws IlligalMinMaxException {
+                void setValidDoubleFilterUserMax (double input) throws IllegalMinMaxException {
                     DoubleFilter doubleFilter = new DoubleFilter(
                             "Test Name",
                             "Test Discription",
                             "Test product Attribute",
                             1, 1000);
 
-                    try {
-                        Assertions.assertEquals(doubleFilter.setUserMax(input), doubleFilter.getUserMaxDouble());
-                    } catch (IllegalMinMaxException e) {
-                        e.printStackTrace();
-                        fail("Failed to set userMin " + input);
-                    }
+                    doubleFilter.setUserMax(input);
+                    Assertions.assertEquals(input, doubleFilter.getUserMaxDouble());
                 }
 
                 @ParameterizedTest

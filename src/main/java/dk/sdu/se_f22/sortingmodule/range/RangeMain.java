@@ -4,10 +4,7 @@ import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 
 

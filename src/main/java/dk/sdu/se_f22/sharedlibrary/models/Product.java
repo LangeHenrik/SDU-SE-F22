@@ -39,6 +39,9 @@ public class Product {
         this.clockspeed = clockspeed;
         this.weight = weight;
     }
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+        this(uuid, averageUserReview, inStock, (long) ean, price, publishedDate, expirationDate, category, name, description, size, clockspeed, weight);
+    }
 
     /**This constructor sets all the required value, but leaves the optional values as null.
      * <br>
@@ -55,6 +58,9 @@ public class Product {
         this.category = category;
         this.name = name;
         this.description = description;
+    }
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+        this(uuid, averageUserReview, inStock, (long) ean, price, publishedDate, expirationDate, category, name, description);
     }
 
     /** This parses a {@link BaseProduct} into a Product.<br>

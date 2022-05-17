@@ -13,12 +13,9 @@ class TimeFilter extends RangeFilterClass {
     private Instant userMin;
     private Instant userMax;
 
-    private static final List<String> validAttributes = List.of(new String[]{"publishedDate", "expirationDate"});
-
-
     public TimeFilter(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super(ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
-                List.of(new String[]{"ean"}));
+                List.of(new String[]{"publishedDate", "expirationDate"}));
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }
@@ -26,7 +23,7 @@ class TimeFilter extends RangeFilterClass {
 
     public TimeFilter(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super(NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
-                List.of(new String[]{"ean"}));
+                List.of(new String[]{"publishedDate", "expirationDate"}));
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }
@@ -95,8 +92,11 @@ class TimeFilter extends RangeFilterClass {
     Collection<Product> filterList(Collection<Product> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max
-        List<Product> filteredResults = new ArrayList<>();
+        if(inputs == null){
+            return null;
+        }
 
+        List<Product> filteredResults = new ArrayList<>();
 
         // loop over all the products in the list and access the correct attribute:
         for (Product productHit : inputs) {
@@ -139,8 +139,8 @@ class TimeFilter extends RangeFilterClass {
      * @return - true if the value is outside the range specified by the filter
      */
     private boolean checkValue(Instant value) {
-        // Perhaps check for nullas well?
-        if (this.userMin != this.userMax) {
+        // Perhaps check for null as well?
+        if (this.userMin != this.userMax && this.userMax != null && this.userMin != null) {
             return value.isBefore(this.userMin) || value.isAfter(this.userMax);
         }
 

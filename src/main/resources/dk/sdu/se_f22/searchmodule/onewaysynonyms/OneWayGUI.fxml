@@ -3,9 +3,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -114,14 +116,21 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label layoutX="107.0" layoutY="2.0" text="Name" />
+                                          <Label layoutX="24.0" layoutY="4.0" text="New Item Name" />
                                           <Label disable="true" layoutX="31.0" layoutY="2.0" text="ID" visible="false" />
-                                          <TextField fx:id="AI_Name" layoutX="68.0" layoutY="23.0" prefHeight="25.0" prefWidth="110.0" />
+                                          <TextField fx:id="AI_Name" layoutX="13.0" layoutY="25.0" prefHeight="25.0" prefWidth="110.0" />
                                           <TextField fx:id="AI_ID" disable="true" layoutX="14.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" visible="false" />
-                                          <Button fx:id="AI_Enter" layoutX="263.0" layoutY="23.0" mnemonicParsing="false" onAction="#addItem" text="Enter" />
-                                          <Label layoutX="192.0" layoutY="2.0" text="SuperID" />
-                                          <TextField fx:id="AI_SuperID" layoutX="191.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" />
-                                          <Label fx:id="AI_status" layoutX="345.0" layoutY="27.0" prefHeight="17.0" prefWidth="108.0" />
+                                          <Button fx:id="AI_Enter" layoutX="432.0" layoutY="23.0" mnemonicParsing="false" onAction="#addItem" text="Enter" />
+                                          <Label layoutX="332.0" layoutY="4.0" text="Super Item Referance" />
+                                          <TextField fx:id="AI_SuperREF" layoutX="331.0" layoutY="25.0" prefHeight="25.0" prefWidth="97.0" />
+                                          <Label fx:id="AI_status" layoutX="485.0" layoutY="11.0" prefHeight="41.0" prefWidth="78.0" wrapText="true" />
+                                          <RadioButton layoutX="264.0" layoutY="11.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="55.0" selected="true" text="Name">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="AddItemRadioGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton layoutX="264.0" layoutY="36.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="43.0" text="ID" toggleGroup="$AddItemRadioGroup" />
+                                          <Label layoutX="174.0" layoutY="15.0" prefHeight="34.0" prefWidth="78.0" text="Coresponding super item:" wrapText="true" />
                                        </children></AnchorPane>
                                             </content>
                                         </Tab>

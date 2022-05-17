@@ -18,7 +18,7 @@ public class OneWayController implements Initializable {
     @FXML
     public TextField insertSuperIDAddItemTextfield, insertNameAddItemTextfield,
             CN_oldName, CN_newName, GI_Item, SearchBar,
-            AI_ID, AI_Name, AI_SuperID;
+            AI_ID, AI_Name, AI_SuperREF;
 
     @FXML
     public ListView IDListView, ItemNameListView, SuperIDListView;
@@ -32,6 +32,7 @@ public class OneWayController implements Initializable {
 
     @FXML
     public TabPane TP_images;
+    public ToggleGroup AddItemRadioGroup;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,11 +83,15 @@ public class OneWayController implements Initializable {
         }
     }
 
-    public void addItem(ActionEvent actionEvent){
-        if (isInt(AI_SuperID.getText()) & Integer.parseInt(AI_SuperID.getText())>0){
-            DatabaseAPI.addItem(AI_Name.getText(),Integer.parseInt(AI_SuperID.getText()));
-            AI_status.setText("Item Added");
-        }else AI_status.setText("Invalid Input");
+    public void addItem(ActionEvent actionEvent) {
+        if (AddItemRadioGroup.getSelectedToggle().equals(AddItemRadioGroup.getToggles().get(0))) {
+            System.out.println("Cake");
+        } else {
+            if (isInt(AI_SuperREF.getText()) & Integer.parseInt(AI_SuperREF.getText()) > 0) {
+                DatabaseAPI.addItem(AI_Name.getText(), Integer.parseInt(AI_SuperREF.getText()));
+                AI_status.setText("Item Added");
+            } else AI_status.setText("Invalid Input");
+        }
     }
 
     private boolean isInt(String text) {

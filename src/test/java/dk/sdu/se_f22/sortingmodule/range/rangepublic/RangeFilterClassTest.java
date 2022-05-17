@@ -17,20 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 //@Execution(ExecutionMode.CONCURRENT)
 // Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterClassTest {
-
-    private RangeFilterCRUD rangeFilterCRUD;
-
-    /*
-    @BeforeEach
-    public void setup(){
-        rangeFilterCRUD = new RangeFilterCRUD();
-    }
-
-    @AfterEach
-    public void teardown(){
-        Helpers.resetDB();
-    }
-     */
     @Nested
     @DisplayName("Non-matching tests")
     class NonMatchingTests {

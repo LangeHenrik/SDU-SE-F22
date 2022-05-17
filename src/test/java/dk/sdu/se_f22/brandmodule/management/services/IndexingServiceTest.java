@@ -52,8 +52,8 @@ public class IndexingServiceTest {
         // Delay to test the thread
         while(isRunning[0]){
            int a = 0;
-           a = a+a;
-            System.out.println(isRunning[0]);
+           a = a*a*100;
+           System.out.flush();
            if(isRunning[0]==false){
                break;
 

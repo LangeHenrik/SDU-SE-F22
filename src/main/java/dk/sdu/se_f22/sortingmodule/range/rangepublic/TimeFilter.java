@@ -143,7 +143,10 @@ class TimeFilter extends RangeFilterClass {
      */
     private boolean checkValue(Instant value) {
         // Perhaps check for null as well?
-        if (this.userMin != this.userMax && this.userMax != null && this.userMin != null) {
+        boolean userMinAndMaxDifferent = this.userMin != this.userMax;
+        boolean userMinAndMaxNotNull = this.userMax != null && this.userMin != null;
+        boolean userMinAndMaxNotDefault = this.userMin != USER_NOT_SET_VALUE && this.userMax != USER_NOT_SET_VALUE;
+        if (userMinAndMaxDifferent && userMinAndMaxNotNull && userMinAndMaxNotDefault ) {
             return value.isBefore(this.userMin) || value.isAfter(this.userMax);
         }
 

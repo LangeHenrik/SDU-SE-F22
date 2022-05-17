@@ -17,7 +17,7 @@ public class CategoryDBConnection{
         return connie;
     }
 
-    private void closeConnection(){
+    protected void closeConnection(){
         try {
             connie.close();
         } catch (SQLException e) {
@@ -250,12 +250,13 @@ public class CategoryDBConnection{
                     createStatement.setInt(2, requirementsFieldName);
 
                     createStatement.execute();
-                    ResultSet rs = createStatement.getGeneratedKeys();
+                    ResultSet resultSetRequirementsValue = createStatement.getGeneratedKeys();
                     int generatedKey = 0;
-                    if (rs.next()) {
-                        generatedKey = rs.getInt(1);
+                    if (resultSetRequirementsValue.next()) {
+                        generatedKey = resultSetRequirementsValue.getInt(1);
                         PreparedStatement createCategoryStatement = this.connect().prepareStatement(
-                                "INSERT INTO categories(name, description, parent_id, requirements_id) VALUES (?,?,?,?)"
+                                "INSERT INTO categories(name, description, parent_id, requirements_id) VALUES (?,?,?,?)",
+                                Statement.RETURN_GENERATED_KEYS
                         );
                         createCategoryStatement.setString(1, name);
                         createCategoryStatement.setString(2, description);
@@ -263,7 +264,14 @@ public class CategoryDBConnection{
                         createCategoryStatement.setInt(4, generatedKey);
                         createCategoryStatement.execute();
 
-                        return generatedKey;
+                        ResultSet resultSetCategory = createCategoryStatement.getGeneratedKeys();
+                        int categoryID = 0;
+
+                        if (resultSetCategory.next()) {
+                            categoryID = resultSetCategory.getInt(1);
+
+                            return categoryID;
+                        }
                     }
                 } else {
                     System.out.println("There is no requirement status with ID: " + requirementsFieldName);
@@ -306,19 +314,27 @@ public class CategoryDBConnection{
                     createStatement.setInt(2, requirementsFieldname);
 
                     createStatement.execute();
-                    ResultSet rs = createStatement.getGeneratedKeys();
+                    ResultSet resultSetRequirementsValue = createStatement.getGeneratedKeys();
                     int generatedKey = 0;
-                    if (rs.next()) {
-                        generatedKey = rs.getInt(1);
+                    if (resultSetRequirementsValue.next()) {
+                        generatedKey = resultSetRequirementsValue.getInt(1);
                         PreparedStatement createCategoryStatement = this.connect().prepareStatement(
-                                "INSERT INTO categories(name, description, requirements_id) VALUES (?,?,?)"
+                                "INSERT INTO categories(name, description, requirements_id) VALUES (?,?,?)",
+                                Statement.RETURN_GENERATED_KEYS
                         );
                         createCategoryStatement.setString(1, name);
                         createCategoryStatement.setString(2, description);
                         createCategoryStatement.setInt(3, generatedKey);
                         createCategoryStatement.execute();
 
-                        return generatedKey;
+                        ResultSet resultSetCategory = createCategoryStatement.getGeneratedKeys();
+                        int categoryID = 0;
+
+                        if (resultSetCategory.next()) {
+                            categoryID = resultSetCategory.getInt(1);
+
+                            return categoryID;
+                        }
                     }
                 } else {
                     System.out.println("There is no requirement status with ID: " + requirementsFieldname);

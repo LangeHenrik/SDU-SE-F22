@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.category.domain;
 
 
 import dk.sdu.se_f22.sortingmodule.category.Category;
+import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -95,6 +96,8 @@ class CategoryDBConnectionTest {
     @Test
     void updateCategoryNameTest() {
         int newCategoryID = DBConnection.createCategory("TestNameFake", "TestDescription", "TestReqValue",1, 1);
+
+        System.out.println(newCategoryID);
 
         DBConnection.updateName(newCategoryID, "TestName");
 
@@ -215,6 +218,7 @@ class CategoryDBConnectionTest {
         }
     }
 
+    // Delete the created elements from database after use in test.
     @AfterEach
     public void deleteRow() {
         String sql2 = "DELETE FROM requirements_values WHERE value = 'TestReqValue'";
@@ -233,5 +237,13 @@ class CategoryDBConnectionTest {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    // To make sure that the connection is closed after use.
+    @AfterEach
+    public void close() {
+        System.out.println("Fuck dig Kevin");
+        DBConnection.closeConnection();
+        DBConnection = null;
     }
 }

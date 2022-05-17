@@ -14,9 +14,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
-import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterFilterResults;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 
 /**
  * Implemented version of SortingModule
@@ -64,18 +62,18 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void addRangeDouble(int rangeId, Double startRange, Double endRange) {
-        this.query.addRangeDouble(rangeId, startRange, endRange);
+    public void addRange(int rangeId, Double startRange, Double endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
-    public void addRangeLong(int rangeId, long startRange, long endRange) {
-        this.query.addRangeLong(rangeId, startRange, endRange);
+    public void addRange(int rangeId, long startRange, long endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
-    public void addRangeInstant(int rangeId, Instant startRange, Instant endRange) {
-        this.query.addRangeInstant(rangeId, startRange, endRange);
+    public void addRange(int rangeId, Instant startRange, Instant endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
@@ -144,8 +142,10 @@ public class SortingModuleImpl implements SortingModule {
         this.query.getRangeDouble().forEach((Integer id, Double[] boundaries) -> {
             try {
                 selectedFilters.add(filterCRUD.read(id));
-                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
-                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                if (selectedFilters.get(selectedFilters.size() - 1).getType() == FilterTypes.DOUBLE) {
+                    selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                    selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                }
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();
             }
@@ -154,8 +154,10 @@ public class SortingModuleImpl implements SortingModule {
         this.query.getRangeLong().forEach((Integer id, Long[] boundaries) -> {
             try {
                 selectedFilters.add(filterCRUD.read(id));
-                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
-                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                if (selectedFilters.get(selectedFilters.size() - 1).getType() == FilterTypes.LONG) {
+                    selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                    selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                }
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();
             }
@@ -164,8 +166,10 @@ public class SortingModuleImpl implements SortingModule {
         this.query.getRangeInstant().forEach((Integer id, Instant[] boundaries) -> {
             try {
                 selectedFilters.add(filterCRUD.read(id));
-                selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
-                selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                if (selectedFilters.get(selectedFilters.size() - 1).getType() == FilterTypes.TIME) {
+                    selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
+                    selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                }
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();
             }

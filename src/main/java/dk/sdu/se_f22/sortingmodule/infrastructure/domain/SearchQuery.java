@@ -73,15 +73,15 @@ public class SearchQuery {
      * @param startRange The start of the range
      * @param endRange   The end of the range
      */
-    public void addRangeDouble(int rangeId, double startRange, double endRange) {
+    public void addRange(int rangeId, double startRange, double endRange) {
         this.rangeDouble.put(rangeId, new Double[] { startRange, endRange });
     }
 
-    public void addRangeLong(int rangeId, long startRange, long endRange) {
+    public void addRange(int rangeId, long startRange, long endRange) {
         this.rangeLong.put(rangeId, new Long[] {startRange, endRange });
     }
 
-    public void addRangeInstant(int rangeId, Instant startRange, Instant endRange) {
+    public void addRange(int rangeId, Instant startRange, Instant endRange) {
         this.rangeInstant.put(rangeId, new Instant[] { startRange, endRange });
     }
 

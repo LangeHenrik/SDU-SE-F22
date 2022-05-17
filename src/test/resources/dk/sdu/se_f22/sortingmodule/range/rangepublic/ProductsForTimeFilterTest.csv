@@ -1,0 +1,3 @@
+id,average user review,ean,price,published date,expiration date,category,name,description,size,clockspeed,weight
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345678,1000,2020-11-30T15:35:23.00,2026-11-30T15:35:24.00,pc,testPc,very testy,unavailable,unavailable,unavailable
+2c8ee936-cabc-11ec-9d64-0242ac120002,3.4,12345679,100,2026-11-30T15:35:24.00,2020-11-30T15:35:24.00,ssd,testSSD,testy boi,unavailable,unavailable,unavailable

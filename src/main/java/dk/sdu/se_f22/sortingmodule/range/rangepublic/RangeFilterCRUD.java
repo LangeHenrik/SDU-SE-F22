@@ -131,29 +131,17 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         RangeFilter result = database.update(out);
 
         // set user min and max to keep that data
-        if (filter instanceof DoubleFilter){
-            try {
-                result.setUserMax(filter.getUserMaxDouble());
-                result.setUserMin(filter.getUserMinDouble());
-            } catch (InvalidFilterTypeException e) {
-                e.printStackTrace();
-            }
+        if (filter instanceof DoubleFilter doubleFilter && result instanceof DoubleFilter resultDouble){
+            resultDouble.setUserMax(doubleFilter.getUserMaxDouble());
+            resultDouble.setUserMin(doubleFilter.getUserMinDouble());
         }
-        if (filter instanceof LongFilter){
-            try {
-                result.setUserMax(filter.getUserMaxLong());
-                result.setUserMin(filter.getUserMinLong());
-            } catch (InvalidFilterTypeException e) {
-                e.printStackTrace();
-            }
+        if (filter instanceof LongFilter longFilter && result instanceof LongFilter resultLong){
+            resultLong.setUserMax(longFilter.getUserMaxLong());
+            resultLong.setUserMin(longFilter.getUserMinLong());
         }
-        if (filter instanceof TimeFilter){
-            try {
-                result.setUserMax(filter.getUserMaxInstant());
-                result.setUserMin(filter.getUserMinInstant());
-            } catch (InvalidFilterTypeException e) {
-                e.printStackTrace();
-            }
+        if (filter instanceof TimeFilter timeFilter && result instanceof TimeFilter resultTime){
+            resultTime.setUserMax(timeFilter.getUserMaxInstant());
+            resultTime.setUserMin(timeFilter.getUserMinInstant());
         }
 
         return result;
@@ -181,12 +169,8 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         RangeFilter updated = database.update(modified);
 
-        try {
-            updated.setUserMax(filter.getUserMaxDouble());
-            updated.setUserMin(filter.getUserMinDouble());
-        } catch (InvalidFilterTypeException e) {
-            e.printStackTrace();
-        }
+        updated.setUserMax(filter.getUserMaxDouble());
+        updated.setUserMin(filter.getUserMinDouble());
 
         return updated;
     }
@@ -196,10 +180,10 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof LongFilter)){
-            throw new InvalidFilterTypeException("You cannot set a double values for a non double filter");
+            throw new InvalidFilterTypeException("You cannot set long values for a non long filter");
         }
 
-        RangeFilter modified = new LongFilter(
+        LongFilter modified = new LongFilter(
                 filter.getId(),
                 filter.getName(),
                 filter.getDescription(),
@@ -211,14 +195,22 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         // Validate new values
         validateFilterUpdate(modified);
 
+        // Commented because an attempt has been made to clean up try-catch
+//        RangeFilter updated = database.update(modified);
+//
+//        try {
+//            updated.setUserMax(filter.getUserMaxLong());
+//            updated.setUserMin(filter.getUserMinLong());
+//        } catch (InvalidFilterTypeException e) {
+//            e.printStackTrace();
+//        }
+        // The try-catch has been removed since the exception is thrown by the method, anyway
+        // thus it wont change the way other modules interact with the method
+        // But it does simplify this code, and increases code coverage
         RangeFilter updated = database.update(modified);
 
-        try {
-            updated.setUserMax(filter.getUserMaxLong());
-            updated.setUserMin(filter.getUserMinLong());
-        } catch (InvalidFilterTypeException e) {
-            e.printStackTrace();
-        }
+        updated.setUserMax(filter.getUserMaxLong());
+        updated.setUserMin(filter.getUserMinLong());
 
         return updated;
     }
@@ -228,7 +220,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof TimeFilter)){
-            throw new InvalidFilterTypeException("You cannot set a double values for a non double filter");
+            throw new InvalidFilterTypeException("You cannot set Instant values for a non Instant/time filter");
         }
 
         RangeFilter modified = new TimeFilter(
@@ -245,12 +237,8 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         RangeFilter updated = database.update(modified);
 
-        try {
-            updated.setUserMax(filter.getUserMaxInstant());
-            updated.setUserMin(filter.getUserMinInstant());
-        } catch (InvalidFilterTypeException e) {
-            e.printStackTrace();
-        }
+        updated.setUserMax(filter.getUserMaxInstant());
+        updated.setUserMin(filter.getUserMinInstant());
 
         return updated;
     }
@@ -268,6 +256,9 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     private void validateFilterUpdate(RangeFilter filter) throws InvalidFilterException, InvalidFilterTypeException {
+        if (filter == null){
+            throw new InvalidFilterException("filter is null");
+        }
         Validator.NoSpecialCharacters(filter.getName());
         Validator.NoSpecialCharacters(filter.getDescription());
         if (filter instanceof DoubleFilter) {

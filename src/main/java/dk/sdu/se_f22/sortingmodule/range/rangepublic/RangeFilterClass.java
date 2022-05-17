@@ -191,7 +191,7 @@ abstract class RangeFilterClass implements RangeFilter{
     }
 
     @Override
-    public double setUserMax(double userMax) throws InvalidFilterTypeException {
+    public double setUserMax(double userMax) throws InvalidFilterTypeException, IlligalMinMaxException {
         throw new InvalidFilterTypeException("Not a double filter");
     }
 

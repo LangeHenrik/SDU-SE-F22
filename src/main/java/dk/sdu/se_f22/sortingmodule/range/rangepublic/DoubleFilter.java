@@ -213,7 +213,15 @@ class DoubleFilter extends RangeFilterClass {
     }
 
     @Override
-    public double setUserMax(double userMax) {
+    public double setUserMax(double userMax) throws IlligalMinMaxException {
+        if (userMax > userMin && userMin != USER_NOT_SET_VALUE) {
+            throw new IlligalMinMaxException("'userMax' can not be less than 'userMin'");
+        }
+
+        if (userMax < DB_MIN || userMax > DB_MAX) {
+            throw new IlligalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
+        }
+
         this.userMax = userMax;
         return this.userMax;
     }

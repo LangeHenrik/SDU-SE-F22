@@ -23,7 +23,7 @@ public class IndexingServiceTest {
         final long[] start = new long[1];
         final long[] end = new long[1];
         final int[] counter = { 0 };
-
+        final boolean[] isRunning = {true};
         final int indexInterval = 100;
 
         // Timer
@@ -39,6 +39,7 @@ public class IndexingServiceTest {
                 } else {
                     if (counter[0] == 1) {
                         end[0] = System.currentTimeMillis();
+                        isRunning[0]=false;
                     }
                     counter[0] += 1;
                 }
@@ -49,12 +50,15 @@ public class IndexingServiceTest {
         }, 0, indexInterval);
 
         // Delay to test the thread
-        for (int i = 0; i < 7500; i++) {
+        while(isRunning[0]){
+           int a = 0;
+        }
+        /*for (int i = 0; i < 7500; i++) {
             for (int j = 0; j < 1000; j++) {
                 for (int k = 0; k <  500; k++) {
                 }
             }
-        }
+        }*/
 
         // Check if it is right (including a buffer of 1/4th of the indexing interval
         // ms)

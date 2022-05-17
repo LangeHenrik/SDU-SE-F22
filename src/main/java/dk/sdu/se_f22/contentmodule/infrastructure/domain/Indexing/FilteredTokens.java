@@ -5,38 +5,27 @@ import java.util.Date;
 import java.util.List;
 
 class  FilteredTokens {
-
-
-
     //IStopWords stopwords = new StopWords;
     //IIrregularWords irregularWords = new IrregularWords();
     //IStemmer stemming = new Stemmer; // method name stem
-    //InterfaceOutgoing indexNSearch = new InterfaceOutgoing;
-    //Search() returns Arraylist of Integers, takes Arraylist of Strings
-    //index() void - method for indexing
 
 
-
-
-    //Ikke brug for ny instans (muligvis)
-     HTMLSite siteWithFilteredTokens(HTMLSite site) {
-        List<String> tokens = new ArrayList<>(site.getTokens());
-
+     HTMLSite siteWithFilteredTokens(HTMLSite newSite) throws IllegalArgumentException {
+        List<String> tokens = new ArrayList<>(newSite.getTokens());
 
         //tokens.set(StopWords.filter(tokens));
-        //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokenStrings));
-        //tokens.set(Stemmer.stem(tokenStrings));
+        //tokens.set(Irregularwords.INSTANCE.searchForIrregularWords(tokens));
+        //tokens.set(Stemmer.stem(tokens));
 
+         if(!tokens.isEmpty()){
+             newSite.setFilteredTokens(new ArrayList<String>(tokens));
+             newSite.setTokens(null); //empty the array
 
-        //save log data??
+             //The index module is asking for a String[] and not an arrayList
+             String[] tokenArray = tokens.toArray(new String[tokens.size()]);
+             newSite.setFilteredTokensArray(tokenArray);
+         } else throw new IllegalArgumentException();
 
-        List<String> filteredTokens = new ArrayList<>();
-
-        return new HTMLSite(site.getId(), site.getHtmlCode(), filteredTokens);
+        return newSite;
     }
-
-    /* //method for passing the tokens on to the Index module
-    void index(ArrayList<Token> stringTokens) {
-        indexNsearch.index(stringTokens);
-    }*/
 }

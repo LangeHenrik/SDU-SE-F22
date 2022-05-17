@@ -37,9 +37,9 @@ public class Tokenizer {
                 }
             }
         }
+        site.setTokens(tokens);
 
-        //Skal man ikke bare skrive site.setTokens(...) og så return site??
-        return new HTMLSite(site.getId(), site.getHtmlCode(), tokens);
+        return site;
     }
 }
 

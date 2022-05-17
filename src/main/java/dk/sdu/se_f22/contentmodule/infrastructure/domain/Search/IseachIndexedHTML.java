@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IseachIndexedHTML {
 
-    List<Content> queryIndex(List<String> searchTokens);
+    List<Content> queryIndex(List<String> searchTokens) throws NoResultsFoundException;
 
 }

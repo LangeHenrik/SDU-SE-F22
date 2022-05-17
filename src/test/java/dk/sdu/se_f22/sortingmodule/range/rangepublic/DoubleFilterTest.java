@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -230,18 +231,6 @@ class DoubleFilterTest {
                 void setValidDoubleFilterUserMinAndUserMax () {
 
                 }
-
-                @Test
-                @DisplayName("Set valid LongFilter userMin and userMax")
-                void setValidLongFilterUserMinAndUserMax () {
-
-                }
-
-                @Test
-                @DisplayName("Set valid TimeFilter userMin and userMax")
-                void setValidTimeFilterUserMinAndUserMax () {
-
-                }
             }
 
             @Nested
@@ -252,18 +241,6 @@ class DoubleFilterTest {
                 @Test
                 @DisplayName("Set invalid DoubleFilter userMin and userMax")
                 void setInvalidDoubleFilterUserMinAndUserMax () {
-
-                }
-
-                @Test
-                @DisplayName("Set invalid LongFilter userMin and userMax")
-                void setInvalidLongFilterUserMinAndUserMax () {
-
-                }
-
-                @Test
-                @DisplayName("Set invalid TimeFilter userMin and userMax")
-                void setInvalidTimeFilterUserMinAndUserMax () {
 
                 }
             }

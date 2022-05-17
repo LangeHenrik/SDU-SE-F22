@@ -2,14 +2,14 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import org.junit.Assert;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -169,21 +169,34 @@ class LongFilterTest {
             class SetValidUserMinAndUserMax {
 
                 @Test
-                @DisplayName("Set valid DoubleFilter userMin and userMax")
-                void setValidDoubleFilterUserMinAndUserMax () {
-
+                @DisplayName("Set valid DoubleFilter userMin")
+                @MethodSource("provideLongFilters")
+                void setValidLongFilterUserMin (LongFilter filter) {
+                    Assertions.assertDoesNotThrow(
+                            () -> filter.setUserMin(10));
                 }
 
                 @Test
-                @DisplayName("Set valid LongFilter userMin and userMax")
-                void setValidLongFilterUserMinAndUserMax () {
-
+                @DisplayName("Set valid LongFilter userMax")
+                void setValidLongFilterUserMax (LongFilter filter) {
+                    Assertions.assertDoesNotThrow(
+                            () -> filter.setUserMax(900));
                 }
 
                 @Test
-                @DisplayName("Set valid TimeFilter userMin and userMax")
-                void setValidTimeFilterUserMinAndUserMax () {
+                @DisplayName("userMin has changed")
+                void userMinHasChanged (LongFilter filter) {
+                    Long newMin = 10L;
+                    filter.setUserMin(newMin);
+                    Assertions.assertEquals(newMin, filter.getUserMinLong());
+                }
 
+                @Test
+                @DisplayName("userMax has changed")
+                void userMaxHasChanged (LongFilter filter) {
+                    Long newMax = 900L;
+                    filter.setUserMin(newMax);
+                    Assertions.assertEquals(newMax, filter.getUserMaxLong());
                 }
             }
 
@@ -209,6 +222,12 @@ class LongFilterTest {
                 void setInvalidTimeFilterUserMinAndUserMax () {
 
                 }
+            }
+
+            static Stream<LongFilter> provideLongFilters (){
+                return Stream.of(
+                        new LongFilter("Long filter 1", "Desc long filter 1", "price", 0, 1000)
+                );
             }
         }
 

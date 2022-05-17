@@ -2,6 +2,8 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -208,23 +210,38 @@ class TimeFilterTest {
             @Nested
             @DisplayName("Set valid userMin and userMax")
             class SetValidUserMinAndUserMax {
-
                 @Test
-                @DisplayName("Set valid DoubleFilter userMin and userMax")
-                void setValidDoubleFilterUserMinAndUserMax () {
-
+                @DisplayName("Set valid TimeFilter userMin")
+                @MethodSource("provideTimeFilters")
+                void setValidTimeFilterUserMin (TimeFilter filter) {
+                    String newDate = "2022-05-10T18:35:24.00Z";
+                    Assertions.assertDoesNotThrow(
+                            () -> filter.setUserMin(Instant.parse("2022-05-10T18:35:24.00Z"))
+                    );
                 }
 
                 @Test
-                @DisplayName("Set valid LongFilter userMin and userMax")
-                void setValidLongFilterUserMinAndUserMax () {
-
+                @DisplayName("userMin changed after being set")
+                @MethodSource("provideTimeFilters")
+                void userMinChangedAfterBeingSet (TimeFilter filter) {
+                    String newDate = "2022-05-10T18:35:24.00Z";
+                    Assertions.assertEquals(newDate, filter.getUserMinInstant().toString());
                 }
 
                 @Test
-                @DisplayName("Set valid TimeFilter userMin and userMax")
-                void setValidTimeFilterUserMinAndUserMax () {
-
+                @DisplayName("Set valid TimeFilter userMax")
+                @MethodSource("provideTimeFilters")
+                void setValidTimeFilterUserMax (TimeFilter filter) {
+                    Assertions.assertDoesNotThrow(
+                            ()-> filter.setUserMax(Instant.parse("2022-05-20T18:35:24.00Z"))
+                        );
+                }
+                @Test
+                @DisplayName("userMax changed after being set")
+                @MethodSource("provideTimeFilters")
+                void userMaxChangedAfterBeingSet (TimeFilter filter) {
+                    String newDate = "2022-05-20T18:35:24.00Z";
+                    Assertions.assertEquals(newDate, filter.getDbMaxInstant().toString());
                 }
             }
 
@@ -234,22 +251,56 @@ class TimeFilterTest {
             class SetInvalidUserMinAndUserMax {
 
                 @Test
-                @DisplayName("Set invalid DoubleFilter userMin and userMax")
-                void setInvalidDoubleFilterUserMinAndUserMax () {
-
+                @DisplayName("Set invalid TimeFilter userMin less than dbMin")
+                @MethodSource("provideTimeFilters")
+                void setInvalidTimeFilterUserMin (TimeFilter filter) {
+                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMin(newUserMin)
+                        );
                 }
 
                 @Test
-                @DisplayName("Set invalid LongFilter userMin and userMax")
-                void setInvalidLongFilterUserMinAndUserMax () {
-
+                @DisplayName("Set invalid TimeFilter userMax less than dbMin")
+                void setInvalidTimeFilterUserMax (TimeFilter filter) {
+                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newUserMax)
+                    );
                 }
 
                 @Test
-                @DisplayName("Set invalid TimeFilter userMin and userMax")
-                void setInvalidTimeFilterUserMinAndUserMax () {
+                @DisplayName("Set invalid TimeFilter userMax less than userMin")
+                void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) {
+                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
+                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 15);
 
+                    filter.setUserMin(newUserMin);
+
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newUserMax)
+                    );
                 }
+
+                @Test
+                @DisplayName("Set invalid TimeFilter userMin higher than userMax")
+                void setInvalidUserMinHigherThanUserMax (TimeFilter filter) {
+                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
+                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 100);
+
+                    filter.setUserMin(newUserMax);
+
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newUserMin)
+                    );
+                }
+
+
+            }
+            static Stream<TimeFilter> provideTimeFilters (){
+                return Stream.of(
+                        new TimeFilter("Time filter 1", "Desc time filter 1", "publish_date", Instant.parse("2022-05-6T18:35:24.00Z"), Instant.parse("2022-05-10T18:35:24.00Z"))
+                );
             }
         }
 

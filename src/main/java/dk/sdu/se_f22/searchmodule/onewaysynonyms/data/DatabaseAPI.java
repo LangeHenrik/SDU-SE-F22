@@ -1,5 +1,6 @@
-package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+package dk.sdu.se_f22.searchmodule.onewaysynonyms.data;
 
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.sql.*;

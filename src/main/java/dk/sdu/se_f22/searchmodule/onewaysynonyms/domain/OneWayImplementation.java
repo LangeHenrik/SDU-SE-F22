@@ -1,6 +1,9 @@
-package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 
-import java.sql.SQLException;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.OneWayInterface;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.notFoundException;
+
 import java.util.LinkedList;
 import java.util.List;
 

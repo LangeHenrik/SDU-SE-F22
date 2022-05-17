@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 
 import java.util.LinkedList;
 

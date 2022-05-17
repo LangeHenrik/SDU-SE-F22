@@ -19,4 +19,7 @@ module dk.sdu.se_f22 {
     opens dk.sdu.se_f22 to javafx.fxml;
     exports dk.sdu.se_f22;
 	exports dk.sdu.se_f22.searchmodule.onewaysynonyms;
+    exports dk.sdu.se_f22.searchmodule.onewaysynonyms.data;
+    exports dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
+    exports dk.sdu.se_f22.searchmodule.onewaysynonyms.presentation;
 }

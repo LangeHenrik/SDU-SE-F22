@@ -1,0 +1,110 @@
+@startuml
+
+interface BrandGetter {
+    + query(tokens: List<String>): List<Integer>
+}
+
+interface Filterable {
+    + filter(tokens: ArrayList<String>): ArrayList<String>
+}
+
+interface IndexingModule {
+    + queryIndex(tokens: List<String>): List<T>
+}
+
+
+interface SearchModule {
+    + search(query: String): SearchResult
+    + getDelimiters(): String[]
+    + getIgnoredCharacters(): Character[]
+    + addDelimiter(delimiter: String)
+    + addIgnoredCharacter(c: Character)
+    + removeDelimiter(delimiter: String)
+    + removeIgnoredCharacter(c: Character)
+    + SearchHits search(query: String)
+}
+
+class ReplaceForbbidenChars {
+    - illegalCharsClass: IllegalChars
+    - illegalChars: List<String>
+
+    + removeForbiddenChars(toSort: String): String
+    + getIllegalChars(): List<String>
+    + setIllegalChars(illegalChars: List<String>): void
+    + addIllegalChars(illegalChar: String): void
+}
+
+class SearchModuleImpl implements SearchModule {
+    - indexingModules: Set<IndexingModule<?>>
+    - filteringModules: Set<Filterable>
+    - ss: Delimiter
+    - addIndexingModule(index: T): void
+    - removeIndexingmModule(index: T): void
+    + queryIndexOfType(clazz: Class<T>, tokens: List<String>): List<T>
+    + search(query: String): SearchHits
+    - tokenize(mystring): String[]
+    - saveSettingsToDB()
+    - readSettingsFromDB()
+}
+
+class SearchModuleUtils {
+    + {static}convertDelimitersToRegex(stringList: List<String>): String
+    - {static}addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+}
+
+class DelimiterSettings {
+    - delimiters: List<String>
+    + getDelimiters(): List<String>
+    + addDelimiters(String): void
+    + removeDelimiter(String): boolean
+}
+
+class TokenFiltration {
+    +filter(tokens: ArrayList<String>): ArrayList<String>
+}
+
+class Tokenization {
+    - searchModuleUtils: SearchModuleUtils
+    - ss: SearchSettings
+    - stringList: List<String>
+    +tokenize(s: String): list<String>
+}
+
+class DBConnection {
+    - url: String
+    - user: String
+    - password: String
+    - {static} conn: Connection
+    - {static} dbConnection: DBConnection
+
+    - DBConnection()
+    - loadConfig(): void
+    + {static} getConnection(): Connection
+    ' see https://stackoverflow.com/a/36710057
+}
+
+class Exception {
+    // From JDK //
+}
+
+class DatabaseConnectionException extends Exception {
+    // Throws when the database connection failed //
+}
+
+class IllegalChars{
+    +addChar(character: String): void
+    +illegalCharsFromDB(): List<String>
+    +removeChar((character: String): void
+}
+
+
+Tokenization -> SearchModuleUtils
+Tokenization --> DelimiterSettings
+SearchHits <- SearchModule
+Filterable <- SearchModuleImpl
+SearchModuleImpl -> DBConnection
+DatabaseConnectionException <-- DBConnection: //<<throws>>//
+DatabaseConnectionException <-- SearchModuleImpl: //<<throws>>//
+IllegalChars -> ReplaceForbbidenChars
+
+@enduml

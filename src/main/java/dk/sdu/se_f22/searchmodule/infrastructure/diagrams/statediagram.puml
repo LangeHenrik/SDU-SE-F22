@@ -1,0 +1,37 @@
+@startuml
+hide empty description
+[*] --> Start
+Start: The module starts
+
+Start -> Idle: Done initializing
+Idle: The system waits until 
+Idle: the user wants to search
+
+Idle -> CharacterRemoval : "search()" is called
+CharacterRemoval: The system removes the
+CharacterRemoval: Illegal characters from
+CharacterRemoval: the search phrase
+
+CharacterRemoval -> Tokenization: Done removing illegal chars
+Tokenization: Splits the search phrase
+Tokenization: On the set delimiters
+
+Tokenization --> Filtering: Done Tokenizing 
+Filtering: The system runs the list
+Filtering: of tokens thru the 
+Filtering: filtering modules
+
+
+Searching <- Filtering: All filters done
+
+Searching: The system parses the
+Searching: search tokens to the 
+Searching: search modules
+
+Idle<[norank]- Searching: Done searching \nand results returned
+
+
+Idle -u-> [*]
+
+
+@enduml

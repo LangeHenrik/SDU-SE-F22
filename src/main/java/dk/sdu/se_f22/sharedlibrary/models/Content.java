@@ -1,5 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
+import org.jsoup.nodes.Document;
+
 public class Content {
     private int pageId;
     private String html;
@@ -16,5 +18,10 @@ public class Content {
     public Content(int pageId, Document html, String timestamp) {
         this.pageId = pageId;
         this.timestamp = timestamp;
+    }
+
+    //This is here to make sure SearchHitsTest's test works
+    public Content() {
+
     }
 }

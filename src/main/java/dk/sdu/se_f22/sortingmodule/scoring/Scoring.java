@@ -58,11 +58,11 @@ public class Scoring implements IScoring {
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'stock'");
                 var sqlReturnValues = statement.executeQuery();
                 while (sqlReturnValues.next()){
-                    if (stock <= sqlReturnValues.getInt(3)) {
-                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
+                    if (stock < sqlReturnValues.getInt(3)) {
+                        product.setScore(sqlReturnValues.getInt(4));
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(sqlReturnValues.getInt(4)+product.getScore());
+                        product.setScore(sqlReturnValues.getInt(4));
                     }
                 }
             } catch (SQLException ex) {

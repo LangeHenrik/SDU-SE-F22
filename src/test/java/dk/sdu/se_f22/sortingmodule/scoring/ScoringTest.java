@@ -6,31 +6,55 @@ import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScoringTest {
- /*
+/*
     Scoring scoring = new Scoring();
     ArrayList<Product> products;
+    Product product1 = new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product2 = new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product3 = new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product4 = new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product5 = new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product6 = new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product7 = new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product8 = new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2020-01-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product9 = new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product10 = new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0);
 
     {
-        try {
-            products = new ArrayList<>(Arrays.asList(
-                    new Product("Pizza",2000,5,10,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new Product("Apple",1000,3,20,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new Product("Cheese",3000,4,30,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")))
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(product10);
+        controlProducts.add(product2);
+        controlProducts.add(product1);
+        controlProducts.add(product5);
+        controlProducts.add(product7);
+        controlProducts.add(product4);
+        controlProducts.add(product9);
+        controlProducts.add(product3);
+        controlProducts.add(product6);
+        controlProducts.add(product8);
+
+
+
+        products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
+        products.add(product3);
+        products.add(product4);
+        products.add(product5);
+        products.add(product6);
+        products.add(product7);
+        products.add(product8);
+        products.add(product9);
+        products.add(product10);
+
+
     }
 
     @BeforeAll
@@ -47,9 +71,9 @@ class ScoringTest {
                 INSERT INTO scores (type, bracket, weight) VALUES
                     ('price',1000,1),
                     ('price',2000,2),
-                    ('price',3000,4),
-                    ('price',4000,5),
-                    ('price',5000,6),
+                    ('price',3000,3),
+                    ('price',4000,4),
+                    ('price',5000,5),
                     ('review',2.5,1),
                     ('review',3.3,2),
                     ('review',3.9,3),
@@ -84,41 +108,39 @@ class ScoringTest {
 
     @Test
     void scoreSort() {
-        ArrayList<Product> controlProducts = new ArrayList<>();
 
-        try {
-            controlProducts = new ArrayList<>(Arrays.asList(
-                    new Product("Apple",1000,3,20,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new Product("Pizza",2000,5,10,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new Product("Cheese",3000,4,30,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")))
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    }
+    @Test
+    void scoreSortAll() {
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2020-01-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+
 
         assertEquals(Arrays.toString(scoring.scoreSortAll(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
     void scoreSortPrice() {
-        ArrayList<Product> controlProducts = new ArrayList<>();
-
-        try {
-            controlProducts = new ArrayList<>(Arrays.asList(
-                    new Product("Apple",1000,3,20,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new Product("Pizza",2000,5,10,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new Product("Cheese",3000,4,30,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017"))
-                    )
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(product1);
+        controlProducts.add(product2);
+        controlProducts.add(product4);
+        controlProducts.add(product7);
+        controlProducts.add(product9);
+        controlProducts.add(product3);
+        controlProducts.add(product8);
+        controlProducts.add(product5);
+        controlProducts.add(product6);
+        controlProducts.add(product10);
 
         assertEquals(Arrays.toString(scoring.scoreSortPrice(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
@@ -127,61 +149,55 @@ class ScoringTest {
 
     @Test
     void scoreSortReview() {
-        ArrayList<Product> controlProducts = new ArrayList<>();
+        List<Product> controlProducts = new ArrayList<>();
 
-        try {
-            controlProducts = new ArrayList<>(Arrays.asList(
-                    new Product("Pizza",2000,5,10,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new Product("Cheese",3000,4,30,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")),
-                    new Product("Apple",1000,3,20,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")))
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        controlProducts.add(product10);
+        controlProducts.add(product4);
+        controlProducts.add(product1);
+        controlProducts.add(product2);
+        controlProducts.add(product5);
+        controlProducts.add(product6);
+        controlProducts.add(product9);
+        controlProducts.add(product3);
+        controlProducts.add(product7);
+        controlProducts.add(product8);
 
         assertEquals(Arrays.toString(scoring.scoreSortReview(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
     void scoreSortStock() {
-        ArrayList<Product> controlProducts = new ArrayList<>();
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(product2);
+        controlProducts.add(product10);
+        controlProducts.add(product1);
+        controlProducts.add(product5);
+        controlProducts.add(product7);
+        controlProducts.add(product4);
+        controlProducts.add(product9);
+        controlProducts.add(product3);
+        controlProducts.add(product6);
+        controlProducts.add(product8);
 
-        try {
-            controlProducts = new ArrayList<>(Arrays.asList(
-                    new Product("Cheese",3000,4,30,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")),
-                    new Product("Apple",1000,3,20,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new Product("Pizza",2000,5,10,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012"))
-                    )
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
 
         assertEquals(Arrays.toString(scoring.scoreSortStock(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
     void scoreSortDate() {
-        ArrayList<Product> controlProducts = new ArrayList<>();
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2020-01-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-09T10:15:30.00Z"),null, null, null, null,null,0,0));
+        controlProducts.add(new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0));
 
-        try {
-            controlProducts = new ArrayList<>(Arrays.asList(
-                    new Product("Apple",1000,3,20,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2022")),
-                    new Product("Pizza",2000,5,10,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2012")),
-                    new Product("Cheese",3000,4,30,
-                            new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2017")))
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         assertEquals(Arrays.toString(scoring.scoreSortDate(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
@@ -291,6 +307,7 @@ class ScoringTest {
                 Id: 15 Type: stock Bracket: 50.0 Weight: 5
                 """);
     }
-    */
+
+ */
 }
 

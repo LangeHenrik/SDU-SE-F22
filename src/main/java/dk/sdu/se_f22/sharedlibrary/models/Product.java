@@ -142,7 +142,7 @@ public class Product {
     public double getWeight() {
         return weight;
     }
-
+/*
     @Override
     public String toString() {
         return "Product{" +
@@ -160,5 +160,17 @@ public class Product {
                 ", expirationDate=" + expirationDate +
                 ", inStock=" + inStock +
                 '}';
+    }
+
+ */
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "averageUserReview=" + averageUserReview +
+                ", price=" + price +
+                ", publishedDate=" + publishedDate +
+                ", inStock=" + inStock +
+                '}'+"\n";
     }
 }

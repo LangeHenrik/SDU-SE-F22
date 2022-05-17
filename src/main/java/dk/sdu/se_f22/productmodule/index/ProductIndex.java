@@ -90,7 +90,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
 
-    public void updateProduct(String id, Product product){
+    public void updateProduct(int id, Product product){
         try {
             PreparedStatement updateCategory = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
@@ -113,10 +113,10 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             //PreparedStatement updateProductSpecs = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
             updateCategory.setString(1, product.getCategory());
-            updateCategory.setString(2, id);
+            updateCategory.setInt(2, id);
 
             updateStock.setArray(1, (Array) product.getInStock());
-            updateStock.setString(2, id);
+            updateStock.setInt(2, id);
 
             updateProduct.setDouble(1, product.getAverageUserReview());
             updateProduct.setString(2, product.getName());
@@ -126,13 +126,13 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             updateProduct.setString(7, product.getDescription());
             updateProduct.setLong(8,product.getEan());
             updateProduct.setDouble(9, product.getWeight());
-            updateProduct.setString(10, id);
+            updateProduct.setInt(10, id);
 
             updateSpecs.setDouble(1, product.getClockspeed());
-            updateSpecs.setString(2, id);
+            updateSpecs.setInt(2, id);
 
             updateStorage.setString(1, product.getSize());
-            updateStorage.setString(2, id);
+            updateStorage.setInt(2, id);
 
             updateCategory.execute();
             updateStock.execute();
@@ -144,21 +144,19 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
         }
     }
 
-    public void deleteProduct(String id){
+    public void deleteProduct(int id){
         try {
-            PreparedStatement deleteCategory = connection.prepareStatement("DELETE FROM categories WHERE id = ?");
+
             PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE id = ?");
-            PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM stock WHERE id = ?");
-            PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM specs WHERE id = ?");
-            PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM storage WHERE id = ?");
+            PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM productStock WHERE id = ?");
+            PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM productStorage WHERE id = ?");
+            PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE id = ?");
 
-            deleteCategory.setString(1, id);
-            deleteProduct.setString(1, id);
-            deleteStock.setString(1, id);
-            deleteSpecs.setString(1, id);
-            deleteStorage.setString(1, id);
+            deleteProduct.setInt(1, id);
+            deleteStock.setInt(1, id);
+            deleteSpecs.setInt(1, id);
+            deleteStorage.setInt(1, id);
 
-            deleteCategory.execute();
             deleteProduct.execute();
             deleteStock.execute();
             deleteSpecs.execute();

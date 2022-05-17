@@ -1,4 +1,6 @@
-# SDU-SE-F22 - Hesehus Case [![Java compile test](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml/badge.svg)](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml)
+# SDU-SE-F22 - Hesehus Case 
+[![Java compile test](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml/badge.svg)](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml)
+[![Java system test](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/system-test.yml/badge.svg)](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/system-test.yml)
 
 ## Folder Structure
 

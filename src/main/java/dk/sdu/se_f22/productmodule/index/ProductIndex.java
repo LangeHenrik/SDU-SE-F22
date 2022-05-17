@@ -88,21 +88,53 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     public void updateProduct(String id, Product product){
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(
-                    "UPDATE product set averageUserReview = ?, instock = ?, ean = ?, price = ?, publisheddate = ?, expirationdate = ?, category = ?, name = ?, description = ?, weight = ? WHERE id = ?");
-            updateStatement.setDouble(1, product.getAverageUserReview());
-            updateStatement.setArray(2, (Array) product.getInStock());
-            updateStatement.setLong(3, product.getEan());
-            updateStatement.setDouble(4, product.getPrice());
-            updateStatement.setString(5, String.valueOf(product.getPublishedDate()));
-            updateStatement.setString(6, String.valueOf(product.getExpirationDate()));
-            updateStatement.setString(7, product.getCategory());
-            updateStatement.setString(8, product.getName());
-            updateStatement.setString(9, product.getDescription());
-            updateStatement.setDouble(10, product.getWeight());
-            updateStatement.setString(11, String.valueOf(id));
-            updateStatement.execute();
+            PreparedStatement updateCategory = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
+            PreparedStatement updateStock = connection.prepareStatement("UPDATE stock set city = ? WHERE id = ?");
+            PreparedStatement updateProduct = connection.prepareStatement(
+                    "UPDATE product set name = ?," +
+                            "averageuserreview = ?," +
+                            "creationdate = ?," +
+                            "publisheddate = ?," +
+                            "expirationdate = ?," +
+                            "price = ?," +
+                            "description = ?," +
+                            "ean = ?," +
+                            "weight = ?," +
+                            "WHERE id = ?");
+            //PreparedStatement updateProductStock = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+            PreparedStatement updateSpecs = connection.prepareStatement("UPDATE specs set clockspeed = ? WHERE id = ?");
+            PreparedStatement updateStorage = connection.prepareStatement("UPDATE storage set size = ? WHERE id = ?");
+            //PreparedStatement updateProductStorage = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+            //PreparedStatement updateProductSpecs = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+
+            updateCategory.setString(1, product.getCategory());
+            updateCategory.setString(2, id);
+
+            updateStock.setArray(1, (Array) product.getInStock());
+            updateStock.setString(2, id);
+
+            updateProduct.setDouble(1, product.getAverageUserReview());
+            updateProduct.setString(2, product.getName());
+            updateProduct.setTimestamp(4, Timestamp.from(product.getPublishedDate()));
+            updateProduct.setTimestamp(5, Timestamp.from(product.getExpirationDate()));
+            updateProduct.setDouble(6, product.getPrice());
+            updateProduct.setString(7, product.getDescription());
+            updateProduct.setLong(8,product.getEan());
+            updateProduct.setDouble(9, product.getWeight());
+            updateProduct.setString(10, id);
+
+            updateSpecs.setDouble(1, product.getClockspeed());
+            updateSpecs.setString(2, id);
+
+            updateStorage.setString(1, product.getSize());
+            updateStorage.setString(2, id);
+
+            updateCategory.execute();
+            updateStock.execute();
+            updateProduct.execute();
+            updateSpecs.execute();
+            updateStorage.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -110,9 +142,24 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     public void deleteProduct(String id){
         try {
-            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM product WHERE id = ?");
-            deleteStatement.setString(1, id);
-            deleteStatement.execute();
+            PreparedStatement deleteCategory = connection.prepareStatement("DELETE FROM categories WHERE id = ?");
+            PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE id = ?");
+            PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM stock WHERE id = ?");
+            PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM specs WHERE id = ?");
+            PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM storage WHERE id = ?");
+
+            deleteCategory.setString(1, id);
+            deleteProduct.setString(1, id);
+            deleteStock.setString(1, id);
+            deleteSpecs.setString(1, id);
+            deleteStorage.setString(1, id);
+
+            deleteCategory.execute();
+            deleteProduct.execute();
+            deleteStock.execute();
+            deleteSpecs.execute();
+            deleteStorage.execute();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }

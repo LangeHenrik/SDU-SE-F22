@@ -28,7 +28,7 @@ public class Helpers {
     public static List<String> readFromCSV(String fileName) {
         List<String> out = new ArrayList<>();
       
-        try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/SortingModule/Range/" + fileName))) {
+        try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/sortingmodule/range/" + fileName))) {
             while (scanner.hasNextLine()) {
                 out.add(scanner.nextLine());
             }

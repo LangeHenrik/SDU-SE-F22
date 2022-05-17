@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,7 +58,7 @@ class DoubleFilterTest {
             try {
                 filter.setUserMin(userMin);
                 filter.setUserMax(userMax);
-            } catch (IlligalMinMaxException e) {
+            } catch (IllegalMinMaxException e) {
                 e.printStackTrace();
                 fail("Failed to set userMin and userMax with " + 10.0 + " and " + 100.0);
             }
@@ -150,13 +150,17 @@ class DoubleFilterTest {
             double userMax = 10.0;
             for(String attribute: strings){
                 DoubleFilter filter = getTestFilter(attribute);
-                filter.setUserMax(userMax);
+                try {
+                    filter.setUserMax(userMax);
+                } catch (IllegalMinMaxException e) {
+                    e.printStackTrace();
+                }
                 out.add(arguments(filter));
 
                 filter = getTestFilter(attribute);
                 try {
                     filter.setUserMin(userMin);
-                } catch (IlligalMinMaxException e) {
+                } catch (IllegalMinMaxException e) {
                     e.printStackTrace();
                 }
                 out.add(arguments(filter));
@@ -172,7 +176,7 @@ class DoubleFilterTest {
                 try {
                     filter.setUserMin(userMin);
                     filter.setUserMax(userMax);
-                } catch (IlligalMinMaxException e) {
+                } catch (IllegalMinMaxException e) {
                     e.printStackTrace();
                     fail("Failed to set userMin and userMax with " + userMin + " and " + userMax);
                 }
@@ -193,7 +197,7 @@ class DoubleFilterTest {
                 try {
                     internalFilter.setUserMax(100.0);
                     internalFilter.setUserMin(10.0);
-                } catch (IlligalMinMaxException e) {
+                } catch (IllegalMinMaxException e) {
                     e.printStackTrace();
                     fail("Failed to set userMin and userMax with " + 10.0 + " and " + 100.0);
                 }
@@ -239,7 +243,6 @@ class DoubleFilterTest {
         // TODO move to correct class
         @Nested
         @DisplayName("Set userMin and userMax")
-        @Disabled("Not yet implemented")
         class SetUserMinAndMax {
 
             @Nested
@@ -258,7 +261,7 @@ class DoubleFilterTest {
 
                     try {
                         Assertions.assertEquals(doubleFilter.setUserMin(input), doubleFilter.getUserMinDouble());
-                    } catch (IlligalMinMaxException e) {
+                    } catch (IllegalMinMaxException e) {
                         e.printStackTrace();
                         fail("Failed to set userMin " + input);
                     }
@@ -274,7 +277,12 @@ class DoubleFilterTest {
                             "Test product Attribute",
                             1, 1000);
 
-                    Assertions.assertEquals(doubleFilter.setUserMax(input), doubleFilter.getUserMaxDouble());
+                    try {
+                        Assertions.assertEquals(doubleFilter.setUserMax(input), doubleFilter.getUserMaxDouble());
+                    } catch (IllegalMinMaxException e) {
+                        e.printStackTrace();
+                        fail("Failed to set userMin " + input);
+                    }
                 }
 
                 @ParameterizedTest
@@ -305,7 +313,6 @@ class DoubleFilterTest {
 
             @Nested
             @DisplayName("Set invalid userMin and userMax")
-            @Disabled("Not yet implemented")
             class SetInvalidUserMinAndUserMax {
 
                 @ParameterizedTest
@@ -319,7 +326,7 @@ class DoubleFilterTest {
                             1, 1000);
 
                     Assertions.assertThrows(
-                            IlligalMinMaxException.class,
+                            IllegalMinMaxException.class,
                             () -> doubleFilter.setUserMin(input));
                 }
 
@@ -334,7 +341,7 @@ class DoubleFilterTest {
                             1, 1000);
 
                     Assertions.assertThrows(
-                            IlligalMinMaxException.class,
+                            IllegalMinMaxException.class,
                             () -> doubleFilter.setUserMax(input));
                 }
 
@@ -349,7 +356,7 @@ class DoubleFilterTest {
                             1, 1000);
 
                     Assertions.assertThrows(
-                            IlligalMinMaxException.class,
+                            IllegalMinMaxException.class,
                             () -> {
                                 doubleFilter.setUserMin(inputMin);
                                 doubleFilter.setUserMax(inputMax);

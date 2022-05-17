@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -174,14 +175,31 @@ class LongFilter extends RangeFilterClass{
     }
 
     @Override
-    public long setUserMin(long userMin) {
+    public long setUserMin(long userMin) throws IllegalMinMaxException {
+
+
         this.userMin = userMin;
         return this.userMin;
     }
 
     @Override
-    public long setUserMax(long userMax) {
+    public long setUserMax(long userMax) throws IllegalMinMaxException {
+        if (userMax == USER_NOT_SET_VALUE){
+            return userMax;
+        }
+
+        if (userMax <= userMin && userMin != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'");
+        }
+
+        if (userMax < DB_MIN || userMax > DB_MAX) {
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+        }
         this.userMax = userMax;
         return this.userMax;
+    }
+
+    public long getUserValueDefault(){
+        return this.USER_NOT_SET_VALUE;
     }
 }

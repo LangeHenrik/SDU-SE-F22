@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -199,13 +199,17 @@ class DoubleFilter extends RangeFilterClass {
     }
 
     @Override
-    public double setUserMin(double userMin) throws IlligalMinMaxException {
-        if (userMin > userMax && userMax != USER_NOT_SET_VALUE) {
-            throw new IlligalMinMaxException("'userMin' can not be greater than 'userMax'");
+    public double setUserMin(double userMin) throws IllegalMinMaxException {
+        if (userMin == USER_NOT_SET_VALUE){
+            return userMin;
+        }
+
+        if (userMin >= userMax && userMax != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMin' can not be greater than 'userMax'");
         }
 
         if (userMin < DB_MIN || userMin > DB_MAX) {
-            throw new IlligalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
+            throw new IllegalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
         }
 
         this.userMin = userMin;
@@ -213,16 +217,24 @@ class DoubleFilter extends RangeFilterClass {
     }
 
     @Override
-    public double setUserMax(double userMax) throws IlligalMinMaxException {
-        if (userMax > userMin && userMin != USER_NOT_SET_VALUE) {
-            throw new IlligalMinMaxException("'userMax' can not be less than 'userMin'");
+    public double setUserMax(double userMax) throws IllegalMinMaxException {
+        if (userMax == USER_NOT_SET_VALUE){
+            return userMax;
+        }
+
+        if (userMax <= userMin && userMin != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'");
         }
 
         if (userMax < DB_MIN || userMax > DB_MAX) {
-            throw new IlligalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
         }
 
         this.userMax = userMax;
         return this.userMax;
+    }
+
+    public double getUserValueDefault(){
+        return this.USER_NOT_SET_VALUE;
     }
 }

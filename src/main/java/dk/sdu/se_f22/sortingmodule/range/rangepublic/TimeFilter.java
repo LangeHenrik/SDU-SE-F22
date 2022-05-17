@@ -1,8 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -185,15 +184,19 @@ class TimeFilter extends RangeFilterClass {
     }
 
     @Override
-    public Instant setUserMin(Instant userMin) throws InvalidFilterTypeException {
+    public Instant setUserMin(Instant userMin) throws IllegalMinMaxException {
+        if (userMin.equals(this.USER_NOT_SET_VALUE)){
+            return userMin;
+        }
+
         long userMinEpoch = userMin.toEpochMilli();
         long userMaxEpoch = userMax.toEpochMilli();
         if (userMinEpoch > userMaxEpoch && userMax != USER_NOT_SET_VALUE) {
-            throw new InvalidFilterTypeException("'userMinEpoch' can not be greater than 'userMax'");
+            throw new IllegalMinMaxException("'userMinEpoch' can not be greater than 'userMax'");
         }
 
         if (userMinEpoch < DB_MIN.toEpochMilli() || userMinEpoch > DB_MAX.toEpochMilli()) {
-            throw new InvalidFilterTypeException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
+            throw new IllegalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMin: " + userMin + " dbMin: " + DB_MIN + " dbMax: " + DB_MAX);
         }
 
         this.userMin = userMin;
@@ -201,8 +204,26 @@ class TimeFilter extends RangeFilterClass {
     }
 
     @Override
-    public Instant setUserMax(Instant userMax) {
+    public Instant setUserMax(Instant userMax) throws IllegalMinMaxException {
+        if (userMax.equals(USER_NOT_SET_VALUE)){
+            return USER_NOT_SET_VALUE;
+        }
+
+        long userMinEpoch = userMin.toEpochMilli();
+        long userMaxEpoch = userMax.toEpochMilli();
+
+        if (userMaxEpoch <= userMinEpoch && userMin != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. UserMin : " + userMin + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+        }
+
+        if (userMaxEpoch < DB_MIN.toEpochMilli() || userMaxEpoch > DB_MAX.toEpochMilli()) {
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+        }
         this.userMax = userMax;
         return this.userMax;
+    }
+
+    public Instant getUserValueDefault(){
+        return this.USER_NOT_SET_VALUE;
     }
 }

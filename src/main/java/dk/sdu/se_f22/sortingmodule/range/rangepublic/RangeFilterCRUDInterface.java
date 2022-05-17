@@ -67,7 +67,7 @@ public interface RangeFilterCRUDInterface {
      * @throws InvalidFilterException Should be thrown if newName is containing special characters. <br>
      * However currently only throws if newName only contains a special character as the only character.
      */
-    RangeFilter update(RangeFilter filter, String newName) throws InvalidFilterException, IllegalImplementationException, SQLException, InvalidFilterTypeException;
+    RangeFilter update(RangeFilter filter, String newName) throws InvalidFilterException, IllegalImplementationException, SQLException, InvalidFilterTypeException, IllegalMinMaxException;
 
     /**
      * This method updates a RangeFilter's name and description attributes <br>
@@ -79,7 +79,7 @@ public interface RangeFilterCRUDInterface {
      * @throws InvalidFilterException Should be thrown if newName or description contains special characters. <br>
      * However currently only throws if newName or description only contains a special character as the only character.
      */
-    RangeFilter update(RangeFilter filter, String newName, String newDescription) throws InvalidFilterException, IllegalImplementationException, SQLException, InvalidFilterTypeException;
+    RangeFilter update(RangeFilter filter, String newName, String newDescription) throws InvalidFilterException, IllegalImplementationException, SQLException, InvalidFilterTypeException, IllegalMinMaxException;
 
     /**
      * This method updates a RangeFilter's (of type DoubleFilter) DB_MIN and DB_MAX values <br>
@@ -91,7 +91,7 @@ public interface RangeFilterCRUDInterface {
      * @throws InvalidFilterException Throws if dbMinToSave or dbMaxToSave is negative <br>
      * or if dbMinToSave is greater than dbMaxToSave.
      */
-    RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException, IllegalImplementationException, InvalidFilterTypeException, SQLException;
+    RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws InvalidFilterException, IllegalImplementationException, InvalidFilterTypeException, SQLException, IllegalMinMaxException;
 
     /**
      * This method updates a RangeFilter's (of type LongFilter) DB_MIN and DB_MAX values <br>
@@ -103,7 +103,7 @@ public interface RangeFilterCRUDInterface {
      * @throws InvalidFilterException Throws if dbMinToSave or dbMaxToSave is negative <br>
      * or if dbMinToSave is greater than dbMaxToSave.
      */
-    RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException, IllegalImplementationException, InvalidFilterTypeException, SQLException;
+    RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws InvalidFilterException, IllegalImplementationException, InvalidFilterTypeException, SQLException, IllegalMinMaxException;
 
     /**
      * This method updates a RangeFilter's (of type TimeFilter) DB_MIN and DB_MAX values <br>
@@ -114,7 +114,7 @@ public interface RangeFilterCRUDInterface {
      * @return RangeFilter with the modified DB_MIN and DB_MAX from database
      * @throws InvalidFilterException Throws if dbMinToSave is later than dbMaxToSave.
      */
-    RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException, IllegalImplementationException, InvalidFilterTypeException, SQLException;
+    RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws InvalidFilterException, IllegalImplementationException, InvalidFilterTypeException, SQLException, IllegalMinMaxException;
 
     /**
      * Method first reads all filters from the database.

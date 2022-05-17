@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 
 import java.time.Instant;
@@ -29,11 +30,11 @@ public interface RangeFilter {
     Instant getUserMaxInstant() throws InvalidFilterTypeException;
     long getUserMaxLong() throws InvalidFilterTypeException;
 
-    double setUserMin(double userMin) throws InvalidFilterTypeException;
-    Instant setUserMin(Instant userMin) throws InvalidFilterTypeException;
-    long setUserMin(long userMin) throws InvalidFilterTypeException;
+    double setUserMin(double userMin) throws IllegalMinMaxException;
+    Instant setUserMin(Instant userMin) throws IllegalMinMaxException;
+    long setUserMin(long userMin) throws IllegalMinMaxException;
 
-    double setUserMax(double userMax) throws InvalidFilterTypeException;
-    Instant setUserMax(Instant userMax) throws InvalidFilterTypeException;
-    long setUserMax(long userMax) throws InvalidFilterTypeException;
+    double setUserMax(double userMax) throws IllegalMinMaxException;
+    Instant setUserMax(Instant userMax) throws IllegalMinMaxException;
+    long setUserMax(long userMax) throws IllegalMinMaxException;
 }

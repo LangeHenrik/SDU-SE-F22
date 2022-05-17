@@ -21,10 +21,12 @@ public class Persistence implements IPersistence {
         //Connect to database
         jsonService = new JsonService();
         BIM2 = new BrandInfrastructure();
+
         try {
             c = DBConnection.getPooledConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        }
+        catch (SQLException e) {
+
         }
     }
 
@@ -73,7 +75,7 @@ public class Persistence implements IPersistence {
             ResultSet r;
             PreparedStatement getBrand;
             if(name == null) {
-                getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.type from brandproducttypejunction as bpj " +
+                getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
                         "right join brand on bpj.brandid = brand.id " +
                         "left join producttype on bpj.productid = producttype.id " +
                         "where brandid = ?;");
@@ -81,7 +83,7 @@ public class Persistence implements IPersistence {
                 getBrand.setInt(1,id);
                 r = getBrand.executeQuery();
             } else{
-                getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.type from brandproducttypejunction as bpj " +
+                getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.name from brandproducttypejunction as bpj " +
                         "right join brand on bpj.brandid = brand.id " +
                         "left join producttype on bpj.productid = producttype.id " +
                         "where brand.name = ?");
@@ -233,7 +235,7 @@ public class Persistence implements IPersistence {
     public boolean databaseIndexer() {
         setAutoCommit(false);
         try {
-            PreparedStatement indexDatabase = c.prepareStatement("create index on producttype(type); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);");
+            PreparedStatement indexDatabase = c.prepareStatement("create index on producttype(name); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);");
             indexDatabase.execute();
             c.commit();
         }  catch (SQLException e) {

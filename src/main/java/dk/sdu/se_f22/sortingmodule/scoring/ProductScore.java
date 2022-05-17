@@ -1,18 +1,16 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
 
-import dk.sdu.se_f22.sharedlibrary.models.Product;
-
 public class ProductScore implements Comparable<ProductScore>{
-    private Product product;
+    private TestProduct product;
     private int score;
 
-    public ProductScore(Product product) {
+    public ProductScore(TestProduct product) {
         this.product = product;
         this.score = 0;
     }
 
-    public Product getProduct() {
+    public TestProduct getProduct() {
         return product;
     }
 

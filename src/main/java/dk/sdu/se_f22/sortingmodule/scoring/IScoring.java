@@ -1,53 +1,33 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
-import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
-
-import java.util.Collection;
 import java.util.List;
 
 public interface IScoring {
 
     /**
-     <p> Returns a list of products that is sorted by the give type </p>
-     * @param input
-     */
-    SearchHits scoreSort(SearchHits input, String type);
-
-    /**
      <p> Returns a list of products that is sorted by price, reviews, stock and date. </p>
-     * @param input
-     * @return
      */
-    Collection<Product> scoreSortAll(Collection<Product> input);
+    List<TestProduct> scoreSort(List<TestProduct> input);
 
     /**
      <p> Returns a list of products that is sorted by price. </p>
-     * @param input
-     * @return
      */
-    Collection<Product> scoreSortPrice(Collection<Product> input);
+    List<TestProduct> scoreSortPrice(List<TestProduct> input);
 
     /**
      <p> Returns a list of products that is sorted by reviews. </p>
-     * @param input
-     * @return
      */
-    Collection<Product> scoreSortReview(Collection<Product> input);
+    List<TestProduct> scoreSortReview(List<TestProduct> input);
 
     /**
      <p> Returns a list of products that is sorted by stock. </p>
-     * @param input
-     * @return
      */
-    Collection<Product> scoreSortStock(Collection<Product> input);
+    List<TestProduct> scoreSortStock(List<TestProduct> input);
 
     /**
      <p> Returns a list of products that is sorted by date </p>
-     * @param input
-     * @return
      */
-    Collection<Product> scoreSortDate(Collection<Product> input);
+    List<TestProduct> scoreSortDate(List<TestProduct> input);
 
     /**
      <p> Returns the scores table </p>

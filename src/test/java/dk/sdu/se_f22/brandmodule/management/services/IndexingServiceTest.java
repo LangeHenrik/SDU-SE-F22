@@ -53,6 +53,7 @@ public class IndexingServiceTest {
         while(isRunning[0]){
            int a = 0;
            a = a+a;
+            System.out.println(isRunning[0]);
            if(isRunning[0]==false){
                break;
 

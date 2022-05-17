@@ -88,8 +88,11 @@ class BrandIndexTest {
         }
 
         BrandIndex brandIndex = new BrandIndex();
+        System.out.println("***");
         System.out.println(brandIndex.searchBrandIndex(tempList));
+        System.out.println("***");
         System.out.println(knownBrand);
+        System.out.println("***");
 
     }
 

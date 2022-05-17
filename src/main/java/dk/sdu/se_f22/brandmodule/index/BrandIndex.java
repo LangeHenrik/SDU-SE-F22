@@ -25,10 +25,10 @@ public class BrandIndex implements IndexInterface {
         try(Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement queryStatement = connection.prepareStatement(finalQuery);
 
-            //Might be this
             for (int i = 0; i < productIDList.size(); i++) {
-                queryStatement.setString(i + 1, String.valueOf(productIDList.get(i)));
+                queryStatement.setInt(i + 1, productIDList.get(i));
             }
+
 
             ResultSet queryResultSet = queryStatement.executeQuery();
 
@@ -53,9 +53,9 @@ public class BrandIndex implements IndexInterface {
 
 
     public String createFinalQueryForIndex(List<Integer> productIDS){
-        String tempFinalQuery = "SELECT * FROM TokenBrandMapTest LEFT JOIN BrandTest ON BrandTest.id = brandId WHERE productId = ?";
-        for (int i = 0; i < productIDS.size(); i++) {
-            tempFinalQuery += " AND name = ? ";
+        String tempFinalQuery = "SELECT * FROM TokenBrandMap LEFT JOIN Brand ON Brand.id = brandId WHERE tokenId = ?";
+        for (int i = 1; i < productIDS.size(); i++) {
+            tempFinalQuery += " AND tokenId = ? ";
         }
 
         return tempFinalQuery;
@@ -83,7 +83,7 @@ public class BrandIndex implements IndexInterface {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        tempList.add(1);
         return tempList;
     }
 

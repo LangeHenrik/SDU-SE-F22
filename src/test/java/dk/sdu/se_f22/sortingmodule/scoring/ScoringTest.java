@@ -78,8 +78,7 @@ class ScoringTest {
                     ('date',5,5);""";
         try (var connection = DBConnection.getPooledConnection()) {
             Statement stmt = connection.createStatement();
-
-            stmt.executeUpdate("DROP TABLE scores; ");
+            stmt.executeUpdate(" DROP TABLE IF exists scores ; ");
             stmt.executeUpdate(sql);
 
         } catch (SQLException ex) {

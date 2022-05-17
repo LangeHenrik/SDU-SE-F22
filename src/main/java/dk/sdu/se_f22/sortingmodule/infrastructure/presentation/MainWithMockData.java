@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.sortingmodule;
+package dk.sdu.se_f22.sortingmodule.infrastructure.presentation;
 
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Content;

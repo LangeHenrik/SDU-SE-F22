@@ -11,7 +11,6 @@ public class HTMLSite  {
     private String documentText;
     private List<String> tokens;
     private List<String> filteredTokensList;
-    private String[] filteredTokensArray;
     private boolean isUpdated;
 
 
@@ -67,14 +66,6 @@ public class HTMLSite  {
 
     public List<String> getFilteredTokens() {
         return filteredTokensList;
-    }
-
-    public String[] getFilteredTokensArray() {
-        return filteredTokensArray;
-    }
-
-    public void setFilteredTokensArray(String[] filteredTokensArray) {
-        this.filteredTokensArray = filteredTokensArray;
     }
 
     public void setFilteredTokens(List<String> filteredTokens) {

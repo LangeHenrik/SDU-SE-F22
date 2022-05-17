@@ -21,10 +21,7 @@ class  FilteredTokens {
              newSite.setFilteredTokens(new ArrayList<String>(tokens));
              newSite.setTokens(null); //empty the array
 
-             //The index module is asking for a String[] and not an arrayList
-             String[] tokenArray = tokens.toArray(new String[tokens.size()]);
-             newSite.setFilteredTokensArray(tokenArray);
-         } else throw new IllegalArgumentException();
+             } else throw new IllegalArgumentException();
 
         return newSite;
     }

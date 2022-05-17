@@ -9,7 +9,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class IndexingServiceTest {
-    IIndexingService indexingService;
     Persistence p = new Persistence();
 
     @BeforeAll

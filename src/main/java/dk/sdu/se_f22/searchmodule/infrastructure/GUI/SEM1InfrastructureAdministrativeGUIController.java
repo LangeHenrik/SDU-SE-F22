@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class SEM1InfrastructureAdministrativeGUIController implements Initializable {
@@ -16,10 +17,6 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     private RadioButton delimiterRB;
     @FXML
     private RadioButton forbiddenCharsRB;
-    @FXML
-    private Button addBtn;
-    @FXML
-    private Button removeBtn;
     @FXML
     private Label delimitersCount;
     @FXML
@@ -47,8 +44,7 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     public void addBtn(ActionEvent e) {
         if (delimiterRB.isSelected()) {
             addDelimiter();
-        }
-        else if (forbiddenCharsRB.isSelected()) {
+        } else if (forbiddenCharsRB.isSelected()) {
             addForbiddenChar();
         }
     }
@@ -56,8 +52,7 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
     public void removeBtn(ActionEvent e) {
         if (delimiterRB.isSelected()) {
             removeDelimiter();
-        }
-        else if (forbiddenCharsRB.isSelected()) {
+        } else if (forbiddenCharsRB.isSelected()) {
             removeForbiddenChar();
         }
     }
@@ -88,17 +83,32 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
 
     private void showDelimiters() {
         delimitersTextArea.clear();
-        for (String s : delimiterSettings.getDelimiters()) {
-            delimitersTextArea.appendText("\"" + s + "\"" + " ,");
-        }
+        prettyWriteToTextField(delimiterSettings.getDelimiters(), delimitersTextArea);
         delimitersCount.setText("Delimiters: " + delimiterSettings.getDelimiters().size());
     }
 
     private void showForbiddenChars() {
         forbiddenCharsTextArea.clear();
-        for (String s : illegalChars.illegalCharsFromDB()) {
-            forbiddenCharsTextArea.appendText("\"" + s + "\"" + " ,");
-        }
+        prettyWriteToTextField(illegalChars.illegalCharsFromDB(), forbiddenCharsTextArea);
         forbiddenCharsCount.setText("Forbidden Characters: " + illegalChars.illegalCharsFromDB().size());
+    }
+
+    private void prettyWriteToTextField(List<String> elementList, TextArea textArea) {
+        StringBuilder charString = new StringBuilder();
+
+        for (int i = 0; i < elementList.size(); i++) {
+            charString.setLength(0);
+            charString.append("\"")
+                    .append(elementList.get(i))
+                    .append("\"");
+
+            if (i != 0 && i % 5 == 0) {
+                charString.append("\n");
+            } else if (i != elementList.size() - 1) {
+                charString.append(", ");
+            }
+
+            textArea.appendText(charString.toString());
+        }
     }
 }

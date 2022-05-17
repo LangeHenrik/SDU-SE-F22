@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.productmodule.management;
+package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

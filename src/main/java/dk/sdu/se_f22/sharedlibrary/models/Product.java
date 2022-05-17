@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.ProductAttribute;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;

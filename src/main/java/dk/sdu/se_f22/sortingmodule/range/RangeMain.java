@@ -1,8 +1,8 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;

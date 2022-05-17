@@ -1,12 +1,10 @@
-package dk.sdu.se_f22.productmodule.management;
+package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
 import org.junit.platform.suite.api.SelectClasses;
-import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({ProductManagerTest.class, ProductAttributeTest.class, JSONReaderTest.class, BaseProductTest.class})
-//@SelectPackages({"dk.sdu.se_f22.productmodule.management"})
 public class TestSuite {
 
 }

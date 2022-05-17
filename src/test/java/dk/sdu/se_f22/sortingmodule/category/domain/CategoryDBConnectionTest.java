@@ -3,7 +3,7 @@ package dk.sdu.se_f22.sortingmodule.category.domain;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.category.Category;
-import org.junit.After;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -104,11 +104,11 @@ class CategoryDBConnectionTest {
     @DisplayName("Update category name")
     @Test
     void updateCategoryNameTest() {
-        int newCategoryID = DBConnection.createCategory("TestNameFake", "TestDescription", "TestReqValue",1, 1);
+        int newCategoryID = dBConnection.createCategory("TestNameFake", "TestDescription", "TestReqValue",1, 1);
 
         System.out.println(newCategoryID);
 
-        DBConnection.updateName(newCategoryID, "TestName");
+        dBConnection.updateName(newCategoryID, "TestName");
 
         String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
                 "INNER JOIN requirements_values \n" +
@@ -117,7 +117,8 @@ class CategoryDBConnectionTest {
                 "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE name = 'TestName'";
 
-        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getPooledConnection();
+                PreparedStatement queryStatement = conn.prepareStatement(sql)) {
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             queryResultSet.next();
@@ -129,7 +130,7 @@ class CategoryDBConnectionTest {
                     ()->assertEquals("name",queryResultSet.getString("fieldname")),
                     ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
             );
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -137,9 +138,9 @@ class CategoryDBConnectionTest {
     @DisplayName("Update category description")
     @Test
     void updateCategoryDescriptionTest() {
-        int newCategoryID = DBConnection.createCategory("TestName", "TestDescriptionFake", "TestReqValue",1, 1);
+        int newCategoryID = dBConnection.createCategory("TestName", "TestDescriptionFake", "TestReqValue",1, 1);
 
-        DBConnection.updateDescription(newCategoryID, "TestDescription");
+        dBConnection.updateDescription(newCategoryID, "TestDescription");
 
         String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
                 "INNER JOIN requirements_values \n" +
@@ -148,7 +149,9 @@ class CategoryDBConnectionTest {
                 "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE name = 'TestName'";
 
-        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getPooledConnection();
+             PreparedStatement queryStatement = conn.prepareStatement(sql)) {
+
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             queryResultSet.next();
@@ -160,7 +163,7 @@ class CategoryDBConnectionTest {
                     ()->assertEquals("name",queryResultSet.getString("fieldname")),
                     ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
             );
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -168,9 +171,9 @@ class CategoryDBConnectionTest {
     @DisplayName("Update category parentID")
     @Test
     void updateCategoryParentIDTest() {
-        int newCategoryID = DBConnection.createCategory("TestName", "TestDescription", "TestReqValue",2, 1);
+        int newCategoryID = dBConnection.createCategory("TestName", "TestDescription", "TestReqValue",2, 1);
 
-        DBConnection.updateParentID(newCategoryID, 1);
+        dBConnection.updateParentID(newCategoryID, 1);
 
         String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
                 "INNER JOIN requirements_values \n" +
@@ -179,7 +182,8 @@ class CategoryDBConnectionTest {
                 "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE name = 'TestName'";
 
-        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getPooledConnection();
+             PreparedStatement queryStatement = conn.prepareStatement(sql)) {
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             queryResultSet.next();
@@ -191,7 +195,7 @@ class CategoryDBConnectionTest {
                     ()->assertEquals("name",queryResultSet.getString("fieldname")),
                     ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
             );
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -199,9 +203,9 @@ class CategoryDBConnectionTest {
     @DisplayName("Update category requirementsValue")
     @Test
     void updateCategoryRequirementsValueTest() {
-        int newCategoryID = DBConnection.createCategory("TestName", "TestDescription", "TestReqValueFake",1, 1);
+        int newCategoryID = dBConnection.createCategory("TestName", "TestDescription", "TestReqValueFake",1, 1);
 
-        DBConnection.updateRequirementsValue(newCategoryID, "TestReqValue");
+        dBConnection.updateRequirementsValue(newCategoryID, "TestReqValue");
 
         String sql = "SELECT categories.id, parent_id, name, description, fieldname, value FROM categories \n" +
                 "INNER JOIN requirements_values \n" +
@@ -210,7 +214,8 @@ class CategoryDBConnectionTest {
                 "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE name = 'TestName'";
 
-        try (PreparedStatement queryStatement = DBConnection.connect().prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getPooledConnection();
+             PreparedStatement queryStatement = conn.prepareStatement(sql)) {
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             queryResultSet.next();
@@ -222,7 +227,7 @@ class CategoryDBConnectionTest {
                     ()->assertEquals("name",queryResultSet.getString("fieldname")),
                     ()->assertEquals("TestReqValue",queryResultSet.getString("value"))
             );
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -250,8 +255,6 @@ class CategoryDBConnectionTest {
     // To make sure that the connection is closed after use.
     @AfterEach
     public void close() {
-        System.out.println("Fuck dig Kevin");
-        DBConnection.closeConnection();
-        DBConnection = null;
+        dBConnection = null;
     }
 }

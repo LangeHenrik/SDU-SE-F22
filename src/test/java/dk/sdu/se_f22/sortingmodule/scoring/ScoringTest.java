@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.scoring;
 
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.junit.jupiter.api.*;
@@ -9,6 +10,7 @@ import java.sql.Statement;
 import java.time.Instant;
 import java.util.*;
 
+import static dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType.ALL;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -27,21 +29,8 @@ class ScoringTest {
     Product product8 = new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2018-01-09T10:15:30.00Z"),null, null, null, null,null,0,0);
     Product product9 = new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-31T10:15:30.00Z"),null, null, null, null,null,0,0);
     Product product10 = new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+
     {
-        List<Product> controlProducts = new ArrayList<>();
-        controlProducts.add(product2);
-        controlProducts.add(product10);
-        controlProducts.add(product5);
-        controlProducts.add(product7);
-        controlProducts.add(product9);
-        controlProducts.add(product1);
-        controlProducts.add(product3);
-        controlProducts.add(product4);
-        controlProducts.add(product6);
-        controlProducts.add(product8);
-
-
-
         products = new ArrayList<>();
         products.add(product1);
         products.add(product2);
@@ -87,8 +76,7 @@ class ScoringTest {
                     ('date',3,3),
                     ('date',4,4),
                     ('date',5,5);""";
-        try {
-            var connection = DBConnection.getPooledConnection();
+        try (var connection = DBConnection.getPooledConnection()) {
             Statement stmt = connection.createStatement();
 
             stmt.executeUpdate("DROP TABLE scores; ");
@@ -103,12 +91,54 @@ class ScoringTest {
     void tryAgain() {
         setup();
     }
-
+/*
     @Test
     @Order(1)
     void scoreSort() {
+        SearchHits searchHits = new SearchHits();
+        searchHits.setProducts(products);
 
+        scoring.scoreSort(searchHits, ALL);
+
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(product2);
+        controlProducts.add(product10);
+        controlProducts.add(product5);
+        controlProducts.add(product7);
+        controlProducts.add(product9);
+        controlProducts.add(product1);
+        controlProducts.add(product3);
+        controlProducts.add(product4);
+        controlProducts.add(product6);
+        controlProducts.add(product8);
+
+        assertEquals(searchHits.getProducts(),controlProducts);
     }
+
+ */
+    @Test
+    @Order(1)
+    void scoreSort() {
+        SearchHits searchHits = new SearchHits();
+        searchHits.setProducts(products);
+
+        scoring.scoreSort(searchHits, ALL);
+
+        List<Product> controlProducts = new ArrayList<>();
+        controlProducts.add(product2);
+        controlProducts.add(product10);
+        controlProducts.add(product5);
+        controlProducts.add(product7);
+        controlProducts.add(product9);
+        controlProducts.add(product1);
+        controlProducts.add(product3);
+        controlProducts.add(product4);
+        controlProducts.add(product6);
+        controlProducts.add(product8);
+
+        assertEquals(searchHits.getProducts(),controlProducts);
+    }
+
     @Test
     @Order(2)
     void scoreSortAll() {
@@ -124,7 +154,8 @@ class ScoringTest {
         controlProducts.add(product6);
         controlProducts.add(product8);
 
-        assertEquals(Arrays.toString(scoring.scoreSortAll(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        //assertEquals(Arrays.toString(scoring.scoreSortAll(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(scoring.scoreSortAll(products),controlProducts);
     }
 
     @Test
@@ -209,8 +240,7 @@ class ScoringTest {
         int weight = 2;
         scoring.createRow(type,bracket,weight);
 
-        try {
-            var connection = DBConnection.getPooledConnection();
+        try (var connection = DBConnection.getPooledConnection()) {
             var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = ?");
             statement.setInt(1,21);
             var sqlReturnValues = statement.executeQuery();
@@ -263,8 +293,7 @@ class ScoringTest {
         double newValue = 1700;
         scoring.updateRow(21,"1700","bracket");
 
-        try {
-            var connection = DBConnection.getPooledConnection();
+        try (var connection = DBConnection.getPooledConnection()) {
             var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = 21");
             var sqlReturnValues = statement.executeQuery();
 
@@ -284,7 +313,6 @@ class ScoringTest {
         scoring.deleteRow(9);
         scoring.deleteRow(1);
         scoring.deleteRow(21);
-
 
         String[] input = scoring.readTable().toArray(new String[0]);
 

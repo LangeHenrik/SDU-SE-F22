@@ -54,9 +54,9 @@ public class Scoring implements IScoring {
     private void stock(List<ProductScore> input) {
         for (ProductScore product : input) {
             int stock = product.getProduct().getInStock().size();
-            try {var connection = DBConnection.getPooledConnection();
+            try (var connection = DBConnection.getPooledConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'stock'");
-                var sqlReturnValues = statement.executeQuery();
+                var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
                     if (stock <= sqlReturnValues.getInt(3)) {
                         product.setScore(sqlReturnValues.getInt(4));
@@ -159,10 +159,6 @@ public class Scoring implements IScoring {
         date(products);
 
         Collections.sort(products);
-
-        for (ProductScore product : products) {
-            System.out.println(product.getScore());
-        }
 
         return unWrapProduct(products);
     }

@@ -89,7 +89,7 @@ public class TestSearchModule {
 
     public static BaseProduct createExampleBaseproduct() {
         var product = new BaseProduct();
-        product.set(ProductAttribute.ID, UUID.randomUUID().toString());
+        product.set(ProductAttribute.UUID, UUID.randomUUID().toString());
         product.set(ProductAttribute.AVERAGE_USER_REVIEW, "123.0");
         product.set(ProductAttribute.IN_STOCK, "hello");
         product.set(ProductAttribute.EAN, "123");

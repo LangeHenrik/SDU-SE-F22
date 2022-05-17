@@ -270,6 +270,25 @@ class TimeFilterTest {
                 }
 
                 @Test
+                @DisplayName("Set invalid TimeFilter userMin higher than dbMin")
+                @MethodSource("provideTimeFilters")
+                void setInvalidTimeFilterUserMinHigherThanDBMin (TimeFilter filter) {
+                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMin(newUserMin)
+                    );
+                }
+
+                @Test
+                @DisplayName("Set invalid TimeFilter userMax higher than dbMin")
+                void setInvalidTimeFilterUserMaxHigherThanDBMin (TimeFilter filter) {
+                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newUserMax)
+                    );
+                }
+
+                @Test
                 @DisplayName("Set invalid TimeFilter userMax less than userMin")
                 void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) {
                     Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);

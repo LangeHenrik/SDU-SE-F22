@@ -178,6 +178,7 @@ class LongFilterTest {
 
                 @Test
                 @DisplayName("Set valid LongFilter userMax")
+                @MethodSource("provideLongFilters")
                 void setValidLongFilterUserMax (LongFilter filter) {
                     Assertions.assertDoesNotThrow(
                             () -> filter.setUserMax(900));
@@ -185,16 +186,18 @@ class LongFilterTest {
 
                 @Test
                 @DisplayName("userMin has changed")
+                @MethodSource("provideLongFilters")
                 void userMinHasChanged (LongFilter filter) {
-                    Long newMin = 10L;
+                    long newMin = 10;
                     filter.setUserMin(newMin);
                     Assertions.assertEquals(newMin, filter.getUserMinLong());
                 }
 
                 @Test
                 @DisplayName("userMax has changed")
+                @MethodSource("provideLongFilters")
                 void userMaxHasChanged (LongFilter filter) {
-                    Long newMax = 900L;
+                    long newMax = 900;
                     filter.setUserMin(newMax);
                     Assertions.assertEquals(newMax, filter.getUserMaxLong());
                 }
@@ -209,21 +212,63 @@ class LongFilterTest {
                 @DisplayName("Set invalid TimeFilter userMin less than dbMin")
                 @MethodSource("provideLongFilters")
                 void setInvalidLongFilterUserMin (LongFilter filter) {
+                    long newValue = filter.getDbMinLong() - 1;
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMin(newValue));
                 }
 
                 @Test
                 @DisplayName("Set invalid LongFilter userMax less than dbMin")
+                @MethodSource("provideLongFilters")
                 void setInvalidLongFilterUserMax (LongFilter filter) {
+                    long newValue = filter.getDbMinLong() - 1;
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newValue)
+                    );
                 }
 
                 @Test
+                @DisplayName("Set invalid TimeFilter userMin higher than dbMax")
+                @MethodSource("provideLongFilters")
+                void setInvalid (LongFilter filter) {
+                    long newValue = filter.getDbMaxLong() + 1;
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMin(newValue));
+                }
+
+                @Test
+                @DisplayName("Set invalid LongFilter userMax higher than dbMax")
+                @MethodSource("provideLongFilters")
+                void setInvalidLongFilterUserMaxHigherThanDBMax (LongFilter filter) {
+                    long newValue = filter.getDbMaxLong() + 1;
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newValue)
+                    );
+                }
+
+
+                @Test
                 @DisplayName("Set invalid LongFilter userMax less than userMin")
+                @MethodSource("provideLongFilters")
                 void setInvalidLessThanUserMaxLessThanUserMin (LongFilter filter) {
+                    long newMin = filter.getDbMaxLong() - 10;
+                    long newMax = filter.getDbMaxLong() - 20;
+
+                    filter.setUserMin(newMin);
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMax(newMax));
                 }
 
                 @Test
                 @DisplayName("Set invalid LongFilter userMin higher than userMax")
+                @MethodSource("provideLongFilters")
                 void setInvalidUserMinHigherThanUserMax (LongFilter filter) {
+                    long newMax = filter.getDbMaxLong() - 20;
+                    long newMin = filter.getDbMaxLong() - 10;
+
+                    filter.setUserMax(newMin);
+                    Assertions.assertThrows(InvalidFilterException.class,
+                            () -> filter.setUserMin(newMax));
                 }
             }
 

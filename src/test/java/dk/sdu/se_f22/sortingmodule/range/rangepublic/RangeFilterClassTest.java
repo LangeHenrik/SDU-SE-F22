@@ -1,23 +1,14 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+
+import java.time.Instant;
 
 //@Execution(ExecutionMode.CONCURRENT)
 // Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterClassTest {
-
-
-    /*
-    @BeforeEach
-    public void setup(){
-        rangeFilterCRUD = new RangeFilterCRUD();
-    }
-
-    @AfterEach
-    public void teardown(){
-        Helpers.resetDB();
-    }
-     */
     @Nested
     @DisplayName("Non-matching tests")
     class NonMatchingTests {

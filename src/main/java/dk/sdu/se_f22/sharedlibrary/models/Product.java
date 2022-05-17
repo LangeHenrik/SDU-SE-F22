@@ -33,7 +33,7 @@ public class Product {
 
     /** The constructor for setting all attributes at once including those that are optional
      */
-    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
         this(uuid, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
         this.size = size;
         this.clockspeed = clockspeed;
@@ -44,7 +44,7 @@ public class Product {
      * <br>
      * Except for clockspeed and weight, which are doubles and thus not capable of being null.
      */
-    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
         this.uuid = uuid;
         this.averageUserReview = averageUserReview;
         this.inStock = inStock;

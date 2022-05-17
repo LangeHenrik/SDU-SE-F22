@@ -1,4 +1,6 @@
-package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
+
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -1,10 +1,10 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
 
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.OneWayImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

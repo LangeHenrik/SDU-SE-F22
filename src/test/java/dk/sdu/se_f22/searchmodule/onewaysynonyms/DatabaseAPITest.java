@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
 import org.junit.jupiter.api.Test;
-import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

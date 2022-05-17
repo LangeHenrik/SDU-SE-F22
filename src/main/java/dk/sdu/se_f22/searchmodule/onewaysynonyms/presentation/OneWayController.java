@@ -1,5 +1,9 @@
-package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+package dk.sdu.se_f22.searchmodule.onewaysynonyms.presentation;
 
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.OneWayImage;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.ItemCatalog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

@@ -6,23 +6,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
-import dk.sdu.se_f22.sharedlibrary.models.Brand;
-import dk.sdu.se_f22.sharedlibrary.models.Content;
-import dk.sdu.se_f22.sharedlibrary.models.Product;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 class SearchHitsTest {
     private SearchHits sh;
-    private Collection<Product> products;
-    private Collection<Brand> brands;
-    private Collection<Content> contents;
+    private Collection products;
+    private Collection brands;
+    private Collection contents;
 
     @BeforeEach
     void setUp() {
@@ -30,13 +23,13 @@ class SearchHitsTest {
         this.sh = new SearchHits();
 
         this.products = this.sh.getProducts();
-        this.sh.setProducts(new ArrayList<Product>());
+        this.sh.setProducts(new ArrayList());
 
         this.brands = this.sh.getBrands();
-        this.sh.setBrands(new ArrayList<Brand>());
+        this.sh.setBrands(new ArrayList());
 
         this.contents = this.sh.getContents();
-        this.sh.setContents(new ArrayList<Content>());
+        this.sh.setContents(new ArrayList());
     }
 
     @AfterEach
@@ -100,46 +93,11 @@ class SearchHitsTest {
         @Test
         void addProductsGet() {
             SearchHits hits = new SearchHits();
-            Collection<Product> productsHits = hits.getProducts();
+            Collection productsHits = hits.getProducts();
 
-            Product product1 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 1");
-            productsHits.add(product1);
-
-            Product product2 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 2");
-            productsHits.add(product2);
-
-            Product product3 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 3");
-            productsHits.add(product3);
+            productsHits.add("Product 1");
+            productsHits.add("Product 2");
+            productsHits.add("Product 3");
 
             assertNotEquals(productsHits, new SearchHits().getProducts());
         }
@@ -148,11 +106,11 @@ class SearchHitsTest {
         @Test
         void addBrandsGet() {
             SearchHits hits = new SearchHits();
-            Collection<Brand> brandHits = hits.getBrands();
+            Collection brandHits = hits.getBrands();
 
-            brandHits.add(new Brand("Brand 1", "Demo", "1999", "Test city"));
-            brandHits.add(new Brand("Brand 2", "Demo", "1999", "Test city"));
-            brandHits.add(new Brand("Brand 3", "Demo", "1999", "Test city"));
+            brandHits.add("Brand 1");
+            brandHits.add("Brand 2");
+            brandHits.add("Brand 3");
 
             assertNotEquals(brandHits, new SearchHits().getBrands());
         }
@@ -161,11 +119,11 @@ class SearchHitsTest {
         @Test
         void addContentsGet() {
             SearchHits hits = new SearchHits();
-            Collection<Content> contentsHits = hits.getContents();
+            Collection contentsHits = hits.getContents();
 
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
+            contentsHits.add("Page 1");
+            contentsHits.add("Page 2");
+            contentsHits.add("Page 3");
 
             assertNotEquals(contentsHits, new SearchHits().getContents());
         }
@@ -178,46 +136,11 @@ class SearchHitsTest {
         @Test
         void addProductsSet() {
             SearchHits hits = new SearchHits();
-            Collection<Product> productsHits = new ArrayList<>();
+            Collection productsHits = new ArrayList<>();
 
-            Product product1 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 1");
-            productsHits.add(product1);
-
-            Product product2 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 2");
-            productsHits.add(product2);
-
-            Product product3 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 3");
-            productsHits.add(product3);
+            productsHits.add("Product 1");
+            productsHits.add("Product 2");
+            productsHits.add("Product 3");
 
             hits.setProducts(productsHits);
 
@@ -228,11 +151,11 @@ class SearchHitsTest {
         @Test
         void addBrandsSet() {
             SearchHits hits = new SearchHits();
-            Collection<Brand> brandHits = new ArrayList<>();
+            Collection brandHits = new ArrayList<>();
 
-            brandHits.add(new Brand("Brand 1", "Demo", "1999", "Test city"));
-            brandHits.add(new Brand("Brand 2", "Demo", "1999", "Test city"));
-            brandHits.add(new Brand("Brand 3", "Demo", "1999", "Test city"));
+            brandHits.add("Brand 1");
+            brandHits.add("Brand 2");
+            brandHits.add("Brand 3");
 
             hits.setBrands(brandHits);
 
@@ -243,108 +166,15 @@ class SearchHitsTest {
         @Test
         void addContentsSet() {
             SearchHits hits = new SearchHits();
-            Collection<Content> contentsHits = new ArrayList<>();
+            Collection contentsHits = new ArrayList<>();
 
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
+            contentsHits.add("Page 1");
+            contentsHits.add("Page 2");
+            contentsHits.add("Page 3");
 
             hits.setContents(contentsHits);
 
             assertEquals(contentsHits, hits.getContents());
-        }
-    }
-
-    @DisplayName("Add elements through add methods")
-    @Nested
-    public class AddSearchHitsTest {
-        @DisplayName("Add products through addProduct")
-        @Test
-        void addProductsGet() {
-            SearchHits hits = new SearchHits();
-            Collection<Product> productsHits = new ArrayList<>();
-
-            Product product1 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 1");
-            productsHits.add(product1);
-            hits.addProduct(product1);
-
-            Product product2 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 2");
-            productsHits.add(product2);
-            hits.addProduct(product2);
-
-            Product product3 = new Product(
-                    new UUID(1, 1),
-                    2.2,
-                    new ArrayList<String>(),
-                    1,
-                    1.2,
-                    Instant.now(),
-                    Instant.now(),
-                    "cat",
-                    "name",
-                    "description 3");
-            productsHits.add(product3);
-            hits.addProduct(product3);
-
-            assertNotEquals(productsHits, new SearchHits().getProducts());
-        }
-
-        @DisplayName("Add brands through addBrand")
-        @Test
-        void addBrandsGet() {
-            SearchHits hits = new SearchHits();
-            Collection<Brand> brandHits = new ArrayList<>();
-
-            Brand brand1 = new Brand("Brand 1", "Demo", "1999", "Test city");
-            brandHits.add(brand1);
-            hits.addBrand(brand1);
-            Brand brand2 = new Brand("Brand 2", "Demo", "1999", "Test city");
-            brandHits.add(brand2);
-            hits.addBrand(brand1);
-            Brand brand3 = new Brand("Brand 3", "Demo", "1999", "Test city");
-            brandHits.add(brand3);
-            hits.addBrand(brand1);
-
-            assertNotEquals(brandHits, new SearchHits().getBrands());
-        }
-
-        @DisplayName("Add contents through addContent")
-        @Test
-        void addContentsGet() {
-            SearchHits hits = new SearchHits();
-            Collection<Content> contentsHits = new ArrayList<>();
-
-            Content content1 = new Content();
-            contentsHits.add(content1);
-            hits.addContent(content1);
-            Content content2 = new Content();
-            contentsHits.add(content2);
-            hits.addContent(content2);
-            Content content3 = new Content();
-            contentsHits.add(content3);
-            hits.addContent(content3);
-
-            assertNotEquals(contentsHits, new SearchHits().getContents());
         }
     }
 
@@ -359,7 +189,7 @@ class SearchHitsTest {
 
         @Test
         void NullBrandsSet() {
-            SearchHits hits = new SearchHits();
+            SearchHits hits =new SearchHits();
             assertThrows(NullPointerException.class, () -> hits.setBrands(null));
         }
 

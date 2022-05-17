@@ -76,7 +76,7 @@ public class SortingModuleImpl implements SortingModule {
         this.saveSearch();
 
         // Search
-        SearchModule searchModule = new SearchModuleImpl();
+        SearchModule searchModule = SearchModuleImpl.createDefaultSearchModule();
         
         SearchHits searchHits;
         try {

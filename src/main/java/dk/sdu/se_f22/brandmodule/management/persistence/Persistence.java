@@ -159,7 +159,7 @@ public class Persistence implements IPersistence {
 
             // Insert products into database
             for (var product : products) {
-                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO producttype (name) VALUES (?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name;");
+                PreparedStatement insertAllProducts = c.prepareStatement("INSERT INTO producttype (type) VALUES (?) ON CONFLICT(type) DO UPDATE SET type = EXCLUDED.type;");
 
                 insertAllProducts.setString(1, product);
                 insertAllProducts.execute();
@@ -174,8 +174,8 @@ public class Persistence implements IPersistence {
                     insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
                 }
                 else {
-                    insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?,?,?,?) WHERE id = ? ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
-                    insertAllBrands.setString(5, String.valueOf(brand.getId()));
+                    insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters, id) VALUES (?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
+                    insertAllBrands.setInt(5, brand.getId());
                 }
 
                 insertAllBrands.setString(1, brand.getName());
@@ -201,7 +201,7 @@ public class Persistence implements IPersistence {
                 for(String product : brand.getProducts()){
                     int productID = 0;
 
-                    PreparedStatement selectProductID = c.prepareStatement("SELECT id FROM producttype WHERE name = ?");
+                    PreparedStatement selectProductID = c.prepareStatement("SELECT id FROM producttype WHERE type = ?");
                     selectProductID.setString(1,product);
                     ResultSet resultsProduct = selectProductID.executeQuery();
 

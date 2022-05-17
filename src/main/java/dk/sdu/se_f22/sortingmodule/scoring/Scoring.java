@@ -121,16 +121,28 @@ public class Scoring implements IScoring {
     public SearchHits scoreSort(SearchHits input, ScoreSortType type) {
 
         switch (type) {
-            case ALL -> input.setProducts(scoreSortAll(input.getProducts()));
-            case PRICE -> input.setProducts(scoreSortPrice(input.getProducts()));
-            case REVIEW -> input.setProducts(scoreSortReview(input.getProducts()));
-            case STOCK -> input.setProducts(scoreSortStock(input.getProducts()));
-            case DATE -> input.setProducts(scoreSortDate(input.getProducts()));
-            default -> {
-                System.out.println("error: invalid sort type");
+            case ALL:
+                input.setProducts(scoreSortAll(input.getProducts()));
+                break;
 
-                return input;
-            }
+            case PRICE:
+                input.setProducts(scoreSortPrice(input.getProducts()));
+                break;
+
+            case REVIEW:
+                input.setProducts(scoreSortReview(input.getProducts()));
+                break;
+
+            case STOCK:
+                input.setProducts(scoreSortStock(input.getProducts()));
+                break;
+
+            case DATE:
+                input.setProducts(scoreSortDate(input.getProducts()));
+                break;
+
+            default:
+                System.out.println("error: invalid sort type");
         }
 
         return input;

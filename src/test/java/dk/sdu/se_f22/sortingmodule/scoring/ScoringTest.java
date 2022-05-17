@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ScoringTest {
-
     Scoring scoring = new Scoring();
     ArrayList<Product> products;
     Product product1 = new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-08-09T10:15:30.00Z"),null, null, null, null,null,0,0);
@@ -46,7 +45,6 @@ class ScoringTest {
 
     @BeforeAll
     void setup() {
-
         String sql = """
                 CREATE TABLE scores(
                    id serial PRIMARY KEY,
@@ -90,31 +88,7 @@ class ScoringTest {
     void tryAgain() {
         setup();
     }
-/*
-    @Test
-    @Order(1)
-    void scoreSort() {
-        SearchHits searchHits = new SearchHits();
-        searchHits.setProducts(products);
 
-        scoring.scoreSort(searchHits, ALL);
-
-        List<Product> controlProducts = new ArrayList<>();
-        controlProducts.add(product2);
-        controlProducts.add(product10);
-        controlProducts.add(product5);
-        controlProducts.add(product7);
-        controlProducts.add(product9);
-        controlProducts.add(product1);
-        controlProducts.add(product3);
-        controlProducts.add(product4);
-        controlProducts.add(product6);
-        controlProducts.add(product8);
-
-        assertEquals(searchHits.getProducts(),controlProducts);
-    }
-
- */
     @Test
     @Order(1)
     void scoreSort() {
@@ -153,7 +127,6 @@ class ScoringTest {
         controlProducts.add(product6);
         controlProducts.add(product8);
 
-        //assertEquals(Arrays.toString(scoring.scoreSortAll(products).toArray()), Arrays.toString(controlProducts.toArray()));
         assertEquals(scoring.scoreSortAll(products),controlProducts);
     }
 
@@ -172,10 +145,8 @@ class ScoringTest {
         controlProducts.add(product6);
         controlProducts.add(product10);
 
-        assertEquals(Arrays.toString(scoring.scoreSortPrice(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(scoring.scoreSortPrice(products), controlProducts);
     }
-
-
 
     @Test
     @Order(4)
@@ -192,7 +163,7 @@ class ScoringTest {
         controlProducts.add(product7);
         controlProducts.add(product8);
 
-        assertEquals(Arrays.toString(scoring.scoreSortReview(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(scoring.scoreSortReview(products), controlProducts);
     }
 
     @Test
@@ -210,7 +181,7 @@ class ScoringTest {
         controlProducts.add(product6);
         controlProducts.add(product8);
 
-        assertEquals(Arrays.toString(scoring.scoreSortStock(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(scoring.scoreSortStock(products), controlProducts);
     }
 
     @Test
@@ -228,7 +199,7 @@ class ScoringTest {
         controlProducts.add(product6);
         controlProducts.add(product8);
 
-        assertEquals(Arrays.toString(scoring.scoreSortDate(products).toArray()), Arrays.toString(controlProducts.toArray()));
+        assertEquals(scoring.scoreSortDate(products), controlProducts);
     }
 
     @Test

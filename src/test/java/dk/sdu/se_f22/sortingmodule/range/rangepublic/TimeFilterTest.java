@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
@@ -216,7 +217,7 @@ class TimeFilterTest {
                 void setValidTimeFilterUserMin (TimeFilter filter) {
                     String newDate = "2022-05-10T18:35:24.00Z";
                     Assertions.assertDoesNotThrow(
-                            () -> filter.setUserMin(Instant.parse("2022-05-10T18:35:24.00Z"))
+                            () -> filter.setUserMin(Instant.parse(newDate))
                     );
                 }
 
@@ -255,7 +256,7 @@ class TimeFilterTest {
                 @MethodSource("provideTimeFilters")
                 void setInvalidTimeFilterUserMin (TimeFilter filter) {
                     Instant newUserMin = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMin(newUserMin)
                         );
                 }
@@ -264,7 +265,26 @@ class TimeFilterTest {
                 @DisplayName("Set invalid TimeFilter userMax less than dbMin")
                 void setInvalidTimeFilterUserMax (TimeFilter filter) {
                     Instant newUserMax = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
+                            () -> filter.setUserMax(newUserMax)
+                    );
+                }
+
+                @Test
+                @DisplayName("Set invalid TimeFilter userMin higher than dbMin")
+                @MethodSource("provideTimeFilters")
+                void setInvalidTimeFilterUserMinHigherThanDBMin (TimeFilter filter) {
+                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
+                    Assertions.assertThrows(IlligalMinMaxException.class,
+                            () -> filter.setUserMin(newUserMin)
+                    );
+                }
+
+                @Test
+                @DisplayName("Set invalid TimeFilter userMax higher than dbMin")
+                void setInvalidTimeFilterUserMaxHigherThanDBMin (TimeFilter filter) {
+                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMax(newUserMax)
                     );
                 }
@@ -277,7 +297,7 @@ class TimeFilterTest {
 
                     filter.setUserMin(newUserMin);
 
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMax(newUserMax)
                     );
                 }
@@ -291,7 +311,7 @@ class TimeFilterTest {
 
                     filter.setUserMin(newUserMax);
 
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMax(newUserMin)
                     );
                 }

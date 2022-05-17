@@ -15,7 +15,18 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     private int categoryHits = 0;
     private int nameHits = 0;
     private int descriptionHits = 0;
+<<<<<<< HEAD
     private List<Product> sortedList = new ArrayList<>();
+=======
+    private List<Product> searchedList = new ArrayList<>();
+
+    private String url = "localhost";
+    private int port = 5432;
+    private String databaseName = "xxxx";
+    private String username = "xxxx";
+    private String password = "xxxx";
+    private Connection connection = null;
+>>>>>>> 768837cda3390e9855eb82b36278e97a4f668448
     private static ProductIndex instance;
     private ProductIndex(){
 
@@ -29,8 +40,8 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     }
 
 
-    // Method for finding amount of hits within a product by a token, then returning an indexed list by the hits
-    public List<Product> indexProductsByToken(List<Product> products, List<String> tokens) {
+    // Method for finding amount of hits within a product by a token
+    public List<Product> searchProducts(List<Product> products, List<String> tokens) {
 
         for(Product p : products){
             String[] categoryWords = p.getCategory().toLowerCase().split("/");
@@ -45,11 +56,15 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             }
 
             p.setHitNum(totalHits);
-            sortedList.add(p);
-            Collections.sort(sortedList);
+            searchedList.add(p);
         }
-        return sortedList;
+        return searchedList;
 
+    }
+    // Method for indexing products depending on amount of search hits
+    public List<Product> indexProducts(List<Product> products){
+        Collections.sort(products);
+        return products;
     }
 
     public int findHits(String[] info, String token){
@@ -65,33 +80,78 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
 
-    public void updateProduct(String id, Product product){
+    public void updateProduct(int id, Product product){
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(
-                    "UPDATE product set averageUserReview = ?, instock = ?, ean = ?, price = ?, publisheddate = ?, expirationdate = ?, category = ?, name = ?, description = ?, weight = ? WHERE id = ?");
-            updateStatement.setDouble(1, product.getAverageUserReview());
-            updateStatement.setArray(2, (Array) product.getInStock());
-            updateStatement.setLong(3, product.getEan());
-            updateStatement.setDouble(4, product.getPrice());
-            updateStatement.setString(5, String.valueOf(product.getPublishedDate()));
-            updateStatement.setString(6, String.valueOf(product.getExpirationDate()));
-            updateStatement.setString(7, product.getCategory());
-            updateStatement.setString(8, product.getName());
-            updateStatement.setString(9, product.getDescription());
-            updateStatement.setDouble(10, product.getWeight());
-            updateStatement.setString(11, String.valueOf(id));
-            updateStatement.execute();
+            PreparedStatement updateCategory = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
+            PreparedStatement updateStock = connection.prepareStatement("UPDATE stock set city = ? WHERE id = ?");
+            PreparedStatement updateProduct = connection.prepareStatement(
+                    "UPDATE product set name = ?," +
+                            "averageuserreview = ?," +
+                            "creationdate = ?," +
+                            "publisheddate = ?," +
+                            "expirationdate = ?," +
+                            "price = ?," +
+                            "description = ?," +
+                            "ean = ?," +
+                            "weight = ?," +
+                            "WHERE id = ?");
+            //PreparedStatement updateProductStock = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+            PreparedStatement updateSpecs = connection.prepareStatement("UPDATE specs set clockspeed = ? WHERE id = ?");
+            PreparedStatement updateStorage = connection.prepareStatement("UPDATE storage set size = ? WHERE id = ?");
+            //PreparedStatement updateProductStorage = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+            //PreparedStatement updateProductSpecs = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+
+            updateCategory.setString(1, product.getCategory());
+            updateCategory.setInt(2, id);
+
+            updateStock.setArray(1, (Array) product.getInStock());
+            updateStock.setInt(2, id);
+
+            updateProduct.setDouble(1, product.getAverageUserReview());
+            updateProduct.setString(2, product.getName());
+            updateProduct.setTimestamp(4, Timestamp.from(product.getPublishedDate()));
+            updateProduct.setTimestamp(5, Timestamp.from(product.getExpirationDate()));
+            updateProduct.setDouble(6, product.getPrice());
+            updateProduct.setString(7, product.getDescription());
+            updateProduct.setLong(8,product.getEan());
+            updateProduct.setDouble(9, product.getWeight());
+            updateProduct.setInt(10, id);
+
+            updateSpecs.setDouble(1, product.getClockspeed());
+            updateSpecs.setInt(2, id);
+
+            updateStorage.setString(1, product.getSize());
+            updateStorage.setInt(2, id);
+
+            updateCategory.execute();
+            updateStock.execute();
+            updateProduct.execute();
+            updateSpecs.execute();
+            updateStorage.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteProduct(String id){
+    public void deleteProduct(int id){
         try {
-            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM product WHERE id = ?");
-            deleteStatement.setString(1, id);
-            deleteStatement.execute();
+
+            PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE id = ?");
+            PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM productStock WHERE id = ?");
+            PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM productStorage WHERE id = ?");
+            PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE id = ?");
+
+            deleteProduct.setInt(1, id);
+            deleteStock.setInt(1, id);
+            deleteSpecs.setInt(1, id);
+            deleteStorage.setInt(1, id);
+
+            deleteProduct.execute();
+            deleteStock.execute();
+            deleteSpecs.execute();
+            deleteStorage.execute();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }

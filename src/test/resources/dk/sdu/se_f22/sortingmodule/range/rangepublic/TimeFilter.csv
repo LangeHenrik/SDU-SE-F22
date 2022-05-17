@@ -1,4 +1,4 @@
 id,name,description,productAtrribute,min,max
-3,test name time,test description for time filter,expirationDate,2018-11-30T16:35:24.00Z,2022-11-30T16:35:24.00Z
-6,test name time six,sechs test description for time filter,publishedDate,2011-11-30T19:35:24.00Z,2019-11-30T19:35:24.00Z
-7,test name time sieben,seven test description for time filter,someDate,2020-11-30T19:35:24.00Z,2030-11-30T19:35:24.00Z
+3,test name time,test description for time filter,expirationDate,2018-11-30T15:35:24.00Z,2022-11-30T15:35:24.00Z
+6,test name time six,sechs test description for time filter,publishedDate,2011-11-30T18:35:24.00Z,2019-11-30T18:35:24.00Z
+7,test name time sieben,seven test description for time filter,someDate,2020-11-30T18:35:24.00Z,2030-11-30T18:35:24.00Z

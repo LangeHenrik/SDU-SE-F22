@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class TwoWaySynonym implements DatabaseOperator {
     private TwoWaySynonym() {}
+    private final Connection conn = DBConnection.getConnection();
     public static TwoWaySynonym getInstance() {
         return TwoWaySynonymHolder.INSTANCE;
     }
@@ -31,9 +32,8 @@ public class TwoWaySynonym implements DatabaseOperator {
             add(uuid);
             add(synonym);
         }};
-        Connection conn = getConnection();
-        PreparedStatement statement = getPreparedStatement(format, args, conn);
-        return (updateDatabase(statement, conn) > 0) ? uuid : null;
+        PreparedStatement statement = getPreparedStatement(format, args);
+        return (updateDatabase(statement) > 0) ? uuid : null;
     }
 
     /**
@@ -52,9 +52,8 @@ public class TwoWaySynonym implements DatabaseOperator {
             add(synonym);
             add(group_id);
         }};
-        Connection conn = getConnection();
-        PreparedStatement statement = getPreparedStatement(format, args, conn);
-        return (updateDatabase(statement, conn) > 0) ? uuid : null;
+        PreparedStatement statement = getPreparedStatement(format, args);
+        return (updateDatabase(statement) > 0) ? uuid : null;
     }
 
     /**
@@ -66,10 +65,9 @@ public class TwoWaySynonym implements DatabaseOperator {
     public ArrayList<Synonym> readAll(int groupId) {
         String statementFormat = "SELECT * FROM twoway_synonym WHERE group_id = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(groupId);}};
-        Connection conn = getConnection();
-        PreparedStatement stmt = getPreparedStatement(statementFormat, args, conn);
-        ArrayList<Synonym> synonyms = readDatabase(stmt, conn);
-        return synonyms;
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        ResultSet rs = readDatabase(stmt);
+        return getSynonyms(rs);
     }
 
     /**
@@ -81,11 +79,16 @@ public class TwoWaySynonym implements DatabaseOperator {
     public Synonym read(String synonym) {
         String statementFormat = "SELECT * FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
-        Connection conn = getConnection();
-        PreparedStatement stmt = getPreparedStatement(statementFormat, args, conn);
-        ArrayList<Synonym> synonyms = readDatabase(stmt, conn);
-        if (!synonyms.isEmpty()) {
-            return synonyms.get(0); // Hacky hacky :)
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        ResultSet rs = readDatabase(stmt);
+        try {
+            if (rs.next()) {
+                return new Synonym(
+                        rs.getString(1), rs.getString(2), rs.getInt(3)
+                );
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return null;
     }
@@ -104,9 +107,8 @@ public class TwoWaySynonym implements DatabaseOperator {
             add(group_id);
             add(synonym);
         }};
-        Connection conn = getConnection();
-        PreparedStatement statement = getPreparedStatement(format, args, conn);
-        return (updateDatabase(statement, conn) > 0);
+        PreparedStatement statement = getPreparedStatement(format, args);
+        return (updateDatabase(statement) > 0);
     }
 
     /**
@@ -122,9 +124,8 @@ public class TwoWaySynonym implements DatabaseOperator {
             add(correctedSpelling);
             add(synonym);
         }};
-        Connection conn = getConnection();
-        PreparedStatement stmt = getPreparedStatement(statementFormat, args, conn);
-        return updateDatabase(stmt, conn) > 0;
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        return updateDatabase(stmt) > 0;
     }
 
     /**
@@ -136,9 +137,8 @@ public class TwoWaySynonym implements DatabaseOperator {
     public boolean delete(String synonym) {
         String statementFormat = "DELETE FROM twoway_synonym WHERE synonym = ?";
         ArrayList<Object> args = new ArrayList<>(){{add(synonym);}};
-        Connection conn = getConnection();
-        PreparedStatement stmt = getPreparedStatement(statementFormat, args, conn);
-        return updateDatabase(stmt, conn) > 0;
+        PreparedStatement stmt = getPreparedStatement(statementFormat, args);
+        return updateDatabase(stmt) > 0;
     }
 
     /**
@@ -173,7 +173,7 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @param  parameters    Params to be mapped in the Query
      * @return               A fully prepared statement if no exception is caught
      */
-    private PreparedStatement getPreparedStatement(String format, ArrayList<Object> parameters, Connection conn){
+    private PreparedStatement getPreparedStatement(String format, ArrayList<Object> parameters){
         PreparedStatement statement = null;
         try {
             statement = conn.prepareStatement(format);
@@ -205,33 +205,31 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @param statement     Prepared statement that should be executed
      * @return              returns a resultset from the query
      */
-    private ArrayList<Synonym> readDatabase(PreparedStatement statement, Connection conn){
+    private ResultSet readDatabase(PreparedStatement statement){
         try {
-            ResultSet result = statement.executeQuery();
-            ArrayList<Synonym> synonyms = resultSetFormatting(result);
-            freeConnection(conn);
-            return synonyms;
+            return statement.executeQuery();
         } catch (SQLTimeoutException throwables){
             System.out.println("Driver timed out, statement execution took too long");
-            return new ArrayList<>();
+            return null;
         } catch (SQLException throwables){
             System.out.println("Query could not be executed");
-            return new ArrayList<>();
+            return null;
         }
     }
 
-    private ArrayList<Synonym> resultSetFormatting(ResultSet rs){
-        ArrayList<Synonym> synonymArrayList = new ArrayList<>();
+    private ArrayList<Synonym> getSynonyms(ResultSet rs) {
+        ArrayList<Synonym> synonymList = new ArrayList<>();
         try {
             while (rs.next()) {
-                synonymArrayList.add(new Synonym(
-                        rs.getString(1), rs.getString(2), rs.getInt(3)
-                ));
+                synonymList.add(new Synonym(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3)));
             }
+            return synonymList;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return synonymArrayList;
+        return null;
     }
 
     /**
@@ -240,11 +238,10 @@ public class TwoWaySynonym implements DatabaseOperator {
      * @param statement     Prepared statement that should be executed
      * @return              returns an int of effected rows from the query
      */
-    private int updateDatabase(PreparedStatement statement, Connection conn){
+    private int updateDatabase(PreparedStatement statement){
         try {
-            int result = statement.executeUpdate();
-            freeConnection(conn);
-            return result;
+            return statement.executeUpdate();
+
         } catch (SQLTimeoutException throwables){
             System.out.println("Driver timed out, statement execution took too long");
             return 0;
@@ -252,25 +249,6 @@ public class TwoWaySynonym implements DatabaseOperator {
             System.out.println(throwables.getMessage());
             System.out.println("Update could not be executed");
             return 0;
-        }
-    }
-
-    private Connection getConnection() {
-        try {
-            return DBConnection.getPooledConnection();
-        } catch (SQLException e) {
-            System.out.println("Couldn't connect to database");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private void freeConnection(Connection conn){
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("Couldn't free connection");
-            e.printStackTrace();
         }
     }
 }

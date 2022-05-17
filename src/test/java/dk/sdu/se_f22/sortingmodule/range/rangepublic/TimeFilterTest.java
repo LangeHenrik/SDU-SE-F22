@@ -4,6 +4,8 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.RangeFilterException;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,7 +59,7 @@ class TimeFilterTest {
         @ParameterizedTest
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
         @ValueSource(strings = {"publishedDate", "expirationDate"})
-        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
+        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) throws InvalidFilterTypeException {
             // Creating filter with productattribute publishDate or experationDate
             TimeFilter filter = getTestFilter(productAttribute);
             Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
@@ -122,7 +124,7 @@ class TimeFilterTest {
             });
         }
 
-        static Stream<Arguments> useFilterArguments() {
+        static Stream<Arguments> useFilterArguments() throws RangeFilterException {
             // Could be refactored to simply return TimeFilters.
             // However it is like this such that the test can easily be refactored to take more arguments if needed.
 
@@ -173,7 +175,7 @@ class TimeFilterTest {
         @DisplayName("Filtering an empty list of results")
         @ParameterizedTest(name = "{0} - setUserMinAndMax={1} - inputList={2}")
         @MethodSource("filteringAnEmptyListOfResultsArgument")
-        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) {
+        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) throws RangeFilterException {
             // preparing the filter
             TimeFilter internalFilter = getTestFilter(productAttribute);
             if (setUserMinAndMax) {
@@ -291,7 +293,7 @@ class TimeFilterTest {
 
                 @Test
                 @DisplayName("Set invalid TimeFilter userMax less than userMin")
-                void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) {
+                void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) throws InvalidFilterTypeException {
                     Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
                     Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 15);
 
@@ -305,7 +307,7 @@ class TimeFilterTest {
 
                 @Test
                 @DisplayName("Set invalid TimeFilter userMin higher than userMax")
-                void setInvalidUserMinHigherThanUserMax (TimeFilter filter) {
+                void setInvalidUserMinHigherThanUserMax (TimeFilter filter) throws InvalidFilterTypeException {
                     Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
                     Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 100);
 

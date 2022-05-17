@@ -206,21 +206,24 @@ class LongFilterTest {
             class SetInvalidUserMinAndUserMax {
 
                 @Test
-                @DisplayName("Set invalid DoubleFilter userMin and userMax")
-                void setInvalidDoubleFilterUserMinAndUserMax () {
-
+                @DisplayName("Set invalid TimeFilter userMin less than dbMin")
+                @MethodSource("provideLongFilters")
+                void setInvalidLongFilterUserMin (LongFilter filter) {
                 }
 
                 @Test
-                @DisplayName("Set invalid LongFilter userMin and userMax")
-                void setInvalidLongFilterUserMinAndUserMax () {
-
+                @DisplayName("Set invalid LongFilter userMax less than dbMin")
+                void setInvalidLongFilterUserMax (LongFilter filter) {
                 }
 
                 @Test
-                @DisplayName("Set invalid TimeFilter userMin and userMax")
-                void setInvalidTimeFilterUserMinAndUserMax () {
+                @DisplayName("Set invalid LongFilter userMax less than userMin")
+                void setInvalidLessThanUserMaxLessThanUserMin (LongFilter filter) {
+                }
 
+                @Test
+                @DisplayName("Set invalid LongFilter userMin higher than userMax")
+                void setInvalidUserMinHigherThanUserMax (LongFilter filter) {
                 }
             }
 

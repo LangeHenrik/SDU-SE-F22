@@ -1,9 +1,5 @@
 @startuml
 
-interface BrandGetter {
-    + query(tokens: List<String>): List<Integer>
-}
-
 interface Filterable {
     + filter(tokens: ArrayList<String>): ArrayList<String>
 }
@@ -14,61 +10,90 @@ interface IndexingModule {
 
 
 interface SearchModule {
-    + search(query: String): SearchResult
-    + getDelimiters(): String[]
-    + getIgnoredCharacters(): Character[]
-    + addDelimiter(delimiter: String)
-    + addIgnoredCharacter(c: Character)
-    + removeDelimiter(delimiter: String)
-    + removeIgnoredCharacter(c: Character)
-    + SearchHits search(query: String)
-}
-
-class ReplaceForbbidenChars {
-    - illegalCharsClass: IllegalChars
-    - illegalChars: List<String>
-
-    + removeForbiddenChars(toSort: String): String
-    + getIllegalChars(): List<String>
-    + setIllegalChars(illegalChars: List<String>): void
-    + addIllegalChars(illegalChar: String): void
-}
-
-class SearchModuleImpl implements SearchModule {
-    - indexingModules: Set<IndexingModule<?>>
-    - filteringModules: Set<Filterable>
-    - ss: Delimiter
-    - addIndexingModule(index: T): void
-    - removeIndexingmModule(index: T): void
-    + queryIndexOfType(clazz: Class<T>, tokens: List<String>): List<T>
     + search(query: String): SearchHits
-    - tokenize(mystring): String[]
-    - saveSettingsToDB()
-    - readSettingsFromDB()
+    + getDelimiters(): List<String>
+    + addDelimiter(delimiter: String)
+    + removeDelimiter(delim: String)
+}
+class SearchLog {
+    - searchString: String
+    - timeSearched: String
+    - brandsCounter: int
+    - productCounter: int
+    - contentCounter: int
+    - brands: List<String>
+    - products: List<String>
+    - contents: List<String>
+    + toString(): String
 }
 
-class SearchModuleUtils {
-    + {static}convertDelimitersToRegex(stringList: List<String>): String
-    - {static}addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+class SearchLogger {
+    - {static}logger: Logger
+    + {static} logSearch(search: String, searchHits: SearchHits, filterTokens: List<String>): void
+    - {static} insertValues(elements: List<T>, id: int, sql: String, getElementID: Function<T, String>)
+    + {static} getAllSearchLogs(): List<SearchLog>
 }
 
 class DelimiterSettings {
     - delimiters: List<String>
+    - dbConnection: Connection
+    - stmt: PreparedStatement
     + getDelimiters(): List<String>
-    + addDelimiters(String): void
+    - updateDelimitersToDatabaseState()
+    - resetDelimiterAttribute()
+    - moveResultsSetToDelimitersAttribute(ResultSet)
+    + addDelimiter(String): void
+    - insertDelimiterIntoDatabase(String)
     + removeDelimiter(String): boolean
+    - delimiterNotFound(String): boolean
+    - makePreparedStatement(String): PreparedStatement
+    - closeAll()
+    - customPrinter(String)
 }
-
-class TokenFiltration {
-    +filter(tokens: ArrayList<String>): ArrayList<String>
-}
-
-class Tokenization {
-    - searchModuleUtils: SearchModuleUtils
-    - ss: SearchSettings
+class Tokenizer {
+    - delimiterSettings: DelimiterSettings
     - stringList: List<String>
-    +tokenize(s: String): list<String>
+    + tokenize (String): List<String>
+    - splitString(String): ArrayList<String>
+    - removeAllEmptyStrings(List<String>)
+    - splitStringUsingDelimiters(String): String[]
+    - listIsEmpty(): boolean
 }
+
+class RegexUtils {
+    + {static}convertDelimitersToRegex(stringList: List<String>): String
+    - {static}addDelimiterToStringBuilder(sb: StringBuilder, i: int, (stringList: List<String>): void
+}
+
+class IllegalChars {
+    + removeForbiddenChars(String): String
+    + addChar(character: String): void
+    + illegalCharsFromDB(): List<String>
+    + removeChar(String)
+}
+
+class SearchModuleImpl implements SearchModule {
+    - {static} logger: Logger
+    - indexingModules: Map<Class<?>, IndexingModule<?>>
+    - filteringModules: Set<Filterable>
+    - delimiterSettings: DelimiterSettings
+
+    - getParameterizedTypeOfIndexingModule(Class<?>): Class<?>
+    + addIndexingModule(index: T): void
+    + removeIndexingModule(Class<?>): void
+    + addFilteringModule(Filterable)
+    + removeFilteringModule(Filterable)
+    + filterTokens(List<String>): List<String>
+
+    + queryIndexOfType(clazz: Class<T>, tokens: List<String>): List<T>
+    + search(query: String): SearchHits
+}
+
+
+
+
+
+
 
 class DBConnection {
     - url: String
@@ -83,28 +108,21 @@ class DBConnection {
     ' see https://stackoverflow.com/a/36710057
 }
 
-class Exception {
-    // From JDK //
-}
-
-class DatabaseConnectionException extends Exception {
-    // Throws when the database connection failed //
-}
-
-class IllegalChars{
-    +addChar(character: String): void
-    +illegalCharsFromDB(): List<String>
-    +removeChar((character: String): void
-}
 
 
-Tokenization -> SearchModuleUtils
-Tokenization --> DelimiterSettings
-SearchHits <- SearchModule
+Tokenizer --> DelimiterSettings
+Tokenizer -->RegexUtils
+
+DelimiterSettings --> DBConnection
+
 Filterable <- SearchModuleImpl
-SearchModuleImpl -> DBConnection
-DatabaseConnectionException <-- DBConnection: //<<throws>>//
-DatabaseConnectionException <-- SearchModuleImpl: //<<throws>>//
-IllegalChars -> ReplaceForbbidenChars
+SearchModuleImpl ---> DelimiterSettings
+SearchModuleImpl --> Tokenizer
+SearchModuleImpl --> IndexingModule
+SearchModuleImpl -> SearchLogger
+SearchModuleImpl --> IllegalChars
+
+SearchLogger --> SearchLog
+IllegalChars --> RegexUtils
 
 @enduml

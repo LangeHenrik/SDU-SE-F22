@@ -1,3 +1,4 @@
+/*
 package dk.sdu.se_f22.productmodule.management;
 
 import org.jetbrains.annotations.Nullable;
@@ -6,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+*/
 /**This is the class used <b>internally in the product module</b>.<br>
  * This class uses a getter which takes a {@link ProductAttribute} to choose what attribute to get.
  * It is possible to choose between 2 different getters to get the value either as numeric {@link BaseProduct#getAsNumeric(ProductAttribute)}
@@ -14,6 +16,17 @@ import java.util.List;
  * (A constructor is supplied for this {@link dk.sdu.se_f22.sharedlibrary.models.Product#Product(BaseProduct)}<br><br>
  * <i>Formerly known as <b>Product</b></i>
  */
+
+package dk.sdu.se_f22.productmodule.management;
+class BaseProduct {
+    String message = "If you have come here looking for the BaseProduct class" +
+            ", you have gone to the wrong place." +
+            " Please go to dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct class instead.";
+}
+
+
+/*
+
 public class BaseProduct { //initialize class
     
     private final HashMap<ProductAttribute, String> productAttributes; //initialize hashmap to contain product attributes
@@ -27,9 +40,11 @@ public class BaseProduct { //initialize class
     }
     
     public double getAsNumeric(ProductAttribute pA){
-        /*if (get(pA).isEmpty()){
+        */
+/*if (get(pA).isEmpty()){
             throw new NullPointerException("No value for " + pA.alias);
-        }*/
+        }*//*
+
         String pAttr = get(pA).replaceAll("\"","");
         double result;
         result = Double.parseDouble(pAttr);
@@ -89,4 +104,4 @@ public class BaseProduct { //initialize class
             }
         }
     }
-}
+}*/

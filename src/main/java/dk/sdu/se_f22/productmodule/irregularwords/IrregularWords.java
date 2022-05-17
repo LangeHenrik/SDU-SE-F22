@@ -1,34 +1,28 @@
-package dk.sdu.se_f22.productmodule.irregularwords.Data;
+package dk.sdu.se_f22.productmodule.irregularwords;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
 
 public class IrregularWords implements IIrregularWords {
+
     public static IrregularWords INSTANCE = new IrregularWords();
     private IrregularWords (){}
-
-    //Initialize method to create a connection to the local database (password might not be the same for all user).
-    public void initialize(){
-        try {
-            DBConnection.getPooledConnection();
-        } catch (SQLException e) {
-                e.printStackTrace();
-        }
-    }
+    //use this url in the config properties file: jdbc:postgresql://testdb.stud-srv.sdu.dk:5432/semesterproject2
 
 
     //Method used for inserting new words with an id into the database.
     @Override
     public boolean createIRWord(int Index, String Word) {
-        try {
+        //Using a try with resource to open a connection to the database that is closed after usage
+        //This is repeated in future methods
+        try (Connection connection = DBConnection.getPooledConnection()){
             //Preparing a statement with the needed SQL language, thereafter putting the method signature
             //into the statement and executing.
-            PreparedStatement insertStatement = DBConnection.getConnection().prepareStatement(
+            PreparedStatement insertStatement = connection.prepareStatement(
                     "INSERT INTO irregularwords (index, word) VALUES (?,?)");
             insertStatement.setInt(1,Index);
             insertStatement.setString(2,Word);
@@ -41,11 +35,12 @@ public class IrregularWords implements IIrregularWords {
 
     @Override
     public boolean createIRWord(String tableWord, String insertionWord){
-        try {
-            //Get the ID from the first word
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            //Get the index from the first word
             int index = INSTANCE.getIndex(tableWord);
             //Statement for inserting the insertionWord with the ID of the tableWord
-            PreparedStatement stmt = DBConnection.getConnection().prepareStatement("INSERT INTO irregularwords (index, word) VALUES (?,?)");
+            PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT INTO irregularwords (index, word) VALUES (?,?)");
             stmt.setInt(1,index);
             stmt.setString(2,insertionWord);
             return stmt.execute();
@@ -58,8 +53,9 @@ public class IrregularWords implements IIrregularWords {
     //Method for deleting a specific word from the database table.
     @Override
     public boolean deleteIRWord(String theWord) {
-        try {
-            PreparedStatement stmt = DBConnection.getConnection().prepareStatement("DELETE FROM irregularwords WHERE word = ?");
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "DELETE FROM irregularwords WHERE word = ?");
             stmt.setString(1,theWord);
             return stmt.execute();
         } catch (SQLException e) {
@@ -71,8 +67,8 @@ public class IrregularWords implements IIrregularWords {
     //Method for updating words in the database table.
     @Override
     public boolean updateIRWord(String originalWord, String updatedWord) {
-        try{
-            PreparedStatement stmt = DBConnection.getConnection().prepareStatement(
+        try(Connection connection = DBConnection.getPooledConnection()){
+            PreparedStatement stmt = connection.prepareStatement(
                     "UPDATE irregularwords SET word = ? WHERE word = ?");
             stmt.setString(1, updatedWord);
             stmt.setString(2, originalWord);
@@ -86,32 +82,35 @@ public class IrregularWords implements IIrregularWords {
     //Method for printing out the database table.
     @Override
     public Boolean readIRWord() {
-
-        try {
-            PreparedStatement db = DBConnection.getConnection().prepareStatement("SELECT * FROM irregularwords");
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement db = connection.prepareStatement(
+                    "SELECT * FROM irregularwords");
             ResultSet list = db.executeQuery();
             System.out.println("Word : Index");
             while(list.next()){
-                System.out.println(" " + list.getString("word") + " :  " + list.getInt("index"));
+                System.out.println(" " + list.getString("word") +
+                        " :  " + list.getInt("index"));
             }
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     //the getIRWord takes a word looks it up in the table and return the matching irregularwords in an arraylist
     @Override
     public ArrayList<String> getIRWord(String word) {
         ArrayList<String> words = new ArrayList<>();
-        try {
+        try(Connection connection = DBConnection.getPooledConnection()) {
             // first we make the arraylist it returns at the end
-            PreparedStatement findIndexStmt = DBConnection.getConnection().prepareStatement("SELECT index FROM irregularwords WHERE word = ?");
+            PreparedStatement findIndexStmt = connection.prepareStatement(
+                    "SELECT index FROM irregularwords WHERE word = ?");
             findIndexStmt.setString(1,word);
             ResultSet findIndexStmtResult = findIndexStmt.executeQuery();
-            try {
-                PreparedStatement findIndexMatchStmt = DBConnection.getConnection().prepareStatement("SELECT word FROM irregularwords WHERE index =?");
+            try{
+                PreparedStatement findIndexMatchStmt = connection.prepareStatement(
+                        "SELECT word FROM irregularwords WHERE index =?");
                 while (findIndexStmtResult.next()) {
                     findIndexMatchStmt.setInt(1, findIndexStmtResult.getInt("index"));
                 }
@@ -126,16 +125,18 @@ public class IrregularWords implements IIrregularWords {
                 return words;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            words.clear();
+            words.add(word);
+            return words;
         }
     }
 
     @Override
     public int getIndex(String word){
         int index = 0;
-        try {
-            PreparedStatement findIndex = DBConnection.getConnection().prepareStatement(("SELECT index FROM irregularwords WHERE word = ?"));
+        try(Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement findIndex = connection.prepareStatement((
+                    "SELECT index FROM irregularwords WHERE word = ?"));
             findIndex.setString(1, word);
             ResultSet indexHolder = findIndex.executeQuery();
             while(indexHolder.next()){
@@ -158,12 +159,14 @@ public class IrregularWords implements IIrregularWords {
     return false;
     }
 
-    //searchForIrregularWords takes a list and check and adds the matching missing irregular words to the list and returns it
+    //searchForIrregularWords takes a list and check and adds the matching missing
+    // irregular words to the list and returns it
     @Override
     public List<String> searchForIrregularWords(List<String> arrayList) {
         //first we initialise a new arraylist to add the irwords to
         List<String> irwords = new ArrayList<>();
-        //we go through each string in the given list to check if they are in the irwords arraylist and if not then add all the irwords to the list
+        //we go through each string in the given list to check if they are in the irwords arraylist
+        // and if not then add all the irwords to the list
       for (String string : arrayList){
           if(!irwords.contains(string)) {
                   irwords.addAll(getIRWord(string));
@@ -173,14 +176,15 @@ public class IrregularWords implements IIrregularWords {
         return irwords;
     }
 
-    // insertValues is a method used once per pc to get some values into the table to perform test from so all have same values,
+    // insertValues is a method used once per pc to get some values into the table
+    // to perform test from so all have same values,
     public void insertValues(){
         try (Scanner scan = new Scanner(new File
                 ("src/main/resources/dk/sdu/se_f22/productmodule/irregularwords/bin/testInsert.txt"))) {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
-                createIRWord(Integer.parseInt(data[0]),data[1]);
+                createIRWord(Integer.parseInt(data[1]),data[0]);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -193,7 +197,7 @@ public class IrregularWords implements IIrregularWords {
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] data = line.split(",");
-                deleteIRWord((data[1]));
+                deleteIRWord((data[0]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -225,7 +229,6 @@ public class IrregularWords implements IIrregularWords {
         boolean running = true;
         try (Scanner s = new Scanner(System.in)) {
             while (running) {
-                INSTANCE.initialize();
                 switch (s.nextLine().toLowerCase()) {
                     case "createirword":
                     case "create":

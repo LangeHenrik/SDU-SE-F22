@@ -15,7 +15,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     private int categoryHits = 0;
     private int nameHits = 0;
     private int descriptionHits = 0;
-    private List<Product> sortedList = new ArrayList<>();
+    private List<Product> searchedList = new ArrayList<>();
 
     private String url = "localhost";
     private int port = 5432;
@@ -50,8 +50,8 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
         }
     }
 
-    // Method for finding amount of hits within a product by a token, then returning an indexed list by the hits
-    public List<Product> indexProductsByToken(List<Product> products, List<String> tokens) {
+    // Method for finding amount of hits within a product by a token
+    public List<Product> searchProducts(List<Product> products, List<String> tokens) {
 
         for(Product p : products){
             String[] categoryWords = p.getCategory().toLowerCase().split("/");
@@ -66,11 +66,15 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             }
 
             p.setHitNum(totalHits);
-            sortedList.add(p);
-            Collections.sort(sortedList);
+            searchedList.add(p);
         }
-        return sortedList;
+        return searchedList;
 
+    }
+    // Method for indexing products depending on amount of search hits
+    public List<Product> indexProducts(List<Product> products){
+        Collections.sort(products);
+        return products;
     }
 
     public int findHits(String[] info, String token){

@@ -45,20 +45,20 @@ class SearchQueryTest {
         HashMap<Integer, Long[]> hLong = new HashMap<>();
         hLong.put(1, new Long[]{3L, 8L});
         hLong.put(2, new Long[]{7L, 52L});
-        s.addRangeLong(1, 3, 8);
-        s.addRangeLong(2, 7, 52);
+        s.addRange(1, 3, 8);
+        s.addRange(2, 7, 52);
 
         HashMap<Integer, Double[]> hDouble = new HashMap<>();
         hDouble.put(1, new Double[]{8.3, 14.9});
         hDouble.put(2, new Double[]{2.7, 73.2});
-        s.addRangeDouble(1, 8.3, 14.9);
-        s.addRangeDouble(2, 2.7, 73.2);
+        s.addRange(1, 8.3, 14.9);
+        s.addRange(2, 2.7, 73.2);
 
         HashMap<Integer, Instant[]> hInstant = new HashMap<>();
         hInstant.put(1, new Instant[]{Instant.ofEpochSecond(1), Instant.ofEpochSecond(7)});
         hInstant.put(2, new Instant[]{Instant.ofEpochSecond(2), Instant.ofEpochSecond(16)});
-        s.addRangeInstant(1, Instant.ofEpochSecond(1), Instant.ofEpochSecond(7));
-        s.addRangeInstant(2, Instant.ofEpochSecond(2), Instant.ofEpochSecond(16));
+        s.addRange(1, Instant.ofEpochSecond(1), Instant.ofEpochSecond(7));
+        s.addRange(2, Instant.ofEpochSecond(2), Instant.ofEpochSecond(16));
 
         Iterator<Map.Entry<Integer, Long[]>> iteratorHLong = hLong.entrySet().iterator();
         Iterator<Map.Entry<Integer, Double[]>> iteratorHDouble = hDouble.entrySet().iterator();
@@ -95,8 +95,8 @@ class SearchQueryTest {
         SearchQuery s = new SearchQuery();
         HashMap<Integer, Long[]> h = new HashMap<>();
 
-        s.addRangeDouble(1, 3.9, 8.1);
-        s.addRangeDouble(2, 19.4, 52.7);
+        s.addRange(1, 3.9, 8.1);
+        s.addRange(2, 19.4, 52.7);
         s.clearRangeDouble();
 
         assertEquals(h, s.getRangeDouble());

@@ -55,18 +55,18 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void addRangeDouble(int rangeId, Double startRange, Double endRange) {
-        this.query.addRangeDouble(rangeId, startRange, endRange);
+    public void addRange(int rangeId, Double startRange, Double endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
-    public void addRangeLong(int rangeId, long startRange, long endRange) {
-        this.query.addRangeLong(rangeId, startRange, endRange);
+    public void addRange(int rangeId, long startRange, long endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override
-    public void addRangeInstant(int rangeId, Instant startRange, Instant endRange) {
-        this.query.addRangeInstant(rangeId, startRange, endRange);
+    public void addRange(int rangeId, Instant startRange, Instant endRange) {
+        this.query.addRange(rangeId, startRange, endRange);
     }
 
     @Override

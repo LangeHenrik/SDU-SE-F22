@@ -176,7 +176,17 @@ class LongFilter extends RangeFilterClass{
 
     @Override
     public long setUserMin(long userMin) throws IllegalMinMaxException {
+        if (userMin == USER_NOT_SET_VALUE){
+            return userMin;
+        }
 
+        if (userMin >= userMax && userMax != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'");
+        }
+
+        if (userMin < DB_MIN || userMin > DB_MAX) {
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+        }
 
         this.userMin = userMin;
         return this.userMin;

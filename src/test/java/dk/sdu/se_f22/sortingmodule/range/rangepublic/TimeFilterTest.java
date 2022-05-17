@@ -200,6 +200,59 @@ class TimeFilterTest {
             // When the desired behaviour of the method has been decided correct the test as needed
         }
 
+        @Nested
+        @DisplayName("Set userMin and userMax")
+        @Disabled("Not yet implemented")
+        class SetUserMinAndMax {
+
+            @Nested
+            @DisplayName("Set valid userMin and userMax")
+            class SetValidUserMinAndUserMax {
+
+                @Test
+                @DisplayName("Set valid DoubleFilter userMin and userMax")
+                void setValidDoubleFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set valid LongFilter userMin and userMax")
+                void setValidLongFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set valid TimeFilter userMin and userMax")
+                void setValidTimeFilterUserMinAndUserMax () {
+
+                }
+            }
+
+            @Nested
+            @DisplayName("Set invalid userMin and userMax")
+            @Disabled("Not yet implemented")
+            class SetInvalidUserMinAndUserMax {
+
+                @Test
+                @DisplayName("Set invalid DoubleFilter userMin and userMax")
+                void setInvalidDoubleFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set invalid LongFilter userMin and userMax")
+                void setInvalidLongFilterUserMinAndUserMax () {
+
+                }
+
+                @Test
+                @DisplayName("Set invalid TimeFilter userMin and userMax")
+                void setInvalidTimeFilterUserMinAndUserMax () {
+
+                }
+            }
+        }
+
         static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {
             List<Arguments> out = new ArrayList<>();
 

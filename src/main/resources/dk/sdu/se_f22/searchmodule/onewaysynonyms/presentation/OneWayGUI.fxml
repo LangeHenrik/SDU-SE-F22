@@ -15,13 +15,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="GUIAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.onewaysynonyms.presentation.OneWayController">
+<AnchorPane fx:id="GUIAnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="473.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.onewaysynonyms.presentation.OneWayController">
     <children>
         <TabPane fx:id="GUITabPane" prefHeight="473.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab fx:id="SearchTab" text="SearchTab" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
                     <content>
-                        <AnchorPane fx:id="SearchTabAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane fx:id="SearchTabAnchorPane" minHeight="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Button fx:id="SearchButton" layoutX="377.0" layoutY="94.0" mnemonicParsing="false" onAction="#SearchTab" text="Search" />
                                 <Text fx:id="SearchTextField" layoutX="101.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What do you want to search for?" wrappingWidth="133.81292724609375" />
@@ -96,7 +96,12 @@
                                 <Button fx:id="GenerateImage" layoutX="442.0" layoutY="14.0" mnemonicParsing="false" onAction="#GenerateImage" text="Generate Image" />
                                 <TextField fx:id="GI_Item" layoutX="338.0" layoutY="14.0" prefHeight="25.0" prefWidth="93.0" />
                                 <ImageView fx:id="image" fitHeight="312.0" fitWidth="568.0" layoutX="15.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
-                                <TabPane fx:id="TP_images" layoutX="14.0" layoutY="355.0" prefHeight="90.0" prefWidth="570.0" tabClosingPolicy="UNAVAILABLE">
+                        <Label layoutX="21.0" layoutY="16.0" prefHeight="21.0" prefWidth="314.0" text="Generate an Image of the database based on an item:">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                                <TabPane fx:id="TP_images" layoutY="355.0" prefHeight="90.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
                                     <tabs>
                                         <Tab text="Change Name">
                                             <content>
@@ -116,14 +121,14 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label layoutX="24.0" layoutY="4.0" text="New Item Name" />
+                                          <Label layoutX="25.0" layoutY="5.0" text="New Item Name" />
                                           <Label disable="true" layoutX="31.0" layoutY="2.0" text="ID" visible="false" />
                                           <TextField fx:id="AI_Name" layoutX="13.0" layoutY="25.0" prefHeight="25.0" prefWidth="110.0" />
                                           <TextField fx:id="AI_ID" disable="true" layoutX="14.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" visible="false" />
                                           <Button fx:id="AI_Enter" layoutX="432.0" layoutY="23.0" mnemonicParsing="false" onAction="#addItem" text="Enter" />
                                           <Label layoutX="332.0" layoutY="4.0" text="Super Item Referance" />
                                           <TextField fx:id="AI_SuperREF" layoutX="331.0" layoutY="25.0" prefHeight="25.0" prefWidth="97.0" />
-                                          <Label fx:id="AI_status" layoutX="485.0" layoutY="11.0" prefHeight="41.0" prefWidth="78.0" wrapText="true" />
+                                          <Label fx:id="AI_status" layoutX="485.0" layoutY="3.0" prefHeight="55.0" prefWidth="113.0" wrapText="true" />
                                           <RadioButton layoutX="264.0" layoutY="11.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="55.0" selected="true" text="Name">
                                              <toggleGroup>
                                                 <ToggleGroup fx:id="AddItemRadioGroup" />
@@ -134,13 +139,56 @@
                                        </children></AnchorPane>
                                             </content>
                                         </Tab>
+                              <Tab text="Move Item/Branch">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="131.0" layoutY="4.0" text="Item reference">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="MIB_Name" layoutX="128.0" layoutY="23.0" prefHeight="25.0" prefWidth="89.0" />
+                                          <Label layoutX="243.0" layoutY="4.0" prefHeight="53.0" prefWidth="64.0" text="New super item:" wrapText="true">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <RadioButton layoutX="313.0" layoutY="33.0" mnemonicParsing="false" text="ID">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="MIBRadioGroup2" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton layoutX="313.0" layoutY="9.0" mnemonicParsing="false" selected="true" text="Name" toggleGroup="$MIBRadioGroup2" />
+                                          <Label layoutX="386.0" layoutY="4.0" text="Super item reference">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="MIB_SuperID" layoutX="375.0" layoutY="23.0" prefHeight="25.0" prefWidth="84.0" />
+                                          <Button layoutX="463.0" layoutY="23.0" mnemonicParsing="false" onAction="#moveItemButtonHandler" text="Update" />
+                                          <Label fx:id="MIB_Status" layoutX="532.0" layoutY="4.0" prefHeight="45.0" prefWidth="62.0">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                          <RadioButton layoutX="65.0" layoutY="9.0" mnemonicParsing="false" selected="true" text="Name">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="MIBRadioGroup1" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton layoutX="65.0" layoutY="34.0" mnemonicParsing="false" text="ID" toggleGroup="$MIBRadioGroup1" />
+                                          <Label layoutX="4.0" layoutY="4.0" prefHeight="53.0" prefWidth="53.0" text="Item to move:" wrapText="true">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </Tab>
                                     </tabs>
                                 </TabPane>
-                        <Label layoutX="21.0" layoutY="16.0" prefHeight="21.0" prefWidth="314.0" text="Generate an Image of the database based on an item:">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </Label>
                             </children>
                         </AnchorPane>
                     </content>

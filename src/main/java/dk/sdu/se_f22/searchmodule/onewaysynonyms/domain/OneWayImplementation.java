@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 
-import dk.sdu.se_f22.searchmodule.onewaysynonyms.OneWayInterface;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.notFoundException;
 
@@ -43,8 +42,8 @@ public class OneWayImplementation implements OneWayInterface {
     }
 
     @Override
-    public void createItem() {
-        DatabaseAPI.addItem("Cake");
+    public void createItem(String name, String superItemName) {
+        DatabaseAPI.addItem(name,superItemName);
     }
 
     @Override

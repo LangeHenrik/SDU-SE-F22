@@ -9,11 +9,9 @@ import java.io.IOException;
 
 public class OneWayGUI extends Application {
 
-
-
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OneWayGUI.class.getResource("OneWayGUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("OneWayGUI.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("OneWayGUI");
         primaryStage.setScene(scene);

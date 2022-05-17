@@ -1,10 +1,10 @@
-package dk.sdu.se_f22.searchmodule.onewaysynonyms;
+package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 
 public interface OneWayInterface extends Filterable {
 
-    public void createItem();
+    public void createItem(String name, String superItemName);
 
     public void changeItemPlacement();
 

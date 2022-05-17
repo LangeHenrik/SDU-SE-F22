@@ -84,7 +84,7 @@ public class OneWayImage {
                 }
                 g2D.fillRoundRect(getX(number, item)+10,i*100,100,50,20,20);
                 g2D.setColor(Color.black);
-                g2D.drawString(item.getName(),getX(number, item)+15,i*100+25);
+                g2D.drawString(item.getName()+" ID: "+item.getId(),getX(number, item)+15,i*100+25);
                 g2D.setColor(Color.getHSBColor(342, 100, (float) 67.45));
             }
            number++;

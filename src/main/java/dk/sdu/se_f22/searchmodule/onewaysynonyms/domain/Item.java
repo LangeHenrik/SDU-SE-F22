@@ -28,7 +28,7 @@ public class Item {
     }
 
     //Methods
-    public void AddSubItem(Item subItem){
+    public void addSubItem(Item subItem){
         subItems.add(subItem);
     }
     public void setSuperItem(Item superItem) {

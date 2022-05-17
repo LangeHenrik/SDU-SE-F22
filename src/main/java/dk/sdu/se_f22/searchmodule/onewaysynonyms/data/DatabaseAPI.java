@@ -19,13 +19,13 @@ public class DatabaseAPI {
     }
     //for adding superItem
 
-    public static void addItem(String itemName){
+    public static void addItem(String itemName, String superItemName) {
         PreparedStatement insertStatement = null;
 
         try {
             insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-            insertStatement.setString(1,itemName);
-            insertStatement.setInt(2,0);
+            insertStatement.setString(1, itemName);
+            insertStatement.setInt(2, searchBasedOnName(superItemName));
             insertStatement.execute();
             System.out.println("Transaction was a succes");
             System.out.println("Item: " + itemName + " was added");
@@ -41,11 +41,11 @@ public class DatabaseAPI {
         PreparedStatement insertStatement = null;
         try {
             insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-            insertStatement.setString(1,itemName);
+            insertStatement.setString(1, itemName);
             insertStatement.setInt(2, superId);
             insertStatement.execute();
             System.out.println("Transaction was a succes");
-            System.out.println("Item: " + itemName + " with super ID: " + superId +  " was added");
+            System.out.println("Item: " + itemName + " with super ID: " + superId + " was added");
         } catch (SQLException e) {
             System.out.println("Could not add " + itemName + " with super ID: " + superId);
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class DatabaseAPI {
         }
     }
 
-    public static void updateName(int id, String name){
+    public static void updateName(int id, String name) {
         PreparedStatement updateStatement = null;
         try {
             updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
@@ -85,7 +85,7 @@ public class DatabaseAPI {
     public static Item[] readEntireDB() {
         try {
             ArrayList<Item> items = new ArrayList<Item>();
-            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items");
+            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items ORDER BY id");
             ResultSet quaryResultSet = null;
             quaryResultSet = quaryStatement.executeQuery();
 
@@ -93,10 +93,12 @@ public class DatabaseAPI {
                 items.add(new Item(quaryResultSet.getInt(1), quaryResultSet.getString(2), quaryResultSet.getInt(3)));
             }
             for (Item item : items) {
-                if (item.getSuperId() != 0) {
+                if (!item.getName().equalsIgnoreCase("root")) {
                     for (Item item2 : items) {
-                        if (item2.getId() == item.getSuperId())
+                        if (item2.getId() == item.getSuperId()) {
                             item.setSuperItem(item2);
+                            item2.addSubItem(item);
+                        }
                     }
                 }
             }
@@ -110,41 +112,40 @@ public class DatabaseAPI {
         return null;
     }
 
-public static void deleteItems(boolean version, int id, String name) {
-    PreparedStatement deleteStatement = null;
-    if (version) {
-        try {
-            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
-            deleteStatement.setString(1, String.valueOf(name));
-            deleteStatement.setInt(2, id);
-            deleteStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static void deleteItems(boolean version, int id, String name) {
+        PreparedStatement deleteStatement = null;
+        if (version) {
+            try {
+                deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
+                deleteStatement.setString(1, String.valueOf(name));
+                deleteStatement.setInt(2, id);
+                deleteStatement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
+                deleteStatement.setString(1, String.valueOf(id));
+                deleteStatement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-    else {
-        try {
-            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
-            deleteStatement.setString(1, String.valueOf(id));
-            deleteStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
 
-    public static int searchBasedOnName(String name){
+    public static int searchBasedOnName(String name) {
         int id = -1;
-        if(name == null){
+        if (name == null) {
             return id;
         }
         PreparedStatement statement = null;
         ResultSet result;
         try {
             statement = connection.prepareStatement("SELECT id FROM items WHERE name=?");
-            statement.setString(1,name);
+            statement.setString(1, name);
             result = statement.executeQuery();
-            while(result.next()){
+            while (result.next()) {
                 id = result.getInt(1);
             }
         } catch (SQLException e) {

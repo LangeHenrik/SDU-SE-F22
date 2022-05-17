@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 
-import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.notFoundException;
 
 import java.util.*;
@@ -14,7 +13,6 @@ public class ItemCatalog{
     public ItemCatalog(Item[] items){
         this.catalog = new LinkedList<>();
         this.catalog.addAll(List.of(items));
-        addSubItems();
     }
 
     //Methods
@@ -30,10 +28,18 @@ public class ItemCatalog{
         return catalog;
     }
 
+    public int containsItem(String s){
+        int count =0;
+        for (Item item:catalog) {
+            if (item.getName().equals(s))count++;
+        }
+        return count;
+    }
+
     private void addSubItems(){
         for(Item item : catalog){
             try{
-                item.getSuperItem().AddSubItem(item);
+                item.getSuperItem().addSubItem(item);
             } catch (NullPointerException ex){
             }
         }

@@ -8,6 +8,8 @@ import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
@@ -59,6 +61,8 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     public List<Product> indexProducts(List<Product> products){
         Collections.sort(products);
         return products;
+        // Instead of returning it should save products in the database and gets retrieved
+
     }
 
     public int findHits(String[] info, String token){
@@ -75,24 +79,25 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
     public void updateProduct(int id, Product product){
-        try {
-            PreparedStatement updateCategory = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
+        try
+                (Connection connection = DBConnection.getPooledConnection();
+                        PreparedStatement updateCategory = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
-            PreparedStatement updateStock = connection.prepareStatement("UPDATE stock set city = ? WHERE id = ?");
-            PreparedStatement updateProduct = connection.prepareStatement(
-                    "UPDATE product set name = ?," +
-                            "averageuserreview = ?," +
-                            "creationdate = ?," +
-                            "publisheddate = ?," +
-                            "expirationdate = ?," +
-                            "price = ?," +
-                            "description = ?," +
-                            "ean = ?," +
-                            "weight = ?," +
-                            "WHERE id = ?");
-            //PreparedStatement updateProductStock = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
-            PreparedStatement updateSpecs = connection.prepareStatement("UPDATE specs set clockspeed = ? WHERE id = ?");
-            PreparedStatement updateStorage = connection.prepareStatement("UPDATE storage set size = ? WHERE id = ?");
+                 PreparedStatement updateStock = connection.prepareStatement("UPDATE stock set city = ? WHERE id = ?");
+                 PreparedStatement updateProduct = connection.prepareStatement(
+                         "UPDATE product set name = ?," +
+                                 "averageuserreview = ?," +
+                                 "creationdate = ?," +
+                                 "publisheddate = ?," +
+                                 "expirationdate = ?," +
+                                 "price = ?," +
+                                 "description = ?," +
+                                 "ean = ?," +
+                                 "weight = ?," +
+                                 "WHERE id = ?");
+                 PreparedStatement updateSpecs = connection.prepareStatement("UPDATE specs set clockspeed = ? WHERE id = ?");
+                 PreparedStatement updateStorage = connection.prepareStatement("UPDATE storage set size = ? WHERE id = ?");)
+        {
             //PreparedStatement updateProductStorage = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
             //PreparedStatement updateProductSpecs = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
@@ -123,18 +128,22 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             updateProduct.execute();
             updateSpecs.execute();
             updateStorage.execute();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void deleteProduct(int id){
-        try {
+        try
+                (Connection connection = DBConnection.getPooledConnection();
+                 PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE id = ?");
+                 PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM productStock WHERE id = ?");
+                 PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM productStorage WHERE id = ?");
+                 PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE id = ?");)
+        {
 
-            PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE id = ?");
-            PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM productStock WHERE id = ?");
-            PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM productStorage WHERE id = ?");
-            PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE id = ?");
+
 
             deleteProduct.setInt(1, id);
             deleteStock.setInt(1, id);
@@ -155,8 +164,11 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     public void createProduct(Product product){
         // calling stored procedure within db
-        try {
-            CallableStatement cs = connection.prepareCall("CALL insertproduct(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        try
+                (Connection connection = DBConnection.getPooledConnection();
+                        CallableStatement cs = connection.prepareCall("CALL insertproduct(?,?,?,?,?,?,?,?,?,?,?,?,?)");)
+        {
+
             cs.setString(1,product.getUuid().toString());
             cs.setDouble(2,product.getAverageUserReview());
             cs.setArray(3,connection.createArrayOf("VARCHAR",product.getInStock().toArray()));
@@ -181,7 +193,9 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     public List<Product> getProducts(){
         List<Product> productList = new ArrayList<>();
 
-        try {
+        try
+                (Connection connection = DBConnection.getPooledConnection();)
+        {
             // query all products
 
             PreparedStatement p = connection.prepareStatement("select product.productid," +

@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.data;
 
+import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Content;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
@@ -13,8 +14,34 @@ public class MockData {
     private Collection<Content> contents = new ArrayList<Content>();
     private Collection<Product> products = new ArrayList<Product>();
 
-    public MockData() {
+    private boolean mockBrands = false;
+    private boolean mockContent = false;
+    private boolean mockProducts = false;
 
+
+    public MockData(boolean brands, boolean content, boolean products) {
+        this.mockBrands = brands;
+        this.mockContent = content;
+        this.mockProducts = products;
+    }
+
+    public SearchHits updateSearchHits(SearchHits searchHits) {
+        if( this.mockBrands ) {
+            generateBrands();
+            searchHits.setBrands(this.brands);
+        }
+
+        if( this.mockContent ) {
+            generateContents();
+            searchHits.setContents(this.contents);
+        }
+
+        if( this.mockProducts ) {
+            generateProducts();
+            searchHits.setProducts(this.products);
+        }
+
+        return searchHits;
     }
 
     /**

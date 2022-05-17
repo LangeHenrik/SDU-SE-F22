@@ -32,7 +32,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
         }
 
         parser.parseHTML(newSite);
-        tokenizer.tokenizeHTMLBodyText(newSite);
+//        tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
         //CMSIndexModule.index(newSite.getFilteredTokensArray(), newSite.getId());
@@ -66,7 +66,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
 
 
         parser.parseHTML(newSite);
-        tokenizer.tokenizeHTMLBodyText(newSite);
+//      tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
         //CMSIndexModule.updateSingular(newSite.getFilteredTokens(), newSite.getId());

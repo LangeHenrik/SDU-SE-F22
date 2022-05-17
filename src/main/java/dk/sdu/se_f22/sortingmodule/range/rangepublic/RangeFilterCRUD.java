@@ -83,12 +83,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName) throws IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException, IllegalMinMaxException {
+    public RangeFilter update(RangeFilter filter, String newName) throws RangeFilterException, SQLException {
         return update(filter, newName, filter.getDescription());
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException, IllegalMinMaxException {
+    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws RangeFilterException, SQLException {
         RangeFilter out = null;
         if (filter instanceof DoubleFilter doubleFilter){
             out = new DoubleFilter(
@@ -132,37 +132,23 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         // set user min and max to keep that data
         if (filter instanceof DoubleFilter doubleFilter && result instanceof DoubleFilter resultDouble){
-            if (doubleFilter.getUserMaxDouble() != doubleFilter.getUserValueDefault()){
-                resultDouble.setUserMax(doubleFilter.getUserMaxDouble());
-            }
-
-            if (doubleFilter.getUserMinDouble() != doubleFilter.getUserValueDefault()){
-                resultDouble.setUserMin(doubleFilter.getUserMinDouble());
-            }
+            resultDouble.setUserMax(doubleFilter.getUserMaxDouble());
+            resultDouble.setUserMin(doubleFilter.getUserMinDouble());
         }
         if (filter instanceof LongFilter longFilter && result instanceof LongFilter resultLong){
-            if (longFilter.getUserMaxLong() != longFilter.getUserValueDefault()){
-                resultLong.setUserMax(longFilter.getUserMaxLong());
-            }
-            if (longFilter.getDbMinLong() != longFilter.getUserValueDefault()){
-                resultLong.setUserMin(longFilter.getUserMinLong());
-            }
+            resultLong.setUserMax(longFilter.getUserMaxLong());
+            resultLong.setUserMin(longFilter.getUserMinLong());
         }
         if (filter instanceof TimeFilter timeFilter && result instanceof TimeFilter resultTime){
-            if (timeFilter.getUserMaxInstant() != timeFilter.getUserValueDefault()){
-                resultTime.setUserMax(timeFilter.getUserMaxInstant());
-            }
-            if (timeFilter.getUserMinInstant() != timeFilter.getUserValueDefault()){
-                resultTime.setUserMin(timeFilter.getUserMinInstant());
-            }
+            resultTime.setUserMax(timeFilter.getUserMaxInstant());
+            resultTime.setUserMin(timeFilter.getUserMinInstant());
         }
 
         return result;
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException, IllegalMinMaxException {
-
+    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws RangeFilterException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof DoubleFilter)){
@@ -182,20 +168,15 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         validateFilterUpdate(modified);
 
         RangeFilter updated = database.update(modified);
-        DoubleFilter d = (DoubleFilter) filter;
-        if (d.getUserMaxDouble() != d.getUserValueDefault()){
-            updated.setUserMax(filter.getUserMaxDouble());
-        }
 
-        if (d.getUserMinDouble() != d.getUserValueDefault()){
-            updated.setUserMin(filter.getUserMinDouble());
-        }
+        updated.setUserMax(filter.getUserMaxDouble());
+        updated.setUserMin(filter.getUserMinDouble());
 
         return updated;
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException, IllegalMinMaxException {
+    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws RangeFilterException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof LongFilter)){
@@ -235,7 +216,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException, IllegalMinMaxException {
+    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws RangeFilterException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof TimeFilter)){
@@ -255,7 +236,6 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         validateFilterUpdate(modified);
 
         RangeFilter updated = database.update(modified);
-
 
         updated.setUserMax(filter.getUserMaxInstant());
         updated.setUserMin(filter.getUserMinInstant());

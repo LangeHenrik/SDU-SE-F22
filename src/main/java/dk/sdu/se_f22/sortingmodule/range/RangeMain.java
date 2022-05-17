@@ -4,7 +4,10 @@ import dk.sdu.se_f22.productmodule.management.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.productmodule.management.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 
 
@@ -17,6 +20,8 @@ import java.util.List;
  * &nbsp 2.1 InternalFilter(Filter, productAttribute)<br>
  * 3. Internal filter bruges til at validere på<br>
  **/
+@SuppressWarnings({"TryWithIdenticalCatches", "ConstantConditions"})
+//Warnings suppressed because the class is purely demonstrational and thus almost pseudocode
 public class RangeMain {
 
     public static void main(String[] args) {
@@ -103,6 +108,8 @@ public class RangeMain {
             e.printStackTrace();
         }
 
+        System.out.println(searchHits);
+
         // the searchHits object now contains a filtered productlist where each filter has been applied
     }
 
@@ -173,6 +180,8 @@ public class RangeMain {
             // This will happen if you implement RangeFilter interface on your own, and pass instances of this instead of the instances you receive from this module
             e.printStackTrace();
         }
+
+        System.out.println(searchHits);
 
         // the searchHits object now contains a filtered productlist where each filter has been applied
     }

@@ -129,7 +129,7 @@ class DoubleFilterTest {
             });
         }
 
-        static Stream<Arguments> useFilterArguments() {
+        static Stream<Arguments> useFilterArguments() throws IlligalMinMaxException {
             // Could be refactored to simply return DoubleFilters.
             // However it is like this such that the test can easily be refactored to take more arguments if needed.
 
@@ -270,7 +270,7 @@ class DoubleFilterTest {
                 @ParameterizedTest
                 @ValueSource(doubles = {2.0, 3.5, 1000.0})
                 @DisplayName("Set valid DoubleFilter userMax")
-                void setValidDoubleFilterUserMax (double input) {
+                void setValidDoubleFilterUserMax (double input) throws IlligalMinMaxException {
                     DoubleFilter doubleFilter = new DoubleFilter(
                             "Test Name",
                             "Test Discription",

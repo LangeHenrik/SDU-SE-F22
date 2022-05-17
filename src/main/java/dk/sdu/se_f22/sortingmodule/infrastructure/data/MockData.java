@@ -194,4 +194,97 @@ public class MockData {
         tmp = new Product(UUID.fromString("64414b11-81bb-47f4-8589-430168fc5ea0"), 3.344, new ArrayList<String>(Arrays.asList("Kolding", "Arhus")), 8311163628423l, 575.95, Instant.parse("2021-12-09T22:29:05.90Z"), Instant.parse("2022-04-27T05:16:05.36Z"), "Components/Processors", "DELL Intel Xeon E5620 processor", "DELL Intel Xeon E5620, Intel\u00ae Xeon\u00ae 5000 Sequence, u, u, u, u, u DELL Intel Xeon E5620. Processor family: Intel\u00ae Xeon\u00ae 5000 Sequence. Intel Identity Protection Technology version: u, Intel Secure Boot Technology version: u, Intel Secure Key Technology version: u");
         this.products.add(tmp);
     }
+
+    /**
+     * Method for generating contents
+     */
+    private void generateContents() {
+        this.contents.add(new Content(1, "<!DOCTYPE html>" +
+            "<html lang=en>" +
+            "" +
+            "<head>" +
+            "    <meta charset='UTF-8'>" +
+            "    <meta http-equiv='X-UA-Compatible' content='IE=edge'>" +
+            "    <meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+            "    <title>Changing a CPU</title>" +
+            "</head>" +
+            "" +
+            "<body>" +
+            "    <h1>Changing a CPU</h1>" +
+            "    <p> for a guide how to change your CPU? no further! guide will teach you everything you need know about performing" +
+            "        CPU overclocking for both the Pentium and Intel Core 2 processors and the Core i3, i5, i7 processors. By" +
+            "        changing the CPU speed you can provide power and performance your systems and you can money as well.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>This guide will you:</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>How to find your CPU temperature</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>What temperature different clocks the processor mean for performance</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li> best clocks for your processor to get the best performance</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>What can be overclocked without a regulator</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>How change your memory clock speed</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>Why you should never to overclock your CPU</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>Additional help and resources:</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <ul>" +
+            "        <li>How to check CPU</li>" +
+            "    </ul>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>So what is the best temperature for your CPU? What temperature will it best for your processor to be running? You" +
+            "        want to check temperature of your CPU because that your maximum processor speed.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>The best temperature for your CPU is around 95-105&deg;F (35-40&deg;C). That is the temperature your CPU to be" +
+            "        your CPU at peak performance. Your processor not be able to get to maximum performance the CPU gets too hot. It" +
+            "        get to a point where it might overheat can even catch fire.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>Note: CPU temperatures vary depending on your location, the architecture your CPU and the type of case you are" +
+            "        using. When using a small form case, you need to make sure the CPU heat sink is large enough to accommodate CPU" +
+            "        cooler.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <h2> CPU Temperatures</h2>" +
+            "    <p>&nbsp;</p>" +
+            "    <p> can limit the of your CPU, especially if you are only using your for gaming. When the CPU is operating at" +
+            "        temperatures, your GPU not be to properly render your game the CPU.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>Therefore you need to CPU temperature as low as possible to give the GPU and the CPU time to work together and" +
+            "        make game look better.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>Similarly, if your gets too hot, it may get too hot to safely work properly.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>Keeping the CPU temperature low is especially important if you are a gamer because your GPU is what gets" +
+            "        performance out of your system. If you a gaming that is primarily used for video playback, example, you" +
+            "        don&rsquo;t to go overclocking your CPU to the same level of performance.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p>Tip: To monitor your CPU&rsquo;s temperature, you can look at the motherboard&rsquo;s temperature indicator, or" +
+            "        connect a thermometer to your system to the motherboard, with the going under your processor.</p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p><strong><em>Consider water cooling</em></strong></p>" +
+            "    <p>&nbsp;</p>" +
+            "    <p> cooling may be best option for some users it them to overclock their CPU without risking overheating. Water" +
+            "        cooling keeps CPU cooler.</p>" +
+            "" +
+            "</body>" +
+            "</html>", "Changing a CPU", "Current timestamp!")));
+        this.contents.add(new Content(2, "HTML!", "Display types", "Current timestamp!")));
+        this.contents.add(new Content(3, "HTML!", "Finding the right laptop for school", "Current timestamp!")));
+    }
 }

@@ -11,41 +11,21 @@ public class HTMLSite  {
     private String documentText;
     private List<String> tokens;
     private List<String> filteredTokensList;
-    private boolean isUpdated;
 
-
-    public HTMLSite(int id, String htmlCode, List<String> tokens) {
-        this.id = id;
-        this.htmlCode = htmlCode;
-        this.tokens = tokens;
-    }
 
     //Constructor for a created htmlpage
     public HTMLSite(int id, String documentText) {
         this.id = id;
         this.documentText = documentText;
-        database.setupDatabase();
-        database.executeQuery("INSERT INTO cms_htmlpages (html_id) VALUES ("+id+")");
+
     }
 
-    //Constructor for an updated htmlpage
-    public HTMLSite(int id, String documentText, boolean isUpdated) {
+    //Constructor for unit testing
+    public HTMLSite(int id, String htmlCode, String documentText, List<String> tokens) {
         this.id = id;
+        this.htmlCode = htmlCode;
         this.documentText = documentText;
-        this.isUpdated = isUpdated;
-        database.setupDatabase();
-        database.executeQuery("INSERT INTO cms_htmlpages (html_id) VALUES ("+id+")");
-    }
-
-
-
-
-    public boolean isUpdated() {
-        return isUpdated;
-    }
-
-    public void setUpdated(boolean updated) {
-        isUpdated = updated;
+        this.tokens = tokens;
     }
 
     public String getHtmlCode() {
@@ -72,8 +52,6 @@ public class HTMLSite  {
 
         this.filteredTokensList = filteredTokens;
     }
-
-    Database database = Database.getInstance();
 
     public String getDocumentText() {
         return documentText;

@@ -1,7 +1,5 @@
 package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +20,11 @@ public class BaseProduct { //initialize class
         productAttributes = new HashMap<>(); //initialize hashmap
     }
     
-    public @Nullable String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
-        return productAttributes.get(pA).isEmpty() ? null : productAttributes.get(pA); //returns hashmap of pA's
+    public String get(ProductAttribute pA){ //String method running through pA's to assign values to productAttributes
+        return productAttributes.get(pA); //returns hashmap of pA's
     }
     
-    public double getAsNumeric(ProductAttribute pA){
-        /*if (get(pA).isEmpty()){
-            throw new NullPointerException("No value for " + pA.alias);
-        }*/
+    public double getAsNumeric(ProductAttribute pA) { //returns product attribute as a double
         String pAttr = get(pA).replaceAll("\"","");
         double result;
         result = Double.parseDouble(pAttr);
@@ -47,15 +42,11 @@ public class BaseProduct { //initialize class
             return productAttributes.get(pA) == null;
         }
         
-        if(value.endsWith("\"")){
-            value = value.substring(0,value.length() - 1); //?
-        }
-        
         productAttributes.put(pA,value); //assigns key and values to map
         return productAttributes.get(pA).equalsIgnoreCase(value);
     }
     
-    public boolean setLocations(ArrayList<String> values){
+    public boolean setLocations(List<String> values){
         
         StringBuilder sB = new StringBuilder();
         for(String s : values){
@@ -68,11 +59,11 @@ public class BaseProduct { //initialize class
     
     @Override
     public String toString(){ //overrides toString method, returning product name and price
-        return "Product: " + productAttributes.get(ProductAttribute.NAME) + " price: " + productAttributes.get(ProductAttribute.PRICE);
+        return "BaseProduct: " + productAttributes.get(ProductAttribute.NAME) + " price: " + productAttributes.get(ProductAttribute.PRICE);
     }
     
     public void print(){
-        System.out.println("Product : " + productAttributes.get(ProductAttribute.NAME)); //returns product name
+        System.out.println("BaseProduct : " + productAttributes.get(ProductAttribute.NAME)); //returns product name
         
         for(ProductAttribute pA : ProductAttribute.values()){ //runs through all product attributes
             

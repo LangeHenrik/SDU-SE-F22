@@ -1,23 +1,31 @@
 package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
+import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ProductManager implements IProductManager, Runnable{
     
     private final ProductJSONReader jsonReader;
     
-    public ArrayList<BaseProduct> baseProductArray;
+    protected ArrayList<BaseProduct> baseProductArray;
     private ArrayList<BaseProduct> updatedBaseProductArray;
     private boolean backgroundThreadIsRunning = false;
     private final Thread backgroundThread;
     private boolean runBackgroundUpdates = true;
     
+    public int getUpdateInterval() {
+        return updateInterval;
+    }
+    
     private int updateInterval;    //Measured in minutes
-    private final String config = "src/main/resources/dk/sdu/se_f22/productmodule/management/config.txt";
+    private final String config = "src/main/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/config.txt";
     
     public ProductManager(String sourcePath){
         //When you create a new object of this class, the background thread is started automatically.
@@ -32,29 +40,36 @@ public class ProductManager implements IProductManager, Runnable{
         backgroundThread.start();
         
         updateInterval = readConfig();
+        
+        Runtime.getRuntime().addShutdownHook(new Thread(this::finalizePM));
     }
     
-    ///Default File Path
+    ///Default File Path: "resources/products.json"
     public ProductManager(){
-        this("src/main/resources/dk/sdu/se_f22/productmodule/management/products.json");
+        this("src/main/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/products.json");
     }
     
     @Override
-    public boolean create(BaseProduct p) {
+    public boolean create(Product p) {
+        return create(toBaseProduct(p));
+    }
+    @Override
+    public boolean create(BaseProduct p){
         
-        //Adds new product to the productArray.
+        //Adds new product to the baseProductArray.
         //Returns whether this was possible or not.
         
         checkForUpdates();
         boolean success = baseProductArray.add(p);
         updateSource();
-        
         return success;
     }
     
+    //Convert ProductManager.createAll(List<Product>) to ProductHit?? All products are being converted to BaseProducts and added to baseProductArray??
     @Override
-    public boolean createAll(ArrayList<BaseProduct> pList){
+    public boolean createAllBaseProduct(ArrayList<BaseProduct> pList){
         checkForUpdates();
+        
         
         boolean success = baseProductArray.addAll(pList);
         
@@ -63,7 +78,26 @@ public class ProductManager implements IProductManager, Runnable{
     }
     
     @Override
-    public BaseProduct readProduct(String productId) {
+    public boolean createAll(ArrayList<Product> pList){
+        checkForUpdates();
+        
+        if(pList == null || pList.isEmpty()){
+            return false;
+        }
+        boolean success = true;
+        
+        for (Product p: pList) {
+            
+            if(!create(p)){
+                success = false;
+            }
+        }
+        updateSource();
+        return success;
+    }
+    
+    @Override
+    public BaseProduct readBaseProduct(String productId) {
         
         //This function returns a single product based on the UUID
         //Since the read() function doesn't alter any attribute values on the product
@@ -73,18 +107,27 @@ public class ProductManager implements IProductManager, Runnable{
         
         BaseProduct toReturn = null;
         
-        for(BaseProduct p : baseProductArray){
+        for(BaseProduct p : baseProductArray){ //Runs through product UUID's until the requested one is found.
             if(p.get(ProductAttribute.UUID).equalsIgnoreCase(productId)){
                 toReturn = p;
                 break;
             }
         }
-        
         return toReturn;
     }
     
     @Override
-    public BaseProduct[] readProducts(String[] productIds) {
+    public Product readProduct(String productID){
+        BaseProduct tempBaseProduct = readBaseProduct(productID);
+        if (tempBaseProduct == null) {
+            return null;
+        } else {
+            return new Product(tempBaseProduct);
+        }
+    }
+    
+    @Override
+    public BaseProduct[] readBaseProducts(String[] productIds) {
         
         //This function returns an array of products based on an array of UUID's
         //The size of the return array should equal the size of the input ID array
@@ -94,13 +137,32 @@ public class ProductManager implements IProductManager, Runnable{
         BaseProduct[] returnArray = new BaseProduct[productIds.length];
         
         for(int i = 0; i < productIds.length; i++){
-            for(BaseProduct p : baseProductArray){
+            for(BaseProduct bP : baseProductArray){
                 
-                if(p.get(ProductAttribute.ID).equalsIgnoreCase(productIds[i])){
-                    returnArray[i] = p;
+                if(bP.get(ProductAttribute.UUID).equalsIgnoreCase(productIds[i])){
+                    returnArray[i] = bP;
                     break;
                 }
             }
+        }
+        
+        return returnArray;
+    }
+    
+    @Override
+    public Product[] readProducts(String[] productIds) { //a copy with return type Product
+        
+        //This function returns an array of products based on an array of UUID's
+        //The size of the return array should equal the size of the input ID array
+        
+        int i = 0;
+        Product[] returnArray = new Product[productIds.length];
+        for (String pId : productIds) { //running through array from rBP to convert
+            
+            if (pId!=null) { //checking bP has a UUID
+                returnArray[i]=readProduct(pId); //converting to P, adding to array, moving to next index
+            }
+            i++;
         }
         
         return returnArray;
@@ -128,11 +190,31 @@ public class ProductManager implements IProductManager, Runnable{
     }
     
     @Override
-    public boolean update(String productId, BaseProduct p) {
+    public boolean update(String productId, Product p) {
         
         //This function updates the attributes of a product based on its UUID
         //By replacing it entirely with a new one. Make sure this new product has all it's attributes set correctly.
         //Any missing attribute on this other product is also removed from the source file.
+        
+        checkForUpdates();
+        
+        boolean success = false;
+        
+        for(BaseProduct pT : baseProductArray){
+            if(pT.get(ProductAttribute.UUID).equalsIgnoreCase(productId)){
+                pT = toBaseProduct(p);
+                success = true;
+                break;
+            }
+        }
+        
+        updateSource();
+        
+        return success;
+    }
+    
+    @Override
+    public boolean updateBaseProduct(String productId, BaseProduct p) {
         
         checkForUpdates();
         
@@ -172,9 +254,10 @@ public class ProductManager implements IProductManager, Runnable{
         return toReturn;
     }
     
+    @Override
     public boolean removeAll(String[] productIds){
         
-        //This function removes all products from the productArray that matches any of the given productIds
+        //This function removes all products from the baseProductArray that matches any of the given productIds
         //It returns whether it was able to find products matching all the id's or not.
         
         checkForUpdates();
@@ -229,7 +312,7 @@ public class ProductManager implements IProductManager, Runnable{
         
         //This function is only used by the backgroundThread.
         //It busy-waits (Thread.sleep would work as well) for updateInterval (minutes)
-        //Then reads the json file again and prepares a new ArrayList<Product> for use.
+        //Then reads the json file again and prepares a new ArrayList<BaseProduct> for use.
         
         while(runBackgroundUpdates) {
             backgroundUpdate();
@@ -239,10 +322,9 @@ public class ProductManager implements IProductManager, Runnable{
     @Override
     public void reparse(){
         
-        //Reads a new productArray from the jsonReader.
+        //Reads a new baseProductArray from the jsonReader.
         //The current array is swapped out with the new one next time any CRUD operation is called.
         //This is done as such, to prevent the backgroundThread and external calls to reparse() to cause issues.
-        
         try {
             updatedBaseProductArray = jsonReader.read();
         }catch (IOException e){
@@ -250,9 +332,27 @@ public class ProductManager implements IProductManager, Runnable{
         }
     }
     
+    BaseProduct toBaseProduct(Product product) {
+        BaseProduct toReturn = new BaseProduct();
+        toReturn.set(ProductAttribute.UUID, product.getUuid().toString());
+        toReturn.set(ProductAttribute.AVERAGE_USER_REVIEW, Double.toString(product.getAverageUserReview()));
+        toReturn.set(ProductAttribute.EAN, Long.toString(product.getEan()));
+        toReturn.set(ProductAttribute.PRICE, Double.toString(product.getPrice()));
+        toReturn.set(ProductAttribute.PUBLISHED_DATE, product.getPublishedDate().toString().substring(0, product.getPublishedDate().toString().indexOf("Z")));
+        toReturn.set(ProductAttribute.EXPIRATION_DATE, product.getExpirationDate().toString().substring(0, product.getExpirationDate().toString().indexOf("Z")));
+        toReturn.set(ProductAttribute.CATEGORY, product.getCategory());
+        toReturn.set(ProductAttribute.NAME, product.getName());
+        toReturn.set(ProductAttribute.DESCRIPTION, product.getDescription());
+        toReturn.set(ProductAttribute.WEIGHT, Double.toString(product.getWeight()));
+        toReturn.set(ProductAttribute.SIZE, product.getSize());
+        toReturn.set(ProductAttribute.CLOCKSPEED, Double.toString(product.getClockspeed()));
+        toReturn.setLocations(product.getInStock());
+        return toReturn;
+    }
+    
     private boolean checkForUpdates(){
         
-        //This function is called from every create, update or delete operation and checks if a newer version of the productArray is available
+        //This function is called from every create, update or delete operation and checks if a newer version of the baseProductArray is available
         //This newer version may come from an external call to reparse() or from the backgroundThread from run()
         //Alternatively, use clone(). It might be more performant.
         
@@ -269,10 +369,10 @@ public class ProductManager implements IProductManager, Runnable{
     
     private void updateSource(){
         
-        //This call rewrites the source file with the current productArray
+        //This call rewrites the source file with the current baseProductArray
         //This !.isEmpty and != null redundancy might not be necessary, but it's here just in case.
         
-        if(!baseProductArray.isEmpty() || baseProductArray != null) {
+        if(baseProductArray != null && !baseProductArray.isEmpty()) {
             
             try {
                 jsonReader.write(baseProductArray);
@@ -306,9 +406,16 @@ public class ProductManager implements IProductManager, Runnable{
         }
         return toReturn;
     }
+
+    /*public void print(){
+        //Prints each products name and price.
+
+        for(BaseProduct p : baseProductArray){
+            System.out.println(p);
+        }
+    }*/
     
-    @Override
-    public ArrayList<BaseProduct> readAllProducts() {
+    protected ArrayList<BaseProduct> readAllProducts() {
         
         //This function returns the entire product array. Using this function may result in errors,
         //rather use readAll()
@@ -316,6 +423,15 @@ public class ProductManager implements IProductManager, Runnable{
         checkForUpdates();
         return baseProductArray;
     }
+
+    /*public void printAllProducts(){
+
+        //Prints a detailed description of each product.
+
+        for(BaseProduct p : baseProductArray){
+            p.print();
+        }
+    }*/
     
     private ArrayList<BaseProduct> getFromSource(){
         try{
@@ -326,10 +442,11 @@ public class ProductManager implements IProductManager, Runnable{
         return new ArrayList<>();
     }
     
-    protected void finalize(){
+    private void finalizePM(){
         
         runBackgroundUpdates = false;
         backgroundThread.interrupt();
+        
         try {
             backgroundThread.join();
         } catch (InterruptedException e) {

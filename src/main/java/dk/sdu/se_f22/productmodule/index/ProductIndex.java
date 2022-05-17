@@ -16,17 +16,9 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     private int nameHits = 0;
     private int descriptionHits = 0;
     private List<Product> sortedList = new ArrayList<>();
-
-    private String url = "localhost";
-    private int port = 5432;
-    private String databaseName = "xxxx";
-    private String username = "xxxx";
-    private String password = "xxxx";
-    private Connection connection = null;
     private static ProductIndex instance;
-
     private ProductIndex(){
-        initializePostgresqlDatabase();
+
     }
 
     public static ProductIndex getInstance(){
@@ -36,19 +28,6 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
         return instance;
     }
 
-    private void initializePostgresqlDatabase() {
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-            connection = DriverManager.getConnection("jdbc:postgresql://" + url
-                    + ":"
-                    + port
-                    + "/" + databaseName, username, password);
-        } catch (SQLException | IllegalArgumentException ex) {
-            ex.printStackTrace(System.err);
-        } finally {
-            if (connection == null) System.exit(-1);
-        }
-    }
 
     // Method for finding amount of hits within a product by a token, then returning an indexed list by the hits
     public List<Product> indexProductsByToken(List<Product> products, List<String> tokens) {

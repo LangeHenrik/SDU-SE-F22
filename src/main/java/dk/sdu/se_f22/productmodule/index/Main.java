@@ -14,7 +14,7 @@ public class Main {
         List<String> mylist = new ArrayList<>();
         mylist.add("Herning");
         mylist.add("Køge");
-        Product product = new Product(UUID.fromString("5cf4d1fd-2787-4b64-8ef9-0b6f131a3f24"),
+        Product product = new Product(UUID.fromString("5cf4d1fd-2787-4b64-8ef9-0b6f131a3f23"),
                 4.446,mylist, 20544709,
                 1787.50,Instant.parse("2021-06-02T05:05:06.622164Z"), Instant.parse("2025-01-25T07:40:33.169509Z"),
                 "Memory/SSD","Lenovo ThinkPad T410 35.8 cm (14.1\")",

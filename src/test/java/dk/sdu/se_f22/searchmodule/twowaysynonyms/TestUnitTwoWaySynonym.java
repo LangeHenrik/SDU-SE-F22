@@ -2,6 +2,7 @@ package dk.sdu.se_f22.searchmodule.twowaysynonyms;
 
 import static org.junit.jupiter.api.Assertions.*;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,7 +13,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TestUnitTwoWaySynonym {
-    static Connection conn = DBConnection.getConnection();
     static TwoWaySynonym operator = TwoWaySynonym.getInstance();
     static String _defaultSynonym;
     static ArrayList<Synonym> _defaultRelatedSynonymCollection;
@@ -20,7 +20,8 @@ public class TestUnitTwoWaySynonym {
 
     @BeforeAll
     static void setUp() {
-        TruncateDB();
+        DBMigration migrator = new DBMigration();
+        migrator.migrate();
         _defaultSynonym = "Computer";
         _defaultRelatedSynonymCollection = new ArrayList<Synonym>(){{
             add(new Synonym("sduconst-0000-0000-1000-000const0001", "PC", 1));
@@ -159,7 +160,7 @@ public class TestUnitTwoWaySynonym {
     }
 
     private static void TruncateDB() {
-        try {
+        try (var conn = DBConnection.getPooledConnection()) {
             Statement stmt = conn.createStatement();
             stmt.execute("TRUNCATE twoway_synonym RESTART IDENTITY");
         } catch (SQLException e) {

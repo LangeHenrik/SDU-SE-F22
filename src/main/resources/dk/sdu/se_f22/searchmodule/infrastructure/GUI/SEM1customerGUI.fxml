@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.infrastructure.GUI.SEM1customerGUIController">
+    <Label layoutX="123.0" layoutY="29.0" text="Customer Search Engine">
+        <font>
+            <Font size="33.0" />
+        </font>
+    </Label>
+    <TextField fx:id="SEM1customerSearchBar" layoutX="123.0" layoutY="78.0" prefHeight="25.0" prefWidth="362.0" />
+    <Button fx:id="SEM1customerSearchbtn" layoutX="433.0" layoutY="113.0" mnemonicParsing="false" onAction="#onSem1SearchButton" text="Search" />
+    <TextArea fx:id="SEM1customerText" layoutX="123.0" layoutY="150.0" prefHeight="200.0" prefWidth="362.0" />
+   <Label layoutX="123.0" layoutY="105.0" prefHeight="17.0" prefWidth="65.0" text="Brand hits:" />
+   <Label layoutX="215.0" layoutY="104.0" text="Product hits: " />
+   <Label fx:id="brandHitsCounter" layoutX="181.0" layoutY="104.0" prefHeight="17.0" prefWidth="19.0" />
+   <Label fx:id="productHitsCounter" layoutX="286.0" layoutY="104.0" prefHeight="17.0" prefWidth="19.0" />
+</AnchorPane>

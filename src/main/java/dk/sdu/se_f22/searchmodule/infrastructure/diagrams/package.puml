@@ -2,19 +2,35 @@
 'https://plantuml.com/sequence-diagram
 package searchmodule {
   package infrastructure{
-  package interfaces{
+  package interfaces #ddd{
     class BrandGetter
     class Filterable
     class IndexingModule
     class SearchModule
-}
-class DelimiterSettings
+    }
+  package GUI #ddd{
+    class SEM1InfrastructureAdministrativeGUIController
+    class TestApplicationAdministrativeGUI
+    class sem1CustomerApp
+    class SEM1customerGUIController
+    }
+  package logger #ddd{
+    class SearchLog
+    class SearchLogger
+    }
+  package tokenization #ddd{
+    class DelimiterSettings
+    class Tokenizer
+    }
+  package util #ddd{
+    class RegexUtils
+    }
 class IllegalChars
-class ReplaceForbiddenChars
-class SearchLog
-class SearchLogger
 class SearchModuleImpl
-class SearchModuleUtils
-class SEM1InfrastructureAdministrativeGUIController
-class Tokenizer
+}
+
+util -[hidden]-> interfaces
+GUI -[hidden]--> tokenization
+GUI -[hidden]--> IllegalChars
+GUI -[hidden]--> SearchModuleImpl
 @enduml

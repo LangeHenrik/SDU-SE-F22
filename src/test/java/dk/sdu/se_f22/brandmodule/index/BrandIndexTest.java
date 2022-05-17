@@ -28,60 +28,75 @@ class BrandIndexTest {
         knownBrand.setProducts(tempList);
 
         try (Connection connection = DBConnection.getPooledConnection()){
-            PreparedStatement brandInsert = connection.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?, ?, ?, ?)");
+            PreparedStatement brandInsert = connection.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING");
             brandInsert.setString(1, knownBrand.getName());
             brandInsert.setString(2, knownBrand.getDescription());
             brandInsert.setString(3, knownBrand.getFounded());
             brandInsert.setString(4, knownBrand.getHeadquarters());
+            brandInsert.execute();
 
-            PreparedStatement prod1 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod1 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod1.setString(1, Products[0]);
+            prod1.execute();
 
-            PreparedStatement prod2 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod2 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod2.setString(1, Products[1]);
+            prod2.execute();
 
-            PreparedStatement prod3 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod3 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod3.setString(1, Products[2]);
+            prod3.execute();
 
-            PreparedStatement prod4 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod4 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod4.setString(1, Products[3]);
+            prod4.execute();
 
-            PreparedStatement prod5 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod5 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod5.setString(1, Products[4]);
+            prod5.execute();
 
-            PreparedStatement prod6 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod6 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod6.setString(1, Products[5]);
+            prod6.execute();
 
-            PreparedStatement prod7 = connection.prepareStatement("INSERT  INTO producttype (type) VALUES (?)");
+            PreparedStatement prod7 = connection.prepareStatement("INSERT  INTO Tokens (token) VALUES (?) ON CONFLICT DO NOTHING");
             prod7.setString(1, Products[6]);
+            prod7.execute();
 
-            PreparedStatement TBM1 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM1 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM1.setInt(1, 1);
             TBM1.setInt(2, 1);
+            TBM1.execute();
 
-            PreparedStatement TBM2 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM2 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM2.setInt(1, 1);
             TBM2.setInt(2, 2);
+            TBM2.execute();
 
-            PreparedStatement TBM3 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM3 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM3.setInt(1, 1);
             TBM3.setInt(2, 3);
+            TBM3.execute();
 
-            PreparedStatement TBM4 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM4 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM4.setInt(1, 1);
             TBM4.setInt(2, 4);
+            TBM4.execute();
 
-            PreparedStatement TBM5 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM5 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM5.setInt(1, 1);
             TBM5.setInt(2, 5);
+            TBM5.execute();
 
-            PreparedStatement TBM6 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM6 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM6.setInt(1, 1);
             TBM6.setInt(2, 6);
+            TBM6.execute();
 
-            PreparedStatement TBM7 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?)");
+            PreparedStatement TBM7 = connection.prepareStatement("INSERT INTO tokenbrandmap (brandid, tokenid) VALUES (?, ?) ON CONFLICT DO NOTHING");
             TBM7.setInt(1, 1);
             TBM7.setInt(2, 7);
+            TBM7.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -207,6 +207,7 @@ class RangeFilterClassTest {
                 LongFilter longFilterWithDifferentMaxValues = new LongFilter(id, name, description, productAttribute, min, max + 1);
                 Assertions.assertFalse(longFilter.equals(longFilterWithDifferentMaxValues));
             }
+
             @ParameterizedTest(name = "Time filter: {0},{1},{2},{3},{4},{5}")
             @DisplayName("Long filters with different filter types: Double filter")
             @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
@@ -215,6 +216,7 @@ class RangeFilterClassTest {
                 DoubleFilter doubleFilterWithDifferentType = new DoubleFilter(id, name, description, productAttribute, (double) min, (double) max);
                 Assertions.assertFalse(longFilter.equals(doubleFilterWithDifferentType));
             }
+
             @ParameterizedTest(name = "Time filter: {0},{1},{2},{3},{4},{5}")
             @DisplayName("Long filters with different filter types: Time filter")
             @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
@@ -321,6 +323,7 @@ class RangeFilterClassTest {
                 DoubleFilter doubleFilterWithDifferentType = new DoubleFilter(id, name, description, productAttribute, 0.1, 99.9);
                 Assertions.assertFalse(timeFilter.equals(doubleFilterWithDifferentType));
             }
+
             @ParameterizedTest(name = "Double filter: {0},{1},{2},{3}, 1, 100")
             @DisplayName("Time filters with different filter types: Long filter")
             @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
@@ -351,68 +354,71 @@ class RangeFilterClassTest {
             }
 
         }
+
+
     }
 
-        @Nested
-        @DisplayName("Matching tests")
-        class MatchingTests {
 
-                @ParameterizedTest
-                @DisplayName("Test matching Double filters")
-                @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-                void testMatchingDoubleFilters(int id, String name, String description, String productAttribute, double min, double max) {
-                    DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
-                    DoubleFilter doubleFilterduplicate = new DoubleFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertTrue(doubleFilter.equals(doubleFilterduplicate));
-                }
+    @Nested
+    @DisplayName("Matching tests")
+    class MatchingTests {
 
-                @ParameterizedTest
-                @DisplayName("Test matching Long filters")
-                @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-                void testMatchingLongFilters(int id, String name, String description, String productAttribute, Long min, Long max) {
-                    LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
-                    LongFilter longFilterduplicate = new LongFilter(id, name, description, productAttribute, min, max);
-                    Assertions.assertTrue(longFilter.equals(longFilterduplicate));
-                }
+        @ParameterizedTest
+        @DisplayName("Test matching Double filters")
+        @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+        void testMatchingDoubleFilters(int id, String name, String description, String productAttribute, double min, double max) {
+            DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
+            DoubleFilter doubleFilterduplicate = new DoubleFilter(id, name, description, productAttribute, min, max);
+            Assertions.assertTrue(doubleFilter.equals(doubleFilterduplicate));
+        }
 
-                @ParameterizedTest
-                @DisplayName("Test matching Time filters")
-                @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-                void testMatchingTimeFilters(int id, String name, String description, String productAttribute, Instant min, Instant max) {
-                    TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
-                    TimeFilter timeFilterduplicate = new TimeFilter(id,name, description,productAttribute,min,max);
-                    Assertions.assertTrue(timeFilter.equals(timeFilterduplicate));
-                }
+        @ParameterizedTest
+        @DisplayName("Test matching Long filters")
+        @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+        void testMatchingLongFilters(int id, String name, String description, String productAttribute, Long min, Long max) {
+            LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
+            LongFilter longFilterduplicate = new LongFilter(id, name, description, productAttribute, min, max);
+            Assertions.assertTrue(longFilter.equals(longFilterduplicate));
+        }
 
-            }
-
-                // This test should be split up into many tests to test each step/level of the equals method
-
-                // Here follows an overview of the necessary tests:
-
-                // For non-matching tests, all other attributes should be equal
-
-                // Non-matching filters:
-                // A filter and an instance of an ordinary Object should not equal
-                // two filters with different ids, should not equal
-                // two filters with different names should not equal
-                // two filters with different descriptions should not equal
-                // two filters looking at different product attributes
-
-                // In specific classes:
-                // Different filter types with same attributes
-                // DBMin differs
-                // DBMax differs
-                // UserMin differs
-                // USerMax differs
+        @ParameterizedTest
+        @DisplayName("Test matching Time filters")
+        @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+        void testMatchingTimeFilters(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
+            TimeFilter timeFilterduplicate = new TimeFilter(id, name, description, productAttribute, min, max);
+            Assertions.assertTrue(timeFilter.equals(timeFilterduplicate));
+        }
 
 
-                // Matching filters:
-                // Maybe we should create an implementation,
-                // which inherits from RangeFilterClass to test if equals works,
-                // if the two filters match
+        // This test should be split up into many tests to test each step/level of the equals method
 
-                // Specific filter classes
-                // Test each type for matching filters
-            }
+        // Here follows an overview of the necessary tests:
+
+        // For non-matching tests, all other attributes should be equal
+
+        // Non-matching filters:
+        // A filter and an instance of an ordinary Object should not equal
+        // two filters with different ids, should not equal
+        // two filters with different names should not equal
+        // two filters with different descriptions should not equal
+        // two filters looking at different product attributes
+
+        // In specific classes:
+        // Different filter types with same attributes
+        // DBMin differs
+        // DBMax differs
+        // UserMin differs
+        // USerMax differs
+
+
+        // Matching filters:
+        // Maybe we should create an implementation,
+        // which inherits from RangeFilterClass to test if equals works,
+        // if the two filters match
+
+        // Specific filter classes
+        // Test each type for matching filters
+    }
+}
 

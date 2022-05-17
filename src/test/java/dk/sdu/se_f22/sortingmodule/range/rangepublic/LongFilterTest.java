@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
@@ -213,7 +214,7 @@ class LongFilterTest {
                 @MethodSource("provideLongFilters")
                 void setInvalidLongFilterUserMin (LongFilter filter) {
                     long newValue = filter.getDbMinLong() - 1;
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMin(newValue));
                 }
 
@@ -222,7 +223,7 @@ class LongFilterTest {
                 @MethodSource("provideLongFilters")
                 void setInvalidLongFilterUserMax (LongFilter filter) {
                     long newValue = filter.getDbMinLong() - 1;
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMax(newValue)
                     );
                 }
@@ -232,7 +233,7 @@ class LongFilterTest {
                 @MethodSource("provideLongFilters")
                 void setInvalid (LongFilter filter) {
                     long newValue = filter.getDbMaxLong() + 1;
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMin(newValue));
                 }
 
@@ -241,7 +242,7 @@ class LongFilterTest {
                 @MethodSource("provideLongFilters")
                 void setInvalidLongFilterUserMaxHigherThanDBMax (LongFilter filter) {
                     long newValue = filter.getDbMaxLong() + 1;
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMax(newValue)
                     );
                 }
@@ -255,7 +256,7 @@ class LongFilterTest {
                     long newMax = filter.getDbMaxLong() - 20;
 
                     filter.setUserMin(newMin);
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMax(newMax));
                 }
 
@@ -267,7 +268,7 @@ class LongFilterTest {
                     long newMin = filter.getDbMaxLong() - 10;
 
                     filter.setUserMax(newMin);
-                    Assertions.assertThrows(InvalidFilterException.class,
+                    Assertions.assertThrows(IlligalMinMaxException.class,
                             () -> filter.setUserMin(newMax));
                 }
             }

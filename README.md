@@ -139,3 +139,4 @@ The checks are visible when creating a pull request on GitHub, just abode the me
 
 All of this, is beyond the current pensum for 2. semester.  
 The GitHub actions can be found in the `.github\workflows` folder.
+ 

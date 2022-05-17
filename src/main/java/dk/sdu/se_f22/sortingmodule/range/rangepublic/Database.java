@@ -63,8 +63,8 @@ public class Database implements DatabaseInterface {
                     statement.setString(1, filter.getName());
                     statement.setString(2, filter.getDescription());
                     statement.setString(3, filter.getProductAttribute());
-                    statement.setTimestamp(4, new Timestamp(filter.getDbMinInstant().toEpochMilli()), cal);
-                    statement.setTimestamp(5, new Timestamp(filter.getDbMaxInstant().toEpochMilli()), cal);
+                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()), cal);
+                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()), cal);
                 }
                 default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
             }
@@ -232,8 +232,8 @@ public class Database implements DatabaseInterface {
                     statement.setString(1, filter.getName());
                     statement.setString(2, filter.getDescription());
                     statement.setString(3, filter.getProductAttribute());
-                    statement.setTimestamp(4, new Timestamp(filter.getDbMinInstant().toEpochMilli()), cal);
-                    statement.setTimestamp(5, new Timestamp(filter.getDbMaxInstant().toEpochMilli()), cal);
+                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()), cal);
+                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()), cal);
                     statement.setInt(6, filter.getId());
                 }
                 default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");

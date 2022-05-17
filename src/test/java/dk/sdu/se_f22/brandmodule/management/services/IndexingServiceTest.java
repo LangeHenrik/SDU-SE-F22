@@ -52,6 +52,11 @@ public class IndexingServiceTest {
         // Delay to test the thread
         while(isRunning[0]){
            int a = 0;
+           a = a+a;
+           if(isRunning[0]==false){
+               break;
+
+           }
         }
         /*for (int i = 0; i < 7500; i++) {
             for (int j = 0; j < 1000; j++) {

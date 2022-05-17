@@ -241,7 +241,7 @@ class LongFilterTest {
                 }
 
                 @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid TimeFilter userMin less than dbMin")
+                @DisplayName("Set invalid LongFilter userMin less than dbMin")
                 @MethodSource("provideLongFilters")
                 void setInvalidLongFilterUserMin (LongFilter filter) {
                     long newValue = filter.getDbMinLong() - 1;
@@ -260,7 +260,7 @@ class LongFilterTest {
                 }
 
                 @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid TimeFilter userMin higher than dbMax")
+                @DisplayName("Set invalid LongFilter userMin higher than dbMax")
                 @MethodSource("provideLongFilters")
                 void setInvalid (LongFilter filter) {
                     long newValue = filter.getDbMaxLong() + 1;

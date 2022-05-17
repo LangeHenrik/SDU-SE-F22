@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -198,7 +199,15 @@ class DoubleFilter extends RangeFilterClass {
     }
 
     @Override
-    public double setUserMin(double userMin) {
+    public double setUserMin(double userMin) throws IlligalMinMaxException {
+        if (userMin > userMax && userMax != USER_NOT_SET_VALUE) {
+            throw new IlligalMinMaxException("'userMin' can not be greater than 'userMax'");
+        }
+
+        if (userMin < DB_MIN || userMin > DB_MAX) {
+            throw new IlligalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
+        }
+
         this.userMin = userMin;
         return this.userMin;
     }

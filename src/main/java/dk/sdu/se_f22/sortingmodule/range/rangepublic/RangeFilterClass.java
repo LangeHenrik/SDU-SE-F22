@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IlligalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 
@@ -175,7 +176,7 @@ abstract class RangeFilterClass implements RangeFilter{
     }
 
     @Override
-    public double setUserMin(double userMin) throws InvalidFilterTypeException {
+    public double setUserMin(double userMin) throws InvalidFilterTypeException, IlligalMinMaxException {
         throw new InvalidFilterTypeException("Not a double filter");
     }
 

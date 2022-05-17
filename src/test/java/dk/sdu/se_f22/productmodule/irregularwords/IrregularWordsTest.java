@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.productmodule.irregularwords;
 
-import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ class IrregularWordsTest {
     //Connecting the test class to the database before each test.
     @BeforeAll
     static void start() {
-    IrregularWords.INSTANCE.initialize();
     IrregularWords.INSTANCE.insertValues();
     }
 
@@ -72,7 +70,6 @@ class IrregularWordsTest {
 
     @Test
     void readIRWord() {
-        IrregularWords.INSTANCE.initialize();
         assertTrue(IrregularWords.INSTANCE.readIRWord());
     }
 

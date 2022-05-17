@@ -225,22 +225,54 @@ class DoubleFilterTest {
             @DisplayName("Set valid userMin and userMax")
             class SetValidUserMinAndUserMax {
 
-                @Test
-                @DisplayName("Set valid DoubleFilter userMin and userMax")
-                void setValidDoubleFilterUserMinAndUserMax () {
+                @ParameterizedTest
+                @ValueSource(doubles = {1.0, 3.5, 999.0})
+                @DisplayName("Set valid DoubleFilter userMin")
+                void setValidDoubleFilterUserMin (double input) {
+                    DoubleFilter doubleFilter = new DoubleFilter(
+                            "Test Name",
+                            "Test Discription",
+                            "Test product Attribute",
+                            1, 1000);
 
+                    Assertions.assertEquals(doubleFilter.setUserMin(input), doubleFilter.getUserMinDouble());
                 }
 
-                @Test
-                @DisplayName("Set valid LongFilter userMin and userMax")
-                void setValidLongFilterUserMinAndUserMax () {
+                @ParameterizedTest
+                @ValueSource(doubles = {2.0, 3.5, 1000.0})
+                @DisplayName("Set valid DoubleFilter userMax")
+                void setValidDoubleFilterUserMax (double input) {
+                    DoubleFilter doubleFilter = new DoubleFilter(
+                            "Test Name",
+                            "Test Discription",
+                            "Test product Attribute",
+                            1, 1000);
 
+                    Assertions.assertEquals(doubleFilter.setUserMax(input), doubleFilter.getUserMaxDouble());
                 }
 
-                @Test
-                @DisplayName("Set valid TimeFilter userMin and userMax")
-                void setValidTimeFilterUserMinAndUserMax () {
+                @ParameterizedTest
+                @MethodSource("provideParameters")
+                @DisplayName("Set valid DoubleFilter userMax And userMax")
+                void setValidDoubleFilterUserMinAndUserMax (double inputMin, double inputMax) {
+                    DoubleFilter doubleFilter = new DoubleFilter(
+                            "Test Name",
+                            "Test Discription",
+                            "Test product Attribute",
+                            1, 1000);
 
+                    Assertions.assertDoesNotThrow(
+                            SomeException.class,
+                            () -> doubleFilter.setUserMin(inputMin),
+                            () -> doubleFilter.setUserMax(inputMax));
+                }
+
+                private static Stream<Arguments> provideParameters() {
+                    return Stream.of(
+                            Arguments.of(1.0, 2.0),
+                            Arguments.of(3.5, 5.5),
+                            Arguments.of(999.0, 1000.0)
+                    );
                 }
             }
 
@@ -249,22 +281,59 @@ class DoubleFilterTest {
             @Disabled("Not yet implemented")
             class SetInvalidUserMinAndUserMax {
 
-                @Test
-                @DisplayName("Set invalid DoubleFilter userMin and userMax")
-                void setInvalidDoubleFilterUserMinAndUserMax () {
+                @ParameterizedTest
+                @ValueSource(doubles = {Double.MIN_VALUE, -1.0, 0.0})
+                @DisplayName("Set invalid DoubleFilter userMin")
+                void setValidDoubleFilterUserMin (double input) {
+                    DoubleFilter doubleFilter = new DoubleFilter(
+                            "Test Name",
+                            "Test Discription",
+                            "Test product Attribute",
+                            1, 1000);
 
+                    Assertions.assertThrows(
+                            SomeException.class,
+                            () -> doubleFilter.setUserMin(input));
                 }
 
-                @Test
-                @DisplayName("Set invalid LongFilter userMin and userMax")
-                void setInvalidLongFilterUserMinAndUserMax () {
+                @ParameterizedTest
+                @ValueSource(doubles = {1000.1, 10000, Double.MAX_VALUE})
+                @DisplayName("Set invalid DoubleFilter userMax")
+                void setValidDoubleFilterUserMax (double input) {
+                    DoubleFilter doubleFilter = new DoubleFilter(
+                            "Test Name",
+                            "Test Discription",
+                            "Test product Attribute",
+                            1, 1000);
 
+                    Assertions.assertThrows(
+                            SomeException.class,
+                            () -> doubleFilter.setUserMax(input));
                 }
 
-                @Test
-                @DisplayName("Set invalid TimeFilter userMin and userMax")
-                void setInvalidTimeFilterUserMinAndUserMax () {
+                @ParameterizedTest
+                @MethodSource("provideParameters")
+                @DisplayName("Set invalid DoubleFilter userMax And userMax")
+                void setValidDoubleFilterUserMinAndUserMax (double inputMin, double inputMax) {
+                    DoubleFilter doubleFilter = new DoubleFilter(
+                            "Test Name",
+                            "Test Discription",
+                            "Test product Attribute",
+                            1, 1000);
 
+                    Assertions.assertThrows(
+                            SomeException.class,
+                            () -> doubleFilter.setUserMin(inputMin),
+                            () -> doubleFilter.setUserMax(inputMax), ""
+                    );
+                }
+
+                private static Stream<Arguments> provideParameters() {
+                    return Stream.of(
+                            Arguments.of(2.0, 1.0),
+                            Arguments.of(5.5, 3.5),
+                            Arguments.of(1000.0, 999.0)
+                    );
                 }
             }
         }

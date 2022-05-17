@@ -1,12 +1,14 @@
-//package dk.sdu.se_f22.contentmodule.infrastructure.data;
-//
-//
-//import java.sql.*;
-//import java.util.ArrayList;
-//
-//import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-//
-//public class Database implements DatabaseInterface {
+package dk.sdu.se_f22.contentmodule.infrastructure.data;
+
+
+import java.sql.*;
+import java.util.ArrayList;
+
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
+public class Database  {
+
+
 //
 //
 //
@@ -104,5 +106,5 @@
 //        }
 //        return parameterid;
 //    }
-//}
+}
 //

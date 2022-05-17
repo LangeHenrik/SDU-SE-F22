@@ -282,6 +282,7 @@ class TimeFilterTest {
                     );
                 }
 
+
                 @Test
                 @DisplayName("Set invalid TimeFilter userMin higher than userMax")
                 void setInvalidUserMinHigherThanUserMax (TimeFilter filter) {

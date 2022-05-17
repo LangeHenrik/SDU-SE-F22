@@ -12,11 +12,12 @@ import java.util.UUID;
 public class test {
 
     public static void main(String[] args) throws ParseException {
+        /*
         List<Product> products = new ArrayList<>();
         products.add(new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[11])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
         products.add(new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0));
 
-/*
+*//*
         products.add(new Product("Pizza",1895,2.3,1,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2020")));
         products.add(new Product("Stikkontakt",3000,3.6,17,new SimpleDateFormat("dd/MM/yyyy").parse("05/22/2028")));
         products.add(new Product("Burger",859,1,50,new SimpleDateFormat("dd/MM/yyyy").parse("05/22/1996")));
@@ -31,7 +32,7 @@ public class test {
         products.add(new Product("Cornflakes",2395,2.2,5,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2019")));
         products.add(new Product("Cake",3395,4.7,9,new SimpleDateFormat("dd/MM/yyyy").parse("02/22/2017")));
 
- */
+ *//*
 
         IScoring scoring = new Scoring();
         //System.out.println(scoring.scoreSort(products));
@@ -47,5 +48,6 @@ public class test {
         for (Product product : products) {
             System.out.println("Price: "+product.getPrice()+" Review: "+product.getAverageUserReview()+" Date: "+product.getPublishedDate()+" Stock: "+product.getInStock().size());
         }
+        */
     }
 }

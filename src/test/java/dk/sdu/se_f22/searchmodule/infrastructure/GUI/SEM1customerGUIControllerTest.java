@@ -2,6 +2,7 @@ package dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 
 import dk.sdu.se_f22.searchmodule.infrastructure.GUI.mocks.MockBrandIndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.GUI.mocks.MockProductIndexingModule;
+import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,6 +18,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -35,8 +37,12 @@ public class SEM1customerGUIControllerTest {
         // Insert mock indexing modules
         Parent root = fxmlLoader.load();
         controller = fxmlLoader.getController();
-        controller.getSearchModule().addIndexingModule(new MockBrandIndexingModule());
-        controller.getSearchModule().addIndexingModule(new MockProductIndexingModule());
+        controller.setSearchModule(
+                new SearchModuleImpl(Set.of(), Set.of(
+                        new MockBrandIndexingModule(),
+                        new MockProductIndexingModule()
+                ))
+        );
 
         scene = new Scene(root);
         stage.setScene(scene);

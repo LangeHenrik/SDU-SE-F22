@@ -107,7 +107,6 @@ public class Database implements DatabaseInterface {
                 }
                 // Then get the filter from the correct view by using the now known data type
                 ResultSet filterResultSet;
-                System.out.println(typeResult.getString(1));
                 //noinspection EnhancedSwitchMigration
                 switch (typeResult.getString(1)) {
                     case "Double":
@@ -173,7 +172,6 @@ public class Database implements DatabaseInterface {
     }
 
     private DoubleFilter createDoubleFilterFromResultset(ResultSet filterResultSet) throws SQLException {
-        System.out.println(filterResultSet.getInt("FilterId") + " " + filterResultSet.getString("Name"));
         return new DoubleFilter(
                 filterResultSet.getInt("FilterId"),
                 filterResultSet.getString("Name"),
@@ -240,8 +238,7 @@ public class Database implements DatabaseInterface {
             }
             int results = statement.executeUpdate();
             if (results < 1) {
-                System.out.println(filter);
-                throw new SQLException("Nothing updated");
+                throw new SQLException("Nothing updated with filter: " + filter);
             }
 
             ResultSet resultSet = statement.getGeneratedKeys();

@@ -12,7 +12,7 @@ public class SortingModuleDemo {
         module.addCategory(1);
         module.addCategory(3);
         module.addCategory(5);
-        module.addRangeDouble(2, 2.46854, 3.89);
+        module.addRangeDouble(4, 2.46854, 3.89);
         module.setPagination(0, 5);
         SearchHits data = module.search();
 

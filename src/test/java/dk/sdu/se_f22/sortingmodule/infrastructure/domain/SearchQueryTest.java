@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.*;
 
 
@@ -39,27 +40,54 @@ class SearchQueryTest {
 
     @Test
     void addRangeTest() {
-        HashMap<Integer, Long[]> h = new HashMap<>();
-        h.put(1, new Long[]{3L, 8L});
-        h.put(2, new Long[]{7L, 52L});
-
-
         SearchQuery s = new SearchQuery();
+
+        HashMap<Integer, Long[]> hLong = new HashMap<>();
+        hLong.put(1, new Long[]{3L, 8L});
+        hLong.put(2, new Long[]{7L, 52L});
         s.addRangeLong(1, 3, 8);
-        s.addRangeDouble(2, 19.4, 52.7);
+        s.addRangeLong(2, 7, 52);
 
-        Iterator<Map.Entry<Integer, Long[]>> iteratorH = h.entrySet().iterator();
-        Iterator<Map.Entry<Integer, Long[]>> iteratorS = s.getRangeLong().entrySet().iterator();
+        HashMap<Integer, Double[]> hDouble = new HashMap<>();
+        hDouble.put(1, new Double[]{8.3, 14.9});
+        hDouble.put(2, new Double[]{2.7, 73.2});
+        s.addRangeDouble(1, 8.3, 14.9);
+        s.addRangeDouble(2, 2.7, 73.2);
 
-        while (iteratorH.hasNext()) {
-            Map.Entry<Integer, Long[]> temp_H = iteratorH.next();
-            Map.Entry<Integer, Long[]> temp_S = iteratorS.next();
+        HashMap<Integer, Instant[]> hInstant = new HashMap<>();
+        hInstant.put(1, new Instant[]{Instant.ofEpochSecond(1), Instant.ofEpochSecond(7)});
+        hInstant.put(2, new Instant[]{Instant.ofEpochSecond(2), Instant.ofEpochSecond(16)});
+        s.addRangeInstant(1, Instant.ofEpochSecond(1), Instant.ofEpochSecond(7));
+        s.addRangeInstant(2, Instant.ofEpochSecond(2), Instant.ofEpochSecond(16));
 
-            if (!temp_H.getKey().equals(temp_S.getKey()) &&
-                    !Arrays.equals((temp_H.getValue()), (temp_S.getValue()))) {
-                fail("addRangeTest failure.");
+        Iterator<Map.Entry<Integer, Long[]>> iteratorHLong = hLong.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Double[]>> iteratorHDouble = hDouble.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Instant[]>> iteratorHInstant = hInstant.entrySet().iterator();
+
+
+        s.getRangeDouble().forEach((Integer id, Double[] boundaries) -> {
+            Map.Entry<Integer, Double[]> nextDouble = iteratorHDouble.next();
+           if (!nextDouble.getKey().equals(id) &&
+                !Arrays.equals(nextDouble.getValue(), boundaries)) {
+               fail("addRangeTest Double failure.");
+           }
+        });
+
+        s.getRangeLong().forEach((Integer id, Long[] boundaries) -> {
+            Map.Entry<Integer, Long[]> nextLong = iteratorHLong.next();
+            if (!nextLong.getKey().equals(id) &&
+                    !Arrays.equals(nextLong.getValue(), boundaries)) {
+                fail("addRangeTest Long failure.");
             }
-        }
+        });
+
+        s.getRangeInstant().forEach((Integer id, Instant[] boundaries) -> {
+            Map.Entry<Integer, Instant[]> nextInstant = iteratorHInstant.next();
+            if (!nextInstant.getKey().equals(id) &&
+                    !Arrays.equals(nextInstant.getValue(), boundaries)) {
+                fail("addRangeTest Instant failure.");
+            }
+        });
     }
 
     @Test

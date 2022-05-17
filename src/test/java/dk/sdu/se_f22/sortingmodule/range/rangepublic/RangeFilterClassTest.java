@@ -103,12 +103,21 @@ class RangeFilterClassTest {
             }
 
             @ParameterizedTest(name = "Long filter: {0},{1},{2},{3},{4},{5}")
-            @DisplayName("Double filters with different filter types")
+            @DisplayName("Double filters with different filter types: Long filter")
             @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void doubleFiltersWithDifferentFilterTypes(int id, String name, String description, String productAttribute, double min, double max) {
+            void doubleFiltersWithDifferentFilterTypesLongFilter(int id, String name, String description, String productAttribute, double min, double max) {
                 DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
                 LongFilter longFilterWithDifferentType = new LongFilter(id, name, description, productAttribute, (long) min, (long) max);
                 Assertions.assertFalse(doubleFilter.equals(longFilterWithDifferentType));
+            }
+
+            @ParameterizedTest(name = "Time filter: {0},{1},{2},{3},{4},{5}")
+            @DisplayName("Double filters with different types: Time filter")
+            @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
+            void doubleFiltersWithDifferentTypesTimeFilter(int id, String name, String description, String productAttribute, double min, double max) {
+                DoubleFilter doublefilter = new DoubleFilter(id, name, description, productAttribute, min, min);
+                TimeFilter timeFilterWithDifferentType = new TimeFilter(id, name, description, productAttribute, Instant.MIN, Instant.MAX);
+                Assertions.assertFalse(doublefilter.equals(timeFilterWithDifferentType));
             }
 
 
@@ -198,13 +207,20 @@ class RangeFilterClassTest {
                 LongFilter longFilterWithDifferentMaxValues = new LongFilter(id, name, description, productAttribute, min, max + 1);
                 Assertions.assertFalse(longFilter.equals(longFilterWithDifferentMaxValues));
             }
-
             @ParameterizedTest(name = "Time filter: {0},{1},{2},{3},{4},{5}")
-            @DisplayName("Long filters with different filter types")
+            @DisplayName("Long filters with different filter types: Double filter")
             @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-            void longFiltersWithDifferentFilterTypes(int id, String name, String description, String productAttribute, long min, long max) {
+            void longFiltersWithDifferentFilterTypesDoubleFilter(int id, String name, String description, String productAttribute, long min, long max) {
                 LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
-                TimeFilter timeFilterWithDifferentType = new TimeFilter(id, name, description, productAttribute, Instant.MIN, Instant.MAX);
+                DoubleFilter doubleFilterWithDifferentType = new DoubleFilter(id, name, description, productAttribute, (double) min, (double) max);
+                Assertions.assertFalse(longFilter.equals(doubleFilterWithDifferentType));
+            }
+            @ParameterizedTest(name = "Time filter: {0},{1},{2},{3},{4},{5}")
+            @DisplayName("Long filters with different filter types: Time filter")
+            @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
+            void longFiltersWithDifferentFilterTypesTimeFilter(int id, String name, String description, String productAttribute, long min, long max) {
+                LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
+                TimeFilter timeFilterWithDifferentType = new TimeFilter(id, name, description, productAttribute, Instant.ofEpochSecond(min), Instant.ofEpochSecond(max));
                 Assertions.assertFalse(longFilter.equals(timeFilterWithDifferentType));
             }
 
@@ -272,7 +288,7 @@ class RangeFilterClassTest {
 
             @ParameterizedTest(name = "{0},{1},{2},{3}" + "diff" + ",{4},{5}")
             @DisplayName("Time filters with different product attributes")
-            @CsvFileSource(resources = "timeFilter.csv", numLinesToSkip = 1)
+            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
             void timeFiltersWithDifferentProductAttributes(int id, String name, String description, String productAttribute, Instant min, Instant max) {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 TimeFilter timeFilterWithDifferentProductAttributes = new TimeFilter(id, name, description, productAttribute + "diff", min, max);
@@ -281,7 +297,7 @@ class RangeFilterClassTest {
 
             @ParameterizedTest(name = "{0},{1},{2},{3},{4},{5}")
             @DisplayName("Time filters with different min values")
-            @CsvFileSource(resources = "timeFilter.csv", numLinesToSkip = 1)
+            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
             void timeFiltersWithDifferentMinValues(int id, String name, String description, String productAttribute, Instant min, Instant max) {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 TimeFilter timeFilterWithDifferentMinValues = new TimeFilter(id, name, description, productAttribute, Instant.MIN, max);
@@ -298,11 +314,19 @@ class RangeFilterClassTest {
             }
 
             @ParameterizedTest(name = "Double filter: {0},{1},{2},{3}, 0.1, 99.9")
-            @DisplayName("Time filters with different filter types")
+            @DisplayName("Time filters with different filter types: Double filter")
             @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-            void timeFiltersWithDifferentFilterTypes(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            void timeFiltersWithDifferentFilterTypesDoubleFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 DoubleFilter doubleFilterWithDifferentType = new DoubleFilter(id, name, description, productAttribute, 0.1, 99.9);
+                Assertions.assertFalse(timeFilter.equals(doubleFilterWithDifferentType));
+            }
+            @ParameterizedTest(name = "Double filter: {0},{1},{2},{3}, 1, 100")
+            @DisplayName("Time filters with different filter types: Long filter")
+            @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
+            void timeFiltersWithDifferentFilterTypesLongFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+                TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
+                DoubleFilter doubleFilterWithDifferentType = new DoubleFilter(id, name, description, productAttribute, 1, 100);
                 Assertions.assertFalse(timeFilter.equals(doubleFilterWithDifferentType));
             }
 
@@ -332,7 +356,6 @@ class RangeFilterClassTest {
         @Nested
         @DisplayName("Matching tests")
         class MatchingTests {
-            class MatchingDoubleFilterTests {
 
                 @ParameterizedTest
                 @DisplayName("Test matching Double filters")
@@ -363,10 +386,6 @@ class RangeFilterClassTest {
 
             }
 
-
-            @Test
-            @Disabled("not written yet")
-            void testEquals() {
                 // This test should be split up into many tests to test each step/level of the equals method
 
                 // Here follows an overview of the necessary tests:
@@ -396,6 +415,4 @@ class RangeFilterClassTest {
                 // Specific filter classes
                 // Test each type for matching filters
             }
-        }
-    }
 

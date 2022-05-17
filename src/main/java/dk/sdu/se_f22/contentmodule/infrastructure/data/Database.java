@@ -1,12 +1,30 @@
-//package dk.sdu.se_f22.contentmodule.infrastructure.data;
-//
-//
-//import java.sql.*;
-//import java.util.ArrayList;
-//
-//import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-//
-//public class Database implements DatabaseInterface {
+package dk.sdu.se_f22.contentmodule.infrastructure.data;
+
+
+import java.sql.*;
+import java.util.ArrayList;
+
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
+public class Database implements DatabaseInterface {
+
+    @Override
+    public void createTable(String table_name) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void saveTokens(String table_name, ArrayList<String> tokens) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public ArrayList<String> loadTokens(String table_name) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 //
 //
 //
@@ -104,5 +122,5 @@
 //        }
 //        return parameterid;
 //    }
-//}
+}
 //

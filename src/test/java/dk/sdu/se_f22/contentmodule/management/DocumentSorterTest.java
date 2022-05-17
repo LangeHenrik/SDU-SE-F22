@@ -29,13 +29,13 @@ class DocumentSorterTest {
 
     @Test
     void getBody() {
-        assertEquals("This is a test Hello my name is Lorem Ipsum This is also a test",documentSorter.getBody(htmlParser.getParsedHTML()));
+        assertEquals("Thesadsasdasdasdasdasdasdasdasdasdasd-wword Hello my name is Lorem Ipsum This is also a test",documentSorter.getBody(htmlParser.getParsedHTML()));
     }
 
     @Test
     void getBodyToString() {
         assertEquals("<body> \n" +
-                " <h1 id=\"test1\">This is a test</h1> \n" +
+                " <h1 id=\"test1\">Thesadsasdasdasdasdasdasdasdasdasdasd-wword</h1> \n" +
                 " <p id=\"testtest1\">Hello my name is Lorem Ipsum</p> \n" +
                 " <h2 id=\"test2\">This is also a test</h2>  \n" +
                 "</body>",documentSorter.getBodyToString(htmlParser.getParsedHTML()));
@@ -43,6 +43,6 @@ class DocumentSorterTest {
 
     @Test
     void selectById() {
-        assertEquals("<h1 id=\"test1\">This is a test</h1>",documentSorter.selectById(htmlParser.getParsedHTML(),"test1",false));
+        assertEquals("<h1 id=\"test1\">Thesadsasdasdasdasdasdasdasdasdasdasd-wword</h1>",documentSorter.selectById(htmlParser.getParsedHTML(),"test1",false));
     }
 }

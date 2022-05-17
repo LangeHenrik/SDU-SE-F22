@@ -46,7 +46,7 @@ class SearchQueryTest {
 
         SearchQuery s = new SearchQuery();
         s.addRangeLong(1, 3, 8);
-        s.addRangeDouble(2, 19.4, 52.7);
+        s.addRangeLong(2, 7, 52);
 
         Iterator<Map.Entry<Integer, Long[]>> iteratorH = h.entrySet().iterator();
         Iterator<Map.Entry<Integer, Long[]>> iteratorS = s.getRangeLong().entrySet().iterator();

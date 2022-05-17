@@ -4,8 +4,16 @@ import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModuleImpl;
 
 public class SortingModuleDemo {
+
+    private static boolean useMockDataBrands = true;
+    private static boolean useMockDataContent = true;
+    private static boolean useMockDataProducts = true;
+
     public static void main (String[] args) {
         SortingModuleImpl module = new SortingModuleImpl();
+
+        // Use Mocked Data
+        module.useMockData(useMockDataBrands, useMockDataContent, useMockDataProducts);
 
         // "search" method, before using below:
         module.setSearchString("Hello, World!");

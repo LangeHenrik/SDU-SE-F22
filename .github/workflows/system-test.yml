@@ -40,7 +40,7 @@ jobs:
           echo db_password=postgres_password >> config.properties
         shell: bash
       - name: Run migrations
-        run: mvn compile exec:java -Dexec.mainClass="dk.sdu.se_f22.sharedlibrary.db.DBMigration"
+        run: mvn compile exec:java -Dexec.mainClass="dk.sdu.se_f22.sharedlibrary.db.DBMigrationFresh"
       - name: Verify with maven
         run: mvn --batch-mode --update-snapshots verify -Dtestfx.robot=glass -Dglass.platform=Monocle -Dmonocle.platform=Headless -Dprism.order=sw
       - name: Publish Test Report

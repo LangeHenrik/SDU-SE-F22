@@ -6,7 +6,7 @@ import java.util.*;
 import com.google.gson.*;
 import dk.sdu.se_f22.brandmodule.index.*;
 import dk.sdu.se_f22.brandmodule.stemming.*;
-import dk.sdu.se_f22.productmodule.irregularwords.Data.IrregularWords;
+import dk.sdu.se_f22.productmodule.irregularwords.IrregularWords;
 import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class BrandInfrastructure implements BrandInfrastructureInterface {

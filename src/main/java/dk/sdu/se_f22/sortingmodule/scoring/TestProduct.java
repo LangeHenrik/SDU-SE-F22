@@ -47,5 +47,6 @@ public class TestProduct {
                 ", releaseDate=" + getReleaseDate() +
                 '}'+"\n";
     }
+
 }
 

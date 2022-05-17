@@ -12,12 +12,15 @@ public class CategoryDBConnection{
 
     private static Connection connie = null;
 
+    /*
     protected Connection connect() throws SQLException, IOException {
         connie = DBConnection.getPooledConnection();
         return connie;
     }
 
-    protected void closeConnection(){
+
+
+    private void closeConnection(){
         try {
             connie.close();
         } catch (SQLException e) {
@@ -25,12 +28,14 @@ public class CategoryDBConnection{
         }
     }
 
+     */
+
     protected int deleteCategory(int id) {
         String SQL = "DELETE FROM requirements_values WHERE id = (SELECT requirements_id FROM categories WHERE id = ?)";
 
         int affectedrows = 0;
 
-        try (Connection conn = this.connect();
+        try (Connection conn = DBConnection.getPooledConnection();
              PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             pstmt.setInt(1, id);
@@ -39,8 +44,6 @@ public class CategoryDBConnection{
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
         }
         return affectedrows;
     }
@@ -50,7 +53,8 @@ public class CategoryDBConnection{
         Category tmpCategory;
         String sql = "SELECT * FROM categories";
 
-        try(PreparedStatement queryStatement = this.connect().prepareStatement(sql)) {
+        try(Connection conn = DBConnection.getPooledConnection();
+            PreparedStatement queryStatement = conn.prepareStatement(sql)) {
             ResultSet queryResultSet = queryStatement.executeQuery();
 
             while(queryResultSet.next()){
@@ -64,10 +68,6 @@ public class CategoryDBConnection{
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
-        } finally {
-            this.closeConnection();
         }
 
         return tmpList;
@@ -82,7 +82,9 @@ public class CategoryDBConnection{
                 "on requirements_values.fieldname_id = requirements_fieldnames.id \n" +
                 "WHERE categories.id = ?";
 
-        try(PreparedStatement queryStatement = this.connect().prepareStatement(sql)) {
+        try(Connection conn = DBConnection.getPooledConnection();
+            PreparedStatement queryStatement = conn.prepareStatement(sql)) {
+
             queryStatement.setInt(1, queryId);
             ResultSet queryResultSet = queryStatement.executeQuery();
 
@@ -100,10 +102,6 @@ public class CategoryDBConnection{
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
-        } finally {
-            this.closeConnection();
         }
 
         return tmpCategory;
@@ -111,7 +109,7 @@ public class CategoryDBConnection{
 
     protected int updateName(int idToChange, String changeTo) {
         String sql = "UPDATE Categories SET name = ? WHERE id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = DBConnection.getPooledConnection();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo.length() > 0) {
                 try {
@@ -129,8 +127,6 @@ public class CategoryDBConnection{
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
             }
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -139,7 +135,7 @@ public class CategoryDBConnection{
 
     protected int updateDescription(int idToChange, String changeTo) {
         String sql = "UPDATE Categories SET description = ? WHERE id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = DBConnection.getPooledConnection();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo.length() > 0) {
                 try {
@@ -157,8 +153,6 @@ public class CategoryDBConnection{
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
             }
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -167,7 +161,7 @@ public class CategoryDBConnection{
 
     protected int updateParentID(int idToChange, int changeTo) {
         String sql = "UPDATE Categories SET parent_id = ? WHERE id = ?";
-        try (Connection conn = this.connect();
+        try (Connection conn = DBConnection.getPooledConnection();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo > 0) {
                 try {
@@ -185,8 +179,6 @@ public class CategoryDBConnection{
             } else {
                 System.out.println("Parent ID must be an integer beyond 0");
             }
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -196,7 +188,7 @@ public class CategoryDBConnection{
     protected int updateRequirementsValue(int idToChange, String changeTo) {
         String sql = "UPDATE Requirements_values SET value = ? WHERE id = (SELECT requirements_id FROM categories WHERE id = ?)";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = DBConnection.getPooledConnection();
              PreparedStatement pStatement = conn.prepareStatement(sql)) {
             if (changeTo.length() > 0) {
                 try {
@@ -214,8 +206,6 @@ public class CategoryDBConnection{
             } else {
                 System.out.println("Requirements ID must be an integer beyond 0");
             }
-        } catch (IOException ioEx) {
-            System.out.println(ioEx.getMessage());
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -233,16 +223,16 @@ public class CategoryDBConnection{
             notValid = true;
 
         if (notValid == false) {
-            try {
+            try(Connection conn = DBConnection.getPooledConnection();) {
                 int checkRows = 0;
-                PreparedStatement checkRowsStatement = this.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+                PreparedStatement checkRowsStatement = conn.prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
                 checkRowsStatement.setInt(1, requirementsFieldName);
                 ResultSet rsCheckRows = checkRowsStatement.executeQuery();
                 rsCheckRows.next();
                 checkRows = rsCheckRows.getInt("rows");
 
                 if (checkRows == 1) {
-                    PreparedStatement createStatement = this.connect().prepareStatement(
+                    PreparedStatement createStatement = conn.prepareStatement(
                             "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
                             Statement.RETURN_GENERATED_KEYS
                     );
@@ -254,7 +244,7 @@ public class CategoryDBConnection{
                     int generatedKey = 0;
                     if (resultSetRequirementsValue.next()) {
                         generatedKey = resultSetRequirementsValue.getInt(1);
-                        PreparedStatement createCategoryStatement = this.connect().prepareStatement(
+                        PreparedStatement createCategoryStatement = conn.prepareStatement(
                                 "INSERT INTO categories(name, description, parent_id, requirements_id) VALUES (?,?,?,?)",
                                 Statement.RETURN_GENERATED_KEYS
                         );
@@ -276,12 +266,9 @@ public class CategoryDBConnection{
                 } else {
                     System.out.println("There is no requirement status with ID: " + requirementsFieldName);
                 }
-            } catch (IOException ioEx) {
-                System.out.println(ioEx.getMessage());
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
-            this.closeConnection();
         } else {
             System.out.println("Invalid input");
         }
@@ -297,16 +284,16 @@ public class CategoryDBConnection{
             notValid = true;
 
         if (notValid == false) {
-            try {
+            try(Connection conn = DBConnection.getPooledConnection();) {
                 int checkRows = 0;
-                PreparedStatement checkRowsStatement = this.connect().prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
+                PreparedStatement checkRowsStatement = conn.prepareStatement("SELECT COUNT(*) AS rows FROM requirements_fieldnames WHERE id = ?");
                 checkRowsStatement.setInt(1, requirementsFieldname);
                 ResultSet rsCheckRows = checkRowsStatement.executeQuery();
                 rsCheckRows.next();
                 checkRows = rsCheckRows.getInt("rows");
 
                 if (checkRows == 1) {
-                    PreparedStatement createStatement = this.connect().prepareStatement(
+                    PreparedStatement createStatement = conn.prepareStatement(
                             "INSERT INTO requirements_values(value, fieldname_id) VALUES (?,?)",
                             Statement.RETURN_GENERATED_KEYS
                     );
@@ -318,7 +305,7 @@ public class CategoryDBConnection{
                     int generatedKey = 0;
                     if (resultSetRequirementsValue.next()) {
                         generatedKey = resultSetRequirementsValue.getInt(1);
-                        PreparedStatement createCategoryStatement = this.connect().prepareStatement(
+                        PreparedStatement createCategoryStatement = conn.prepareStatement(
                                 "INSERT INTO categories(name, description, requirements_id) VALUES (?,?,?)",
                                 Statement.RETURN_GENERATED_KEYS
                         );
@@ -339,12 +326,9 @@ public class CategoryDBConnection{
                 } else {
                     System.out.println("There is no requirement status with ID: " + requirementsFieldname);
                 }
-            } catch (IOException ioEx) {
-                System.out.println(ioEx.getMessage());
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
-            this.closeConnection();
         } else {
             System.out.println("Invalid input");
         }

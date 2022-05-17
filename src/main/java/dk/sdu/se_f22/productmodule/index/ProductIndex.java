@@ -15,18 +15,12 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     private int categoryHits = 0;
     private int nameHits = 0;
     private int descriptionHits = 0;
-<<<<<<< HEAD
+
     private List<Product> sortedList = new ArrayList<>();
-=======
+
     private List<Product> searchedList = new ArrayList<>();
 
-    private String url = "localhost";
-    private int port = 5432;
-    private String databaseName = "xxxx";
-    private String username = "xxxx";
-    private String password = "xxxx";
-    private Connection connection = null;
->>>>>>> 768837cda3390e9855eb82b36278e97a4f668448
+
     private static ProductIndex instance;
     private ProductIndex(){
 

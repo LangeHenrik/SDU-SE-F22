@@ -12,31 +12,31 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ScoringTest {
-/*
+
     Scoring scoring = new Scoring();
     ArrayList<Product> products;
-    Product product1 = new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product2 = new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product3 = new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product1 = new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-08-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product2 = new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-07-29T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product3 = new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-11T10:15:30.00Z"),null, null, null, null,null,0,0);
     Product product4 = new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
     Product product5 = new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
     Product product6 = new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0);
     Product product7 = new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product8 = new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2020-01-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product9 = new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product10 = new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-
+    Product product8 = new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2018-01-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product9 = new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-31T10:15:30.00Z"),null, null, null, null,null,0,0);
+    Product product10 = new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
     {
         List<Product> controlProducts = new ArrayList<>();
-        controlProducts.add(product10);
         controlProducts.add(product2);
-        controlProducts.add(product1);
+        controlProducts.add(product10);
         controlProducts.add(product5);
         controlProducts.add(product7);
-        controlProducts.add(product4);
         controlProducts.add(product9);
+        controlProducts.add(product1);
         controlProducts.add(product3);
+        controlProducts.add(product4);
         controlProducts.add(product6);
         controlProducts.add(product8);
 
@@ -53,8 +53,6 @@ class ScoringTest {
         products.add(product8);
         products.add(product9);
         products.add(product10);
-
-
     }
 
     @BeforeAll
@@ -107,36 +105,38 @@ class ScoringTest {
     }
 
     @Test
+    @Order(1)
     void scoreSort() {
 
     }
     @Test
+    @Order(2)
     void scoreSortAll() {
         List<Product> controlProducts = new ArrayList<>();
-        controlProducts.add(new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2020-01-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-
+        controlProducts.add(product2);
+        controlProducts.add(product10);
+        controlProducts.add(product5);
+        controlProducts.add(product7);
+        controlProducts.add(product9);
+        controlProducts.add(product1);
+        controlProducts.add(product3);
+        controlProducts.add(product4);
+        controlProducts.add(product6);
+        controlProducts.add(product8);
 
         assertEquals(Arrays.toString(scoring.scoreSortAll(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
+    @Order(3)
     void scoreSortPrice() {
         List<Product> controlProducts = new ArrayList<>();
         controlProducts.add(product1);
         controlProducts.add(product2);
+        controlProducts.add(product3);
         controlProducts.add(product4);
         controlProducts.add(product7);
         controlProducts.add(product9);
-        controlProducts.add(product3);
         controlProducts.add(product8);
         controlProducts.add(product5);
         controlProducts.add(product6);
@@ -148,9 +148,9 @@ class ScoringTest {
 
 
     @Test
+    @Order(4)
     void scoreSortReview() {
         List<Product> controlProducts = new ArrayList<>();
-
         controlProducts.add(product10);
         controlProducts.add(product4);
         controlProducts.add(product1);
@@ -166,43 +166,43 @@ class ScoringTest {
     }
 
     @Test
+    @Order(5)
     void scoreSortStock() {
         List<Product> controlProducts = new ArrayList<>();
         controlProducts.add(product2);
         controlProducts.add(product10);
-        controlProducts.add(product1);
         controlProducts.add(product5);
         controlProducts.add(product7);
+        controlProducts.add(product1);
         controlProducts.add(product4);
         controlProducts.add(product9);
         controlProducts.add(product3);
         controlProducts.add(product6);
         controlProducts.add(product8);
 
-
-
         assertEquals(Arrays.toString(scoring.scoreSortStock(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
+    @Order(6)
     void scoreSortDate() {
         List<Product> controlProducts = new ArrayList<>();
-        controlProducts.add(new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),1.2,new ArrayList<>(Arrays.asList(new String[0])),0,3050,Instant.parse("2020-01-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-        controlProducts.add(new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-10-09T10:15:30.00Z"),null, null, null, null,null,0,0));
-
+        controlProducts.add(product2);
+        controlProducts.add(product5);
+        controlProducts.add(product10);
+        controlProducts.add(product7);
+        controlProducts.add(product3);
+        controlProducts.add(product9);
+        controlProducts.add(product1);
+        controlProducts.add(product4);
+        controlProducts.add(product6);
+        controlProducts.add(product8);
 
         assertEquals(Arrays.toString(scoring.scoreSortDate(products).toArray()), Arrays.toString(controlProducts.toArray()));
     }
 
     @Test
+    @Order(8)
     void createRow() {
         String type = "price";
         double bracket = 1500;
@@ -224,6 +224,7 @@ class ScoringTest {
     }
 
     @Test
+    @Order(7)
     void readTable() {
         String[] input = scoring.readTable().toArray(new String[0]);
 
@@ -240,9 +241,9 @@ class ScoringTest {
                 Id: 20 Type: date Bracket: 5.0 Weight: 5
                 Id: 1 Type: price Bracket: 1000.0 Weight: 1
                 Id: 2 Type: price Bracket: 2000.0 Weight: 2
-                Id: 3 Type: price Bracket: 3000.0 Weight: 4
-                Id: 4 Type: price Bracket: 4000.0 Weight: 5
-                Id: 5 Type: price Bracket: 5000.0 Weight: 6
+                Id: 3 Type: price Bracket: 3000.0 Weight: 3
+                Id: 4 Type: price Bracket: 4000.0 Weight: 4
+                Id: 5 Type: price Bracket: 5000.0 Weight: 5
                 Id: 6 Type: review Bracket: 2.5 Weight: 1
                 Id: 7 Type: review Bracket: 3.3 Weight: 2
                 Id: 8 Type: review Bracket: 3.9 Weight: 3
@@ -257,6 +258,7 @@ class ScoringTest {
     }
 
     @Test
+    @Order(10)
     void updateRow() {
         double newValue = 1700;
         scoring.updateRow(21,"1700","bracket");
@@ -275,11 +277,14 @@ class ScoringTest {
     }
 
     @Test
+    @Order(9)
     void deleteRow() {
         scoring.deleteRow(8);
         scoring.deleteRow(12);
         scoring.deleteRow(9);
         scoring.deleteRow(1);
+        scoring.deleteRow(21);
+
 
         String[] input = scoring.readTable().toArray(new String[0]);
 
@@ -295,9 +300,9 @@ class ScoringTest {
                 Id: 19 Type: date Bracket: 4.0 Weight: 4
                 Id: 20 Type: date Bracket: 5.0 Weight: 5
                 Id: 2 Type: price Bracket: 2000.0 Weight: 2
-                Id: 3 Type: price Bracket: 3000.0 Weight: 4
-                Id: 4 Type: price Bracket: 4000.0 Weight: 5
-                Id: 5 Type: price Bracket: 5000.0 Weight: 6
+                Id: 3 Type: price Bracket: 3000.0 Weight: 3
+                Id: 4 Type: price Bracket: 4000.0 Weight: 4
+                Id: 5 Type: price Bracket: 5000.0 Weight: 5
                 Id: 6 Type: review Bracket: 2.5 Weight: 1
                 Id: 7 Type: review Bracket: 3.3 Weight: 2
                 Id: 10 Type: review Bracket: 4.7 Weight: 5
@@ -307,7 +312,5 @@ class ScoringTest {
                 Id: 15 Type: stock Bracket: 50.0 Weight: 5
                 """);
     }
-
- */
 }
 

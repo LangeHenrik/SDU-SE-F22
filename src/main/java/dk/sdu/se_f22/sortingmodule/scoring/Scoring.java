@@ -18,11 +18,11 @@ public class Scoring implements IScoring {
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()) {
                     double priceCompare = sqlReturnValues.getDouble(3);
-                    if (price < priceCompare) {
-                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
+                    if (price <= priceCompare) {
+                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
-                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore()+1);
+                        product.setScore(-sqlReturnValues.getInt(4) + product.getScore());
                     }
                 }
             } catch (SQLException e) {
@@ -38,7 +38,7 @@ public class Scoring implements IScoring {
                  var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'review';");
                  var sqlReturnValues = statement.executeQuery()) {
                 while (sqlReturnValues.next()){
-                    if (review < sqlReturnValues.getDouble(3)) {
+                    if (review <= sqlReturnValues.getDouble(3)) {
                         product.setScore(sqlReturnValues.getInt(4)+product.getScore());
                         break;
                     } else if (sqlReturnValues.isLast()) {
@@ -58,7 +58,7 @@ public class Scoring implements IScoring {
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'stock'");
                 var sqlReturnValues = statement.executeQuery();
                 while (sqlReturnValues.next()){
-                    if (stock < sqlReturnValues.getInt(3)) {
+                    if (stock <= sqlReturnValues.getInt(3)) {
                         product.setScore(sqlReturnValues.getInt(4));
                         break;
                     } else if (sqlReturnValues.isLast()) {
@@ -147,6 +147,10 @@ public class Scoring implements IScoring {
         date(products);
 
         Collections.sort(products);
+
+        for (ProductScore product : products) {
+            System.out.println(product.getScore());
+        }
 
         return unWrapProduct(products);
     }

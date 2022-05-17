@@ -201,7 +201,7 @@ class LongFilterTest {
                 @MethodSource("provideLongFilters")
                 void setValidLongFilterUserMin (LongFilter filter) {
                     Assertions.assertDoesNotThrow(
-                            () -> filter.setUserMin(10));
+                            () -> filter.setUserMin(1));
                 }
 
                 @ParameterizedTest(name = "{0}")
@@ -217,7 +217,7 @@ class LongFilterTest {
                 @DisplayName("userMin has changed")
                 @MethodSource("provideLongFilters")
                 void userMinHasChanged (LongFilter filter) throws IllegalMinMaxException {
-                    long newMin = 10;
+                    long newMin = 1;
                     filter.setUserMin(newMin);
                     Assertions.assertEquals(newMin, filter.getUserMinLong());
                 }

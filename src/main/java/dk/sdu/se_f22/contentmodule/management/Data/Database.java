@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.contentmodule.management.Data;
+/*package dk.sdu.se_f22.contentmodule.management.Data;
 
 import java.sql.*;
 
@@ -28,3 +28,4 @@ public class Database {
         return database;
     }
 }
+*/

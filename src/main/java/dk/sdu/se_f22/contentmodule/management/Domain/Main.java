@@ -16,7 +16,7 @@ public class Main {
         }
 
         try {
-            Database database = Database.getDatabase();
+
             Management.Create(parsedHTML);
             Management.updateIndexInterval(1000);
         } catch (SQLException e) {

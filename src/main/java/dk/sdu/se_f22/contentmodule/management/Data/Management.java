@@ -1,10 +1,13 @@
 package dk.sdu.se_f22.contentmodule.management.Data;
 
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,36 +17,17 @@ import java.util.Scanner;
 import dk.sdu.se_f22.sharedlibrary.models.Content;
 
 public class Management {
-    static Database dat;
-
-    static {
-        try {
-            dat = Database.getDatabase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static int Create(String html) throws SQLException {
         Scanner s;
 
-        try {
-            var res = dat.Execute("INSERT INTO pages (html, timestamp) VALUES ( '" + html + "', NOW()) RETURNING id;");
-            res.next();
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("INSERT INTO pages (html, timestamp ) VALUES (?, NOW()) RETURNING id;")) {
+            var res = ps.executeQuery();
             return res.getInt(1);
         } catch (Exception e) {
-            e.printStackTrace();
-            StringBuilder scriptString = new StringBuilder();
-            try {
-                s = new Scanner(new FileInputStream("src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt"));
+            DBMigration dbm = new DBMigration();
+            dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
 
-                while (s.hasNext()) {
-                    scriptString.append(s.nextLine());
-                }
-                dat.executeVoidReturn(scriptString.toString());
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
        }
 
         return 0;
@@ -62,14 +46,21 @@ public class Management {
     public static Content[] GetArrayOfContent(int[] ids) {
         List<Content> contents = new ArrayList<Content>();
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM pages WHERE id IN (");
-        for (int i = 1; i < ids.length; i++) {
-            sb.append(", ").append(ids[i]);
-        }
-        sb.append(");");
+        StringBuilder builder = new StringBuilder();
 
-        try {
-            ResultSet rs = dat.Execute(sb.toString());
+        for( int i = 0 ; i < ids.length; i++ ) {
+            builder.append("?,");
+        }
+
+        String placeHolders =  builder.deleteCharAt( builder.length() -1 ).toString();
+        String st = "SELECT * FROM pages WHERE id in ("+ placeHolders + ")";
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(st)) {
+            for (int i = 0; i < ids.length; i++) {
+                ps.setInt(i+1, ids[i]);
+            }
+            ResultSet rs = ps.executeQuery();
+
+            //Parses to Content class
             while (rs.next()) {
                 var title = Jsoup.parse(rs.getString(2)).getElementsByTag("title");
                 contents.add(new Content(rs.getInt(1), rs.getString(2), title.get(0).text(), rs.getString(3)));
@@ -91,14 +82,19 @@ public class Management {
         }
     }
 
-    private static ResultSet GetResultSetFromId(int id) throws SQLException {
-        return dat.Execute("SELECT * FROM pages WHERE id = " + id);
+    private static ResultSet GetResultSetFromId(int id) {
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("SELECT * FROM pages WHERE id = ?")) {
+            ps.setInt(1, id);
+            return ps.executeQuery();
+        }
+        catch (SQLException e) { e.printStackTrace(); }
+        return null;
     }
 
     public static void Update(int id, String html) {
-        try {
-            var dat = Database.getDatabase();
-            dat.executeVoidReturn("UPDATE pages SET html = '" + html + "', timestamp = NOW() WHERE id = " + id);
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("UPDATE pages SET html = ? WHERE id = ?")) {
+            ps.setInt(1, id);
+            ps.setString(2, html);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,8 +105,8 @@ public class Management {
     }
 
     public static void Delete(int id) {
-        try {
-            dat.executeVoidReturn("DELETE FROM pages WHERE id = " + id);
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("DELETE FROM pages WHERE id = ?")) {
+            ps.setInt(1, id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

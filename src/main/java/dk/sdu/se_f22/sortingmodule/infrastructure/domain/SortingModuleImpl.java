@@ -8,6 +8,7 @@ import dk.sdu.se_f22.sharedlibrary.utils.Color;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
+import dk.sdu.se_f22.sortingmodule.infrastructure.data.MockData;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
@@ -21,6 +22,12 @@ import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterFilterResults;
  * Implemented version of SortingModule
  */
 public class SortingModuleImpl implements SortingModule {
+
+    // Dont change these variables. change them in SortingModuleDemo.java
+    private boolean useMockDataBrand = false;
+    private boolean useMockDataContent = false;
+    private boolean useMockDataProduct = false;
+
     /**
      * The search query object, that holds query information
      */
@@ -119,6 +126,12 @@ public class SortingModuleImpl implements SortingModule {
             searchHits = new SearchHits();
         }
 
+        // Mock Data if requestd.
+        if( this.useMockDataContent || this.useMockDataBrand || this.useMockDataProduct ) {
+            MockData mockData = new MockData(this.useMockDataBrand, this.useMockDataContent, this.useMockDataProduct);
+            searchHits = mockData.updateSearchHits(searchHits);
+        }
+
         // Filters
         // Category
         CategoryFilter categoryFilter = new CategoryFilter();
@@ -177,4 +190,16 @@ public class SortingModuleImpl implements SortingModule {
     private void saveSearch() {
         SaveSearchQuery.saveSearch(this.query, this.searchString);
     }
+
+    /**
+     * Following  method, is used to enable mock data
+     */
+    public void useMockData(boolean b, boolean c, boolean p) {
+        this.useMockDataBrand = b;
+        this.useMockDataContent = c;
+        this.useMockDataProduct = p;
+    }
+
+
+
 }

@@ -17,7 +17,6 @@ public class IndexingServiceTest {
 
     }
 
-
     @Test
     void indexingIntervalTimeTest() throws InterruptedException {
         // Variables that are used in the TimerTask
@@ -25,7 +24,7 @@ public class IndexingServiceTest {
         final long[] end = new long[1];
         final int[] counter = { 0 };
 
-        int indexInterval = 100;
+        final int indexInterval = 100;
 
         // Timer
         Timer updateIndex = new Timer();
@@ -50,9 +49,9 @@ public class IndexingServiceTest {
         }, 0, indexInterval);
 
         // Delay to test the thread
-        for (int i = 0; i < 75000; i++) {
-            for (int j = 0; j < 10000; j++) {
-                for (int k = 0; k <  5000; k++) {
+        for (int i = 0; i < 7500; i++) {
+            for (int j = 0; j < 1000; j++) {
+                for (int k = 0; k <  500; k++) {
                 }
             }
         }

@@ -164,7 +164,7 @@ public class ProductManager implements IProductManager, Runnable{
             }
             i++;
         }
-        
+         
         return returnArray;
     }
     

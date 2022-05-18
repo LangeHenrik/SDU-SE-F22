@@ -1,4 +1,5 @@
-# SDU-SE-F22 - Hesehus Case [![Java compile test](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml/badge.svg)](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/compile-test.yml)
+# SDU-SE-F22 - Hesehus Case 
+[![Java system test](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/system-test.yml/badge.svg)](https://github.com/LangeHenrik/SDU-SE-F22/actions/workflows/system-test.yml)
 
 ## Folder Structure
 
@@ -139,3 +140,4 @@ The checks are visible when creating a pull request on GitHub, just abode the me
 
 All of this, is beyond the current pensum for 2. semester.  
 The GitHub actions can be found in the `.github\workflows` folder.
+ 

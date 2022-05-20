@@ -18,16 +18,18 @@ import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class Management {
 
-    public static int Create(String html) throws SQLException {
+    public static int Create(int contentId, String html, int employeeId) throws SQLException {
         Scanner s;
 
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("INSERT INTO pages (html, timestamp ) VALUES (?, NOW()) RETURNING id;")) {
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("CALL addPage(?, ?, ?)")) {
+            ps.setInt(1, contentId);
+            ps.setString(2, html);
+            ps.setInt(3, employeeId);
             var res = ps.executeQuery();
             return res.getInt(1);
         } catch (Exception e) {
             DBMigration dbm = new DBMigration();
             dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
-
        }
 
         return 0;
@@ -91,10 +93,12 @@ public class Management {
         return null;
     }
 
-    public static void Update(int id, String html) {
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("UPDATE pages SET html = ? WHERE id = ?")) {
-            ps.setInt(1, id);
+    public static void Update(int contentId, String html, int employeeId) {
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("CALL addPage(?, ?, ?)")) {
+            ps.setInt(1, contentId);
             ps.setString(2, html);
+            ps.setInt(3, employeeId);
+            ps.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }

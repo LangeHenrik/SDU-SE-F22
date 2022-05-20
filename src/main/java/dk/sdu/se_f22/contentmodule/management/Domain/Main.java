@@ -17,7 +17,7 @@ public class Main {
 
         try {
 
-            Management.Create(parsedHTML);
+            Management.Create(001, parsedHTML, 1);
             Management.updateIndexInterval(1000);
         } catch (SQLException e) {
             e.printStackTrace();

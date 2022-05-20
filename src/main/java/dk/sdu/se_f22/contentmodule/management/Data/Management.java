@@ -45,9 +45,9 @@ public class Management {
         }
     }
 
+    //DANIEL REF PLEASE FOR THE LOVE OF GOD MAKE SOME COMMENTS TO THIS
     public static Content[] GetArrayOfContent(int[] ids) {
         List<Content> contents = new ArrayList<Content>();
-        StringBuilder sb = new StringBuilder();
         StringBuilder builder = new StringBuilder();
 
         for( int i = 0 ; i < ids.length; i++ ) {
@@ -55,11 +55,21 @@ public class Management {
         }
 
         String placeHolders =  builder.deleteCharAt( builder.length() -1 ).toString();
-        String st = "SELECT * FROM pages WHERE id in ("+ placeHolders + ")";
+        String st = "SELECT html FROM pages WHERE id = (\n" +
+                "    SELECT pages_id\n" +
+                "    FROM contains\n" +
+                "    WHERE log_id = (\n" +
+                "        SELECT log.id\n" +
+                "        FROM log\n" +
+                "        WHERE id IN (" + placeHolders +")\n" +
+                "        ORDER BY timestamp LIMIT ?\n" +
+                "    )\n" +
+                ");";
         try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(st)) {
             for (int i = 0; i < ids.length; i++) {
                 ps.setInt(i+1, ids[i]);
             }
+            ps.setInt(ids.length + 1, ids.length);
             ResultSet rs = ps.executeQuery();
 
             //Parses to Content class
@@ -85,7 +95,17 @@ public class Management {
     }
 
     private static ResultSet GetResultSetFromId(int id) {
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("SELECT * FROM pages WHERE id = ?")) {
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(
+                "SELECT html FROM pages WHERE id = (\n" +
+                "    SELECT pages_id\n" +
+                "    FROM contains\n" +
+                "    WHERE log_id = (\n" +
+                "        SELECT log.id \n" +
+                "        FROM log \n" +
+                "        WHERE id = ? \n" +
+                "        ORDER BY timestamp FETCH FIRST ROW ONLY\n" +
+                "        )\n" +
+                ");")) {
             ps.setInt(1, id);
             return ps.executeQuery();
         }
@@ -111,6 +131,7 @@ public class Management {
     public static void Delete(int id) {
         try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("DELETE FROM pages WHERE id = ?")) {
             ps.setInt(1, id);
+            ps.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }

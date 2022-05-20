@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.contentmodule.management.Data;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
+import dk.sdu.se_f22.sharedlibrary.db.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import dk.sdu.se_f22.sharedlibrary.models.Content;
+import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class Management {
 

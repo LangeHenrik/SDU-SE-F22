@@ -99,9 +99,6 @@ public class TestSearchModule {
         product.set(ProductAttribute.CATEGORY, "hello");
         product.set(ProductAttribute.NAME, "hello");
         product.set(ProductAttribute.DESCRIPTION, "hello");
-        product.set(ProductAttribute.SIZE, "unavailable");
-        product.set(ProductAttribute.CLOCKSPEED, "unavailable");
-        product.set(ProductAttribute.WEIGHT, "unavailable");
         return product;
     }
 

@@ -77,15 +77,15 @@ public class Product {
         this.name = baseProduct.get(ProductAttribute.NAME);
         this.description = baseProduct.get(ProductAttribute.DESCRIPTION);
 
-        if (!baseProduct.get(ProductAttribute.SIZE).equals("unavailable")){
+        if (baseProduct.get(ProductAttribute.SIZE) != null){
             this.size = baseProduct.get(ProductAttribute.SIZE);
         }
 
-        if (!baseProduct.get(ProductAttribute.CLOCKSPEED).equals("unavailable")){
+        if (baseProduct.get(ProductAttribute.CLOCKSPEED) != null){
             this.clockspeed = Double.parseDouble(baseProduct.get(ProductAttribute.CLOCKSPEED));
         }
 
-        if (!baseProduct.get(ProductAttribute.WEIGHT).equals("unavailable")){
+        if (baseProduct.get(ProductAttribute.WEIGHT) != null){
             this.weight = Double.parseDouble(baseProduct.get(ProductAttribute.WEIGHT));
         }
     }

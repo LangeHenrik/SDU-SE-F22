@@ -57,7 +57,7 @@ public class Helpers {
         List<Product> mockResults = new ArrayList<>();
 
         for (String productString : products) {
-            String[] attributes = productString.split(",");
+            String[] attributes = productString.split(",", -1);
 
             // We choose to create the product this way,
             // since we can utilize the parser already written in the Product() class

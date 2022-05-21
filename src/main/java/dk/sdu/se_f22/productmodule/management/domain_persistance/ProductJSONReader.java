@@ -84,7 +84,6 @@ public class ProductJSONReader {
                 
             }else if(newProduct){
                 
-                currentBaseProduct.set(ProductAttribute.ID, String.valueOf(amountOfProducts));
                 output.add(currentBaseProduct);
                 currentBaseProduct = new BaseProduct();
                 amountOfProducts++;

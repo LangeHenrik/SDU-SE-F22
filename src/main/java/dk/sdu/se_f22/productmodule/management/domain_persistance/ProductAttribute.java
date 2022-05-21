@@ -3,7 +3,6 @@ package dk.sdu.se_f22.productmodule.management.domain_persistance;
 public enum ProductAttribute {
     
     UUID("id"),
-    ID("pId"),
     AVERAGE_USER_REVIEW("averageUserReview"),
     IN_STOCK("inStock"),
     EAN("ean"),

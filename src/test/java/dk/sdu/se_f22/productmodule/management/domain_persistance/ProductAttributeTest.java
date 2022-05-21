@@ -9,7 +9,7 @@ class ProductAttributeTest {
     @Test
     void values() {
         //First I make a list of all the values we want ProductAttribute to have
-        String[] sArr = {"UUID", "ID", "AVERAGE_USER_REVIEW", "IN_STOCK", "EAN", "PRICE", "PUBLISHED_DATE", "EXPIRATION_DATE", "CATEGORY", "NAME", "DESCRIPTION", "WEIGHT", "SIZE", "CLOCKSPEED"};
+        String[] sArr = {"UUID", "AVERAGE_USER_REVIEW", "IN_STOCK", "EAN", "PRICE", "PUBLISHED_DATE", "EXPIRATION_DATE", "CATEGORY", "NAME", "DESCRIPTION", "WEIGHT", "SIZE", "CLOCKSPEED"};
         
         //Then I make a list of all the values ProductAttribute actually has and turn them into strings
         ProductAttribute[] pArr = ProductAttribute.values();
@@ -26,7 +26,7 @@ class ProductAttributeTest {
     @Test
     void valueOf() {
         //First I make a list of all the values we want ProductAttribute to turn into enum-values of the same name
-        String[] sArr = {"UUID", "ID", "AVERAGE_USER_REVIEW", "IN_STOCK", "EAN", "PRICE", "PUBLISHED_DATE", "EXPIRATION_DATE", "CATEGORY", "NAME", "DESCRIPTION", "WEIGHT", "SIZE", "CLOCKSPEED"};
+        String[] sArr = {"UUID", "AVERAGE_USER_REVIEW", "IN_STOCK", "EAN", "PRICE", "PUBLISHED_DATE", "EXPIRATION_DATE", "CATEGORY", "NAME", "DESCRIPTION", "WEIGHT", "SIZE", "CLOCKSPEED"};
         
         //Then I make a list of all the enum-values ProductAttribute has
         ProductAttribute[] pArr = ProductAttribute.values();
@@ -40,7 +40,7 @@ class ProductAttributeTest {
     @Test
     void fromString(){
         //First I make a list of all the values we want ProductAttribute to turn into enum-values of the same name
-        String[] sArr = {"id", "pId", "averageUserReview", "inStock", "ean", "price", "publishedDate", "expirationDate", "category", "name", "description", "weight", "size", "clockSpeed"};
+        String[] sArr = {"id", "averageUserReview", "inStock", "ean", "price", "publishedDate", "expirationDate", "category", "name", "description", "weight", "size", "clockSpeed"};
         
         //Then I make a list of all the enum-values ProductAttribute has
         ProductAttribute[] pArr = ProductAttribute.values();

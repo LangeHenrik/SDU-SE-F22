@@ -1,7 +1,6 @@
 [
 {
 	"id": "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f7d",
-	"pId": "",
 	"averageUserReview": "2.8",
 	"inStock": [
 		"test"
@@ -19,7 +18,6 @@
 },
 {
 	"id": "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f8d",
-	"pId": "",
 	"averageUserReview": "2.8",
 	"inStock": [
 		"test"
@@ -37,7 +35,6 @@
 },
 {
 	"id": "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f6d",
-	"pId": "",
 	"averageUserReview": "2.8",
 	"inStock": [
 		"test"
@@ -55,7 +52,6 @@
 },
 {
 	"id": "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f9d",
-	"pId": "",
 	"averageUserReview": "2.8",
 	"inStock": [
 		"test"
@@ -73,7 +69,6 @@
 },
 {
 	"id": "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f5d",
-	"pId": "",
 	"averageUserReview": "2.8",
 	"inStock": [
 		"test"

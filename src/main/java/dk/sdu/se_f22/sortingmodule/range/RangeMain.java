@@ -24,7 +24,7 @@ public class RangeMain {
 
     public static void main(String[] args) {
         BaseProduct baseProduct = new BaseProduct();
-        baseProduct.set(ProductAttribute.ID, "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f4e");
+        baseProduct.set(ProductAttribute.UUID, "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f4e");
         baseProduct.set(ProductAttribute.AVERAGE_USER_REVIEW, "4.446");
         baseProduct.set(ProductAttribute.EAN, "2054647099864");
         baseProduct.set(ProductAttribute.PRICE, "1787.50");

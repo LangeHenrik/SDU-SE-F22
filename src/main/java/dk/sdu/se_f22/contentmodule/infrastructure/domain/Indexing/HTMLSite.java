@@ -1,7 +1,13 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 
-import dk.sdu.se_f22.contentmodule.infrastructure.data.Database;
 
+import dk.sdu.se_f22.contentmodule.infrastructure.data.DatabaseQueries;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +18,20 @@ public class HTMLSite  {
     private List<String> tokens;
     private List<String> filteredTokensList;
 
-
     //Constructor for a created htmlpage
     public HTMLSite(int id, String documentText) {
         this.id = id;
         this.documentText = documentText;
+
+        try (Connection connection = DBConnection.getPooledConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_htmlpages (html_id) VALUES ("+id+")");
+            stmt.execute();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+
 
     }
 

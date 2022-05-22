@@ -31,9 +31,6 @@ class ProductManagerTest {
         }
         
         baseProduct = new BaseProduct();
-        for(ProductAttribute pa : ProductAttribute.values()){
-            baseProduct.set(pa, "test");
-        }
         
         baseProduct.set(ProductAttribute.UUID, "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f7d");
         baseProduct.set(ProductAttribute.AVERAGE_USER_REVIEW, "2.8");
@@ -56,7 +53,9 @@ class ProductManagerTest {
         
         assertEquals(baseProduct.get(ProductAttribute.UUID), returnedBaseProduct.get(ProductAttribute.UUID));
         assertEquals(baseProduct.get(ProductAttribute.AVERAGE_USER_REVIEW), returnedBaseProduct.get(ProductAttribute.AVERAGE_USER_REVIEW));
-        assertEquals(baseProduct.getLocations(), returnedBaseProduct.getLocations());
+        for (int i = 0; i < baseProduct.getLocations().size(); i++) {
+            assertEquals(baseProduct.getLocations().get(i), returnedBaseProduct.getLocations().get(i));
+        }
         assertEquals(baseProduct.get(ProductAttribute.EAN), returnedBaseProduct.get(ProductAttribute.EAN));
         assertEquals(baseProduct.get(ProductAttribute.PRICE), returnedBaseProduct.get(ProductAttribute.PRICE));
         assertEquals(baseProduct.get(ProductAttribute.PUBLISHED_DATE), returnedBaseProduct.get(ProductAttribute.PUBLISHED_DATE));

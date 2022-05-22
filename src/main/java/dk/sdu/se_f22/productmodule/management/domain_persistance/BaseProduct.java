@@ -33,11 +33,14 @@ public class BaseProduct { //initialize class
     }
     
     public ArrayList<String> getLocations(){ //String array method returning the class attribute availableAt
+        if (this.get(ProductAttribute.IN_STOCK) == null){
+            return new ArrayList<>();
+        }
         return new ArrayList<>(List.of(this.get(ProductAttribute.IN_STOCK).split(",")));
     } //returns an arraylist of the available shops
     
     public boolean set(ProductAttribute pA, String value){
-        if (value.isEmpty()){
+        if (value == null || value.isEmpty()){
             productAttributes.put(pA, null);
             return productAttributes.get(pA) == null;
         }

@@ -2,6 +2,7 @@ package dk.sdu.se_f22.productmodule.infrastructure.data;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,8 @@ class TokenParameterStore  {
 			sb.append(ignored);
 		}
 		String ignoredChars = sb.toString();
-		try (PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement
+		try (Connection conn = DBConnection.getPooledConnection();
+			PreparedStatement stmt = conn.prepareStatement
 			("INSERT INTO token_parameters(delimiter, ignored_chars, type) VALUES (?,?,?)");) {
 
 			stmt.setString(1, tp.getDelimiter());
@@ -31,7 +33,8 @@ class TokenParameterStore  {
 	}
 
 	public static TokenParameter loadTokenParameter() {
-		try (PreparedStatement stmt = DBConnection.getPooledConnection().prepareStatement("SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;");
+		try (Connection conn = DBConnection.getPooledConnection();
+			 PreparedStatement stmt = conn.prepareStatement("SELECT delimiter, ignored_chars FROM token_parameters WHERE type = 'Product' ORDER BY id DESC LIMIT 1;");
 			 ResultSet queryResultSet = stmt.executeQuery();) {
 
 			if(queryResultSet.next()){

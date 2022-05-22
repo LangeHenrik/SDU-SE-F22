@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
             JsonService s = new JsonService();
 
-            System.out.println("test Acer");
+
 
             int indexNumber = 0;
             assertEquals(known.getName(), s.deserializeBrand().get(indexNumber).getName());
@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.*;
             tmp.addAll(List.of(allProducts));
             known.setProducts(tmp);
 
-            System.out.println("test Intel");
+
             indexNumber = 6;
             assertEquals(known.getName(), s.deserializeBrand().get(indexNumber).getName());
             assertEquals(known.getDescription(), s.deserializeBrand().get(indexNumber).getDescription());

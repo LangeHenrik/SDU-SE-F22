@@ -10,6 +10,7 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ProductInfIndexImpl implements ProductInfIndex{
 
@@ -37,7 +38,7 @@ public class ProductInfIndexImpl implements ProductInfIndex{
         for (String token : tokens){
              for (String ignoredChar : tokenParameter.getIgnoredChars()){
                  if(token.contains(ignoredChar)){
-                     token = token.replaceAll(ignoredChar, "");
+                     token = token.replaceAll(Pattern.quote(ignoredChar), "");
                  }
              }
         }

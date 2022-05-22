@@ -165,6 +165,24 @@ class LongFilter extends RangeFilterClass{
     }
 
     @Override
+    public long setUserMin(long userMin) throws IllegalMinMaxException {
+        if (userMin == USER_NOT_SET_VALUE){
+            return userMin;
+        }
+
+        if (userMin >= userMax && userMax != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. UserMin : " + userMin + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+        }
+
+        if (userMin < DB_MIN || userMin > DB_MAX) {
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMin : " + userMin + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+        }
+
+        this.userMin = userMin;
+        return this.userMin;
+    }
+
+    @Override
     public long getUserMinLong() {
         return userMin;
     }
@@ -175,31 +193,13 @@ class LongFilter extends RangeFilterClass{
     }
 
     @Override
-    public long setUserMin(long userMin) throws IllegalMinMaxException {
-        if (userMin == USER_NOT_SET_VALUE){
-            return userMin;
-        }
-
-        if (userMin >= userMax && userMax != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'");
-        }
-
-        if (userMin < DB_MIN || userMin > DB_MAX) {
-            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
-        }
-
-        this.userMin = userMin;
-        return this.userMin;
-    }
-
-    @Override
     public long setUserMax(long userMax) throws IllegalMinMaxException {
         if (userMax == USER_NOT_SET_VALUE){
             return userMax;
         }
 
         if (userMax <= userMin && userMin != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'");
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
         }
 
         if (userMax < DB_MIN || userMax > DB_MAX) {

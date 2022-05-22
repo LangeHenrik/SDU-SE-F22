@@ -205,11 +205,11 @@ class DoubleFilter extends RangeFilterClass {
         }
 
         if (userMin >= userMax && userMax != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMin' can not be greater than 'userMax'");
+            throw new IllegalMinMaxException("'userMin' can not be greater than 'userMax'. UserMin :"+ userMin + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
         }
 
         if (userMin < DB_MIN || userMin > DB_MAX) {
-            throw new IllegalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'");
+            throw new IllegalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMin: "+ userMin + " dbMax: " + DB_MAX + " dbMin : " + DB_MIN);
         }
 
         this.userMin = userMin;
@@ -223,7 +223,7 @@ class DoubleFilter extends RangeFilterClass {
         }
 
         if (userMax <= userMin && userMin != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'");
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. userMax: " + userMax + " dbMax: " + DB_MAX + " dbMin : " + DB_MIN);
         }
 
         if (userMax < DB_MIN || userMax > DB_MAX) {

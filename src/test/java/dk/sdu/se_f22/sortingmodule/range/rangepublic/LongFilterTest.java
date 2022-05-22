@@ -114,12 +114,7 @@ class LongFilterTest {
             out.add(arguments(filter));
 
             filter = getTestFilter();
-            try {
-                filter.setUserMin(userMin);
-            } catch (IllegalMinMaxException e) {
-                e.printStackTrace();
-                fail("Failed to set userMin " + userMin);
-            }
+            filter.setUserMin(userMin);
             out.add(arguments(filter));
 
             // Add filters that set both usermin and max, in such a way that the list is different than simply dbmin and max
@@ -130,13 +125,8 @@ class LongFilterTest {
             long dbMin = 0;
             long dbMax = 12345678;
             filter = new LongFilter(0, "test name", "test description", "ean", dbMin, dbMax);
-            try {
-                filter.setUserMin(userMin);
-                filter.setUserMax(userMax);
-            } catch (IllegalMinMaxException e) {
-                e.printStackTrace();
-                fail("Failed to set userMin " + userMin + " and userMax " + userMax);
-            }
+            filter.setUserMin(userMin);
+            filter.setUserMax(userMax);
             out.add(arguments(filter));
 
 
@@ -146,16 +136,11 @@ class LongFilterTest {
         @DisplayName("Filtering an empty list of results")
         @ParameterizedTest(name = "setUserMinAndMax={1} - inputList={2}")
         @MethodSource("filteringAnEmptyListOfResultsArgument")
-        void filteringAnEmptyListOfResults(boolean setUserMinAndMax, Collection<Product> inputList) {
+        void filteringAnEmptyListOfResults(boolean setUserMinAndMax, Collection<Product> inputList) throws IllegalMinMaxException {
             LongFilter internalFilter = new LongFilter(0, "test name", "test description", "ean", 0, 1000);
             if(setUserMinAndMax){
-                try {
-                    internalFilter.setUserMax(100);
-                    internalFilter.setUserMin(10);
-                } catch (IllegalMinMaxException e) {
-                    e.printStackTrace();
-                    fail("Failed to set userMin " + 10 + " and userMax " + 100);
-                }
+                internalFilter.setUserMax(100);
+                internalFilter.setUserMin(10);
             }
 
             // preparing the expected result
@@ -180,7 +165,7 @@ class LongFilterTest {
             static Stream<LongFilter> provideLongFiltersProvider (){
                 return Stream.of(
                         new LongFilter("Long filter 1", "Desc long filter 1", "price", 0, 1000),
-                        new LongFilter("Long filter 2", "Desc long filter 2", "price", 0, 1)
+                        new LongFilter("Long filter 2", "Desc long filter 2", "price", 0, 30)
                 );
             }
 

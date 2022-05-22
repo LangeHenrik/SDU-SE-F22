@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.RangeFilterException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -147,11 +148,7 @@ class DoubleFilterTest {
             double userMax = 10.0;
             for(String attribute: strings){
                 DoubleFilter filter = getTestFilter(attribute);
-                try {
-                    filter.setUserMax(userMax);
-                } catch (IllegalMinMaxException e) {
-                    e.printStackTrace();
-                }
+                filter.setUserMax(userMax);
                 out.add(arguments(filter));
 
                 filter = getTestFilter(attribute);
@@ -179,16 +176,11 @@ class DoubleFilterTest {
         @DisplayName("Filtering an empty list of results")
         @ParameterizedTest(name = "{0} - setUserMinAndMax={1} - inputList={2}")
         @MethodSource("filteringAnEmptyListOfResultsArgument")
-        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) {
+        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) throws IllegalMinMaxException {
             DoubleFilter internalFilter = new DoubleFilter(0, "test name", "test description", productAttribute, 0, 1000);
             if(setUserMinAndMax){
-                try {
-                    internalFilter.setUserMax(100.0);
-                    internalFilter.setUserMin(10.0);
-                } catch (IllegalMinMaxException e) {
-                    e.printStackTrace();
-                    fail("Failed to set userMin and userMax with " + 10.0 + " and " + 100.0);
-                }
+                internalFilter.setUserMax(100.0);
+                internalFilter.setUserMin(10.0);
             }
 
             // preparing the expected result
@@ -240,7 +232,7 @@ class DoubleFilterTest {
                 @ParameterizedTest
                 @ValueSource(doubles = {1.0, 3.5, 999.0})
                 @DisplayName("Set valid DoubleFilter userMin")
-                void setValidDoubleFilterUserMin (double input) {
+                void setValidDoubleFilterUserMin (double input) throws RangeFilterException {
                     DoubleFilter doubleFilter = new DoubleFilter(
                             "Test Name",
                             "Test Discription",

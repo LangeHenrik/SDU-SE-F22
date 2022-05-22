@@ -24,7 +24,5 @@ public interface IBim {
     //set the index interval
     void setIndexInterval(int indexInterval);
     int  getIndexingInterval();
-    List<Brand> getBrandsIndex();
-    void StartIndexInterval();
 
 }

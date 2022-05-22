@@ -30,6 +30,13 @@ public interface RangeFilter {
     Instant getUserMaxInstant() throws InvalidFilterTypeException;
     long getUserMaxLong() throws InvalidFilterTypeException;
 
+    /**
+     * Set the userMin for the filter. 
+     * Only if the userMin value is bigger than the DBMin value and the userMin is less than the DBMax and userMax if it is set.
+     * @param userMin Double value for userMin.
+     * @return Return the new value for userMin. 
+     * @throws IllegalMinMaxException
+     */
     double setUserMin(double userMin) throws IllegalMinMaxException;
     Instant setUserMin(Instant userMin) throws IllegalMinMaxException;
     long setUserMin(long userMin) throws IllegalMinMaxException;

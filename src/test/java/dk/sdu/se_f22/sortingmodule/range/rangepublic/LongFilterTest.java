@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.RangeFilterException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -88,7 +89,7 @@ class LongFilterTest {
             });
         }
 
-        static Stream<Arguments> useFilterArguments() {
+        static Stream<Arguments> useFilterArguments() throws RangeFilterException {
             // Could be refactored to simply return DoubleFilters.
             // However it is like this such that the test can easily be refactored to take more arguments if needed.
 
@@ -109,12 +110,7 @@ class LongFilterTest {
             long userMax = 12345674;
 
             LongFilter filter = getTestFilter();
-            try {
-                filter.setUserMax(userMax);
-            } catch (IllegalMinMaxException e) {
-                e.printStackTrace();
-                fail("Failed to set userMax " + userMax);
-            }
+            filter.setUserMax(userMax);
             out.add(arguments(filter));
 
             filter = getTestFilter();

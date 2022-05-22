@@ -205,6 +205,7 @@ class LongFilter extends RangeFilterClass{
         if (userMax < DB_MIN || userMax > DB_MAX) {
             throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
         }
+
         this.userMax = userMax;
         return this.userMax;
     }

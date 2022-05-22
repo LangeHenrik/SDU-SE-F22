@@ -50,18 +50,15 @@ class DoubleFilterTest {
         @ParameterizedTest
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
         @ValueSource(strings = {"price", "averageUserReview", "clockspeed","weight" })
-        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
+        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) throws RangeFilterException {
             //Creating filter through getTestFilter method
             DoubleFilter filter = getTestFilter(productAttribute);
             double userMin = 10.0;
             double userMax = 100.0;
-            try {
-                filter.setUserMin(userMin);
-                filter.setUserMax(userMax);
-            } catch (IllegalMinMaxException e) {
-                e.printStackTrace();
-                fail("Failed to set userMin and userMax with " + 10.0 + " and " + 100.0);
-            }
+
+            filter.setUserMin(userMin);
+            filter.setUserMax(userMax);
+
 
             //Preparing input list
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForDoubleFilterTest.csv", true);
@@ -158,11 +155,7 @@ class DoubleFilterTest {
                 out.add(arguments(filter));
 
                 filter = getTestFilter(attribute);
-                try {
-                    filter.setUserMin(userMin);
-                } catch (IllegalMinMaxException e) {
-                    e.printStackTrace();
-                }
+                filter.setUserMin(userMin);
                 out.add(arguments(filter));
             }
 
@@ -173,13 +166,8 @@ class DoubleFilterTest {
                 double dbMin = -100.0;
                 double dbMax = 10000.0;
                 DoubleFilter filter = new DoubleFilter(0, "test name", "test description", attribute, dbMin, dbMax);
-                try {
-                    filter.setUserMin(userMin);
-                    filter.setUserMax(userMax);
-                } catch (IllegalMinMaxException e) {
-                    e.printStackTrace();
-                    fail("Failed to set userMin and userMax with " + userMin + " and " + userMax);
-                }
+                filter.setUserMin(userMin);
+                filter.setUserMax(userMax);
 
                 out.add(arguments(filter));
             }
@@ -259,12 +247,8 @@ class DoubleFilterTest {
                             "Test product Attribute",
                             1, 1000);
 
-                    try {
-                        Assertions.assertEquals(doubleFilter.setUserMin(input), doubleFilter.getUserMinDouble());
-                    } catch (IllegalMinMaxException e) {
-                        e.printStackTrace();
-                        fail("Failed to set userMin " + input);
-                    }
+                    Assertions.assertEquals(doubleFilter.setUserMin(input), doubleFilter.getUserMinDouble());
+
                 }
 
                 @ParameterizedTest

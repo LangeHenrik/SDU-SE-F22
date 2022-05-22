@@ -195,7 +195,7 @@ class TimeFilter extends RangeFilterClass {
         long userMinEpoch = userMin.toEpochMilli();
         long userMaxEpoch = userMax.toEpochMilli();
         if (userMinEpoch > userMaxEpoch && userMax != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMinEpoch' can not be greater than 'userMax'");
+            throw new IllegalMinMaxException("'userMinEpoch' can not be greater than 'userMax' UserMin: " + userMin + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
         }
 
         if (userMinEpoch < DB_MIN.toEpochMilli() || userMinEpoch > DB_MAX.toEpochMilli()) {
@@ -216,11 +216,11 @@ class TimeFilter extends RangeFilterClass {
         long userMaxEpoch = userMax.toEpochMilli();
 
         if (userMaxEpoch <= userMinEpoch && userMin != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. UserMin : " + userMin + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. UserMin : " + userMin + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
         }
 
         if (userMaxEpoch < DB_MIN.toEpochMilli() || userMaxEpoch > DB_MAX.toEpochMilli()) {
-            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax : " + DB_MAX + " dbMin : " + DB_MIN);
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
         }
         this.userMax = userMax;
         return this.userMax;

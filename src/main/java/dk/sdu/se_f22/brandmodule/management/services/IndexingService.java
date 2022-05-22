@@ -12,7 +12,7 @@ public class IndexingService implements IIndexingService {
     public IndexingService() {
     }
 
-    public List<Brand> getBrandIndex(){
+    public List<Brand> getBrandIndex(){;
         return service.deserializeBrand();
 
     }

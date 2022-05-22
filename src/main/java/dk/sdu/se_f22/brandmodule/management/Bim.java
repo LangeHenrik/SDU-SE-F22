@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.brandmodule.management;
 import dk.sdu.se_f22.brandmodule.management.persistence.IPersistence;
 import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
-import dk.sdu.se_f22.brandmodule.management.services.IndexingService;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.List;
 
 public class Bim implements IBim {
     IPersistence persistence = new Persistence();
-    IndexingService indexingService = new IndexingService();
 
     @Override
     public void createBrand(List<Brand>brands){
@@ -57,14 +55,4 @@ public class Bim implements IBim {
     public int getIndexingInterval(){
         return persistence.getIndexingInterval();
      }
-
-    @Override
-    public List<Brand> getBrandsIndex() {
-        return indexingService.getBrandIndex();
-    }
-
-    @Override
-    public void StartIndexInterval() {
-        indexingService.StartIndexInterval();
-    }
 }

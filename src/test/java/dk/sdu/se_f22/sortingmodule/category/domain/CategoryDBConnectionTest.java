@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,9 +38,33 @@ class CategoryDBConnectionTest {
     }
 
     @Test
-    @DisplayName("Read valid list of categories")
-    void getAllCategories(){
+    @DisplayName("Read all, check object type")
+    void getAllCategoriesReturnType() {
+        List<Category> categoriesFromDB = dBConnection.getAllCategories();
 
+        // Returns a list
+        assertTrue(categoriesFromDB instanceof List<Category>);
+    }
+
+    @Test
+    @DisplayName("Read all, check its not empty")
+    void getAllCategoriesIsNotEmpty() {
+        List<Category> categoriesFromDB = dBConnection.getAllCategories();
+
+        // Is the list empty
+        assertFalse(categoriesFromDB.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Read all, check valid attribute types")
+    void getAllCategoriesCheckAttributeType() {
+        List<Category> categories = dBConnection.getAllCategories();
+        Category testCategory = categories.get(0);
+        assertAll("Check attribute types",
+            ()->assertInstanceOf(String.class, testCategory.getName()),
+            ()->assertInstanceOf(String.class, testCategory.getDescription()),
+            ()->assertInstanceOf(Integer.class, testCategory.getId())
+        );
     }
 
     @Test
@@ -105,8 +130,6 @@ class CategoryDBConnectionTest {
     @Test
     void updateCategoryNameTest() {
         int newCategoryID = dBConnection.createCategory("TestNameFake", "TestDescription", "TestReqValue",1, 1);
-
-        System.out.println(newCategoryID);
 
         dBConnection.updateName(newCategoryID, "TestName");
 

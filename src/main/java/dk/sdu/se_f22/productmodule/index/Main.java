@@ -29,5 +29,7 @@ public class Main {
             System.out.println(product1);
         }
 
+        p.createSearchProduct(products);
+
     }
 }

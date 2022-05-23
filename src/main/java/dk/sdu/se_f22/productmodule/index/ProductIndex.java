@@ -160,7 +160,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
         }
 
     }
-    
+
     // method that creates and stores products in DB with timestamp of search.
     public void createSearchProduct(List<Product> searchedProducts){
         try
@@ -172,7 +172,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             PreparedStatement searchStatement = connection.prepareStatement("INSERT INTO searches VALUES(?,?)");
             searchStatement.setString(1,p.getUuid().toString());
             searchStatement.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
-        }
+            }
         }
 
         catch (SQLException e) {
@@ -200,37 +200,41 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
                     "LEFT JOIN  storage on productstorage.storageid = storage.storageid\n" +
                     "LEFT JOIN categories on categories.categoryid = product.categoryid\n" +
                     "ORDER BY searches.creationdate DESC;");
-            ResultSet resultSet = p.executeQuery();
-
-            while(resultSet.next()){
-                List<String> citylist = new ArrayList<>();
-
-                //iterate through cities in the city column of stock table for all products
-                PreparedStatement pcity = connection.prepareStatement("select city from stock" +
-                        " inner join productstock on productstock.stockid = stock.stockid " +
-                        "INNER JOIN product on product.productid = productstock.productid" +
-                        " WHERE product.productid = ?");
-                pcity.setString(1,resultSet.getString(1));
-                ResultSet citySet = pcity.executeQuery();
-
-                while(citySet.next()){
-                    citylist.add(citySet.getString(1));
-                }
-
-                // create product object
-                productList.add(new Product(UUID.fromString(resultSet.getString(1)),
-                        resultSet.getDouble(2), citylist,resultSet.getInt(3),
-                        resultSet.getDouble(4),resultSet.getTimestamp(5).toInstant(),
-                        resultSet.getTimestamp(6).toInstant(), resultSet.getString(7),
-                        resultSet.getString(8), resultSet.getString(9),
-                        resultSet.getString(10), resultSet.getDouble(11),
-                        resultSet.getDouble(12)
-                ));
-            }
+            productListCreator(productList, connection, p);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return productList;
+    }
+
+    private void productListCreator(List<Product> productList, Connection connection, PreparedStatement p) throws SQLException {
+        ResultSet resultSet = p.executeQuery();
+
+        while(resultSet.next()){
+            List<String> citylist = new ArrayList<>();
+
+            //iterate through cities in the city column of stock table for all products
+            PreparedStatement pcity = connection.prepareStatement("select city from stock" +
+                    " inner join productstock on productstock.stockid = stock.stockid " +
+                    "INNER JOIN product on product.productid = productstock.productid" +
+                    " WHERE product.productid = ?");
+            pcity.setString(1,resultSet.getString(1));
+            ResultSet citySet = pcity.executeQuery();
+
+            while(citySet.next()){
+                citylist.add(citySet.getString(1));
+            }
+
+            // create product object
+            productList.add(new Product(UUID.fromString(resultSet.getString(1)),
+                    resultSet.getDouble(2), citylist,resultSet.getInt(3),
+                    resultSet.getDouble(4),resultSet.getTimestamp(5).toInstant(),
+                    resultSet.getTimestamp(6).toInstant(), resultSet.getString(7),
+                    resultSet.getString(8), resultSet.getString(9),
+                    resultSet.getString(10), resultSet.getDouble(11),
+                    resultSet.getDouble(12)
+            ));
+        }
     }
 
     public List<Product> getProducts(){
@@ -240,7 +244,6 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
                 (Connection connection = DBConnection.getPooledConnection();)
         {
             // query all products
-
             PreparedStatement p = connection.prepareStatement("select product.productid," +
                     "averageuserreview,ean,price,publisheddate,expirationdate,categories.category," +
                     "name,description,storage.size,specs.clockspeed,product.weight from product\n" +
@@ -249,33 +252,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
                     "LEFT JOIN  productstorage on productstorage.productid = product.productid\n" +
                     "LEFT JOIN  storage on productstorage.storageid = storage.storageid\n" +
                     "LEFT JOIN categories on categories.categoryid = product.categoryid;");
-            ResultSet resultSet = p.executeQuery();
-
-            while(resultSet.next()){
-                List<String> citylist = new ArrayList<>();
-
-                //iterate through cities in the city column of stock table for all products
-                PreparedStatement pcity = connection.prepareStatement("select city from stock" +
-                        " inner join productstock on productstock.stockid = stock.stockid " +
-                        "INNER JOIN product on product.productid = productstock.productid" +
-                        " WHERE product.productid = ?");
-                pcity.setString(1,resultSet.getString(1));
-                ResultSet citySet = pcity.executeQuery();
-
-                while(citySet.next()){
-                    citylist.add(citySet.getString(1));
-                }
-
-                // create product object
-                productList.add(new Product(UUID.fromString(resultSet.getString(1)),
-                        resultSet.getDouble(2), citylist,resultSet.getInt(3),
-                        resultSet.getDouble(4),resultSet.getTimestamp(5).toInstant(),
-                        resultSet.getTimestamp(6).toInstant(), resultSet.getString(7),
-                        resultSet.getString(8), resultSet.getString(9),
-                        resultSet.getString(10), resultSet.getDouble(11),
-                        resultSet.getDouble(12)
-                ));
-            }
+            productListCreator(productList, connection, p);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -308,59 +285,4 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             e.printStackTrace();
         }
     }
-
-
 }
-
-
-
-
-
-
-        /*
-        for (int i = 0; i < products.size(); i++) {
-            for (int n = 0; n < token.size(); n++) {
-                String[] categoryWords = products.get(i).getCategory().toLowerCase().split("/");
-                String[] nameWords = products.get(i).getName().toLowerCase().split(" ");
-                String[] descriptionWords = products.get(i).getDescription().toLowerCase().split(" ");
-
-
-                for (String cateElem : categoryWords) {
-                    if (cateElem.contains(token.get(n).toLowerCase())) {
-                        categoryHits += 1;
-                    }
-                }
-                for (String nameElem : nameWords) {
-                    if (nameElem.contains(token.get(n).toLowerCase())) {
-                        nameHits += 1;
-                    }
-                }
-                for (String descElem : descriptionWords) {
-                    if (descElem.contains(token.get(n).toLowerCase())) {
-                        descriptionHits += 1;
-                    }
-                }
-            }
-            int total = categoryHits + nameHits + descriptionHits;
-
-            System.out.printf("Product: " + i +
-                            "\nCategory hit counter: %4d " +
-                            "\nName hit counter: %8d " +
-                            "\nDescription hit counter: %d " +
-                            "\nTotal: %19d\n\n",
-                            categoryHits, nameHits, descriptionHits, total);
-
-            products.get(i).setHitNum(total);
-            sortedList.add(products.get(i));
-            Collections.sort(sortedList);
-
-
-            categoryHits = 0;
-            nameHits = 0;
-            descriptionHits = 0;
-        }
-
-
-        return sortedList;
-
-        */

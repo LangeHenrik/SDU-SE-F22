@@ -10,26 +10,6 @@ import java.util.List;
 
 public class CategoryDBConnection {
 
-    private static Connection connie = null;
-
-    /*
-    protected Connection connect() throws SQLException, IOException {
-        connie = DBConnection.getPooledConnection();
-        return connie;
-    }
-
-
-
-    private void closeConnection(){
-        try {
-            connie.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-     */
-
     protected int deleteCategory(int id) {
         String SQL = "DELETE FROM requirements_values WHERE id = (SELECT requirements_id FROM categories WHERE id = ?)";
 

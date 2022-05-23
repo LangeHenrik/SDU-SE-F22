@@ -78,56 +78,51 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
 
 
-    public void updateProduct(int id, Product product){
+    public void updateProduct(int id, Product product, int productID, int specID, int storageID){
         try
                 (Connection connection = DBConnection.getPooledConnection();
-                        PreparedStatement updateCategory = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
-
-                 PreparedStatement updateStock = connection.prepareStatement("UPDATE stock set city = ? WHERE id = ?");
                  PreparedStatement updateProduct = connection.prepareStatement(
-                         "UPDATE product set name = ?," +
+                         "UPDATE product SET name = ?," +
                                  "averageuserreview = ?," +
-                                 "creationdate = ?," +
                                  "publisheddate = ?," +
                                  "expirationdate = ?," +
                                  "price = ?," +
                                  "description = ?," +
                                  "ean = ?," +
-                                 "weight = ?," +
-                                 "WHERE id = ?");
-                 PreparedStatement updateSpecs = connection.prepareStatement("UPDATE specs set clockspeed = ? WHERE id = ?");
-                 PreparedStatement updateStorage = connection.prepareStatement("UPDATE storage set size = ? WHERE id = ?");)
+                                 "weight = ?" +
+                                 "WHERE productID = ?");
+                 PreparedStatement updateProductStock = connection.prepareStatement("UPDATE productStock SET productID = ?, stockID = ? WHERE productStockID = ?");
+                 PreparedStatement updateProductSpecs = connection.prepareStatement("UPDATE productSpecs SET specID = ?, productID = ? WHERE uniqueID = ?");
+                 PreparedStatement updateProductStorage = connection.prepareStatement("UPDATE productStorage SET productid = ?, storageid = ? WHERE uniqueID = ?");)
         {
-            //PreparedStatement updateProductStorage = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
-            //PreparedStatement updateProductSpecs = connection.prepareStatement("UPDATE categories set category = ? WHERE id = ?");
 
-            updateCategory.setString(1, product.getCategory());
-            updateCategory.setInt(2, id);
+            updateProduct.setString(1, product.getName());
+            updateProduct.setDouble(2, product.getAverageUserReview());
+            updateProduct.setTimestamp(3, Timestamp.from(product.getPublishedDate()));
+            updateProduct.setTimestamp(4, Timestamp.from(product.getExpirationDate()));
+            updateProduct.setDouble(5, product.getPrice());
+            updateProduct.setString(6, product.getDescription());
+            updateProduct.setLong(7,product.getEan());
+            updateProduct.setDouble(8, product.getWeight());
+            updateProduct.setInt(9, id);
 
-            updateStock.setArray(1, (Array) product.getInStock());
-            updateStock.setInt(2, id);
+            updateProductStock.setInt(1, productID);
+            updateProductStock.setInt(2, specID);
+            updateProductStock.setInt(3, id);
 
-            updateProduct.setDouble(1, product.getAverageUserReview());
-            updateProduct.setString(2, product.getName());
-            updateProduct.setTimestamp(4, Timestamp.from(product.getPublishedDate()));
-            updateProduct.setTimestamp(5, Timestamp.from(product.getExpirationDate()));
-            updateProduct.setDouble(6, product.getPrice());
-            updateProduct.setString(7, product.getDescription());
-            updateProduct.setLong(8,product.getEan());
-            updateProduct.setDouble(9, product.getWeight());
-            updateProduct.setInt(10, id);
+            updateProductSpecs.setInt(1, specID);
+            updateProductSpecs.setInt(2, productID);
+            updateProductSpecs.setInt(3, id);
 
-            updateSpecs.setDouble(1, product.getClockspeed());
-            updateSpecs.setInt(2, id);
+            updateProductStorage.setInt(1, productID);
+            updateProductStorage.setInt(2, storageID);
+            updateProductStorage.setInt(3, id);
 
-            updateStorage.setString(1, product.getSize());
-            updateStorage.setInt(2, id);
 
-            updateCategory.execute();
-            updateStock.execute();
             updateProduct.execute();
-            updateSpecs.execute();
-            updateStorage.execute();
+            updateProductStock.execute();
+            updateProductSpecs.execute();
+            updateProductStorage.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,10 +132,10 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     public void deleteProduct(int id){
         try
                 (Connection connection = DBConnection.getPooledConnection();
-                 PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE id = ?");
-                 PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM productStock WHERE id = ?");
-                 PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM productStorage WHERE id = ?");
-                 PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE id = ?");)
+                 PreparedStatement deleteProduct = connection.prepareStatement("DELETE FROM product WHERE productID = ?");
+                 PreparedStatement deleteStock = connection.prepareStatement("DELETE FROM productStock WHERE productStockID = ?");
+                 PreparedStatement deleteSpecs = connection.prepareStatement("DELETE FROM productStorage WHERE uniqueID = ?");
+                 PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE uniqueID = ?");)
         {
 
             deleteProduct.setInt(1, id);

@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.util.*;
 
 public class Scoring implements IScoring {
-
     private void price(List<ProductScore> input) {
         for (ProductScore product : input) {
             double price = product.getProduct().getPrice();
@@ -80,7 +79,6 @@ public class Scoring implements IScoring {
     private void date(List<ProductScore> input) {
         for (ProductScore product : input) {
             Instant date = product.getProduct().getPublishedDate();
-
             try (var connection = DBConnection.getPooledConnection()) {
                 var statement = connection.prepareStatement("SELECT * FROM scores WHERE type = 'date'");
                 var sqlReturnValues = statement.executeQuery();
@@ -101,9 +99,7 @@ public class Scoring implements IScoring {
         }
     }
 
-
     public List<ProductScore> wrapProduct (Collection<Product> input) {
-
         List<ProductScore> products = new ArrayList<>();
 
         for (Product product : input) {
@@ -115,7 +111,6 @@ public class Scoring implements IScoring {
     }
 
     public List<Product> unWrapProduct (List<ProductScore> input) {
-
         List<Product> products = new ArrayList<>();
 
         for (ProductScore productScore : input) {
@@ -127,30 +122,13 @@ public class Scoring implements IScoring {
 
     @Override
     public SearchHits scoreSort(SearchHits input, ScoreSortType type) {
-
         switch (type) {
-            case ALL:
-                input.setProducts(scoreSortAll(input.getProducts()));
-                break;
-
-            case PRICE:
-                input.setProducts(scoreSortPrice(input.getProducts()));
-                break;
-
-            case REVIEW:
-                input.setProducts(scoreSortReview(input.getProducts()));
-                break;
-
-            case STOCK:
-                input.setProducts(scoreSortStock(input.getProducts()));
-                break;
-
-            case DATE:
-                input.setProducts(scoreSortDate(input.getProducts()));
-                break;
-
-            default:
-                System.out.println("error: invalid sort type");
+            case ALL -> input.setProducts(scoreSortAll(input.getProducts()));
+            case PRICE -> input.setProducts(scoreSortPrice(input.getProducts()));
+            case REVIEW -> input.setProducts(scoreSortReview(input.getProducts()));
+            case STOCK -> input.setProducts(scoreSortStock(input.getProducts()));
+            case DATE -> input.setProducts(scoreSortDate(input.getProducts()));
+            default -> System.out.println("error: invalid sort type");
         }
 
         return input;
@@ -158,14 +136,12 @@ public class Scoring implements IScoring {
 
     @Override
     public Collection<Product> scoreSortAll(Collection<Product> input) {
-
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
 
         price(products);
         review(products);
         stock(products);
         date(products);
-
         Collections.sort(products);
 
         return unWrapProduct(products);
@@ -174,6 +150,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortPrice(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+
         price(products);
         Collections.sort(products);
 
@@ -183,6 +160,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortReview(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+
         review(products);
         Collections.sort(products);
 
@@ -192,6 +170,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortStock(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+
         stock(products);
         Collections.sort(products);
 
@@ -201,6 +180,7 @@ public class Scoring implements IScoring {
     @Override
     public Collection<Product> scoreSortDate(Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>(this.wrapProduct(input));
+
         date(products);
         Collections.sort(products);
 
@@ -231,29 +211,27 @@ public class Scoring implements IScoring {
 
     @Override
     public void updateRow(int id, Object newValue, String column) {
-        try {
-            var connection = DBConnection.getPooledConnection();
-            PreparedStatement stmt;
+        try (var connection = DBConnection.getPooledConnection()) {
+            PreparedStatement statement;
             switch (column) {
-                case "type" -> stmt = connection.prepareStatement("Update scores SET type = ? WHERE id = ?");
-                case "bracket" -> stmt = connection.prepareStatement("Update scores SET bracket = ? WHERE id = ?");
-                case "weight" -> stmt = connection.prepareStatement("Update scores SET weight = ? WHERE id = ?");
+                case "type" -> statement = connection.prepareStatement("Update scores SET type = ? WHERE id = ?");
+                case "bracket" -> statement = connection.prepareStatement("Update scores SET bracket = ? WHERE id = ?");
+                case "weight" -> statement = connection.prepareStatement("Update scores SET weight = ? WHERE id = ?");
                 default -> {
                     System.out.println("Column name doesn't exist");
                     return;
                 }
             }
             if (column.equals("bracket")) {
-                stmt.setDouble(1,Double.parseDouble((String) newValue));
+                statement.setDouble(1,Double.parseDouble((String) newValue));
             } else if (column.equals("weight")) {
-                stmt.setInt(1,Integer.parseInt((String) newValue));
+                statement.setInt(1,Integer.parseInt((String) newValue));
             } else {
-                stmt.setObject(1,newValue);
+                statement.setObject(1,newValue);
             }
-            stmt.setInt(2,id);
-            stmt.execute();
-            stmt.close();
-            connection.close();
+            statement.setInt(2,id);
+            statement.execute();
+            statement.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -261,13 +239,11 @@ public class Scoring implements IScoring {
 
     @Override
     public void deleteRow(int id) {
-        try {
-            var connection = DBConnection.getPooledConnection();
-            PreparedStatement stmt = connection.prepareStatement("DELETE FROM scores WHERE id = ?");
-            stmt.setInt(1, id);
-            stmt.execute();
-            stmt.close();
-            connection.close();
+        try (var connection = DBConnection.getPooledConnection()) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM scores WHERE id = ?");
+            statement.setInt(1, id);
+            statement.execute();
+            statement.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -275,16 +251,13 @@ public class Scoring implements IScoring {
 
     @Override
     public void createRow(String type, double bracket, int weight) {
-        try {
-            var connection = DBConnection.getPooledConnection();
-            PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO scores (type, bracket, weight) VALUES(?,?,?)");
-            stmt.setString(1,type);
-            stmt.setDouble(2,bracket);
-            stmt.setInt(3,weight);
-            stmt.execute();
-            stmt.close();
-            connection.close();
+        try (var connection = DBConnection.getPooledConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO scores (type, bracket, weight) VALUES(?,?,?)");
+            statement.setString(1,type);
+            statement.setDouble(2,bracket);
+            statement.setInt(3,weight);
+            statement.execute();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

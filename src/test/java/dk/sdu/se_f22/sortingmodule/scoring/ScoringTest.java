@@ -75,10 +75,10 @@ class ScoringTest {
                     ('date',4,4),
                     ('date',5,5);""";
         try (var connection = DBConnection.getPooledConnection()) {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(" DROP TABLE IF exists scores ; ");
-            stmt.executeUpdate(sql);
-
+            var statement = connection.createStatement();
+            statement.executeUpdate("DROP TABLE IF EXISTS scores;");
+            statement.executeUpdate(sql);
+            statement.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -94,7 +94,6 @@ class ScoringTest {
     void scoreSort() {
         SearchHits searchHits = new SearchHits();
         searchHits.setProducts(products);
-
         scoring.scoreSort(searchHits, ALL);
 
         List<Product> controlProducts = new ArrayList<>();
@@ -203,31 +202,9 @@ class ScoringTest {
     }
 
     @Test
-    @Order(8)
-    void createRow() {
-        String type = "price";
-        double bracket = 1500;
-        int weight = 2;
-        scoring.createRow(type,bracket,weight);
-
-        try (var connection = DBConnection.getPooledConnection()) {
-            var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = ?");
-            statement.setInt(1,21);
-            var sqlReturnValues = statement.executeQuery();
-
-            while (sqlReturnValues.next()) {
-                assertEquals(type+bracket+weight,sqlReturnValues.getString(2)+sqlReturnValues.getDouble(3)+sqlReturnValues.getInt(4));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     @Order(7)
     void readTable() {
         String[] input = scoring.readTable().toArray(new String[0]);
-
         StringBuilder words = new StringBuilder();
 
         for (String s : input) {
@@ -258,18 +235,23 @@ class ScoringTest {
     }
 
     @Test
-    @Order(10)
-    void updateRow() {
-        double newValue = 1700;
-        scoring.updateRow(21,"1700","bracket");
+    @Order(8)
+    void createRow() {
+        String type = "price";
+        double bracket = 1500;
+        int weight = 2;
+        scoring.createRow(type,bracket,weight);
 
         try (var connection = DBConnection.getPooledConnection()) {
-            var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = 21");
+            var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = ?");
+            statement.setInt(1,21);
             var sqlReturnValues = statement.executeQuery();
 
             while (sqlReturnValues.next()) {
-                assertEquals(sqlReturnValues.getDouble(3),newValue);
+                assertEquals(type+bracket+weight,sqlReturnValues.getString(2)+sqlReturnValues.getDouble(3)+sqlReturnValues.getInt(4));
             }
+            statement.close();
+            sqlReturnValues.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -285,7 +267,6 @@ class ScoringTest {
         scoring.deleteRow(21);
 
         String[] input = scoring.readTable().toArray(new String[0]);
-
         StringBuilder words = new StringBuilder();
 
         for (String s : input) {
@@ -309,6 +290,28 @@ class ScoringTest {
                 Id: 14 Type: stock Bracket: 20.0 Weight: 4
                 Id: 15 Type: stock Bracket: 50.0 Weight: 5
                 """);
+    }
+
+    @Test
+    @Order(10)
+    void updateRow() {
+        double newValue = 1700;
+        int id = 21;
+        scoring.updateRow(id,String.valueOf(newValue),"bracket");
+
+        try (var connection = DBConnection.getPooledConnection()) {
+            var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = ?");
+            statement.setInt(1, id);
+            var sqlReturnValues = statement.executeQuery();
+
+            while (sqlReturnValues.next()) {
+                assertEquals(sqlReturnValues.getDouble(3),newValue);
+            }
+            statement.close();
+            sqlReturnValues.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

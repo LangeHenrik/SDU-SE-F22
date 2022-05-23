@@ -18,8 +18,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
-import static dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI.deleteItems;
-import static dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI.readEntireDB;
+import static dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI.*;
 
 public class OneWayController implements Initializable {
 
@@ -47,6 +46,7 @@ public class OneWayController implements Initializable {
         TP_images.setDisable(true);
         TP_images.setVisible(false);
         itemCatalog = new ItemCatalog(readEntireDB());
+        initializeTable();
     }
 
     public void GenerateImage(ActionEvent actionEvent) {
@@ -126,7 +126,7 @@ public class OneWayController implements Initializable {
     public void changeName(ActionEvent actionEvent) {
         int ID = validateInput(CN_oldName);
         if (ID > 0) {
-            if (!isEmptyOrInt(CN_newName.getText())) {
+            if (!isEmptyOrInt(CN_newName.getText()) && !CN_newName.getText().equalsIgnoreCase("root")) {
                 DatabaseAPI.updateName(ID, CN_newName.getText());
                 CN_status.setText("Updated name to: " + CN_newName.getText());
                 generateImageButton.fire();
@@ -138,11 +138,11 @@ public class OneWayController implements Initializable {
     public void addItem(ActionEvent actionEvent) {
         int IDSuperRef = validateInput(AI_SuperREF);
         if (IDSuperRef >= 0) {
-            if (!isEmptyOrInt(AI_Name.getText())) {
+            if (!isEmptyOrInt(AI_Name.getText()) && !AI_Name.getText().equalsIgnoreCase("root")) {
                 DatabaseAPI.addItem(AI_Name.getText(), IDSuperRef);
                 AI_status.setText("Item added with name: " + AI_Name.getText());
                 generateImageButton.fire();
-            }
+            }else AI_status.setText("Invalid Input");
         } else if (IDSuperRef == -1) AI_status.setText("Cannot add item, use ID instead for super item reference");
         else AI_status.setText("Invalid Input");
     }
@@ -157,14 +157,14 @@ public class OneWayController implements Initializable {
                 MIB_Status.setText("Cannot update super id to be the same as item id");
             }else {
                 DatabaseAPI.updateSuperId(idItem, idSuperItem);
-                MIB_Status.setText("Updated " + MIB_Name.getText() + " super item to: " + MIB_SuperID.getText());
+                MIB_Status.setText("Updated item with ID: " + idItem + " super item id to: " + idSuperItem);
                 generateImageButton.fire();
             }
-        } else if (idItem == -1) {
+        } else if (idItem==-1) {
             MIB_Status.setText("Use ID for \"item to move\" instead");
         } else if (idSuperItem == -1) {
             MIB_Status.setText("Use ID for \"new super item\" instead");
-        } else if (idItem == -2) {
+        } else if (idItem == 0 || idItem == -2) {
             MIB_Status.setText("Invalid input for \"item to move\" field");
         } else MIB_Status.setText("Invalid input for \"new super item\" field");
     }
@@ -181,8 +181,11 @@ public class OneWayController implements Initializable {
                 subItems=item.getSubItems();
                 for (Item subItem : subItems){
                     subItem.setSuperItem(item.getSuperItem());
+                    subItem.setSuperId(item.getSuperId());
+                    updateSuperId(subItem.getId(),item.getSuperId());
                 }
                 deleteItems(item.getId());
+                DIStatus.setText("Item succesfully deleted");
                 generateImageButton.fire();
             }
         }else if (id == -1) DIStatus.setText("Use ID instead");
@@ -205,7 +208,7 @@ public class OneWayController implements Initializable {
             }
         }
 
-        if (amount == 1 & id >= 0 & !textField.getText().equalsIgnoreCase("root")) {
+        if (amount == 1 && id >= 0) {
             return id;
         } else if (amount > 1) {
             return -1;

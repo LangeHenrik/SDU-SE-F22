@@ -17,93 +17,91 @@ public class DatabaseAPI {
             e.printStackTrace();
         }
     }
-    //for adding superItem
-    public static void addItem(String itemName, String superItemName) {
-        if (itemName.equalsIgnoreCase("root")) {
-            System.out.println("Could not add " + itemName);
-            return;
-        }
-        PreparedStatement insertStatement = null;
 
+    public static boolean initializeTable(){
+        PreparedStatement preparedStatement = null;
         try {
-            insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
-            insertStatement.setString(1, itemName);
-            insertStatement.setInt(2, searchBasedOnName(superItemName));
-            insertStatement.execute();
-            System.out.println("Transaction was a succes");
-            System.out.println("Item: " + itemName + " was added");
+            preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS onewaysynonyms (" +
+                    "id serial primary key, " +
+                    "name varchar, " +
+                    "superid integer)");
+            preparedStatement.execute();
+            if (searchBasedOnName("root")==-1){
+                preparedStatement = connection.prepareStatement("INSERT INTO onewaysynonyms (name, superid) values (?,?)");
+                preparedStatement.setString(1,"root");
+                preparedStatement.setInt(2,0);
+                preparedStatement.execute();
+                preparedStatement = connection.prepareStatement("UPDATE onewaysynonyms SET id=? WHERE name=?");
+                preparedStatement.setInt(1,0);
+                preparedStatement.setString(2,"root");
+                preparedStatement.execute();
+            }
+            preparedStatement.close();
+            return true;
         } catch (SQLException e) {
-            System.out.println("Could not add: " + itemName);
-            e.printStackTrace();
+            return false;
         }
     }
 
     //for adding subItem
-    public static void addItem(String itemName, int superId) {
+    public static boolean addItem(String itemName, int superId) {
         if (itemName.equalsIgnoreCase("root")) {
-            System.out.println("Could not add " + itemName);
-            return;
+            return false;
         }
         PreparedStatement insertStatement = null;
         try {
-            insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
+            insertStatement = connection.prepareStatement("INSERT INTO onewaysynonyms (name,superId) VALUES (?,?)");
             insertStatement.setString(1, itemName);
             insertStatement.setInt(2, superId);
             insertStatement.execute();
-            System.out.println("Transaction was a succes");
-            System.out.println("Item: " + itemName + " with super ID: " + superId + " was added");
+            return true;
         } catch (SQLException e) {
-            System.out.println("Could not add " + itemName + " with super ID: " + superId);
             e.printStackTrace();
+            return false;
         }
     }
 
-    public static void updateSuperId(int id, int superId) {
+    public static boolean updateSuperId(int id, int superId) {
         if (id == 0) {
-            System.out.println("Could not update root");
-            return;
+            return false;
         }
         if (id == superId) {
-            System.out.println("Cannot update super id to be the same as the item id");
-            return;
+            return false;
         }
         PreparedStatement updateStatement = null;
         try {
-            updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE id=?");
+            updateStatement = connection.prepareStatement("UPDATE onewaysynonyms SET superId=? WHERE id=?");
             updateStatement.setInt(1, superId);
             updateStatement.setInt(2, id);
             updateStatement.execute();
-            System.out.println("Transaction was a succes");
-            System.out.println("Updated Super ID: " + superId);
+            return true;
         } catch (SQLException e) {
-            System.out.println("Could not update Super ID: " + superId);
             e.printStackTrace();
+            return false;
         }
     }
 
-    public static void updateName(int id, String name) {
+    public static boolean updateName(int id, String name) {
         if (id == 0) {
-            System.out.println("Could not update root");
-            return;
+            return false;
         }
         PreparedStatement updateStatement = null;
         try {
-            updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
+            updateStatement = connection.prepareStatement("UPDATE onewaysynonyms SET name=? WHERE id=?");
             updateStatement.setString(1, name);
             updateStatement.setInt(2, id);
             updateStatement.execute();
-            System.out.println("Transaction was a succes");
-            System.out.println("Updated Name: " + name);
+            return true;
         } catch (SQLException e) {
-            System.out.println("Unable to update name: " + name);
             e.printStackTrace();
+            return false;
         }
     }
 
     public static Item[] readEntireDB() {
         try {
             ArrayList<Item> items = new ArrayList<Item>();
-            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM items ORDER BY id");
+            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM onewaysynonyms ORDER BY id");
             ResultSet quaryResultSet = null;
             quaryResultSet = quaryStatement.executeQuery();
 
@@ -121,35 +119,24 @@ public class DatabaseAPI {
                 }
             }
             Item[] item = items.toArray(new Item[items.size()]);
-            System.out.println("The read was a succes");
             return item;
         } catch (SQLException e) {
-            System.out.println("Cant read :/");
             e.printStackTrace();
         }
         return null;
     }
 
-    public static void deleteItems(int id, String name) {
+    public static boolean deleteItems(int id) {
+        if (id == 0) return false;
         PreparedStatement deleteStatement = null;
         try {
-            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
-            deleteStatement.setString(1, name);
-            deleteStatement.setInt(2, id);
-            deleteStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteItems(int id) {
-        PreparedStatement deleteStatement = null;
-        try {
-            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
+            deleteStatement = connection.prepareStatement("DELETE FROM onewaysynonyms WHERE id=?");
             deleteStatement.setInt(1, id);
             deleteStatement.execute();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -161,7 +148,7 @@ public class DatabaseAPI {
         PreparedStatement statement = null;
         ResultSet result;
         try {
-            statement = connection.prepareStatement("SELECT id FROM items WHERE name=?");
+            statement = connection.prepareStatement("SELECT id FROM onewaysynonyms WHERE name=?");
             statement.setString(1, name);
             result = statement.executeQuery();
             while (result.next()) {

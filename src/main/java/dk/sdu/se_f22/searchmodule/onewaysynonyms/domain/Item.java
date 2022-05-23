@@ -49,6 +49,9 @@ public class Item {
     public int getSuperId() {
         return superId;
     }
+    public void setSuperId(int id){
+        this.superId = id;
+    }
     public int getId() {
         return id;
     }

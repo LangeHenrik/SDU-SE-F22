@@ -91,7 +91,7 @@ class OneWayImplementationTest {
                 new Item(20, "Emre", 16),
                 new Item(21, "Eibert", 16)};
 
-        Item[] items2 = owi.createItemArray();
+        Item[] items2 = owi.getDatabaseItems();
 
         for (int i = 0; i < items.length; i++) {
             assertEquals(items[i].getName(),items2[i].getName());

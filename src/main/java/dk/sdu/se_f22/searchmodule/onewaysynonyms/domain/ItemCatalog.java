@@ -37,7 +37,7 @@ public class ItemCatalog{
     }
     public int containsItem(int id){
         for (Item item:catalog) {
-            if (item.getId() == id);
+            if (item.getId() == id)
             return 1;
         }
         return 0;

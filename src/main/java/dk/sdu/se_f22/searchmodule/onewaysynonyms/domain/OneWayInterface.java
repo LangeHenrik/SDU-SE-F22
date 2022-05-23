@@ -4,14 +4,17 @@ import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 
 public interface OneWayInterface extends Filterable {
 
-    public void createItem(String name, String superItemName);
+    public void initializeTable();
 
-    public void changeItemPlacement();
+    public void addItem(String name, String superItemName);
 
-    public void showCatalog();
+    public void changeSuperId(String itemName, String newSuperItemName);
 
-    public void changeItemName();
+    public void changeItemName(String newName, String oldName);
 
-    public void returnNameList();
+    public void deleteItem(String name);
+
+    public void printCatalog();
+
 
 }

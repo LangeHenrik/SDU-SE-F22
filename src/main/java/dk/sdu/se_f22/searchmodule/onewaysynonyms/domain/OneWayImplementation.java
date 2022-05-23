@@ -19,7 +19,7 @@ public class OneWayImplementation implements OneWayInterface {
     public List<String> filter(List<String> tokens) {
         int length = tokens.size();
         for (int i = 0; i < length; i++) {
-            LinkedList<Item> items = null;
+            LinkedList<Item> items;
             try {
                 items = (this.itemCatalog.oneWaySynonymStrings(tokens.get(i)));
                 for (Item item : items) {
@@ -80,12 +80,10 @@ public class OneWayImplementation implements OneWayInterface {
 
     public void changeSuperId(String itemName, int SuperItemID) {
         changeSuperId(validateName(itemName), SuperItemID);
-
     }
 
     public void changeSuperId(int itemId, String SuperItemName) {
         changeSuperId(itemId, validateName(SuperItemName));
-
     }
 
     public void changeSuperId(int itemId, int SuperItemId) {
@@ -126,6 +124,7 @@ public class OneWayImplementation implements OneWayInterface {
                 for (Item subItem : subItems) {
                     subItem.setSuperItem(item.getSuperItem());
                     subItem.setSuperId(item.getSuperId());
+                    item.getSuperItem().removeSubItem(item);
                     updateSuperId(subItem.getId(), item.getSuperId());
                 }
                 if (deleteItems(item.getId())) {
@@ -154,8 +153,10 @@ public class OneWayImplementation implements OneWayInterface {
     @Override
     public void printCatalog() {
         Item[] content = DatabaseAPI.readEntireDB();
-        for (Item item : content) {
-            System.out.println(item);
+        if (content != null) {
+            for (Item item : content) {
+                System.out.println(item);
+            }
         }
     }
 
@@ -164,9 +165,8 @@ public class OneWayImplementation implements OneWayInterface {
     }
 
     private boolean isNumber(String input) {
-        int num;
         try {
-            num = Integer.parseInt(input);
+            Integer.parseInt(input);
             return true;
         } catch (Exception e) {
             return false;
@@ -174,18 +174,13 @@ public class OneWayImplementation implements OneWayInterface {
     }
 
     private boolean validateID(int input) {
-        int id = input;
         int amount = itemCatalog.containsItem(input);
 
-        if (amount == 1 && id >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return amount == 1 && input >= 0;
     }
 
     private int validateName(String name) {
-        int id = -1, amount = 0;
+        int id, amount;
         id = DatabaseAPI.searchBasedOnName(name);
         amount = itemCatalog.containsItem(name);
 

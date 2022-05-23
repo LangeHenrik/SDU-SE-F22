@@ -19,7 +19,7 @@ public class DatabaseAPI {
     }
 
     public static boolean initializeTable(){
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS onewaysynonyms (" +
                     "id serial primary key, " +
@@ -48,7 +48,7 @@ public class DatabaseAPI {
         if (itemName.equalsIgnoreCase("root")) {
             return false;
         }
-        PreparedStatement insertStatement = null;
+        PreparedStatement insertStatement;
         try {
             insertStatement = connection.prepareStatement("INSERT INTO onewaysynonyms (name,superId) VALUES (?,?)");
             insertStatement.setString(1, itemName);
@@ -68,7 +68,7 @@ public class DatabaseAPI {
         if (id == superId) {
             return false;
         }
-        PreparedStatement updateStatement = null;
+        PreparedStatement updateStatement;
         try {
             updateStatement = connection.prepareStatement("UPDATE onewaysynonyms SET superId=? WHERE id=?");
             updateStatement.setInt(1, superId);
@@ -85,7 +85,7 @@ public class DatabaseAPI {
         if (id == 0) {
             return false;
         }
-        PreparedStatement updateStatement = null;
+        PreparedStatement updateStatement;
         try {
             updateStatement = connection.prepareStatement("UPDATE onewaysynonyms SET name=? WHERE id=?");
             updateStatement.setString(1, name);
@@ -100,13 +100,13 @@ public class DatabaseAPI {
 
     public static Item[] readEntireDB() {
         try {
-            ArrayList<Item> items = new ArrayList<Item>();
-            PreparedStatement quaryStatement = connection.prepareStatement("SELECT * FROM onewaysynonyms ORDER BY id");
-            ResultSet quaryResultSet = null;
-            quaryResultSet = quaryStatement.executeQuery();
+            ArrayList<Item> items = new ArrayList<>();
+            PreparedStatement quarryStatement = connection.prepareStatement("SELECT * FROM onewaysynonyms ORDER BY id");
+            ResultSet quarryResultSet;
+            quarryResultSet = quarryStatement.executeQuery();
 
-            while (quaryResultSet.next()) {
-                items.add(new Item(quaryResultSet.getInt(1), quaryResultSet.getString(2), quaryResultSet.getInt(3)));
+            while (quarryResultSet.next()) {
+                items.add(new Item(quarryResultSet.getInt(1), quarryResultSet.getString(2), quarryResultSet.getInt(3)));
             }
             for (Item item : items) {
                 if (!item.getName().equalsIgnoreCase("root")) {
@@ -118,8 +118,8 @@ public class DatabaseAPI {
                     }
                 }
             }
-            Item[] item = items.toArray(new Item[items.size()]);
-            return item;
+
+            return items.toArray(new Item[items.size()]);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,7 +128,7 @@ public class DatabaseAPI {
 
     public static boolean deleteItems(int id) {
         if (id == 0) return false;
-        PreparedStatement deleteStatement = null;
+        PreparedStatement deleteStatement;
         try {
             deleteStatement = connection.prepareStatement("DELETE FROM onewaysynonyms WHERE id=?");
             deleteStatement.setInt(1, id);
@@ -145,7 +145,7 @@ public class DatabaseAPI {
         if (name == null) {
             return id;
         }
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         ResultSet result;
         try {
             statement = connection.prepareStatement("SELECT id FROM onewaysynonyms WHERE name=?");

@@ -49,7 +49,7 @@ public class OneWayController implements Initializable {
         initializeTable();
     }
 
-    public void GenerateImage(ActionEvent actionEvent) {
+    public void GenerateImage() {
         this.itemCatalog = new ItemCatalog(readEntireDB());
         String input = GI_Item.getText();
 
@@ -58,19 +58,22 @@ public class OneWayController implements Initializable {
 
         OneWayImage owi = null;
 
-        for (Item item : list) {
-            if (isInt(input)){
-                if (item.getId() == Integer.parseInt(input)) {
-                owi = new OneWayImage(item);
-                break;
-                }
-            }else {
-                if (item.getName().equalsIgnoreCase(input)) {
-                    owi = new OneWayImage(item);
-                    break;
+        if (list != null) {
+            for (Item item : list) {
+                if (isInt(input)) {
+                    if (item.getId() == Integer.parseInt(input)) {
+                        owi = new OneWayImage(item);
+                        break;
+                    }
+                } else {
+                    if (item.getName().equalsIgnoreCase(input)) {
+                        owi = new OneWayImage(item);
+                        break;
+                    }
                 }
             }
         }
+
 
         if (owi == null) {
             owi = new OneWayImage(list[0]);
@@ -123,10 +126,10 @@ public class OneWayController implements Initializable {
         }
     }
 
-    public void changeName(ActionEvent actionEvent) {
+    public void changeName() {
         int ID = validateInput(CN_oldName);
         if (ID > 0) {
-            if (!isEmptyOrInt(CN_newName.getText()) && !CN_newName.getText().equalsIgnoreCase("root")) {
+            if (isNotEmptyOrInt(CN_newName.getText()) && !CN_newName.getText().equalsIgnoreCase("root")) {
                 DatabaseAPI.updateName(ID, CN_newName.getText());
                 CN_status.setText("Updated name to: " + CN_newName.getText());
                 generateImageButton.fire();
@@ -135,19 +138,19 @@ public class OneWayController implements Initializable {
         else CN_status.setText("Invalid input");
     }
 
-    public void addItem(ActionEvent actionEvent) {
+    public void addItem() {
         int IDSuperRef = validateInput(AI_SuperREF);
         if (IDSuperRef >= 0) {
-            if (!isEmptyOrInt(AI_Name.getText()) && !AI_Name.getText().equalsIgnoreCase("root")) {
+            if (isNotEmptyOrInt(AI_Name.getText()) && !AI_Name.getText().equalsIgnoreCase("root")) {
                 DatabaseAPI.addItem(AI_Name.getText(), IDSuperRef);
                 AI_status.setText("Item added with name: " + AI_Name.getText());
                 generateImageButton.fire();
-            }else AI_status.setText("Invalid Input");
+            } else AI_status.setText("Invalid Input");
         } else if (IDSuperRef == -1) AI_status.setText("Cannot add item, use ID instead for super item reference");
         else AI_status.setText("Invalid Input");
     }
 
-    public void moveItemButtonHandler(ActionEvent actionEvent) {
+    public void moveItemButtonHandler() {
         int idItem, idSuperItem;
         idItem = validateInput(MIB_Name);
         idSuperItem = validateInput(MIB_SuperID);
@@ -155,12 +158,12 @@ public class OneWayController implements Initializable {
         if (idItem > 0 && idSuperItem >= 0) {
             if (idItem == idSuperItem) {
                 MIB_Status.setText("Cannot update super id to be the same as item id");
-            }else {
+            } else {
                 DatabaseAPI.updateSuperId(idItem, idSuperItem);
                 MIB_Status.setText("Updated item with ID: " + idItem + " super item id to: " + idSuperItem);
                 generateImageButton.fire();
             }
-        } else if (idItem==-1) {
+        } else if (idItem == -1) {
             MIB_Status.setText("Use ID for \"item to move\" instead");
         } else if (idSuperItem == -1) {
             MIB_Status.setText("Use ID for \"new super item\" instead");
@@ -169,26 +172,27 @@ public class OneWayController implements Initializable {
         } else MIB_Status.setText("Invalid input for \"new super item\" field");
     }
 
-    public void deleteItem(ActionEvent actionEvent) {
+    public void deleteItem() {
         Item item;
         LinkedList<Item> subItems;
         int id = validateInput(DIInput);
-        if (id > 0){
+        if (id > 0) {
             item = itemCatalog.getItemInCatalog(id);
-            if (item==null){
+            if (item == null) {
                 DIStatus.setText("Invalid input");
-            }else {
-                subItems=item.getSubItems();
-                for (Item subItem : subItems){
+            } else {
+                subItems = item.getSubItems();
+                for (Item subItem : subItems) {
                     subItem.setSuperItem(item.getSuperItem());
                     subItem.setSuperId(item.getSuperId());
-                    updateSuperId(subItem.getId(),item.getSuperId());
+                    item.getSuperItem().removeSubItem(item);
+                    updateSuperId(subItem.getId(), item.getSuperId());
                 }
                 deleteItems(item.getId());
-                DIStatus.setText("Item succesfully deleted");
+                DIStatus.setText("Item successfully deleted");
                 generateImageButton.fire();
             }
-        }else if (id == -1) DIStatus.setText("Use ID instead");
+        } else if (id == -1) DIStatus.setText("Use ID instead");
         else DIStatus.setText("Invalid input");
     }
 
@@ -220,7 +224,7 @@ public class OneWayController implements Initializable {
     private boolean isInt(String text) {
         if (text != null) {
             try {
-                int i = Integer.parseInt(text);
+                Integer.parseInt(text);
                 return true;
             } catch (Exception ex) {
                 return false;
@@ -229,10 +233,8 @@ public class OneWayController implements Initializable {
         return false;
     }
 
-    private boolean isEmptyOrInt(String text) {
-        if (text.equalsIgnoreCase("") || isInt(text)) {
-            return true;
-        } else return false;
+    private boolean isNotEmptyOrInt(String text) {
+        return !text.equalsIgnoreCase("") && !isInt(text);
     }
 
 }

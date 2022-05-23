@@ -40,7 +40,9 @@ public class OneWayImage {
             for(Item item : childrenInGeneration){
                 try{
                     nextGeneration.addAll(item.getSubItems());
-                }catch (NullPointerException ex){}
+                }catch (NullPointerException ex){
+                    ex.getMessage();
+                }
             }
             if(nextGeneration.size() == 0){
                 break;
@@ -70,8 +72,8 @@ public class OneWayImage {
         g2D.setColor(Color.getHSBColor(342, 100, (float) 67.45));
         int number = 0;
         HashMap<Integer,Integer[]> log = new HashMap<>();
-        int x2 = 0;
-        int y2 = 0;
+        int x2;
+        int y2;
         for(int i = 0; i< tree.size(); i++){
             for(Item item : tree.get(number)){
                 log.put(item.getId(), new Integer[]{getX(number,item)+10,i*100});

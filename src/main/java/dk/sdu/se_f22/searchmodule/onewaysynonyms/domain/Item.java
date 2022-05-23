@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Item {
     //Attributes
-    private String name;
+    private final String name;
     private Item superItem;
     private int id;
     private int superId;
@@ -34,8 +34,8 @@ public class Item {
     public void setSuperItem(Item superItem) {
         this.superItem = superItem;
     }
-    public Boolean removeSubItem(Item item){
-        return subItems.remove(item);
+    public void removeSubItem(Item item){
+        subItems.remove(item);
     }
     public String getName() {
         return name;

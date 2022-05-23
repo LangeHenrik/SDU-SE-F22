@@ -18,8 +18,11 @@ public class DatabaseAPI {
         }
     }
     //for adding superItem
-
     public static void addItem(String itemName, String superItemName) {
+        if (itemName.equalsIgnoreCase("root")) {
+            System.out.println("Could not add " + itemName);
+            return;
+        }
         PreparedStatement insertStatement = null;
 
         try {
@@ -36,8 +39,11 @@ public class DatabaseAPI {
     }
 
     //for adding subItem
-
     public static void addItem(String itemName, int superId) {
+        if (itemName.equalsIgnoreCase("root")) {
+            System.out.println("Could not add " + itemName);
+            return;
+        }
         PreparedStatement insertStatement = null;
         try {
             insertStatement = connection.prepareStatement("INSERT INTO items (name,superId) VALUES (?,?)");
@@ -52,12 +58,20 @@ public class DatabaseAPI {
         }
     }
 
-    public static void updateSuperId(String name, int superId) {
+    public static void updateSuperId(int id, int superId) {
+        if (id == 0) {
+            System.out.println("Could not update root");
+            return;
+        }
+        if (id == superId) {
+            System.out.println("Cannot update super id to be the same as the item id");
+            return;
+        }
         PreparedStatement updateStatement = null;
         try {
-            updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE name=?");
+            updateStatement = connection.prepareStatement("UPDATE items SET superId=? WHERE id=?");
             updateStatement.setInt(1, superId);
-            updateStatement.setString(2, name);
+            updateStatement.setInt(2, id);
             updateStatement.execute();
             System.out.println("Transaction was a succes");
             System.out.println("Updated Super ID: " + superId);
@@ -68,6 +82,10 @@ public class DatabaseAPI {
     }
 
     public static void updateName(int id, String name) {
+        if (id == 0) {
+            System.out.println("Could not update root");
+            return;
+        }
         PreparedStatement updateStatement = null;
         try {
             updateStatement = connection.prepareStatement("UPDATE items SET name=? WHERE id=?");
@@ -112,25 +130,26 @@ public class DatabaseAPI {
         return null;
     }
 
-    public static void deleteItems(boolean version, int id, String name) {
+    public static void deleteItems(int id, String name) {
         PreparedStatement deleteStatement = null;
-        if (version) {
-            try {
-                deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
-                deleteStatement.setString(1, String.valueOf(name));
-                deleteStatement.setInt(2, id);
-                deleteStatement.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
-                deleteStatement.setString(1, String.valueOf(id));
-                deleteStatement.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE name=? AND id=?");
+            deleteStatement.setString(1, name);
+            deleteStatement.setInt(2, id);
+            deleteStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteItems(int id) {
+        PreparedStatement deleteStatement = null;
+        try {
+            deleteStatement = connection.prepareStatement("DELETE FROM items WHERE id=?");
+            deleteStatement.setInt(1, id);
+            deleteStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

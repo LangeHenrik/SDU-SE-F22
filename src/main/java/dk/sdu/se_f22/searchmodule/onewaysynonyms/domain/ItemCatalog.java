@@ -35,14 +35,12 @@ public class ItemCatalog{
         }
         return count;
     }
-
-    private void addSubItems(){
-        for(Item item : catalog){
-            try{
-                item.getSuperItem().addSubItem(item);
-            } catch (NullPointerException ex){
-            }
+    public int containsItem(int id){
+        for (Item item:catalog) {
+            if (item.getId() == id);
+            return 1;
         }
+        return 0;
     }
 
     public LinkedList<Item> oneWaySynonymStrings(String string) throws notFoundException {
@@ -54,12 +52,12 @@ public class ItemCatalog{
         throw new notFoundException("Item not found in database.");
     }
 
-    public Item getRoot(){
+    public Item getItemInCatalog(int id){
         for (Item item:catalog) {
-            if (item.getSuperId()==0){
+            if (item.getId()==id){
                 return item;
             }
         }
-        return catalog.get(0);
+        return null;
     }
 }

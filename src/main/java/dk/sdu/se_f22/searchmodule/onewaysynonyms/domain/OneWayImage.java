@@ -1,7 +1,5 @@
 package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 
-import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
@@ -71,15 +69,15 @@ public class OneWayImage {
         g2D.setStroke(new BasicStroke(3));
         g2D.setColor(Color.getHSBColor(342, 100, (float) 67.45));
         int number = 0;
-        HashMap<String,Integer[]> log = new HashMap<>();
+        HashMap<Integer,Integer[]> log = new HashMap<>();
         int x2 = 0;
         int y2 = 0;
         for(int i = 0; i< tree.size(); i++){
             for(Item item : tree.get(number)){
-                log.put(item.getName(), new Integer[]{getX(number,item)+10,i*100});
-                if(log.containsKey(getSuperName(item))){
-                    x2 = log.get(getSuperName(item))[0]+50;
-                    y2 = log.get(getSuperName(item))[1]+50;
+                log.put(item.getId(), new Integer[]{getX(number,item)+10,i*100});
+                if(log.containsKey(getSuperID(item))){
+                    x2 = log.get(getSuperID(item))[0]+50;
+                    y2 = log.get(getSuperID(item))[1]+50;
                     g2D.drawLine(getX(number,item)+60,i*100+25,x2,y2);
                 }
                 g2D.fillRoundRect(getX(number, item)+10,i*100,100,50,20,20);
@@ -91,11 +89,11 @@ public class OneWayImage {
         }
     }
 
-    private String getSuperName(Item item) {
+    private int getSuperID(Item item) {
         if(item.getSuperItem() == null){
-            return "tehe";
+            return -1;
         }
-        return item.getSuperItem().getName();
+        return item.getSuperItem().getId();
     }
 
     private int getX(int number, Item item) {

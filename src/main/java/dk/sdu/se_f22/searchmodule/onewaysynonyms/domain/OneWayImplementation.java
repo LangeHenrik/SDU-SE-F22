@@ -29,7 +29,6 @@ public class OneWayImplementation implements OneWayInterface {
         return DatabaseAPI.readEntireDB();
     }
 
-
     public static void main(String[] args) {
         List<String> tokens = new LinkedList<>();
         tokens.add("Humans");
@@ -48,7 +47,7 @@ public class OneWayImplementation implements OneWayInterface {
 
     @Override
     public void changeItemPlacement() {
-        DatabaseAPI.updateSuperId("Cake", 2);
+        //DatabaseAPI.updateSuperId("Cake", 2);
     }
 
     @Override

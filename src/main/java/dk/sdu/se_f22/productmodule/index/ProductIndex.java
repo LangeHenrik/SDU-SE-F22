@@ -143,8 +143,6 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
                  PreparedStatement deleteStorage = connection.prepareStatement("DELETE FROM productSpecs WHERE id = ?");)
         {
 
-
-
             deleteProduct.setInt(1, id);
             deleteStock.setInt(1, id);
             deleteSpecs.setInt(1, id);
@@ -172,6 +170,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             PreparedStatement searchStatement = connection.prepareStatement("INSERT INTO searches VALUES(?,?)");
             searchStatement.setString(1,p.getUuid().toString());
             searchStatement.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
+            searchStatement.execute();
             }
         }
 
@@ -200,7 +199,9 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
                     "LEFT JOIN  storage on productstorage.storageid = storage.storageid\n" +
                     "LEFT JOIN categories on categories.categoryid = product.categoryid\n" +
                     "ORDER BY searches.creationdate DESC;");
+            p.executeQuery();
             productListCreator(productList, connection, p);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -253,6 +254,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
                     "LEFT JOIN  storage on productstorage.storageid = storage.storageid\n" +
                     "LEFT JOIN categories on categories.categoryid = product.categoryid;");
             productListCreator(productList, connection, p);
+            p.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }

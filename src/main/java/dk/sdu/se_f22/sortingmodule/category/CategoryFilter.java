@@ -59,7 +59,7 @@ public class CategoryFilter implements CategoryFilterInterface {
                         }
                     } else if (category.getRequirementFieldName().toLowerCase().equals("name")) {
                         Pattern pattern = Pattern.compile(
-                                "(^|[^\\w])\\s?(" + category.getRequirementValue() + ")\\s?([^\\w+]|$)",
+                                "(^|[^\\w])(" + category.getRequirementValue() + ")([^\\w+]|$)",
                                 Pattern.CASE_INSENSITIVE);
                         Matcher matcher = pattern.matcher(product.getName());
                         boolean matchFound = matcher.find();

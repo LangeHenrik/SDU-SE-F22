@@ -51,13 +51,13 @@ public class CategoryCRUD implements CategoryCRUDInterface{
     }
 
     @Override
-    public void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
-        DBConnection.createCategory(name, description, requirementsValue, parentID, requirementsFieldName);
+    public int createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName) {
+        return DBConnection.createCategory(name, description, requirementsValue, parentID, requirementsFieldName);
     }
 
     @Override
-    public void createCategory(String name, String description, String requirementsValue, int requirementsFieldName) {
-        DBConnection.createCategory(name, description, requirementsValue, requirementsFieldName);
+    public int createCategory(String name, String description, String requirementsValue, int requirementsFieldName) {
+        return DBConnection.createCategory(name, description, requirementsValue, requirementsFieldName);
     }
 
     @Override

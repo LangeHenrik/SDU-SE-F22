@@ -4,10 +4,7 @@ package dk.sdu.se_f22.sortingmodule.category.domain;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.category.Category;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -53,6 +50,38 @@ class CategoryDBConnectionTest {
 
         // Is the list empty
         assertFalse(categoriesFromDB.isEmpty());
+    }
+
+    @Nested
+    class getAllCategories{
+        int countFromDB;
+        protected CategoryDBConnection dBConnection;
+
+        @BeforeEach
+        void setup(){
+            dBConnection = new CategoryDBConnection();
+
+            String sql = "SELECT COUNT(*) FROM categories";
+
+            try (Connection conn = DBConnection.getPooledConnection();
+                 PreparedStatement queryStatement = conn.prepareStatement(sql)) {
+                ResultSet queryResultSet = queryStatement.executeQuery();
+
+                queryResultSet.next();
+
+                countFromDB = queryResultSet.getInt("count");
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        @Test
+        @DisplayName("Read all, check if contains all categories")
+        void getAllCategories() {
+            List<Category> categories = dBConnection.getAllCategories();
+            assertEquals(countFromDB, categories.size());
+        }
     }
 
     @Test

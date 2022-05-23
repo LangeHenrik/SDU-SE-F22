@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CategoryCRUDInterface {
 
-    void createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName);
+    int createCategory(String name, String description, String requirementsValue, int parentID, int requirementsFieldName);
 
-    void createCategory(String name, String description, String requirementsValue, int requirementsFieldName);
+    int createCategory(String name, String description, String requirementsValue, int requirementsFieldName);
 
     List<Category> getAllCategories();
 

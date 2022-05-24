@@ -33,11 +33,6 @@ class LongFilterTest {
         assertEquals(FilterTypes.LONG, longFilter.getType());
     }
 
-    @Test
-    @Disabled("test not yet written")
-    void testEquals() {
-        fail("test not yet written");
-    }
 
     @Nested
     @DisplayName("Use filter method")

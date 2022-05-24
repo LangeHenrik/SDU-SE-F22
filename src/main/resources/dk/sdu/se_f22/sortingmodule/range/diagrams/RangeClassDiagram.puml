@@ -4,27 +4,63 @@ skinparam classAttributeIconSize 0
 hide empty methods
 hide empty fields
 
-package exceptions {
-    class RangeFilterException
+package sharedLibrary{
+    class Product{
+        ~ uuid UUID
+        ~ averageUserReview double
+        ~ price double
+        ~ clockspeed double
+        ~ weight double
+        ~ ean long
+        ~ size String
+        ~ category String
+        ~ name String
+        ~ description String
+        ~ publishedDate Instant
+        ~ expirationDate Instant
+        ~ inStock List<String>
 
-    class EmptyDatabaseException
-    class IdNotFoundException
-    class IllegalImplementationException
-    class IllegalMinMaxException
-    class InvalidAttributeException
-    class InvalidFilterException
-    class InvalidFilterTypeException
-    class UnknownFilterTypeException
+        -- Getters on all types--
+    }
 
-    RangeFilterException <|-- EmptyDatabaseException : < Extends
-    RangeFilterException <|-- IdNotFoundException : < Extends
-    RangeFilterException <|-- IllegalImplementationException : < Extends
-    RangeFilterException <|-- IllegalMinMaxException : < Extends
-    RangeFilterException <|-- InvalidAttributeException : < Extends
-    RangeFilterException <|-- InvalidFilterException : < Extends
-    RangeFilterException <|-- InvalidFilterTypeException : < Extends
-    RangeFilterException <|-- UnknownFilterTypeException : < Extends
+    class DBConnection{
+        - {static} LOGGER Logger
+        - {static} instance DBConnection
+        - CONNECTION_POOL BasicDataSource
+        - url String
+        - user String
+        - password String
+        - dbConnection Connection
+
+        + {static} getInstance() DBConnection
+        + {static} getConnection() Connection
+        + {static} getPooledConnection() Connection
+        - loadConfig() void
+    }
+
 }
+
+'package exceptions {
+'    class RangeFilterException
+'
+'    class EmptyDatabaseException
+'    class IdNotFoundException
+'    class IllegalImplementationException
+'    class IllegalMinMaxException
+'    class InvalidAttributeException
+'    class InvalidFilterException
+'    class InvalidFilterTypeException
+'    class UnknownFilterTypeException
+'
+'    RangeFilterException <|-- EmptyDatabaseException : < Extends
+'    RangeFilterException <|-- IdNotFoundException : < Extends
+'    RangeFilterException <|-- IllegalImplementationException : < Extends
+'    RangeFilterException <|-- IllegalMinMaxException : < Extends
+'    RangeFilterException <|-- InvalidAttributeException : < Extends
+'    RangeFilterException <|-- InvalidFilterException : < Extends
+'    RangeFilterException <|-- InvalidFilterTypeException : < Extends
+'    RangeFilterException <|-- UnknownFilterTypeException : < Extends
+'}
 
 package validators {
     class Validator{
@@ -36,8 +72,7 @@ package validators {
         + {static} MaxLessThanMin(min Instant, max Instant) void
     }
 
-    Validator ..> InvalidFilterException : <<use>>
-
+'    Validator ..> InvalidFilterException : <<use>>
 }
 
 package rangepublic {
@@ -273,8 +308,29 @@ package rangepublic {
     LongFilter ..> FilterTypes : <<use>>
     TimeFilter ..> FilterTypes : <<use>>
 
-    RangeFilterFilterResults ..> RangeFilter
-    RangeFilterFilterResults ..> RangeFilterClass
+    RangeFilterFilterResults ..> RangeFilter : <<use>>
+    RangeFilterFilterResults ..> RangeFilterClass : <<use>>
+
+    RangeFilterCRUDInterface ..> RangeFilter : <<use>>
+
+    RangeFilterCRUD ..> RangeFilterClass : <<use>>
+    RangeFilterCRUD ..> DatabaseInterface : <<use>>
+    RangeFilterCRUD ..> Database : <<use>>
+    RangeFilterCRUD ..> Validator : <<use>>
+    RangeFilterCRUD ..> DoubleFilter : <<use>>
+    RangeFilterCRUD ..> LongFilter : <<use>>
+    RangeFilterCRUD ..> TimeFilter : <<use>>
+
+    DatabaseInterface ..> RangeFilter : <<use>>
+    Database ..> DoubleFilter : <<use>>
+    Database ..> LongFilter : <<use>>
+    Database ..> TimeFilter : <<use>>
+    Database ..> FilterTypes : <<use>>
+    Database ..> DBConnection : <<use>>
+
+    RangeFilterFilterResults ..> Product : <<use>>
+    RangeFilterClass ..> Product : <<use>>
+
 
 
 }

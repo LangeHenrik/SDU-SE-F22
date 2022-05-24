@@ -361,6 +361,26 @@ class TimeFilterTest {
                 );
             }
 
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set userMin with incorrect type")
+            @MethodSource("provideTimeFilters")
+            void setUserMinWithIncorrectType (TimeFilter filter) {
+                double newValue = 100.0;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newValue)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set userMax with incorrect type")
+            @MethodSource("provideTimeFilters")
+            void setUserMaxWithIncorrectType (TimeFilter filter) {
+                double newValue = 100.0;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newValue)
+                );
+            }
+
 
         }
 

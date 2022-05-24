@@ -8,6 +8,9 @@ import dk.sdu.se_f22.sharedlibrary.utils.Color;
 import dk.sdu.se_f22.searchmodule.infrastructure.SearchModuleImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
+import dk.sdu.se_f22.sortingmodule.category.CategoryFilterInterface;
+import dk.sdu.se_f22.sortingmodule.category.domain.CategoryCRUD;
+import dk.sdu.se_f22.sortingmodule.category.domain.CategoryCRUDInterface;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.MockData;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
@@ -104,8 +107,8 @@ public class SortingModuleImpl implements SortingModule {
   
     @Override
     public List getAllCategories() {
-        CategoryFilter categoryFilter = new CategoryFilter();
-        return categoryFilter.getAllCategories();
+        CategoryCRUDInterface categoryCRUD = new CategoryCRUD();
+        return categoryCRUD.getAllCategories();
     }
 
     @Override
@@ -132,7 +135,7 @@ public class SortingModuleImpl implements SortingModule {
 
         // Filters
         // Category
-        CategoryFilter categoryFilter = new CategoryFilter();
+        CategoryFilterInterface categoryFilter = new CategoryFilter();
         searchHits = categoryFilter.filterProductsByCategory(searchHits, this.query.getCategory());
 
         // Range

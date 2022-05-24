@@ -20,7 +20,7 @@ CREATE TABLE cms_usedparameters (
     UNIQUE (page_id, parameter_id)
 );
 
-ALTER TABLE cms_usedparameters ADD UNIQUE index(page_id, parameter_id);
+CREATE UNIQUE INDEX cms_usedparameters_index ON cms_usedparameters(page_id, parameter_id);
 
 INSERT INTO cms_tokenparameters (id, limitedchar)
 VALUES (1, '-'),

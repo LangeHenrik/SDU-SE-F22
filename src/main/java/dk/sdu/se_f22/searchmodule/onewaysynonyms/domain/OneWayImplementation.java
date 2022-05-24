@@ -17,7 +17,7 @@ public class OneWayImplementation implements OneWayInterface {
         this.itemCatalog = new ItemCatalog(getDatabaseItems());
     }
     @Override
-    public ArrayList<String> filter(ArrayList<String> tokens) {
+    public ArrayList<String> filter(ArrayList<String> tokens) throws NullPointerException {
         int length = tokens.size();
         LinkedList<Item> items;
         for (int i = 0; i < length; i++) {
@@ -164,8 +164,7 @@ public class OneWayImplementation implements OneWayInterface {
 
     public static void main(String[] args) {
         OneWayImplementation oneWayImplementation = new OneWayImplementation();
-        ArrayList<String> items = new ArrayList<>();
-        items.add("root");
+        ArrayList<String> items = null;
         for (String token : oneWayImplementation.filter(items)){
             System.out.println(token);
         }

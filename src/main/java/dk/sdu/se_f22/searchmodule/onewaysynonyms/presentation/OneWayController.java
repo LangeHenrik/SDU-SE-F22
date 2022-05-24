@@ -93,15 +93,19 @@ public class OneWayController implements Initializable {
 
     public void MFfilter(ActionEvent actionEvent) {
         OneWayImplementation owi = new OneWayImplementation();
-        ArrayList<String> tokens;
+        ArrayList<String> tokens = null;
         MFList.getItems().clear();
 
         try (Scanner scanner = new Scanner(MFInput.getText())){
-            tokens = new ArrayList<>(Arrays.asList(scanner.next().split(",")));
-            owi.filter(tokens);
+            while(scanner.hasNext()){
+                tokens = new ArrayList<>(Arrays.asList(scanner.next().split(",")));
+                owi.filter(tokens);
+            }
         }
-        for (String token: tokens) {
-            MFList.getItems().add(token);
+        if (tokens!=null){
+            for (String token: tokens) {
+                MFList.getItems().add(token);
+            }
         }
     }
 

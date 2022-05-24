@@ -5,6 +5,7 @@ import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.OneWayImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ class OneWayImplementationTest {
     @Test
     void filter() {
 
-        List<String> dbTokens = new LinkedList<>();
+        ArrayList<String> dbTokens = new ArrayList<>();
         dbTokens.add("Humans");
 
         dbTokens = owi.filter(dbTokens);
@@ -49,7 +50,7 @@ class OneWayImplementationTest {
         tokens.add("personbil");
         tokens.add("lastbil");
 
-        List<String> dbTokens = new LinkedList<>();
+        ArrayList<String> dbTokens = new ArrayList<>();
         dbTokens.add("Humans");
         dbTokens.add("motordrevet");
 

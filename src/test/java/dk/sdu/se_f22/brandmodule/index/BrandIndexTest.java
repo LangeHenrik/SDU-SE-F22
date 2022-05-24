@@ -61,7 +61,7 @@ class BrandIndexTest {
         brand.setProducts(tempList);
 
         //tokens ----------
-        List<String> firstTokens = List.of("lol", "Phones", "Computers", "Watches");
+        List<String> firstTokens = List.of("Quality", "Phones", "Computers", "Watches");
         List<String> testTokens = List.of("Phones", "Tv-Controller", "Computers");
 
         //creating instance of BrandIndex class -----------------
@@ -80,11 +80,6 @@ class BrandIndexTest {
         catch (SQLException e) {
             e.printStackTrace();
         }
-
-        //Check lists
-        for (String s: firstTokens) {
-            System.out.println(s);
-        };
 
         //Calling indexBrandInformation with brand and tokens --------
         index.indexBrandInformation(brand, firstTokens);

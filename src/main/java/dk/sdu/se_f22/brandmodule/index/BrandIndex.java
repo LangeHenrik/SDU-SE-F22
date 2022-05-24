@@ -78,14 +78,17 @@ public class BrandIndex implements IndexInterface {
             PreparedStatement queryTokenId = null;
             ResultSet rsTokenId = null;
 
-            if (!rs.next() || newTokens.get(0) == null); tokenInsert.setString(1, newTokens.get(0));
+            if (!rs.next() && newTokens.get(0) != null); tokenInsert.setString(1, newTokens.get(0));
             tokenInsert.execute();
+            System.out.println(newTokens.get(0)+" has been added.");
+            rs = queryToken.executeQuery();
 
             for (int i = 0; i < tokens.size(); i++) {
                 while (rs.next()) {
                     if (rs.getString("token").equals(newTokens.get(i))) {
                         tokenInsert.setString(1, newTokens.get(i));
                         tokenInsert.execute();
+                        System.out.println(newTokens.get(i)+" has been added.");
                     }
                     rs.beforeFirst();
                 }

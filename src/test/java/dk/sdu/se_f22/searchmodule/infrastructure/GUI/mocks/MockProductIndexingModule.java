@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure.GUI.mocks;
 
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.TestSearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;

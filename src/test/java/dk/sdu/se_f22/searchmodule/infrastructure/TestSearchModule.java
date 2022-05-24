@@ -1,11 +1,12 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.ProductAttribute;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockFilteringModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingData;
 import dk.sdu.se_f22.searchmodule.infrastructure.mocks.MockIndexingModule;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
@@ -98,9 +99,6 @@ public class TestSearchModule {
         product.set(ProductAttribute.CATEGORY, "hello");
         product.set(ProductAttribute.NAME, "hello");
         product.set(ProductAttribute.DESCRIPTION, "hello");
-        product.set(ProductAttribute.SIZE, "unavailable");
-        product.set(ProductAttribute.CLOCKSPEED, "unavailable");
-        product.set(ProductAttribute.WEIGHT, "unavailable");
         return product;
     }
 

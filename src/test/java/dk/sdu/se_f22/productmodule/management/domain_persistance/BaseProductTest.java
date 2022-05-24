@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.productmodule.management;
+package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
 import org.junit.jupiter.api.*;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BaseProductTest {
-    private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
+    private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/products.json");
     
     @BeforeAll
     static void initialize(){
@@ -59,10 +59,12 @@ class BaseProductTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    
+        
         BaseProduct baseProduct = baseProductTestList.get(0);
+        System.out.println(baseProduct.toString());
         assertThrows(NumberFormatException.class, () -> baseProduct.getAsNumeric(ProductAttribute.NAME));
         assertThrows(NullPointerException.class, () -> baseProduct.getAsNumeric(ProductAttribute.SIZE));
+        assertEquals(1787.5d, baseProduct.getAsNumeric(ProductAttribute.PRICE));
     }
     
     @Test

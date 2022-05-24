@@ -4,6 +4,7 @@ import dk.sdu.se_f22.brandmodule.management.services.JsonService;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import org.junit.jupiter.api.Test;
+import org.postgresql.util.PSQLException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -115,5 +116,4 @@ class BrandIndexTest {
 
         //drop all newly added in db ------------
     }
-
 }

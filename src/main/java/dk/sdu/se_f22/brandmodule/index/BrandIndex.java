@@ -75,44 +75,47 @@ public class BrandIndex implements IndexInterface {
 
             String dbColumnToken = "token"; //
 
-            PreparedStatement queryTokenId = null;
-            ResultSet rsTokenId = null;
+            System.out.println(!rs.next() && newTokens.get(0) != null);
+             if (!rs.next() && newTokens.get(0) != null) {
+                 tokenInsert.setString(1, newTokens.get(0));
+                 tokenInsert.execute();
+                 rs = queryToken.executeQuery();
+                 System.out.println(newTokens.get(0)+" has been added.");
+             }
 
-            if (!rs.next() && newTokens.get(0) != null); tokenInsert.setString(1, newTokens.get(0));
-            tokenInsert.execute();
-            System.out.println(newTokens.get(0)+" has been added.");
-            rs = queryToken.executeQuery();
-
-            for (int i = 0; i < tokens.size(); i++) {
-                while (rs.next()) {
-                    if (rs.getString("token").equals(newTokens.get(i))) {
+            System.out.println(tokens.size()+" is tokens.size.");
+            System.out.println(rs.first());
+            while (rs.next()) {
+                for (int i = 0; i < tokens.size(); i++) {
+                    System.out.println(rs.getString("token") + " is rs.getString. POG POG "+newTokens.get(i)+" is newTokens.get(i)");
+                    if (!(rs.getString("token").equals(newTokens.get(i)))) {
                         tokenInsert.setString(1, newTokens.get(i));
                         tokenInsert.execute();
-                        System.out.println(newTokens.get(i)+" has been added.");
+                        System.out.println(newTokens.get(i) + " has been added. INSIDE IF");
                     }
-                    rs.beforeFirst();
-                }
+                    else { continue; }
 
-                //tror det er unødvendigt fordi de begge er FK og begge er oprettet med nextvalue keys
-                queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
-                queryTokenId.setString(1, newTokens.get(i));
-                rsTokenId = queryTokenId.executeQuery();
-                while (rsTokenId.next()) {
-                    mapInsert.setInt(1, brand.getId());
-                    mapInsert.setInt(2, rsTokenId.getInt(1));
-                    mapInsert.execute();
+                    PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
+                    queryTokenId.setString(1, newTokens.get(i));
+                    ResultSet rsTokenId = queryTokenId.executeQuery();
+                    while (rsTokenId.next()) {
+                        mapInsert.setInt(1, brand.getId());
+                        mapInsert.setInt(2, rsTokenId.getInt(1));
+                        mapInsert.execute();
+                    }
+                    rsTokenId.close();
+                    queryTokenId.close();
                 }
+                rs = queryToken.executeQuery();
             }
 
             //preparedStatements
             mapInsert.close();
             tokenInsert.close();
             queryToken.close();
-            queryTokenId.close();
 
             //resultSets
             rs.close();
-            rsTokenId.close();
         }
         catch (SQLException e) {
             e.printStackTrace();

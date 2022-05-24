@@ -6,16 +6,20 @@ import dk.sdu.se_f22.sharedlibrary.models.Content;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Execution(ExecutionMode.CONCURRENT)
@@ -130,8 +134,8 @@ class RangeFilterFilterResultsTest {
     }
 
     @ParameterizedTest(name = "Reverse filter order {0}")
-    @DisplayName("Filter results with non empty lists")
     @ValueSource(booleans = {false, true})
+    @DisplayName("Filter results with non empty lists")
     void filterResultsWithNonEmptyLists(boolean reverseFilterList) throws IllegalImplementationException {
         // Create one of each different RangeFilter type
         // Make csv file with products - make sure the products which is accepted by a filters min/max range also is accepted by the other filters min/max range
@@ -170,5 +174,201 @@ class RangeFilterFilterResultsTest {
 
         Assertions.assertEquals(expectedBrands, result.getBrands());
         Assertions.assertEquals(expectedContent, result.getContents());
+    }
+
+    @ParameterizedTest(name = "Reverse filter order {0}")
+    @ValueSource(booleans = {false, true})
+    @DisplayName("filterResultsWithFilterOnInvalidAttribute")
+    void filterResultsWithFilterOnInvalidAttribute(boolean reverseFilterList) throws IllegalImplementationException {
+        SearchHits hits = getSearchHitsWithBrandAndContent();
+
+        // This is not good but is necessary due to a lacking implementation of equals methods in brands and content classes
+        Collection<Brand> expectedBrands = hits.getBrands();
+        Collection<Content> expectedContent = hits.getContents();
+
+        List<Product> products = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForRangeFilterFilterResultsTest.csv", true);
+        List<Product> expectedProducts = Helpers.readMockProductResultsFromFile("rangepublic/ExpectedProductsForRangeFilterFilterResultsTest.csv", true);
+
+
+        hits.setProducts(products);
+
+        List<RangeFilter> rangeFilters = getTestFilters();
+
+        // create the filter manually that has an invalid attribute
+        rangeFilters.add(
+                new DoubleFilter(100, "Invalid attribute double filter", "The double filter has an invalid attribute", "myPrice", 100, 101)
+        );
+        // If this filter is actually used, we would hopefully get a very small list, that would cause the test to fail
+
+        if (reverseFilterList) {
+            List<RangeFilter> reversed = new ArrayList<>();
+            for (RangeFilter filter : rangeFilters) {
+                reversed.add(0, filter);
+            }
+
+            rangeFilters = reversed;
+        }
+
+        SearchHits result = RangeFilterFilterResults.filterResults(hits, rangeFilters);
+
+        // We use toString, because the equals method has not been overridden in Product.
+        // The toString comparison however will provide the exact same results as a properly implemented equals in this case
+        Assertions.assertEquals(expectedProducts.toString(), result.getProducts().toString());
+
+        Assertions.assertEquals(expectedBrands, result.getBrands());
+        Assertions.assertEquals(expectedContent, result.getContents());
+    }
+
+    @ParameterizedTest(name = "Reverse filter order {0}")
+    @ValueSource(booleans = {false, true})
+    @DisplayName("filtering with an illegally implemented filter throws exception")
+    void filteringWithAnIllegallyImplementedFilterThrowsException(boolean reverseFilterList) {
+        SearchHits hits = getSearchHitsWithBrandAndContent();
+
+        // This is not good but is necessary due to a lacking implementation of equals methods in brands and content classes
+        Collection<Brand> expectedBrands = hits.getBrands();
+        Collection<Content> expectedContent = hits.getContents();
+
+        List<Product> products = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForRangeFilterFilterResultsTest.csv", true);
+        List<Product> expectedProducts = Helpers.readMockProductResultsFromFile("rangepublic/ExpectedProductsForRangeFilterFilterResultsTest.csv", true);
+
+
+        hits.setProducts(products);
+
+        List<RangeFilter> rangeFilters = getTestFilters();
+
+        // create the filter manually that has an invalid attribute
+        // We create it as an implementation of RangeFilter interface, since it is the only public element (RangeFilterClass is default)
+        rangeFilters.add(
+                new RangeFilter() {
+                    @Override
+                    public int getId() {
+                        return 0;
+                    }
+
+                    @Override
+                    public String getName() {
+                        return "illegal";
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "illegal";
+                    }
+
+                    @Override
+                    public String getProductAttribute() {
+                        return "illegal";
+                    }
+
+                    @Override
+                    public FilterTypes getType() {
+                        return FilterTypes.DOUBLE; //Arbitrarily chosen
+                    }
+
+                    @Override
+                    public double getDbMinDouble() {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getDbMinInstant() {
+                        return Instant.parse("2018-11-30T16:35:24.00Z");
+                    }
+
+                    @Override
+                    public long getDbMinLong() {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getDbMaxDouble() {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getDbMaxInstant() {
+                        return Instant.parse("2018-11-30T16:35:24.00Z");
+                    }
+
+                    @Override
+                    public long getDbMaxLong() {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getUserMinDouble() {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getUserMinInstant() {
+                        return Instant.parse("2018-11-30T16:35:24.00Z");
+                    }
+
+                    @Override
+                    public long getUserMinLong() {
+                        return 0;
+                    }
+
+                    @Override
+                    public double getUserMaxDouble() {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant getUserMaxInstant() {
+                        return Instant.parse("2018-11-30T16:35:24.00Z");
+                    }
+
+                    @Override
+                    public long getUserMaxLong() {
+                        return 0;
+                    }
+
+                    @Override
+                    public double setUserMin(double userMin) {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant setUserMin(Instant userMin) {
+                        return Instant.parse("2018-11-30T16:35:24.00Z");
+                    }
+
+                    @Override
+                    public long setUserMin(long userMin) {
+                        return 0;
+                    }
+
+                    @Override
+                    public double setUserMax(double userMax) {
+                        return 0;
+                    }
+
+                    @Override
+                    public Instant setUserMax(Instant userMax) {
+                        return Instant.parse("2018-11-30T16:35:24.00Z");
+                    }
+
+                    @Override
+                    public long setUserMax(long userMax) {
+                        return 0;
+                    }
+                }
+        );
+        //This is an illegal implementation, and should cause an exception when filtering the list
+
+        if (reverseFilterList) {
+            List<RangeFilter> reversed = new ArrayList<>();
+            for (RangeFilter filter : rangeFilters) {
+                reversed.add(0, filter);
+            }
+
+            rangeFilters = reversed;
+        }
+
+        List<RangeFilter> finalRangeFilters = rangeFilters;
+        assertThrows(IllegalImplementationException.class, () -> RangeFilterFilterResults.filterResults(hits, finalRangeFilters));
     }
 }

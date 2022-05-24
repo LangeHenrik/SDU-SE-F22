@@ -37,7 +37,6 @@ public class CategoryFilter implements CategoryFilterInterface {
 
                 for(Category category : categories){
                     if(category == null){
-                        System.out.println("Category wasn't found");
                         break;
                     }
                     if (category.getRequirementFieldName().toLowerCase().equals("category")) {
@@ -48,14 +47,11 @@ public class CategoryFilter implements CategoryFilterInterface {
                         boolean matchFound = matcher.find();
 
                         if (matchFound) {
-                            System.out.println("Match found: " + product.getName());
 
                             if (!newProducts.contains(product)) {
                                 newProducts.add(product);
                             }
                             break;
-                        } else {
-                            System.out.println("Match not found:" + product.getName());
                         }
                     } else if (category.getRequirementFieldName().toLowerCase().equals("name")) {
                         Pattern pattern = Pattern.compile(
@@ -65,19 +61,14 @@ public class CategoryFilter implements CategoryFilterInterface {
                         boolean matchFound = matcher.find();
 
                         if (matchFound) {
-                            System.out.println("Match found: " + product.getName());
 
                             if (!newProducts.contains(product)) {
                                 newProducts.add(product);
                             }
                             break;
-                        } else {
-                            System.out.println("Match not found:" + product.getName());
                         }
                     }
                 }
-            } else {
-                System.out.println("The instance " + oldProduct.getClass() + " isn't supported");
             }
         }
         searchHits.setProducts(newProducts);

@@ -14,5 +14,4 @@ public interface OneWayInterface extends Filterable {
 
     public void printCatalog();
 
-
 }

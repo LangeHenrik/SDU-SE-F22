@@ -17,6 +17,7 @@ public class OneWayImplementation implements OneWayInterface {
         this.itemCatalog = new ItemCatalog(getDatabaseItems());
         DatabaseAPI.initializeTable();
     }
+
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) throws NullPointerException {
         int length = tokens.size();
@@ -101,6 +102,19 @@ public class OneWayImplementation implements OneWayInterface {
         changeItemName(id, newName);
     }
 
+    public void changeItemName(int oldItemId, String newName) {
+        if (validateID(oldItemId)) {
+            if (oldItemId > 0 && !newName.equalsIgnoreCase("root") && !isNumber(newName)) {
+                if (DatabaseAPI.updateName(oldItemId, newName)) {
+                    System.out.println("Transaction was a succes");
+                    System.out.println("Successfully updated item name");
+                    return;
+                }
+            }
+        }
+        System.out.println("Unable to update item name");
+    }
+
     @Override
     public void deleteItem(String name) {
         deleteItem(validateName(name));
@@ -132,19 +146,6 @@ public class OneWayImplementation implements OneWayInterface {
         System.out.println("Unable to delete item");
     }
 
-    public void changeItemName(int oldItemId, String newName) {
-        if (validateID(oldItemId)) {
-            if (oldItemId > 0 && !newName.equalsIgnoreCase("root") && !isNumber(newName)) {
-                if (DatabaseAPI.updateName(oldItemId, newName)) {
-                    System.out.println("Transaction was a succes");
-                    System.out.println("Successfully updated item name");
-                    return;
-                }
-            }
-        }
-        System.out.println("Unable to update item name");
-    }
-
     @Override
     public void printCatalog() {
         Item[] content = DatabaseAPI.readEntireDB();
@@ -153,16 +154,6 @@ public class OneWayImplementation implements OneWayInterface {
                 System.out.println(item);
             }
         }
-    }
-
-
-    public static void main(String[] args) {
-        OneWayImplementation oneWayImplementation = new OneWayImplementation();
-        ArrayList<String> items = null;
-        for (String token : oneWayImplementation.filter(items)){
-            System.out.println(token);
-        }
-
     }
 
     private boolean isNumber(String input) {

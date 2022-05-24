@@ -1,7 +1,6 @@
 [
 {
 	"id": "1cf3d1fd-7787-4b64-8ef9-0b6f131a9f4e",
-	"pId": "1",
 	"averageUserReview": "4.446",
 	"inStock": [
 		"Charlottenlund",
@@ -20,7 +19,6 @@
 },
 {
 	"id": "ea6954c2-64ec-4a65-b1a5-d614907e8b65",
-	"pId": "2",
 	"averageUserReview": "3.328",
 	"inStock": [
 		"Esbjerg",
@@ -44,7 +42,6 @@
 },
 {
 	"id": "73f5e31e-bcaa-4939-a4fd-4cded7ab9eb8",
-	"pId": "3",
 	"averageUserReview": "4.834",
 	"inStock": [
 		"Hvidovre",
@@ -73,7 +70,6 @@
 },
 {
 	"id": "45d6065e-eb97-48ce-afb3-310bd698f0fb",
-	"pId": "4",
 	"averageUserReview": "2.955",
 	"inStock": [
 		"Charlottenlund",
@@ -98,7 +94,6 @@
 },
 {
 	"id": "afd16cbd-5469-47e0-ba93-4a045a732a71",
-	"pId": "5",
 	"averageUserReview": "1.644",
 	"inStock": [
 		"Esbjerg",
@@ -125,7 +120,6 @@
 },
 {
 	"id": "04a0a803-911e-48b7-8c64-0ebf8ad448cf",
-	"pId": "6",
 	"averageUserReview": "3.315",
 	"inStock": [
 		"Randers",
@@ -146,7 +140,6 @@
 },
 {
 	"id": "48c7ec0d-d9f5-4c9d-b36a-901c11a2adb9",
-	"pId": "7",
 	"averageUserReview": "4.39",
 	"inStock": [
 		"Herning",
@@ -168,7 +161,6 @@
 },
 {
 	"id": "941884b6-76d4-48a7-9d52-06fc2fb61b4b",
-	"pId": "8",
 	"averageUserReview": "3.694",
 	"inStock": [
 		"Herning",
@@ -195,7 +187,6 @@
 },
 {
 	"id": "1cc20f06-d890-496a-9991-91b452d22cb5",
-	"pId": "9",
 	"averageUserReview": "3.385",
 	"inStock": [
 		"Naestved",
@@ -221,7 +212,6 @@
 },
 {
 	"id": "a6381ade-870f-476d-98b1-79477abc15ae",
-	"pId": "10",
 	"averageUserReview": "3.294",
 	"inStock": [
 		"Esbjerg",
@@ -247,7 +237,6 @@
 },
 {
 	"id": "72b6873e-3427-443d-ad79-8d4f8c5fedde",
-	"pId": "11",
 	"averageUserReview": "2.896",
 	"inStock": [
 		"Aalborg",
@@ -268,7 +257,6 @@
 },
 {
 	"id": "c67cb89a-c0c6-4234-a211-96b3cc543945",
-	"pId": "12",
 	"averageUserReview": "1.898",
 	"inStock": [
 		"Vejle",
@@ -288,7 +276,6 @@
 },
 {
 	"id": "3240d5f6-8c92-410f-a6d3-c6b7a1b71678",
-	"pId": "13",
 	"averageUserReview": "4.632",
 	"inStock": [
 		"Esbjerg",
@@ -320,7 +307,6 @@
 },
 {
 	"id": "c191c7a6-1d0e-4b5b-a080-3db6ef558937",
-	"pId": "14",
 	"averageUserReview": "3.765",
 	"inStock": [
 		"Naestved"
@@ -338,7 +324,6 @@
 },
 {
 	"id": "5de4f3b1-2c7f-4a8c-83f9-6ed927d619aa",
-	"pId": "15",
 	"averageUserReview": "4.016",
 	"inStock": [
 		"Greve",
@@ -368,7 +353,6 @@
 },
 {
 	"id": "67d7b470-eebe-4da9-8b9e-72b522a7accf",
-	"pId": "16",
 	"averageUserReview": "4.749",
 	"inStock": [
 		"Silkeborg",
@@ -388,7 +372,6 @@
 },
 {
 	"id": "aeae0025-a7a7-4a65-b0c9-a1b92c113bbc",
-	"pId": "17",
 	"averageUserReview": "2.803",
 	"inStock": [
 		"Vejle",
@@ -413,7 +396,6 @@
 },
 {
 	"id": "f3d5118f-be71-44c0-bff8-71e924ee66f5",
-	"pId": "18",
 	"averageUserReview": "3.685",
 	"inStock": [
 		"Kolding",
@@ -435,7 +417,6 @@
 },
 {
 	"id": "c11d8cb8-e07f-4fae-94b2-4944b30f93c6",
-	"pId": "19",
 	"averageUserReview": "1.518",
 	"inStock": [
 		"Frederiksberg",
@@ -458,7 +439,6 @@
 },
 {
 	"id": "a5dcdfe2-3d64-4976-ae8c-a1068aa2665e",
-	"pId": "20",
 	"averageUserReview": "5.0",
 	"inStock": [
 		"Greve"
@@ -476,7 +456,6 @@
 },
 {
 	"id": "1ed4a221-0434-4d0d-91c8-1c4089b65f77",
-	"pId": "21",
 	"averageUserReview": "3.762",
 	"inStock": [
 		"Horsens",
@@ -501,7 +480,6 @@
 },
 {
 	"id": "4201c327-3c0f-43f9-9b46-8fb0ab5df761",
-	"pId": "22",
 	"averageUserReview": "4.322",
 	"inStock": [
 		"Horsens",
@@ -521,7 +499,6 @@
 },
 {
 	"id": "589347fc-07fe-4e1d-9f6c-1f99b1322a85",
-	"pId": "23",
 	"averageUserReview": "3.601",
 	"inStock": [
 		"Kolding",
@@ -553,7 +530,6 @@
 },
 {
 	"id": "06d980d7-8645-4fba-b688-3c51dcfbf69d",
-	"pId": "24",
 	"averageUserReview": "3.656",
 	"inStock": [
 		"Frederiksberg",
@@ -572,7 +548,6 @@
 },
 {
 	"id": "ce8b01ec-1a52-415a-86a1-557d3f8f9a1e",
-	"pId": "25",
 	"averageUserReview": "4.639",
 	"inStock": [
 		"Arhus",
@@ -599,7 +574,6 @@
 },
 {
 	"id": "14a3a69e-72c8-4480-93e8-4074f660cccd",
-	"pId": "26",
 	"averageUserReview": "3.811",
 	"inStock": [
 		"Herning",
@@ -627,7 +601,6 @@
 },
 {
 	"id": "19e56a2a-3718-4e58-9c08-283945cee02f",
-	"pId": "27",
 	"averageUserReview": "3.571",
 	"inStock": [
 		"Horsens",
@@ -660,7 +633,6 @@
 },
 {
 	"id": "8e8bab75-0d9f-4de6-8f40-fb0618083cd2",
-	"pId": "28",
 	"averageUserReview": "3.433",
 	"inStock": [
 		"Ballerup",
@@ -693,7 +665,6 @@
 },
 {
 	"id": "64414b11-81bb-47f4-8589-430168fc5ea0",
-	"pId": "29",
 	"averageUserReview": "3.344",
 	"inStock": [
 		"Kolding",

@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -123,7 +124,7 @@ class SearchQueryTest {
     @Test
     void setScoringTest() {
         SearchQuery s = new SearchQuery();
-        s.setScoring(5);
-        assertEquals(5, s.getScoring());
+        s.setScoring(ScoreSortType.STOCK);
+        assertEquals(ScoreSortType.STOCK, s.getScoring());
     }
 }

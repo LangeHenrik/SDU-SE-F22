@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS Tokens;
 DROP TABLE IF EXISTS Brand;
 DROP TABLE IF EXISTS ProductType;
 DROP TABLE IF EXISTS Config;
-DROP TABLE IF EXISTS StemmingException;
 DROP TABLE IF EXISTS irregularwords;
 
 --Her oprettes tabellerne, der skal ikke INSERT INTO tabellerne endnu, da vi vil lave en .java fil som seeder hele databasen på én gang,
@@ -45,11 +44,6 @@ CREATE TABLE BrandProductTypeJunction(
 
 CREATE TABLE Config(
     brandIndexInterval INTEGER NOT NULL
-);
-
-CREATE TABLE StemmingException (
-                                   id SERIAL PRIMARY KEY,
-                                   exceptionName varchar(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE irregularwords(

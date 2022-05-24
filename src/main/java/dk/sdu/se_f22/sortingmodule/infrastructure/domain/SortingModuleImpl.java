@@ -15,6 +15,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationExcepti
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 /**
  * Implemented version of SortingModule
@@ -87,7 +88,7 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void setScoring(int scoring) {
+    public void setScoring(ScoreSortType scoring) {
         this.query.setScoring(scoring);
 
     }

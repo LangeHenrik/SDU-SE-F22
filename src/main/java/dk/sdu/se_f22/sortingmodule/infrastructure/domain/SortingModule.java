@@ -6,6 +6,7 @@ import java.util.List;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 /**
  * Search product, brand and content with range- and category filtering and scoring as well as pagination
@@ -66,7 +67,7 @@ public interface SortingModule {
      * 
      * @param scoring Scoring method
      */
-    public void setScoring(int scoring);
+    public void setScoring(ScoreSortType scoring);
 
     /**
      * Return available range filters

@@ -1,21 +1,19 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Search;
 
 
-import dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing.HTMLSite;
-import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
+import dk.sdu.se_f22.sharedlibrary.models.Content;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchClass implements IseachIndexedHTML{
+public class SearchClass implements IsearchIndexedHTML {
     //InterfaceOutgoing CMSIndexModule = new InterfaceOutgoing;
-    //CMSModulePublicInterface? CMSModule = new CMSModulePublicInterface?;
+    //CMSModulePublicInterface CMSModule = new CMSModulePublicInterface?;
 
 
     @Override
-    public List<Content> queryIndex(List<String> searchTokens) throws NoResultsFoundException {
-
+    public List<Content> queryIndex(List<String> searchTokens) {
+        List<Content> nullToken = new ArrayList<>();
         /*
         ArrayList<Integer> searchResultHTMLIds = new ArrayList<Integer>(CMSIndexModule.search(searchTokens));
         //Search() returns Arraylist of Integers, takes Arraylist of Strings
@@ -27,8 +25,8 @@ public class SearchClass implements IseachIndexedHTML{
         }
         */
 
+        return nullToken;
 
-        return null;
     }
 
 }

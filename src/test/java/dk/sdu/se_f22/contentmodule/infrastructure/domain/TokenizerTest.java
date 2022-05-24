@@ -3,11 +3,13 @@ package dk.sdu.se_f22.contentmodule.infrastructure.domain;
 
 import dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing.HTMLSite;
 import dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing.Tokenizer;
+import org.junit.internal.runners.statements.Fail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,8 +30,12 @@ class TokenizerTest {
     }
 
     @Test
-    void tokenizeHTMLBodyText() {
+     void tokenizeHTMLBodyText() {
         // Test metode
-//        assertEquals(5, tk.tokenizeHTMLBodyText(site).getTokens().size());
+        try {
+            assertEquals(5, tk.tokenizeHTMLBodyText(site).getTokens().size());
+        } catch (IOException e) {
+            fail();
+        }
     }
 }

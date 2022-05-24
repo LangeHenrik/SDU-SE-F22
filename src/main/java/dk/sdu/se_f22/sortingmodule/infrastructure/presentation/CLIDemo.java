@@ -1,7 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.presentation;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -9,9 +11,12 @@ import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Content;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.category.Category;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModule;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModuleImpl;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import java.util.*;
 
 public class CLIDemo {
     private boolean exit = false;
@@ -99,17 +104,163 @@ public class CLIDemo {
                 }
 
                 break;
-
-            
-
-            case SCORE:
-                System.out.println("What scoring do you want to use?");
-                while (true) {
-
-                    ScoreSortType.valueOf(readLine());
-
-                    break;
+            case SEARCHINFORMATION:
+                System.out.println("Page: " + (module.getQuery().getPagination()[0] + 1));
+                System.out.println("Page size: " + module.getQuery().getPagination()[1]);
+                System.out.println("Scoring: " + module.getQuery().getScoring());
+                System.out.println("Categories filtered by: " + module.getQuery().getCategory());
+                System.out.print("Ranges filtered by: ");
+                for (Map range : module.getQuery().getAllRanges()) {
+                    range.forEach((key, value) -> {
+                        System.out.print(key+" ");
+                    });
                 }
+                System.out.println("");
+                break;
+            
+            case SCORE:
+                String scores = "";
+                for (ScoreSortType type : ScoreSortType.values()) {
+                    scores += ", "+type;
+                } 
+                scores = scores.substring(2);
+
+                System.out.println("What scoring do you want to use ("+scores+")?");
+                while (true) {
+                    try {
+                        module.setScoring(ScoreSortType.valueOf(readLine())); 
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Try again");
+                    }
+                }
+                break;
+            case SCORES:
+                for (ScoreSortType type : ScoreSortType.values()) {
+                    System.out.println("- " + type);
+                }
+                break;
+            case CATEGORY:
+                System.out.println("What categories would you like to have in search? (More can be added, by using comma, or none by entering empty)");
+                System.out.println("Available categories:");
+                for (Object category : module.getAllCategories()) {
+                    if (category instanceof Category) {
+                        Category categoryToDisplay = (Category) category;
+                        System.out.println("    - ("+categoryToDisplay.getId()+") "+categoryToDisplay.getName());
+                    }
+                }
+                
+                String[] ids = readLine().split(",");
+                module.clearCategory();
+                for (String id : ids) {
+                    try {
+                        module.addCategory(Integer.parseInt(id));
+                    } catch (Exception e) {
+                    }
+                }
+                System.out.println("Categories filtered by: " + module.getQuery().getCategory());
+                break;
+            case CATEGORIES:
+                for (Object category : module.getAllCategories()) {
+                    if (category instanceof Category) {
+                        Category categoryToDisplay = (Category) category;
+                        System.out.println("- ("+categoryToDisplay.getId()+") "+categoryToDisplay.getName());
+                    }
+                }
+                break;
+            case RANGE:
+                System.out.println("What ranges would you like to have in search? (More can be added, by using comma, or none by entering empty)");
+                System.out.println("Available ranges:");
+                HashMap<Integer, RangeFilter> rangeFilterMap = new HashMap<>();
+                for (Object range : module.getAvailableRangeFilters()) {
+                    if (range instanceof RangeFilter) {
+                        RangeFilter rangeToDisplay = (RangeFilter) range;
+                        System.out.println("- ("+rangeToDisplay.getId()+") "+rangeToDisplay.getName()+" | "+rangeToDisplay.getType());
+                        rangeFilterMap.put(rangeToDisplay.getId(), rangeToDisplay);
+                    }
+                }
+                
+                String[] rangeIds = readLine().split(",");
+                module.clearRange();
+                for (String id : rangeIds) {
+                    int formattedId = Integer.parseInt(id);
+                    try {
+                        if (rangeFilterMap.get(formattedId) == null) {
+                            continue;
+                        }
+                        System.out.println(rangeFilterMap.get(formattedId).getName()+": ");
+                        switch (rangeFilterMap.get(formattedId).getType()) {
+                            default:
+                            case DOUBLE:
+                                System.out.println("Start range:");
+                                double startRangeDouble = Double.parseDouble(readLine());
+                                System.out.println("End range:");
+                                double endRangeDouble = Double.parseDouble(readLine());
+                                module.addRange(formattedId, startRangeDouble, endRangeDouble);
+                                break;
+                            case LONG:
+                                System.out.println("Start range:");
+                                long startRangeLong = Long.parseLong(readLine());
+                                System.out.println("End range:");
+                                long endRangeLong = Long.parseLong(readLine());
+                                module.addRange(formattedId, startRangeLong, endRangeLong);
+                                break;
+                            case TIME:
+                                System.out.println("Start range (epoch):");
+                                Instant startRangeTime = Instant.ofEpochMilli(Long.parseLong(readLine()));
+                                System.out.println("End range (epoch):");
+                                Instant endRangeTime = Instant.ofEpochMilli(Long.parseLong(readLine()));
+                                module.addRange(formattedId, startRangeTime, endRangeTime);
+                                break;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                System.out.print("Ranges filtered by: ");
+                for (Map range : module.getQuery().getAllRanges()) {
+                    range.forEach((key, value) -> {
+                        System.out.print(key+" ");
+                    });
+                }
+                System.out.println("");
+                
+                break;
+            case RANGES:
+                for (Object range : module.getAvailableRangeFilters()) {
+                    if (range instanceof RangeFilter) {
+                        RangeFilter rangeToDisplay = (RangeFilter) range;
+                        System.out.println("- ("+rangeToDisplay.getId()+") "+rangeToDisplay.getName()+" | "+rangeToDisplay.getType());
+                    }
+                }
+                break;
+            case PAGINATION:
+                int page = 0;
+                int pageSize = 25;
+
+                System.out.println("What page do you want to see? (currently: "+module.getQuery().getPagination()[0]+")");
+                while (true) {
+                    try {
+                        page = Integer.parseInt(readLine());
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Try again");
+                    }
+                }
+
+                System.out.println("How many hits do you want per page? (currently: "+module.getQuery().getPagination()[1]+")");
+                while (true) {
+                    try {
+                        pageSize = Integer.parseInt(readLine());
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Try again");
+                    }
+                }
+
+                module.setPagination(page, pageSize);
                 break;
 
             case MOCKDATA:
@@ -171,6 +322,12 @@ public class CLIDemo {
         SEARCHINFORMATION("search information", "search info", "info"),
 
         SCORE("score", "set scoring", "scoring", "sorting", "sort"),
+        SCORES("scores", "score list"),
+        CATEGORY("category", "set category"),
+        CATEGORIES("categories", "category list"),
+        RANGE("range", "set range"),
+        RANGES("ranges", "range list"),
+        PAGINATION("pagination"),
 
         MOCKDATA("mock"),
         ENABLEMOCK("use mock", "mock on"),

@@ -13,7 +13,7 @@ public class SortingModuleDemo {
     private static boolean useMockDataProducts = true;
 
     public static void main (String[] args) {
-        SortingModuleImpl module = new SortingModuleImpl();
+        SortingModule module = new SortingModuleImpl();
 
         // Use Mocked Data
         module.useMockData(useMockDataBrands, useMockDataContent, useMockDataProducts);

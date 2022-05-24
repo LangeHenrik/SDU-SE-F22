@@ -92,7 +92,11 @@ public class SortingModuleImpl implements SortingModule {
     @Override
     public void setScoring(ScoreSortType scoring) {
         this.query.setScoring(scoring);
+    }
 
+    @Override
+    public SearchQuery getQuery() {
+        return query;
     }
 
     @Override

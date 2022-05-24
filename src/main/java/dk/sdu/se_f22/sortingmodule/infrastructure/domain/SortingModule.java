@@ -69,6 +69,8 @@ public interface SortingModule {
      */
     public void setScoring(ScoreSortType scoring);
 
+    public SearchQuery getQuery();
+
     /**
      * Return available range filters
      */

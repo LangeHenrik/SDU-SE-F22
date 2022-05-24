@@ -30,7 +30,7 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentIds);
         }
 
-        @ParameterizedTest(name = "{0},{1}=" + "diff" + ",{2},{3}")
+        @ParameterizedTest(name = "{0}, {1}=" + "diff" + ", {2}, {3}")
         @DisplayName("Dummy filters with different names")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentNames(int id, String name, String description, String productAttribute) {
@@ -39,8 +39,8 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentNames);
         }
 
-        @ParameterizedTest(name = "{0}, {1}, {2}, " + "diff" + ", {3}")
-        @DisplayName("Dummy filters with different names")
+        @ParameterizedTest(name = "{0}, {1}, {2}=" + "diff" + ", {3}")
+        @DisplayName("Dummy filters with different descriptions")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentDescriptions(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
@@ -48,8 +48,8 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentDescriptions);
         }
 
-        @ParameterizedTest(name = "{0}, {1}, {2}, {3}" + " diff")
-        @DisplayName("Dummy filters with different names")
+        @ParameterizedTest(name = "{0}, {1}, {2}, {3}=" + " diff")
+        @DisplayName("Dummy filters with different product attributes")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentProductAttributes(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);

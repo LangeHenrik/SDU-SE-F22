@@ -33,15 +33,5 @@ public class SortingModuleDemo {
         System.out.println("Brands: " + data.getBrands().toString());
         System.out.println("Content: " + data.getContents().toString());
 
-        // Print all existing range filters
-        // System.out.println(module.getAvailableRangeFilters().toString()
-        //         .replaceAll("ID", "\n\tID")
-        //         .replaceAll("RangeFilterClass", "")
-        //         .replaceAll("[\\[\\]{}]", "")
-        //         .replaceAll("LongFilter", "\nLongFilter")
-        //         .replaceAll("DoubleFilter", "\nDoubleFilter")
-        //         .replaceAll("TimeFilter", "\nTimeFilter")
-        //         .replaceAll(", ", "\n\t")
-        // );
     }
 }

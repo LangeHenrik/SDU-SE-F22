@@ -75,6 +75,11 @@ public interface SortingModule {
     public List<RangeFilter> getAvailableRangeFilters();
 
     /**
+     * Print available range filters
+     */
+    public void printAvailableRangeFilters();
+
+    /**
      * Return modified SearchHits with pagination
      */
     public SearchHits paginateHits(SearchHits searchHits);

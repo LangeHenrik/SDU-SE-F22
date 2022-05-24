@@ -101,6 +101,19 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
+    public void printAvailableRangeFilters() {
+        System.out.println(this.getAvailableRangeFilters().toString()
+                .replaceAll("ID", "\n\tID")
+                .replaceAll("RangeFilterClass", "")
+                .replaceAll("[\\[\\]{}]", "")
+                .replaceAll("LongFilter", "\nLongFilter")
+                .replaceAll("DoubleFilter", "\nDoubleFilter")
+                .replaceAll("TimeFilter", "\nTimeFilter")
+                .replaceAll(", ", "\n\t")
+        );
+    }
+
+    @Override
     public SearchHits paginateHits(SearchHits searchHits) {
         return this.query.paginateHits(searchHits);
     }

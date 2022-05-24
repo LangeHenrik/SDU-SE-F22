@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Item {
     //Attributes
-    private final String name;
+    private String name;
     private Item superItem;
     private int id;
     private int superId;

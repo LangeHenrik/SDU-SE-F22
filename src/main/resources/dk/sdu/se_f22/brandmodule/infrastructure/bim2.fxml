@@ -1,11 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.brandmodule.infrastructure.Bim2Controller">
+<AnchorPane prefHeight="477.0" prefWidth="571.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.brandmodule.infrastructure.Bim2Controller">
    <children>
-      <Text layoutX="271.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Mom" />
+      <TabPane layoutX="26.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab text="Index Brand">
+            <content>
+                  <GridPane hgap="20.0" vgap="20.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="328.0" minWidth="10.0" prefWidth="284.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.0" minWidth="10.0" prefWidth="287.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="292.0" minHeight="10.0" prefHeight="246.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="219.0" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox spacing="10.0" GridPane.rowSpan="2147483647">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label text="Name" />
+                                    <TextField fx:id="nameField" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Description" />
+                                    <TextField fx:id="descriptionField" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Founded" />
+                                    <TextField fx:id="foundedField" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Headquarters" />
+                                    <TextField fx:id="headquartersField" />
+                                 </children>
+                              </VBox>
+                              <VBox VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="BOTTOM_LEFT">
+                                       <children>
+                                          <Label text="Products" />
+                                          <HBox alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="46.0" spacing="5.0" HBox.hgrow="SOMETIMES">
+                                             <children>
+                                                <Button mnemonicParsing="false" onMouseClicked="#addProduct" text="Add Product" />
+                                                <Button mnemonicParsing="false" onMouseClicked="#removeProduct" text="Remove" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                    <ListView fx:id="productsListView" prefHeight="151.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1">
+                           <children>
+                              <HBox alignment="BOTTOM_LEFT">
+                                 <children>
+                                    <Label alignment="BOTTOM_LEFT" text="Brands" />
+                                    <HBox alignment="TOP_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Button mnemonicParsing="false" onMouseClicked="#addBrand" text="Add Brand" />
+                                          <Button mnemonicParsing="false" onMouseClicked="#removeBrand" text="Remove" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <ListView fx:id="brandsListView" onMouseClicked="#onBrandClicked" prefHeight="151.0" prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </ListView>
+                           </children>
+                        </VBox>
+                        <Button mnemonicParsing="false" onMouseClicked="#indexBrands" text="Index Brands" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </GridPane>
+            </content>
+          </Tab>
+          <Tab text="Tokenization Parameters">
+            <content>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label text="Delimiter" />
+                                    <TextField fx:id="delimiterField" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Ignore" />
+                                    <TextField fx:id="ignoreField" />
+                                 </children>
+                              </VBox>
+                              <Button mnemonicParsing="false" onMouseClicked="#setTokenizationParameters" text="Set Tokenization Parameters" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </FlowPane>
+            </content>
+          </Tab>
+            <Tab text="QueryIndex">
+               <content>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER">
+                     <children>
+                        <HBox spacing="50.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" spacing="10.0">
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <HBox alignment="BOTTOM_LEFT">
+                                             <children>
+                                                <Label text="Tokens" />
+                                                <HBox alignment="TOP_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" onMouseClicked="#addToken" text="Add token" />
+                                                      <Button mnemonicParsing="false" onMouseClicked="#removeToken" text="Remove" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </HBox>
+                                          <ListView fx:id="queryTokensListView" prefHeight="200.0" prefWidth="200.0" />
+                                       </children>
+                                    </VBox>
+                                    <Button mnemonicParsing="false" onMouseClicked="#queryIndex" text="Search" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Results" />
+                                    <ListView fx:id="queryResultsListView" prefHeight="200.0" prefWidth="200.0" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </FlowPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

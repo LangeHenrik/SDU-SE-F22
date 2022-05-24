@@ -2,6 +2,8 @@ package dk.sdu.se_f22.searchmodule.misspellings;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
+import dk.sdu.se_f22.sharedlibrary.db.MigrationException;
+
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
@@ -17,8 +19,12 @@ class MisspellingsTest {
 
     @BeforeAll
     static void dbMigration(){
-        DBMigration migrator = new DBMigration();
-        migrator.migrate();
+        try {
+            DBMigration migrator = new DBMigration();
+            migrator.migrate();
+        } catch (MigrationException e) { 
+            e.printStackTrace();
+        }
     }
 
     @BeforeEach

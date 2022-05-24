@@ -219,8 +219,6 @@ class DoubleFilterTest {
             return out.stream();
         }
 
-
-        // TODO move to correct class
         @Nested
         @DisplayName("Set userMin and userMax")
         class SetUserMinAndMax {

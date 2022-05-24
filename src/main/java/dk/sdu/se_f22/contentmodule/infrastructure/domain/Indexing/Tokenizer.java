@@ -22,7 +22,7 @@ public class Tokenizer {
 
 
 
-        //Laves om
+        //TODO: Laves om sådan at parametre bliver hentet fra DB og ikke hard coded
         for (int i = 0; i < convertedsite.length(); i++) {
             switch (convertedsite.charAt(i)) {
                 case '-' -> database.logParameters(pageid, database.getParameterID('-'));

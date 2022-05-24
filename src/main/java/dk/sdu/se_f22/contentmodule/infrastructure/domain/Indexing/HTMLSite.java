@@ -1,14 +1,11 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 
 
-import dk.sdu.se_f22.contentmodule.infrastructure.data.DatabaseQueries;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HTMLSite  {
@@ -28,11 +25,8 @@ public class HTMLSite  {
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
-
-
-
     }
 
     //Constructor for unit testing

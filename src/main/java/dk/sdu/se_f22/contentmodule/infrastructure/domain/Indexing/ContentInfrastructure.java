@@ -17,8 +17,6 @@ public class ContentInfrastructure implements IContentInfrastructre{
     @Override
     public void createHTMLSite(int htmlId, String htmlCode) throws IOException {
 
-
-        //Guidelines
         HTMLSite newSite = new HTMLSite(htmlId, htmlCode);
         
         try (Connection connection = DBConnection.getPooledConnection()) {
@@ -27,7 +25,6 @@ public class ContentInfrastructure implements IContentInfrastructre{
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            //Handling
             e.printStackTrace();
         }
 
@@ -88,7 +85,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
 
 
         } catch (SQLException e) {
-            // TODO: Handle exception
+            e.printStackTrace();
         }
 
 

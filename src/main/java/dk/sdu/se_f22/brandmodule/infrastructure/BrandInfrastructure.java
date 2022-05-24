@@ -30,7 +30,7 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 			loadTokenizationParameters();
 		} catch (IOException e) {
 			// use default parameters
-			this.tokenizationParameters = new TokenizationParameters(".", ",");
+			this.tokenizationParameters = new TokenizationParameters(" ", "[,\\.]");
 		}
 
 		// initialize filters
@@ -50,7 +50,9 @@ public class BrandInfrastructure implements BrandInfrastructureInterface {
 			// .stream.toList() converts from a Set to a List
 			List<String> brandTokens = tokenizeBrand(brand).stream().toList();
 			brandTokens = filterTokens(brandTokens);
-			index.indexBrandInformation(brand, brandTokens);
+			try {
+				index.indexBrandInformation(brand, brandTokens);
+			} catch (Exception ignored) { }
 		}
 	}
 

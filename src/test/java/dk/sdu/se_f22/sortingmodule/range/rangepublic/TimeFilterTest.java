@@ -2,7 +2,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,13 +56,15 @@ class TimeFilterTest {
         @ParameterizedTest
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
         @ValueSource(strings = {"publishedDate", "expirationDate"})
-        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) {
+        void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) throws IllegalMinMaxException {
             // Creating filter with productattribute publishDate or experationDate
             TimeFilter filter = getTestFilter(productAttribute);
             Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
             Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
+
             filter.setUserMin(userMin);
             filter.setUserMax(userMax);
+
             // Preparing input list
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForTimeFilterTest.csv", true);
 
@@ -87,7 +89,7 @@ class TimeFilterTest {
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")
-        void useFilter(TimeFilter internalFilter) {
+    void useFilter(TimeFilter internalFilter) {
             // preparing the input list
             // Note: Helpers.readMockProductResultsFromFile Should be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
@@ -121,7 +123,7 @@ class TimeFilterTest {
             });
         }
 
-        static Stream<Arguments> useFilterArguments() {
+        static Stream<Arguments> useFilterArguments() throws RangeFilterException, IllegalMinMaxException {
             // Could be refactored to simply return TimeFilters.
             // However it is like this such that the test can easily be refactored to take more arguments if needed.
 
@@ -143,11 +145,15 @@ class TimeFilterTest {
             Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
             for(String attribute: strings){
                 TimeFilter filter = getTestFilter(attribute);
+
                 filter.setUserMax(userMax);
+
                 out.add(arguments(filter));
 
                 filter = getTestFilter(attribute);
+
                 filter.setUserMin(userMin);
+
                 out.add(arguments(filter));
             }
 
@@ -158,8 +164,10 @@ class TimeFilterTest {
                 Instant dbMin = Instant.parse("2017-11-30T15:35:24.00Z");
                 Instant dbMax = Instant.parse("2023-11-30T15:35:24.00Z");
                 TimeFilter filter = new TimeFilter(0, "test name", "test description", attribute, dbMin, dbMax);
+
                 filter.setUserMin(userMin);
                 filter.setUserMax(userMax);
+
                 out.add(arguments(filter));
             }
 
@@ -172,7 +180,7 @@ class TimeFilterTest {
         @DisplayName("Filtering an empty list of results")
         @ParameterizedTest(name = "{0} - setUserMinAndMax={1} - inputList={2}")
         @MethodSource("filteringAnEmptyListOfResultsArgument")
-        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) {
+        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) throws RangeFilterException, IllegalMinMaxException {
             // preparing the filter
             TimeFilter internalFilter = getTestFilter(productAttribute);
             if (setUserMinAndMax) {
@@ -202,127 +210,8 @@ class TimeFilterTest {
             // When the desired behaviour of the method has been decided correct the test as needed
         }
 
-        @Nested
-        @DisplayName("Set userMin and userMax")
-        @Disabled("Not yet implemented")
-        class SetUserMinAndMax {
-
-            @Nested
-            @DisplayName("Set valid userMin and userMax")
-            class SetValidUserMinAndUserMax {
-                @Test
-                @DisplayName("Set valid TimeFilter userMin")
-                @MethodSource("provideTimeFilters")
-                void setValidTimeFilterUserMin (TimeFilter filter) {
-                    String newDate = "2022-05-10T18:35:24.00Z";
-                    Assertions.assertDoesNotThrow(
-                            () -> filter.setUserMin(Instant.parse("2022-05-10T18:35:24.00Z"))
-                    );
-                }
-
-                @Test
-                @DisplayName("userMin changed after being set")
-                @MethodSource("provideTimeFilters")
-                void userMinChangedAfterBeingSet (TimeFilter filter) {
-                    String newDate = "2022-05-10T18:35:24.00Z";
-                    Assertions.assertEquals(newDate, filter.getUserMinInstant().toString());
-                }
-
-                @Test
-                @DisplayName("Set valid TimeFilter userMax")
-                @MethodSource("provideTimeFilters")
-                void setValidTimeFilterUserMax (TimeFilter filter) {
-                    Assertions.assertDoesNotThrow(
-                            ()-> filter.setUserMax(Instant.parse("2022-05-20T18:35:24.00Z"))
-                        );
-                }
-                @Test
-                @DisplayName("userMax changed after being set")
-                @MethodSource("provideTimeFilters")
-                void userMaxChangedAfterBeingSet (TimeFilter filter) {
-                    String newDate = "2022-05-20T18:35:24.00Z";
-                    Assertions.assertEquals(newDate, filter.getDbMaxInstant().toString());
-                }
-            }
-
-            @Nested
-            @DisplayName("Set invalid userMin and userMax")
-            @Disabled("Not yet implemented")
-            class SetInvalidUserMinAndUserMax {
-
-                @Test
-                @DisplayName("Set invalid TimeFilter userMin less than dbMin")
-                @MethodSource("provideTimeFilters")
-                void setInvalidTimeFilterUserMin (TimeFilter filter) {
-                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
-                    Assertions.assertThrows(InvalidFilterException.class,
-                            () -> filter.setUserMin(newUserMin)
-                        );
-                }
-
-                @Test
-                @DisplayName("Set invalid TimeFilter userMax less than dbMin")
-                void setInvalidTimeFilterUserMax (TimeFilter filter) {
-                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
-                    Assertions.assertThrows(InvalidFilterException.class,
-                            () -> filter.setUserMax(newUserMax)
-                    );
-                }
-
-                @Test
-                @DisplayName("Set invalid TimeFilter userMin higher than dbMin")
-                @MethodSource("provideTimeFilters")
-                void setInvalidTimeFilterUserMinHigherThanDBMin (TimeFilter filter) {
-                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
-                    Assertions.assertThrows(InvalidFilterException.class,
-                            () -> filter.setUserMin(newUserMin)
-                    );
-                }
-
-                @Test
-                @DisplayName("Set invalid TimeFilter userMax higher than dbMin")
-                void setInvalidTimeFilterUserMaxHigherThanDBMin (TimeFilter filter) {
-                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
-                    Assertions.assertThrows(InvalidFilterException.class,
-                            () -> filter.setUserMax(newUserMax)
-                    );
-                }
-
-                @Test
-                @DisplayName("Set invalid TimeFilter userMax less than userMin")
-                void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) {
-                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
-                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 15);
-
-                    filter.setUserMin(newUserMin);
-
-                    Assertions.assertThrows(InvalidFilterException.class,
-                            () -> filter.setUserMax(newUserMax)
-                    );
-                }
 
 
-                @Test
-                @DisplayName("Set invalid TimeFilter userMin higher than userMax")
-                void setInvalidUserMinHigherThanUserMax (TimeFilter filter) {
-                    Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
-                    Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 100);
-
-                    filter.setUserMin(newUserMax);
-
-                    Assertions.assertThrows(InvalidFilterException.class,
-                            () -> filter.setUserMax(newUserMin)
-                    );
-                }
-
-
-            }
-            static Stream<TimeFilter> provideTimeFilters (){
-                return Stream.of(
-                        new TimeFilter("Time filter 1", "Desc time filter 1", "publish_date", Instant.parse("2022-05-6T18:35:24.00Z"), Instant.parse("2022-05-10T18:35:24.00Z"))
-                );
-            }
-        }
 
         static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {
             List<Arguments> out = new ArrayList<>();
@@ -345,4 +234,142 @@ class TimeFilterTest {
             return out.stream();
         }
     }
+    @Nested
+    @DisplayName("Set userMin and userMax")
+    class SetUserMinAndMax {
+
+        static Stream<TimeFilter> provideTimeFiltersProvider (){
+            return Stream.of(
+                    new TimeFilter("Time filter 1", "Desc time filter 1", "publish_date", Instant.parse("2022-05-06T18:35:24.00Z"), Instant.parse("2022-05-20T18:35:24.00Z"))
+            );
+        }
+
+        @Nested
+        @DisplayName("Set valid userMin and userMax")
+        class SetValidUserMinAndUserMax {
+
+            static Stream<TimeFilter> provideTimeFilters(){
+                return provideTimeFiltersProvider();
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set valid TimeFilter userMin")
+            @MethodSource("provideTimeFilters")
+            void setValidTimeFilterUserMin (TimeFilter filter) {
+                String newDate = "2022-05-10T18:35:24.00Z";
+                Assertions.assertDoesNotThrow(
+                        () -> filter.setUserMin(Instant.parse(newDate))
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("userMin changed after being set")
+            @MethodSource("provideTimeFilters")
+            void userMinChangedAfterBeingSet (TimeFilter filter) throws IllegalMinMaxException {
+                Instant newDate = filter.getDbMinInstant().plusSeconds(1);
+                filter.setUserMin(newDate);
+                Assertions.assertEquals(newDate, filter.getUserMinInstant());
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set valid TimeFilter userMax")
+            @MethodSource("provideTimeFilters")
+            void setValidTimeFilterUserMax (TimeFilter filter) {
+                Instant newUserMax = filter.getDbMaxInstant().minusSeconds(1);
+                Assertions.assertDoesNotThrow(
+                        ()-> filter.setUserMax(newUserMax)
+                );
+            }
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("userMax changed after being set")
+            @MethodSource("provideTimeFilters")
+            void userMaxChangedAfterBeingSet (TimeFilter filter) throws IllegalMinMaxException {
+                Instant newDate = filter.getDbMaxInstant().minusSeconds(1);
+                filter.setUserMax(newDate);
+                Assertions.assertEquals(newDate, filter.getUserMaxInstant());
+            }
+        }
+
+        @Nested
+        @DisplayName("Set invalid userMin and userMax")
+        class SetInvalidUserMinAndUserMax {
+
+            static Stream<TimeFilter> provideTimeFilters(){
+                return provideTimeFiltersProvider();
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid TimeFilter userMin less than dbMin")
+            @MethodSource("provideTimeFilters")
+            void setInvalidTimeFilterUserMin (TimeFilter filter) {
+                Instant newUserMin = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newUserMin)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid TimeFilter userMax less than dbMin")
+            @MethodSource("provideTimeFilters")
+            void setInvalidTimeFilterUserMax (TimeFilter filter) {
+                Instant newUserMax = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newUserMax)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid TimeFilter userMin higher than dbMin")
+            @MethodSource("provideTimeFilters")
+            void setInvalidTimeFilterUserMinHigherThanDBMin (TimeFilter filter) {
+                Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newUserMin)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid TimeFilter userMax higher than dbMin")
+            @MethodSource("provideTimeFilters")
+            void setInvalidTimeFilterUserMaxHigherThanDBMin (TimeFilter filter) {
+                Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newUserMax)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid TimeFilter userMax less than userMin")
+            @MethodSource("provideTimeFilters")
+            void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) throws IllegalMinMaxException {
+                Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
+                Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 15);
+
+                filter.setUserMin(newUserMin);
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newUserMax)
+                );
+            }
+
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid TimeFilter userMin higher than userMax")
+            @MethodSource("provideTimeFilters")
+            void setInvalidUserMinHigherThanUserMax (TimeFilter filter) throws IllegalMinMaxException {
+                Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
+                Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 100);
+
+                filter.setUserMin(newUserMin);
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newUserMax)
+                );
+            }
+
+
+        }
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -198,14 +199,42 @@ class DoubleFilter extends RangeFilterClass {
     }
 
     @Override
-    public double setUserMin(double userMin) {
+    public double setUserMin(double userMin) throws IllegalMinMaxException {
+        if (userMin == USER_NOT_SET_VALUE){
+            return userMin;
+        }
+
+        if (userMin >= userMax && userMax != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMin' can not be greater than 'userMax'. UserMin :"+ userMin + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
+        }
+
+        if (userMin < DB_MIN || userMin > DB_MAX) {
+            throw new IllegalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMin: "+ userMin + " dbMax: " + DB_MAX + " dbMin : " + DB_MIN);
+        }
+
         this.userMin = userMin;
         return this.userMin;
     }
 
     @Override
-    public double setUserMax(double userMax) {
+    public double setUserMax(double userMax) throws IllegalMinMaxException {
+        if (userMax == USER_NOT_SET_VALUE){
+            return userMax;
+        }
+
+        if (userMax <= userMin && userMin != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. userMax: " + userMax + " dbMax: " + DB_MAX + " dbMin : " + DB_MIN);
+        }
+
+        if (userMax < DB_MIN || userMax > DB_MAX) {
+            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax: "  + userMax + " dbMax: " + DB_MAX + " dbMin : " + DB_MIN);
+        }
+
         this.userMax = userMax;
         return this.userMax;
+    }
+
+    public double getUserValueDefault(){
+        return this.USER_NOT_SET_VALUE;
     }
 }

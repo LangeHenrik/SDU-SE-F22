@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 
@@ -175,32 +176,32 @@ abstract class RangeFilterClass implements RangeFilter{
     }
 
     @Override
-    public double setUserMin(double userMin) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a double filter");
+    public double setUserMin(double userMin) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a double filter");
     }
 
     @Override
-    public Instant setUserMin(Instant userMin) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a time/Instant filter");
+    public Instant setUserMin(Instant userMin) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a time/Instant filter");
     }
 
     @Override
-    public long setUserMin(long userMin) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a long filter");
+    public long setUserMin(long userMin) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a long filter");
     }
 
     @Override
-    public double setUserMax(double userMax) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a double filter");
+    public double setUserMax(double userMax) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a double filter");
     }
 
     @Override
-    public Instant setUserMax(Instant userMax) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a time/Instant filter");
+    public Instant setUserMax(Instant userMax) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a time/Instant filter");
     }
 
     @Override
-    public long setUserMax(long userMax) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a long filter");
+    public long setUserMax(long userMax) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a long filter");
     }
 }

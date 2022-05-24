@@ -7,7 +7,9 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class Database implements DatabaseInterface {
     private final String[] queryAttributes = {"filterid", "name", "description", "productattribute", "min", "max"};
@@ -53,6 +55,7 @@ public class Database implements DatabaseInterface {
                     statement.setLong(5, filter.getDbMaxLong());
                 }
                 case TIME -> {
+                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     statement = connection.prepareStatement(
                             "INSERT INTO SortingRangeTimeView (name, description, productAttribute, min, max) VALUES (?, ?, ?, ?, ?)",
                             queryAttributes
@@ -60,8 +63,8 @@ public class Database implements DatabaseInterface {
                     statement.setString(1, filter.getName());
                     statement.setString(2, filter.getDescription());
                     statement.setString(3, filter.getProductAttribute());
-                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
-                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
+                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()), cal);
+                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()), cal);
                 }
                 default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
             }
@@ -104,7 +107,6 @@ public class Database implements DatabaseInterface {
                 }
                 // Then get the filter from the correct view by using the now known data type
                 ResultSet filterResultSet;
-                System.out.println(typeResult.getString(1));
                 //noinspection EnhancedSwitchMigration
                 switch (typeResult.getString(1)) {
                     case "Double":
@@ -156,18 +158,20 @@ public class Database implements DatabaseInterface {
     }
 
     private TimeFilter createTimeFilterFromResultset(ResultSet filterResultSet) throws SQLException {
+        // We need to force use of UTC for the testrunner
+        java.util.Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         return new TimeFilter(
                 filterResultSet.getInt("FilterId"),
                 filterResultSet.getString("Name"),
                 filterResultSet.getString("Description"),
                 filterResultSet.getString("ProductAttribute"),
-                filterResultSet.getTimestamp("Min").toInstant(),
-                filterResultSet.getTimestamp("Max").toInstant()
+                filterResultSet.getTimestamp("Min", cal).toInstant(),
+                filterResultSet.getTimestamp("Max", cal).toInstant()
         );
     }
 
     private DoubleFilter createDoubleFilterFromResultset(ResultSet filterResultSet) throws SQLException {
-        System.out.println(filterResultSet.getInt("FilterId") + " " + filterResultSet.getString("Name"));
         return new DoubleFilter(
                 filterResultSet.getInt("FilterId"),
                 filterResultSet.getString("Name"),
@@ -218,6 +222,7 @@ public class Database implements DatabaseInterface {
 
                 }
                 case TIME -> {
+                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     statement = connection.prepareStatement(
                             "UPDATE SortingRangeTimeView SET name=?, description=?, productAttribute=?, min=?, max=? WHERE (filterId = ?);",
                             new String[]{"filterid", "name", "description", "productattribute", "min", "max"}
@@ -225,16 +230,15 @@ public class Database implements DatabaseInterface {
                     statement.setString(1, filter.getName());
                     statement.setString(2, filter.getDescription());
                     statement.setString(3, filter.getProductAttribute());
-                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()));
-                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()));
+                    statement.setTimestamp(4, Timestamp.from(filter.getDbMinInstant()), cal);
+                    statement.setTimestamp(5, Timestamp.from(filter.getDbMaxInstant()), cal);
                     statement.setInt(6, filter.getId());
                 }
                 default -> throw new InvalidFilterTypeException("Didn't match any of our builtin RangeFilter types.");
             }
             int results = statement.executeUpdate();
             if (results < 1) {
-                System.out.println(filter);
-                throw new SQLException("Nothing updated");
+                throw new SQLException("Nothing updated with filter: " + filter);
             }
 
             ResultSet resultSet = statement.getGeneratedKeys();

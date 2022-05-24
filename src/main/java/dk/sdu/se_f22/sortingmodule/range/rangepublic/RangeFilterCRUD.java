@@ -83,12 +83,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName) throws IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException {
+    public RangeFilter update(RangeFilter filter, String newName) throws RangeFilterException, SQLException {
         return update(filter, newName, filter.getDescription());
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws IllegalImplementationException, SQLException, InvalidFilterTypeException, InvalidFilterException {
+    public RangeFilter update(RangeFilter filter, String newName, String newDescription) throws RangeFilterException, SQLException {
         RangeFilter out = null;
         if (filter instanceof DoubleFilter doubleFilter){
             out = new DoubleFilter(
@@ -148,7 +148,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException {
+    public RangeFilter update(RangeFilter filter, double dbMinToSave, double dbMaxToSave) throws RangeFilterException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof DoubleFilter)){
@@ -176,7 +176,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException {
+    public RangeFilter update(RangeFilter filter, long dbMinToSave, long dbMaxToSave) throws RangeFilterException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof LongFilter)){
@@ -216,7 +216,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
     }
 
     @Override
-    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws IllegalImplementationException, InvalidFilterTypeException, SQLException, InvalidFilterException {
+    public RangeFilter update(RangeFilter filter, Instant dbMinToSave, Instant dbMaxToSave) throws RangeFilterException, SQLException {
         validateFilterImplementation(filter);
 
         if (!(filter instanceof TimeFilter)){

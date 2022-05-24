@@ -53,7 +53,7 @@ public class SEM1customerGUIController {
 
             if(!foundResult) {
                 System.out.println("No elements found");
-                SEM1customerText.appendText("No elements found");
+                SEM1customerText.appendText("No elements found" + "\n");
             }
     }
 

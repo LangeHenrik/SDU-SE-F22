@@ -2,10 +2,9 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 
 import dk.sdu.se_f22.searchmodule.infrastructure.GUI.TestApplicationAdministrativeGUI;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,23 +81,24 @@ class SEM1InfrastructureAdministrativeGUIControllerTest {
         Button addButton = getAddButton(robot);
         TextField addTextField = getaddTextField(robot);
         RadioButton delimitersRB = getDelimiterRB(robot);
-
-        robot.clickOn(delimitersRB);
-        robot.clickOn(addTextField);
-        robot.write("29");
-        robot.clickOn(addButton);
+        for (int i = 0; i < 10; i++) {
+            robot.clickOn(addTextField);
+            robot.write("2" + i);
+            robot.clickOn(addButton);
+        }
     }
 
     @Test
     void removeBtnDelimiter(FxRobot robot) {
         Button removeButton = getRemoveButton(robot);
-        TextField removeTextField = getremoveTextField(robot);
+        TextField removeTextField = getaddTextField(robot);
         RadioButton delimitersRB = getDelimiterRB(robot);
-
         robot.clickOn(delimitersRB);
-        robot.clickOn(removeTextField);
-        robot.write("29");
-        robot.clickOn(removeButton);
+        for (int i = 0; i < 10; i++) {
+            robot.clickOn(removeTextField);
+            robot.write("2" + i);
+            robot.clickOn(removeButton);
+        }
     }
 
     @Test
@@ -108,20 +108,51 @@ class SEM1InfrastructureAdministrativeGUIControllerTest {
         RadioButton forbiddenCharRB = getForbiddenCharsRB(robot);
 
         robot.clickOn(forbiddenCharRB);
-        robot.clickOn(addTextField);
-        robot.write("29");
-        robot.clickOn(addButton);
+        for (int i = 0; i < 10; i++) {
+            robot.clickOn(addTextField);
+            robot.write("2" + i);
+            robot.clickOn(addButton);
+        }
     }
 
     @Test
     void removeForbiddenChar(FxRobot robot) {
         Button removeButton = getRemoveButton(robot);
-        TextField removeTextField = getremoveTextField(robot);
+        TextField removeTextField = getaddTextField(robot);
         RadioButton forbiddenCharRB = getForbiddenCharsRB(robot);
 
         robot.clickOn(forbiddenCharRB);
-        robot.clickOn(removeTextField);
-        robot.write("29");
-        robot.clickOn(removeButton);
+        for (int i = 0; i < 10; i++) {
+            robot.clickOn(removeTextField);
+            robot.write("2" + i);
+            robot.clickOn(removeButton);
+        }
+    }
+
+    @Test
+    void adminSearchTestHandlerTest(FxRobot robot){
+        robot.clickOn((Node) robot.lookup(hasText("Test")).nth(2).query());
+
+        Optional<TextField> searchTestTextFieldOptional = robot.lookup(hasId("adminTokenTestEntry")).tryQueryAs(TextField.class);
+        if (searchTestTextFieldOptional.isEmpty()){
+            fail("A TextFeild with the id 'adminTokenTestEntry' could not be found!");
+        }
+        TextField searchTestTextField = searchTestTextFieldOptional.get();
+
+        robot.clickOn(searchTestTextField);
+        robot.write("Yeet");
+
+        Optional<Button> searchTestButtonOptional = robot.lookup(hasText("Test")).tryQueryAs(Button.class);
+        if (searchTestButtonOptional.isEmpty()){
+            fail("A button with text 'Test' could not be found!");
+        }
+        Button searchTestButton = searchTestButtonOptional.get();
+        robot.clickOn(searchTestButton);
+
+        robot.clickOn(searchTestTextField);
+        robot.eraseText(4);
+        robot.write("Test1");
+        robot.clickOn(searchTestButton);
+
     }
 }

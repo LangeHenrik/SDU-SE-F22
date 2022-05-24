@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 public class Persistence implements IPersistence {
-    private Connection c = null;
     private IJsonService jsonService = null;
     public BrandInfrastructureInterface BIM2 = null;
 
@@ -21,11 +20,6 @@ public class Persistence implements IPersistence {
         //Connect to database
         jsonService = new JsonService();
         BIM2 = new BrandInfrastructure();
-        try {
-            c = DBConnection.getPooledConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -42,7 +36,7 @@ public class Persistence implements IPersistence {
     public List<Brand> getAllBrands() {
         List<Brand> brandList = new ArrayList<>();
 
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
             List<Integer> brandIdList = new ArrayList();
 
             PreparedStatement getBrandId = c.prepareStatement("SELECT id FROM brand");
@@ -64,10 +58,9 @@ public class Persistence implements IPersistence {
     }
 
     private Brand brandGetter(String name, Integer id) {
-        setAutoCommit(true);
-
         Brand brand = null;
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
+            c.setAutoCommit(false);
             var stmt = c.createStatement();
 
             ResultSet r;
@@ -124,8 +117,8 @@ public class Persistence implements IPersistence {
 
     @Override
     public boolean deleteBrand(int id) {
-        setAutoCommit(false);
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
+            c.setAutoCommit(false);
             // Delete from both Brand and Junction table
             // Products may be used by another brand, so it won't be deleted
             PreparedStatement deleteBrandJunction = c.prepareStatement("DELETE FROM BrandProductTypeJunction where brandid = ?");
@@ -148,8 +141,8 @@ public class Persistence implements IPersistence {
 
     @Override
     public boolean addOrUpdateBrands(List<Brand> brands) {
-        setAutoCommit(false);
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
+            c.setAutoCommit(false);
             /* ------ Insert all products ------ */
             // Keep no duplicate products
             Set<String> products = new HashSet<>();
@@ -231,8 +224,8 @@ public class Persistence implements IPersistence {
 
     @Override
     public boolean databaseIndexer() {
-        setAutoCommit(false);
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
+            c.setAutoCommit(false);
             PreparedStatement indexDatabase = c.prepareStatement("create index on producttype(type); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);");
             indexDatabase.execute();
             c.commit();
@@ -253,27 +246,18 @@ public class Persistence implements IPersistence {
     }
 
     private void rollback() {
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
             c.rollback();
         } catch (SQLException e) {
 
         }
     }
 
-    private void setAutoCommit(Boolean set) {
-        try {
-            c.setAutoCommit(set);
-        } catch (SQLException e) {
-
-        }
-    }
-
-
     public void setIndexingInterval(int indexingInterval)  {
 
         ResultSet r = null;
         PreparedStatement indexInterval = null;
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
             indexInterval = c.prepareStatement("update config set brandindexinterval = ? ");
             indexInterval.setInt(1,indexingInterval);
             indexInterval.execute();
@@ -287,7 +271,7 @@ public class Persistence implements IPersistence {
     public int getIndexingInterval(){
         ResultSet r = null;
         PreparedStatement indexInterval = null;
-        try {
+        try(var c = DBConnection.getPooledConnection()) {
             indexInterval = c.prepareStatement("select brandindexinterval from config where id = 60");
             r = indexInterval.executeQuery();
             r.next();
@@ -298,8 +282,4 @@ public class Persistence implements IPersistence {
         }
         return -1;
     }
-
-
-
-
 }

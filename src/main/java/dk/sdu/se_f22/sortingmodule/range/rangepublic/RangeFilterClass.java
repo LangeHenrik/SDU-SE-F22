@@ -19,19 +19,19 @@ abstract class RangeFilterClass implements RangeFilter{
     private final String DESCRIPTION;
     private final String PRODUCT_ATTRIBUTE;
 
-    public List<String> validAttributes;
+    private final List<String> VALID_ATTRIBUTES;
 
-    public RangeFilterClass(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> validAttributes) {
+    public RangeFilterClass(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> VALID_ATTRIBUTES) {
         this.ID = ID;
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
 
-        this.validAttributes = validAttributes;
+        this.VALID_ATTRIBUTES = VALID_ATTRIBUTES;
     }
 
-    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> validAttributes) {
-        this(DEFAULT_ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE, validAttributes);
+    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> VALID_ATTRIBUTES) {
+        this(DEFAULT_ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE, VALID_ATTRIBUTES);
     }
 
     /**
@@ -52,9 +52,9 @@ abstract class RangeFilterClass implements RangeFilter{
     abstract Collection<Product> filterList(Collection<Product> inputs);
 
     public Collection<Product> useFilter(Collection<Product> inputs, boolean strict) throws InvalidAttributeException {
-        if (!(validAttributes.contains(this.getProductAttribute()))) {
+        if (!(VALID_ATTRIBUTES.contains(this.getProductAttribute()))) {
             if(strict){
-                throw new InvalidAttributeException(this.getProductAttribute(), validAttributes);
+                throw new InvalidAttributeException(this.getProductAttribute(), VALID_ATTRIBUTES);
             }
             return inputs;
         }

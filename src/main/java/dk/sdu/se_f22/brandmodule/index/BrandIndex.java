@@ -80,15 +80,15 @@ public class BrandIndex implements IndexInterface {
 
             if (!rs.next() || newTokens.get(0) == null); tokenInsert.setString(1, newTokens.get(0));
             tokenInsert.execute();
-            rs = queryToken.executeQuery();
 
             for (int i = 0; i < tokens.size(); i++) {
                 while (rs.next()) {
-                if (rs.getString() != newTokens.get(i)) {
-                    tokenInsert.setString(1, newTokens.get(i));
+                    if (rs.getString("token").equals(newTokens.get(i))) {
+                        tokenInsert.setString(1, newTokens.get(i));
+                        tokenInsert.execute();
                     }
+                    rs.beforeFirst();
                 }
-                tokenInsert.execute();
 
                 //tror det er unødvendigt fordi de begge er FK og begge er oprettet med nextvalue keys
                 queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");

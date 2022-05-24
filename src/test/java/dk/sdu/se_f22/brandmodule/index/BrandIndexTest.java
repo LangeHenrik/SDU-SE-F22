@@ -61,8 +61,8 @@ class BrandIndexTest {
         brand.setProducts(tempList);
 
         //tokens ----------
-        List<String> firstTokens = List.of("Quality", "Phones", "Computers", "Watches");
-        List<String> testTokens = List.of("Quality", "Phones", "Tv-Controller", "Computers");
+        List<String> firstTokens = List.of("lol", "Phones", "Computers", "Watches");
+        List<String> testTokens = List.of("Phones", "Tv-Controller", "Computers");
 
         //creating instance of BrandIndex class -----------------
         BrandIndex index = new BrandIndex();
@@ -80,6 +80,11 @@ class BrandIndexTest {
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+        //Check lists
+        for (String s: firstTokens) {
+            System.out.println(s);
+        };
 
         //Calling indexBrandInformation with brand and tokens --------
         index.indexBrandInformation(brand, firstTokens);
@@ -101,13 +106,6 @@ class BrandIndexTest {
         index.indexBrandInformation(brand, testTokens);
 
         //Checking if the code doesn't add duplicates and adds non-duplicate tokens -----------
-        checkNonDuplicates(testTokens);
-
-        //drop all newly added in db ------------
-    }
-
-    @Test
-    void checkNonDuplicates(List<String> testTokens) {
         try {
             PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens");
             ResultSet queryRs = query.executeQuery();
@@ -119,6 +117,8 @@ class BrandIndexTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        //drop all newly added in db ------------
     }
 
 }

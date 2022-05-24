@@ -15,6 +15,7 @@ public class OneWayImplementation implements OneWayInterface {
 
     public OneWayImplementation() {
         this.itemCatalog = new ItemCatalog(getDatabaseItems());
+        DatabaseAPI.initializeTable();
     }
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) throws NullPointerException {
@@ -41,13 +42,6 @@ public class OneWayImplementation implements OneWayInterface {
         }
         System.out.println("The read was a succes");
         return arr;
-    }
-
-    @Override
-    public void initializeTable() {
-        if (DatabaseAPI.initializeTable()) {
-            System.out.println("A new table has been created");
-        } else System.out.println("Table already exists");
     }
 
 

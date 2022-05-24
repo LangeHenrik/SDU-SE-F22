@@ -33,18 +33,21 @@ public class Product {
 
     /** The constructor for setting all attributes at once including those that are optional
      */
-    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
         this(uuid, averageUserReview, inStock, ean, price, publishedDate, expirationDate, category, name, description);
         this.size = size;
         this.clockspeed = clockspeed;
         this.weight = weight;
+    }
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
+        this(uuid, averageUserReview, inStock, (long) ean, price, publishedDate, expirationDate, category, name, description, size, clockspeed, weight);
     }
 
     /**This constructor sets all the required value, but leaves the optional values as null.
      * <br>
      * Except for clockspeed and weight, which are doubles and thus not capable of being null.
      */
-    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
         this.uuid = uuid;
         this.averageUserReview = averageUserReview;
         this.inStock = inStock;
@@ -55,6 +58,9 @@ public class Product {
         this.category = category;
         this.name = name;
         this.description = description;
+    }
+    public Product(UUID uuid, double averageUserReview, List<String> inStock, int ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description) {
+        this(uuid, averageUserReview, inStock, (long) ean, price, publishedDate, expirationDate, category, name, description);
     }
 
     /** This parses a {@link BaseProduct} into a Product.<br>

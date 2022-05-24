@@ -15,7 +15,9 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationExcepti
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
+import dk.sdu.se_f22.sortingmodule.scoring.IScoring;
 import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sortingmodule.scoring.Scoring;
 
 /**
  * Implemented version of SortingModule
@@ -184,6 +186,8 @@ public class SortingModuleImpl implements SortingModule {
         }
 
         // Scoring
+        IScoring scoring = new Scoring();
+        searchHits = scoring.scoreSort(searchHits, this.query.getScoring());
 
         // Pagination
         searchHits = paginateHits(searchHits);

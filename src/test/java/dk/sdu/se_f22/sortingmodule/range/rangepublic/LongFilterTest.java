@@ -153,154 +153,6 @@ class LongFilterTest {
             assertEquals(expectedResult, filteredResults);
         }
 
-        @Nested
-        @DisplayName("Set userMin and userMax")
-        class SetUserMinAndMax {
-
-            static Stream<LongFilter> provideLongFiltersProvider (){
-                return Stream.of(
-                        new LongFilter("Long filter 1", "Desc long filter 1", "price", 0, 1000),
-                        new LongFilter("Long filter 2", "Desc long filter 2", "price", 0, 30)
-                );
-            }
-
-            @Nested
-            @DisplayName("Set valid userMin and userMax")
-            class SetValidUserMinAndUserMax {
-
-                static Stream<LongFilter> provideLongFilters(){
-                    return provideLongFiltersProvider();
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set valid DoubleFilter userMin")
-                @MethodSource("provideLongFilters")
-                void setValidLongFilterUserMin (LongFilter filter) {
-                    Assertions.assertDoesNotThrow(
-                            () -> filter.setUserMin(1));
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set valid LongFilter userMax")
-                @MethodSource("provideLongFilters")
-                void setValidLongFilterUserMax (LongFilter filter) {
-                    long newUserMax = filter.getDbMaxLong() - 1;
-                    Assertions.assertDoesNotThrow(
-                            () -> filter.setUserMax(newUserMax));
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("userMin has changed")
-                @MethodSource("provideLongFilters")
-                void userMinHasChanged (LongFilter filter) throws IllegalMinMaxException {
-                    long newMin = 1;
-                    filter.setUserMin(newMin);
-                    Assertions.assertEquals(newMin, filter.getUserMinLong());
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("userMax has changed")
-                @MethodSource("provideLongFilters")
-                void userMaxHasChanged (LongFilter filter) throws IllegalMinMaxException {
-                    long newMax = filter.getDbMaxLong() -1;
-                    filter.setUserMax(newMax);
-                    Assertions.assertEquals(newMax, filter.getUserMaxLong());
-                }
-            }
-
-            @Nested
-            @DisplayName("Set invalid userMin and userMax")
-            class SetInvalidUserMinAndUserMax {
-
-                static Stream<LongFilter> provideLongFilters(){
-                    return provideLongFiltersProvider();
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid LongFilter userMin less than dbMin")
-                @MethodSource("provideLongFilters")
-                void setInvalidLongFilterUserMin (LongFilter filter) {
-                    long newValue = filter.getDbMinLong() - 1;
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMin(newValue));
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid LongFilter userMax less than dbMin")
-                @MethodSource("provideLongFilters")
-                void setInvalidLongFilterUserMax (LongFilter filter) {
-                    long newValue = filter.getDbMinLong() - 1;
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMax(newValue)
-                    );
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid LongFilter userMin higher than dbMax")
-                @MethodSource("provideLongFilters")
-                void setInvalid (LongFilter filter) {
-                    long newValue = filter.getDbMaxLong() + 1;
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMin(newValue));
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid LongFilter userMax higher than dbMax")
-                @MethodSource("provideLongFilters")
-                void setInvalidLongFilterUserMaxHigherThanDBMax (LongFilter filter) {
-                    long newValue = filter.getDbMaxLong() + 1;
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMax(newValue)
-                    );
-                }
-
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid LongFilter userMax less than userMin")
-                @MethodSource("provideLongFilters")
-                void setInvalidLessThanUserMaxLessThanUserMin (LongFilter filter) throws IllegalMinMaxException {
-                    long newMin = filter.getDbMaxLong() - 10;
-                    long newMax = filter.getDbMaxLong() - 20;
-
-                    filter.setUserMin(newMin);
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMax(newMax));
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set invalid LongFilter userMin higher than userMax")
-                @MethodSource("provideLongFilters")
-                void setInvalidUserMinHigherThanUserMax (LongFilter filter) throws IllegalMinMaxException {
-                    long newMax = filter.getDbMaxLong() - 20;
-                    long newMin = filter.getDbMaxLong() - 10;
-
-                    filter.setUserMin(newMin);
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMax(newMax));
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set userMin with incorrect type")
-                @MethodSource("provideLongFilters")
-                void setUserMinWithIncorrectType (LongFilter filter) {
-                    double newValue = 100.0;
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMin(newValue)
-                    );
-                }
-
-                @ParameterizedTest(name = "{0}")
-                @DisplayName("Set userMax with incorrect type")
-                @MethodSource("provideLongFilters")
-                void setUserMaxWithIncorrectType (LongFilter filter) {
-                    double newValue = 100.0;
-                    Assertions.assertThrows(IllegalMinMaxException.class,
-                            () -> filter.setUserMax(newValue)
-                    );
-                }
-            }
-        }
-
         static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {
             List<Arguments> out = new ArrayList<>();
 
@@ -318,6 +170,202 @@ class LongFilterTest {
             }
 
             return out.stream();
+        }
+    }
+
+    @Nested
+    @DisplayName("Set userMin and userMax")
+    class SetUserMinAndMax {
+
+        static Stream<LongFilter> provideLongFiltersProvider (){
+            return Stream.of(
+                    new LongFilter("Long filter 1", "Desc long filter 1", "price", 0, 1000),
+                    new LongFilter("Long filter 2", "Desc long filter 2", "price", 0, 30)
+            );
+        }
+
+        @Nested
+        @DisplayName("Set valid userMin and userMax")
+        class SetValidUserMinAndUserMax {
+
+            static Stream<LongFilter> provideLongFilters(){
+                return provideLongFiltersProvider();
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set valid DoubleFilter userMin")
+            @MethodSource("provideLongFilters")
+            void setValidLongFilterUserMin (LongFilter filter) {
+                Assertions.assertDoesNotThrow(
+                        () -> filter.setUserMin(1));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set valid LongFilter userMax")
+            @MethodSource("provideLongFilters")
+            void setValidLongFilterUserMax (LongFilter filter) {
+                long newUserMax = filter.getDbMaxLong() - 1;
+                Assertions.assertDoesNotThrow(
+                        () -> filter.setUserMax(newUserMax));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("userMin has changed")
+            @MethodSource("provideLongFilters")
+            void userMinHasChanged (LongFilter filter) throws IllegalMinMaxException {
+                long newMin = 1;
+                filter.setUserMin(newMin);
+                Assertions.assertEquals(newMin, filter.getUserMinLong());
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("userMax has changed")
+            @MethodSource("provideLongFilters")
+            void userMaxHasChanged (LongFilter filter) throws IllegalMinMaxException {
+                long newMax = filter.getDbMaxLong() -1;
+                filter.setUserMax(newMax);
+                Assertions.assertEquals(newMax, filter.getUserMaxLong());
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set valid userMin and then userMax")
+            @MethodSource("provideLongFilters")
+            void setUserMinAndThenUserMax (LongFilter filter) throws IllegalMinMaxException {
+                long newMax = filter.getDbMaxLong() - 1;
+                long newMin = filter.getDbMinLong() + 1;
+                filter.setUserMin(newMin);
+
+                Assertions.assertDoesNotThrow(
+                        () -> filter.setUserMax(newMax));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set valid userMax and then userMin")
+            @MethodSource("provideLongFilters")
+            void setUserMaxAndThenUserMin (LongFilter filter) throws IllegalMinMaxException {
+                long newMax = filter.getDbMaxLong() - 1;
+                long newMin = filter.getDbMinLong() + 1;
+                filter.setUserMax(newMax);
+
+                Assertions.assertDoesNotThrow(
+                        () -> filter.setUserMin(newMin));
+            }
+        }
+
+        @Nested
+        @DisplayName("Set invalid userMin and userMax")
+        class SetInvalidUserMinAndUserMax {
+
+            static Stream<LongFilter> provideLongFilters(){
+                return provideLongFiltersProvider();
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid LongFilter userMin less than dbMin")
+            @MethodSource("provideLongFilters")
+            void setInvalidLongFilterUserMin (LongFilter filter) {
+                long newValue = filter.getDbMinLong() - 1;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newValue));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid LongFilter userMax less than dbMin")
+            @MethodSource("provideLongFilters")
+            void setInvalidLongFilterUserMax (LongFilter filter) {
+                long newValue = filter.getDbMinLong() - 1;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newValue)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid LongFilter userMin higher than dbMax")
+            @MethodSource("provideLongFilters")
+            void setInvalid (LongFilter filter) {
+                long newValue = filter.getDbMaxLong() + 1;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newValue));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid LongFilter userMax higher than dbMax")
+            @MethodSource("provideLongFilters")
+            void setInvalidLongFilterUserMaxHigherThanDBMax (LongFilter filter) {
+                long newValue = filter.getDbMaxLong() + 1;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newValue)
+                );
+            }
+
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid LongFilter userMax less than userMin")
+            @MethodSource("provideLongFilters")
+            void setInvalidLessThanUserMaxLessThanUserMin (LongFilter filter) throws IllegalMinMaxException {
+                long newMin = filter.getDbMaxLong() - 10;
+                long newMax = filter.getDbMaxLong() - 20;
+
+                filter.setUserMin(newMin);
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newMax));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid LongFilter userMin higher than userMax")
+            @MethodSource("provideLongFilters")
+            void setInvalidUserMinHigherThanUserMax (LongFilter filter) throws IllegalMinMaxException {
+                long newMax = filter.getDbMaxLong() - 20;
+                long newMin = filter.getDbMaxLong() - 10;
+
+                filter.setUserMin(newMin);
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newMax));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set userMin with incorrect type")
+            @MethodSource("provideLongFilters")
+            void setUserMinWithIncorrectType (LongFilter filter) {
+                double newValue = 100.0;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newValue)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set userMax with incorrect type")
+            @MethodSource("provideLongFilters")
+            void setUserMaxWithIncorrectType (LongFilter filter) {
+                double newValue = 100.0;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newValue)
+                );
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid userMin and then userMax")
+            @MethodSource("provideLongFilters")
+            void setUserMinAndThenUserMax (LongFilter filter) throws IllegalMinMaxException {
+                long newMax = filter.getDbMinLong() + 1;
+                long newMin = filter.getDbMaxLong() - 1;
+                filter.setUserMin(newMin);
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newMax));
+            }
+
+            @ParameterizedTest(name = "{0}")
+            @DisplayName("Set invalid userMax and then userMin")
+            @MethodSource("provideLongFilters")
+            void setUserMaxAndThenUserMin (LongFilter filter) throws IllegalMinMaxException {
+                long newMax = filter.getDbMinLong() + 1;
+                long newMin = filter.getDbMaxLong() - 1;
+                filter.setUserMax(newMax);
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newMin));
+            }
         }
     }
 }

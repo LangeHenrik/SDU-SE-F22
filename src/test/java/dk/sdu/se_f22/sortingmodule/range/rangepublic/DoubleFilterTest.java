@@ -216,158 +216,191 @@ class DoubleFilterTest {
         }
 
 
+
+    }
+
+    @Nested
+    @DisplayName("Set userMin and userMax")
+    class SetUserMinAndMax {
+
         @Nested
-        @DisplayName("Set userMin and userMax")
-        class SetUserMinAndMax {
+        @DisplayName("Set valid userMin and userMax")
+        class SetValidUserMinAndUserMax {
 
-            @Nested
-            @DisplayName("Set valid userMin and userMax")
-            class SetValidUserMinAndUserMax {
-
-                @ParameterizedTest
-                @ValueSource(doubles = {1.0, 3.5, 999.0})
-                @DisplayName("Set valid DoubleFilter userMin")
-                void setValidDoubleFilterUserMin (double input) throws RangeFilterException {
-                    DoubleFilter doubleFilter = new DoubleFilter(
-                            "Test Name",
-                            "Test Discription",
-                            "Test product Attribute",
-                            1, 1000);
-
-                    Assertions.assertEquals(doubleFilter.setUserMin(input), doubleFilter.getUserMinDouble());
-
-                }
-
-                @ParameterizedTest
-                @ValueSource(doubles = {2.0, 3.5, 1000.0})
-                @DisplayName("Set valid DoubleFilter userMax")
-                void setValidDoubleFilterUserMax (double input) throws IllegalMinMaxException {
-                    DoubleFilter doubleFilter = new DoubleFilter(
-                            "Test Name",
-                            "Test Discription",
-                            "Test product Attribute",
-                            1, 1000);
-
-                    doubleFilter.setUserMax(input);
-                    Assertions.assertEquals(input, doubleFilter.getUserMaxDouble());
-                }
-
-                @ParameterizedTest
-                @MethodSource("provideParameters")
-                @DisplayName("Set valid DoubleFilter userMax And userMax")
-                void setValidDoubleFilterUserMinAndUserMax (double inputMin, double inputMax) {
-                    DoubleFilter doubleFilter = new DoubleFilter(
-                            "Test Name",
-                            "Test Discription",
-                            "Test product Attribute",
-                            1, 1000);
-
-                    Assertions.assertDoesNotThrow(
-                            () -> {
-                                doubleFilter.setUserMax(inputMax);
-                                doubleFilter.setUserMin(inputMin);
-                            });
-                }
-
-                private static Stream<Arguments> provideParameters() {
-                    return Stream.of(
-                            Arguments.of(1.0, 2.0),
-                            Arguments.of(3.5, 5.5),
-                            Arguments.of(999.0, 1000.0)
-                    );
-                }
-            }
-
-            @Nested
-            @DisplayName("Set invalid userMin and userMax")
-            class SetInvalidUserMinAndUserMax {
-
-                @ParameterizedTest
-                @ValueSource(doubles = {Double.MIN_VALUE, -1.0, 0.0})
-                @DisplayName("Set invalid DoubleFilter userMin")
-                void setValidDoubleFilterUserMin (double input) {
-                    DoubleFilter doubleFilter = new DoubleFilter(
-                            "Test Name",
-                            "Test Discription",
-                            "Test product Attribute",
-                            1, 1000);
-
-                    Assertions.assertThrows(
-                            IllegalMinMaxException.class,
-                            () -> doubleFilter.setUserMin(input));
-                }
-
-                @ParameterizedTest
-                @ValueSource(doubles = {1000.1, 10000, Double.MAX_VALUE})
-                @DisplayName("Set invalid DoubleFilter userMax")
-                void setValidDoubleFilterUserMax (double input) {
-                    DoubleFilter doubleFilter = new DoubleFilter(
-                            "Test Name",
-                            "Test Discription",
-                            "Test product Attribute",
-                            1, 1000);
-
-                    Assertions.assertThrows(
-                            IllegalMinMaxException.class,
-                            () -> doubleFilter.setUserMax(input));
-                }
-
-                @ParameterizedTest
-                @MethodSource("provideParameters")
-                @DisplayName("Set invalid DoubleFilter userMax And userMax")
-                void setValidDoubleFilterUserMinAndUserMax (double inputMin, double inputMax) {
-                    DoubleFilter doubleFilter = new DoubleFilter(
-                            "Test Name",
-                            "Test Discription",
-                            "Test product Attribute",
-                            1, 1000);
-
-                    Assertions.assertThrows(
-                            IllegalMinMaxException.class,
-                            () -> {
-                                doubleFilter.setUserMin(inputMin);
-                                doubleFilter.setUserMax(inputMax);
-                            });
-                }
-
-                private static Stream<Arguments> provideParameters() {
-                    return Stream.of(
-                            Arguments.of(2.0, 1.0),
-                            Arguments.of(5.5, 3.5),
-                            Arguments.of(1000.0, 999.0)
-                    );
-                }
-            }
-
-            @Test
-            @DisplayName("Set userMin with incorrect type")
-            void setUserMinWithIncorrectType () {
-                long newValue = 100;
+            @ParameterizedTest
+            @ValueSource(doubles = {1.0, 3.5, 999.0})
+            @DisplayName("Set valid DoubleFilter userMin")
+            void setValidDoubleFilterUserMin (double input) throws RangeFilterException {
                 DoubleFilter doubleFilter = new DoubleFilter(
                         "Test Name",
                         "Test Discription",
                         "Test product Attribute",
                         1, 1000);
 
-                Assertions.assertThrows(IllegalMinMaxException.class,
-                        () -> doubleFilter.setUserMin(newValue)
-                );
+                Assertions.assertEquals(doubleFilter.setUserMin(input), doubleFilter.getUserMinDouble());
+
             }
 
-            @Test
-            @DisplayName("Set userMax with incorrect type")
-            void setUserMaxWithIncorrectType () {
-                long newValue = 100;
+            @ParameterizedTest
+            @ValueSource(doubles = {2.0, 3.5, 1000.0})
+            @DisplayName("Set valid DoubleFilter userMax")
+            void setValidDoubleFilterUserMax (double input) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(
                         "Test Name",
                         "Test Discription",
                         "Test product Attribute",
                         1, 1000);
 
-                Assertions.assertThrows(IllegalMinMaxException.class,
-                        () -> doubleFilter.setUserMax(newValue)
+                doubleFilter.setUserMax(input);
+                Assertions.assertEquals(input, doubleFilter.getUserMaxDouble());
+            }
+
+            @ParameterizedTest
+            @MethodSource("provideParameters")
+            @DisplayName("Set valid DoubleFilter userMax and then userMin")
+            void setValidDoubleFilterUserMaxAndThenUserMin (double inputMin, double inputMax) throws IllegalMinMaxException {
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                doubleFilter.setUserMax(inputMax);
+
+                Assertions.assertDoesNotThrow(
+                        () -> doubleFilter.setUserMin(inputMin));
+            }
+
+            @ParameterizedTest
+            @MethodSource("provideParameters")
+            @DisplayName("Set valid DoubleFilter userMin and then userMax")
+            void setValidDoubleFilterUserMinAndThenUserMax (double inputMin, double inputMax) throws IllegalMinMaxException {
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                doubleFilter.setUserMin(inputMin);
+
+                Assertions.assertDoesNotThrow(
+                        () -> doubleFilter.setUserMax(inputMax));
+            }
+
+            private static Stream<Arguments> provideParameters() {
+                return Stream.of(
+                        Arguments.of(1.0, 2.0),
+                        Arguments.of(3.5, 5.5),
+                        Arguments.of(999.0, 1000.0)
                 );
             }
+        }
+
+        @Nested
+        @DisplayName("Set invalid userMin and userMax")
+        class SetInvalidUserMinAndUserMax {
+
+            @ParameterizedTest
+            @ValueSource(doubles = {Double.MIN_VALUE, -1.0, 0.0})
+            @DisplayName("Set invalid DoubleFilter userMin")
+            void setValidDoubleFilterUserMin (double input) {
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                Assertions.assertThrows(
+                        IllegalMinMaxException.class,
+                        () -> doubleFilter.setUserMin(input));
+            }
+
+            @ParameterizedTest
+            @ValueSource(doubles = {1000.1, 10000, Double.MAX_VALUE})
+            @DisplayName("Set invalid DoubleFilter userMax")
+            void setValidDoubleFilterUserMax (double input) {
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                Assertions.assertThrows(
+                        IllegalMinMaxException.class,
+                        () -> doubleFilter.setUserMax(input));
+            }
+
+            @ParameterizedTest
+            @MethodSource("provideParameters")
+            @DisplayName("Set invalid DoubleFilter userMin and then userMax")
+            void setValidDoubleFilterUserMinAndThenUserMax (double inputMin, double inputMax) throws IllegalMinMaxException {
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                doubleFilter.setUserMin(inputMin);
+
+                Assertions.assertThrows(
+                        IllegalMinMaxException.class,
+                        () -> doubleFilter.setUserMax(inputMax));
+            }
+
+            @ParameterizedTest
+            @MethodSource("provideParameters")
+            @DisplayName("Set invalid DoubleFilter userMax and then userMin")
+            void setValidDoubleFilterUserMaxAndThenUserMin (double inputMin, double inputMax) throws IllegalMinMaxException {
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                doubleFilter.setUserMax(inputMax);
+
+                Assertions.assertThrows(
+                        IllegalMinMaxException.class,
+                        () -> doubleFilter.setUserMin(inputMin));
+            }
+
+            private static Stream<Arguments> provideParameters() {
+                return Stream.of(
+                        Arguments.of(2.0, 1.0),
+                        Arguments.of(5.5, 3.5),
+                        Arguments.of(1000.0, 999.0)
+                );
+            }
+        }
+
+        @Test
+        @DisplayName("Set userMin with incorrect type")
+        void setUserMinWithIncorrectType () {
+            long newValue = 100;
+            DoubleFilter doubleFilter = new DoubleFilter(
+                    "Test Name",
+                    "Test Discription",
+                    "Test product Attribute",
+                    1, 1000);
+
+            Assertions.assertThrows(IllegalMinMaxException.class,
+                    () -> doubleFilter.setUserMin(newValue)
+            );
+        }
+
+        @Test
+        @DisplayName("Set userMax with incorrect type")
+        void setUserMaxWithIncorrectType () {
+            long newValue = 100;
+            DoubleFilter doubleFilter = new DoubleFilter(
+                    "Test Name",
+                    "Test Discription",
+                    "Test product Attribute",
+                    1, 1000);
+
+            Assertions.assertThrows(IllegalMinMaxException.class,
+                    () -> doubleFilter.setUserMax(newValue)
+            );
         }
     }
 }

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Tokenizer {
 
-    public HTMLSite tokenizeHTMLBodyText(HTMLSite site) throws IOException {
+    public void tokenizeHTMLBodyText(HTMLSite site) throws IOException {
 
         ArrayList<String> tokens = new ArrayList<>();
         String convertedsite = site.getDocumentText();
@@ -44,8 +44,6 @@ public class Tokenizer {
             }
         }
         site.setTokens(tokens);
-
-        return null;
     }
 }
 

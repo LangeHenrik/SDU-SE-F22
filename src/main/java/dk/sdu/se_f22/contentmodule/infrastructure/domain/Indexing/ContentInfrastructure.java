@@ -27,11 +27,11 @@ public class ContentInfrastructure implements IContentInfrastructre{
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            // TODO: Handle exception   
+            System.out.println(e);
         }
 
         parser.parseHTML(newSite);
-//      tokenizer.tokenizeHTMLBodyText(newSite);
+        tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
         //CMSIndexModule.index(newSite.getFilteredTokensArray(), newSite.getId());

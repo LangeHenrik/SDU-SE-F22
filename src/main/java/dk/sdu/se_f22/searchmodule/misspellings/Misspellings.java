@@ -33,6 +33,7 @@ public class Misspellings implements DatabaseOperator {
             }
         }
         return corrected;
+
     }
 
 
@@ -150,6 +151,42 @@ public class Misspellings implements DatabaseOperator {
 
     }
 
-
+    public static void main(String[] args) {
+        Misspellings misspelling = new Misspellings();
+        ArrayList<String> text = new ArrayList<String>();
+        text.add("kymputer");
+        text.add("kamera");
+        text.add("tw");
+        System.out.println(text);
+        //filter
+        misspelling.filter(text);
+        System.out.println(text);
+        System.out.println("---------------------");
+        //add misspelling
+        System.out.println("add misspelling");
+        misspelling.addMisspelling("kamera", "camera");
+        misspelling.addMisspelling("kymputer", "computer");
+        System.out.println("---------------------");
+        //filter
+        misspelling.filter(text);
+        System.out.println(text);
+        System.out.println("---------------------");
+        //delete misspelling
+        System.out.println("delete misspelling");
+        misspelling.deleteMisspelling("kamera");
+        System.out.println("---------------------");
+        //filter
+        misspelling.filter(text);
+        System.out.println(text);
+        System.out.println("---------------------");
+        //update misspelling
+        System.out.println("update misspelling");
+        misspelling.updateMisspelling("kymputer", "komputer");
+        System.out.println("---------------------");
+        //filter
+        misspelling.filter(text);
+        System.out.println(text);
+        System.out.println("---------------------");
+    }
 
 }

@@ -14,6 +14,11 @@ open module dk.sdu.se_f22 {
     requires org.postgresql.jdbc;
     requires validatorfx;
     requires com.google.gson;
+    requires org.apache.commons.pool2;
     requires org.jetbrains.annotations;
-    exports dk.sdu.se_f22;
+    requires org.jsoup;
+
+    exports dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 }
+
+

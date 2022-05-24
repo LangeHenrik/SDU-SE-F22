@@ -33,7 +33,7 @@ public class DatabaseQueries  {
             ResultSet queryResultSet = stmt.executeQuery();
             //Name??
             while (queryResultSet.next()) {
-                chars = chars + queryResultSet.getString(("limitedchar"));
+                chars = chars + queryResultSet.getString("parameter");
             }
             stmt.close();
 
@@ -76,10 +76,11 @@ public class DatabaseQueries  {
             stmt.execute();
             ResultSet queryResultSet = stmt.executeQuery();
 
-            parameterid = queryResultSet.getInt(parameter);
+            parameterid = queryResultSet.getInt("parameter_id");
             stmt.close();
         } catch (SQLException e) {
             System.out.println(e);
+
         }
         return parameterid;
 

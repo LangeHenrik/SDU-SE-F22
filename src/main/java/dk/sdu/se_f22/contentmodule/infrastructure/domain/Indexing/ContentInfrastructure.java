@@ -27,7 +27,8 @@ public class ContentInfrastructure implements IContentInfrastructre{
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            System.out.println(e);
+            //Handling
+            e.printStackTrace();
         }
 
         parser.parseHTML(newSite);

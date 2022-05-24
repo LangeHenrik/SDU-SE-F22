@@ -20,6 +20,9 @@ public class Tokenizer {
 
         int pageid = database.getPageID(site.getId());
 
+
+
+        //Laves om
         for (int i = 0; i < convertedsite.length(); i++) {
             switch (convertedsite.charAt(i)) {
                 case '-' -> database.logParameters(pageid, database.getParameterID('-'));

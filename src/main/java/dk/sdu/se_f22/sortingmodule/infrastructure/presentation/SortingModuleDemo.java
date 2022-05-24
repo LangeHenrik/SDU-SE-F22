@@ -2,6 +2,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.presentation;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModuleImpl;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 public class SortingModuleDemo {
 
@@ -23,6 +24,7 @@ public class SortingModuleDemo {
         module.addCategory(5);
         module.addRange(4, 2.46854, 3.89);
         module.setPagination(0, 5);
+        module.setScoring(ScoreSortType.ALL);
         SearchHits data = module.search();
 
         // Data received

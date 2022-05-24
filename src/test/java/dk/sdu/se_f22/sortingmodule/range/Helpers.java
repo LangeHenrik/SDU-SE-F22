@@ -26,7 +26,7 @@ public class Helpers {
     public static List<String> readFromCSV(String fileName) {
         List<String> out = new ArrayList<>();
       
-        try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/SortingModule/Range/" + fileName))) {
+        try (Scanner scanner = new Scanner(new File("src/test/resources/dk/sdu/se_f22/sortingmodule/range/" + fileName))) {
             while (scanner.hasNextLine()) {
                 out.add(scanner.nextLine());
             }
@@ -62,7 +62,7 @@ public class Helpers {
             // We choose to create the product this way,
             // since we can utilize the parser already written in the Product() class
             BaseProduct baseProduct = new BaseProduct();
-            baseProduct.set(ProductAttribute.ID, attributes[0]);
+            baseProduct.set(ProductAttribute.UUID, attributes[0]);
             baseProduct.set(ProductAttribute.AVERAGE_USER_REVIEW, attributes[1]);
             baseProduct.set(ProductAttribute.EAN, attributes[2]);
             baseProduct.set(ProductAttribute.PRICE, attributes[3]);

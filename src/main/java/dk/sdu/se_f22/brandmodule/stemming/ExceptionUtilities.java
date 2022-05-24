@@ -15,14 +15,18 @@ public class ExceptionUtilities {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO stemmingexceptions (exception) VALUES (?)");
         statement.setString(1, name);
         statement.executeUpdate();
+        statement.close();
         connection.close();
     }
 
     public static HashMap<Integer, String> getExceptions() throws SQLException {
         Connection connection = DBConnection.getPooledConnection();
-        String query = "SELECT * FROM stemmingexceptions";
-        ResultSet result = connection.prepareStatement(query).executeQuery();
-        return handleResult(result);
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM stemmingexceptions");
+        ResultSet result = statement.executeQuery();
+        HashMap resultMap = handleResult(result);
+        statement.close();
+        connection.close();
+        return resultMap;
     }
 
     public static HashMap<Integer, String> getException(String name) throws SQLException {
@@ -30,7 +34,10 @@ public class ExceptionUtilities {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM stemmingexceptions WHERE exception = ?");
         statement.setString(1, name);
         ResultSet result = statement.executeQuery();
-        return handleResult(result);
+        HashMap resultMap = handleResult(result);
+        statement.close();
+        connection.close();
+        return resultMap;
 
     }
 
@@ -40,6 +47,7 @@ public class ExceptionUtilities {
         statement.setString(1, newName);
         statement.setString(2, name);
         statement.executeUpdate();
+        statement.close();
         connection.close();
     }
 
@@ -48,6 +56,7 @@ public class ExceptionUtilities {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM stemmingexceptions " + "WHERE exception =  ?");
         statement.setString(1, name);
         statement.executeUpdate();
+        statement.close();
         connection.close();
     }
 

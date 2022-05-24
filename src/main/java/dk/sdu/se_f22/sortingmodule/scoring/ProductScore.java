@@ -25,13 +25,6 @@ public class ProductScore implements Comparable<ProductScore>{
     }
 
     @Override
-    public String toString() {
-        return "ProductScore{" +
-                "score=" + score +
-                '}';
-    }
-
-    @Override
     public int compareTo(ProductScore productScore) {
         return -Integer.compare(getScore(),productScore.getScore());
     }

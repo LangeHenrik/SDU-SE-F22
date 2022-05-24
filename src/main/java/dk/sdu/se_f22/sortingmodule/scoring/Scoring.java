@@ -99,7 +99,7 @@ public class Scoring implements IScoring {
         }
     }
 
-    public List<ProductScore> wrapProduct (Collection<Product> input) {
+    private List<ProductScore> wrapProduct (Collection<Product> input) {
         List<ProductScore> products = new ArrayList<>();
 
         for (Product product : input) {
@@ -110,7 +110,7 @@ public class Scoring implements IScoring {
         return products;
     }
 
-    public List<Product> unWrapProduct (List<ProductScore> input) {
+    private List<Product> unWrapProduct (List<ProductScore> input) {
         List<Product> products = new ArrayList<>();
 
         for (ProductScore productScore : input) {

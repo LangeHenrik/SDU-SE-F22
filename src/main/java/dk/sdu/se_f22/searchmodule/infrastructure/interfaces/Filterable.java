@@ -1,7 +1,8 @@
 package dk.sdu.se_f22.searchmodule.infrastructure.interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Filterable {
-    List<String> filter(List<String> tokens);
+    ArrayList<String> filter(ArrayList<String> tokens);
 }

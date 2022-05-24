@@ -3,6 +3,7 @@ package dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.notFoundException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,11 +16,11 @@ public class OneWayImplementation implements OneWayInterface {
     public OneWayImplementation() {
         this.itemCatalog = new ItemCatalog(getDatabaseItems());
     }
-
-    public List<String> filter(List<String> tokens) {
+    @Override
+    public ArrayList<String> filter(ArrayList<String> tokens) {
         int length = tokens.size();
+        LinkedList<Item> items;
         for (int i = 0; i < length; i++) {
-            LinkedList<Item> items;
             try {
                 items = (this.itemCatalog.oneWaySynonymStrings(tokens.get(i)));
                 for (Item item : items) {
@@ -162,6 +163,13 @@ public class OneWayImplementation implements OneWayInterface {
 
 
     public static void main(String[] args) {
+        OneWayImplementation oneWayImplementation = new OneWayImplementation();
+        ArrayList<String> items = new ArrayList<>();
+        items.add("root");
+        for (String token : oneWayImplementation.filter(items)){
+            System.out.println(token);
+        }
+
     }
 
     private boolean isNumber(String input) {

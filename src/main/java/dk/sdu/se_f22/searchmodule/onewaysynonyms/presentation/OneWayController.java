@@ -4,6 +4,7 @@ import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.OneWayImage;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.Item;
 import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.ItemCatalog;
+import dk.sdu.se_f22.searchmodule.onewaysynonyms.domain.OneWayImplementation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,8 +16,7 @@ import javafx.scene.image.WritableImage;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static dk.sdu.se_f22.searchmodule.onewaysynonyms.data.DatabaseAPI.*;
 
@@ -26,10 +26,17 @@ public class OneWayController implements Initializable {
     public TextField CN_oldName, CN_newName, GI_Item, SearchBar,
             AI_ID, AI_Name, AI_SuperREF,
             MIB_Name, MIB_SuperID,
-            DIInput;
+            DIInput,
+            MFInput;
 
     @FXML
-    public ListView IDListView, ItemNameListView, SuperIDListView;
+    public ListView<Integer> IDListView;
+    @FXML
+    public ListView<String> ItemNameListView;
+    @FXML
+    public ListView<Integer> SuperIDListView;
+    @FXML
+    public ListView<String> MFList;
     @FXML
     public ImageView image;
 
@@ -82,6 +89,20 @@ public class OneWayController implements Initializable {
         image.setImage(convertToFxImage(owi.getImage()));
         TP_images.setDisable(false);
         TP_images.setVisible(true);
+    }
+
+    public void MFfilter(ActionEvent actionEvent) {
+        OneWayImplementation owi = new OneWayImplementation();
+        ArrayList<String> tokens;
+        MFList.getItems().clear();
+
+        try (Scanner scanner = new Scanner(MFInput.getText())){
+            tokens = new ArrayList<>(Arrays.asList(scanner.next().split(",")));
+            owi.filter(tokens);
+        }
+        for (String token: tokens) {
+            MFList.getItems().add(token);
+        }
     }
 
     private static Image convertToFxImage(BufferedImage image) {

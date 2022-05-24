@@ -17,7 +17,21 @@
     <children>
         <TabPane fx:id="GUITabPane" prefHeight="473.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab fx:id="SearchTab" text="SearchTab" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+            <Tab text="Module Function">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="MFInput" layoutX="102.0" layoutY="60.0" prefHeight="25.0" prefWidth="290.0" />
+                        <Button layoutX="414.0" layoutY="60.0" mnemonicParsing="false" onAction="#MFfilter" text="Filter" />
+                        <ListView fx:id="MFList" layoutX="102.0" layoutY="118.0" prefHeight="251.0" prefWidth="364.0" />
+                        <Label layoutX="103.0" layoutY="20.0" text="Item to filter after:" />
+                        <Label layoutX="103.0" layoutY="98.0" text="List of synonyms:" />
+                        <Label layoutX="103.0" layoutY="38.0" text="Add multiple tokens by seperating them with ," />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+                <Tab fx:id="SearchTab" text="Search Database" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
                     <content>
                         <AnchorPane fx:id="SearchTabAnchorPane" minHeight="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -48,7 +62,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="ImageTab">
+                <Tab text="Database manipulation">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>

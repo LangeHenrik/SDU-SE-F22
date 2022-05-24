@@ -1,15 +1,22 @@
 package dk.sdu.se_f22.brandmodule.index;
 
 import dk.sdu.se_f22.brandmodule.management.services.JsonService;
+import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BrandIndexTest {
+
+    private Connection DBConn = DBConnection.getConnection();
 
     @Test
     void searchBrandIndex() {
@@ -42,6 +49,76 @@ class BrandIndexTest {
 
     @Test
     void indexBrandInformation() {
+        //creating brand object -----------
+        Brand brand = new Brand(1, null, null, null, null , null);
+        brand.setName("Apple");
+        brand.setDescription("Apple Inc (Apple) designs, manufactures, and markets smartphones, tablets, personal computers (PCs), portable and wearable devices. The company also offers software and related services, accessories, networking solutions, and third-party digital content and applications.");
+        brand.setFounded("April 1, 1976");
+        brand.setHeadquarters("Cupertino, California, USA");
+        String[] Products = {"Personal computers", "Smartphones", "Smartwatches", "Earbuds", "Headphones"};
+        ArrayList<String> tempList = new ArrayList<>();
+        tempList.addAll(List.of(Products));
+        brand.setProducts(tempList);
 
+        //tokens ----------
+        List<String> firstTokens = List.of("Quality", "Phones", "Computers", "Watches");
+        List<String> testTokens = List.of("Quality", "Phones", "Tv-Controller", "Computers");
+
+        //creating instance of BrandIndex class -----------------
+        BrandIndex index = new BrandIndex();
+
+        //Inserting brand into DB ----------------
+        try {
+            PreparedStatement ps1 = DBConn.prepareStatement("INSERT INTO brand(name,description,founded,headquarters) VALUES (?,?,?,?)");
+            ps1.setString(1, brand.getName());
+            ps1.setString(2, brand.getDescription());
+            ps1.setString(3, brand.getFounded());
+            ps1.setString(4, brand.getHeadquarters());
+            ps1.execute();
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //Calling indexBrandInformation with brand and tokens --------
+        index.indexBrandInformation(brand, firstTokens);
+
+        //Querying DB and checking if the tokens in the DB is equal to the firstTokens list -----------
+        try {
+            PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens");
+            ResultSet queryRs = query.executeQuery();
+            for (int i = 0; i < query.getFetchSize(); i++){
+                while (queryRs.next()){
+                    assertEquals(firstTokens.get(i), queryRs.getString(1));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //Calling indexBrandInformation with brand and new tokens to test if it adds the new tokens and not duplicates ----------
+        index.indexBrandInformation(brand, testTokens);
+
+        //Checking if the code doesn't add duplicates and adds non-duplicate tokens -----------
+        checkNonDuplicates(testTokens);
+
+        //drop all newly added in db ------------
     }
+
+    @Test
+    void checkNonDuplicates(List<String> testTokens) {
+        try {
+            PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens");
+            ResultSet queryRs = query.executeQuery();
+            for (int i = 0; i < query.getFetchSize(); i++){
+                while (queryRs.next()){
+                    assertEquals(testTokens.get(i), queryRs.getString(1));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package dk.sdu.se_f22.brandmodule.index;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,14 +78,19 @@ public class BrandIndex implements IndexInterface {
             PreparedStatement queryTokenId = null;
             ResultSet rsTokenId = null;
 
+            if (!rs.next() || newTokens.get(0) == null); tokenInsert.setString(1, newTokens.get(0));
+            tokenInsert.execute();
+            rs = queryToken.executeQuery();
 
             for (int i = 0; i < tokens.size(); i++) {
                 while (rs.next()) {
-                    if (rs.getString(dbColumnToken) != newTokens.get(i)) {
-                        tokenInsert.setString(1, newTokens.get(i));
+                if (rs.getString() != newTokens.get(i)) {
+                    tokenInsert.setString(1, newTokens.get(i));
                     }
                 }
                 tokenInsert.execute();
+
+                //tror det er unødvendigt fordi de begge er FK og begge er oprettet med nextvalue keys
                 queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
                 queryTokenId.setString(1, newTokens.get(i));
                 rsTokenId = queryTokenId.executeQuery();
@@ -94,6 +100,7 @@ public class BrandIndex implements IndexInterface {
                     mapInsert.execute();
                 }
             }
+
             //preparedStatements
             mapInsert.close();
             tokenInsert.close();
@@ -103,7 +110,6 @@ public class BrandIndex implements IndexInterface {
             //resultSets
             rs.close();
             rsTokenId.close();
-
         }
         catch (SQLException e) {
             e.printStackTrace();

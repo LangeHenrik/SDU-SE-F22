@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +19,18 @@ public class SaveSearchQuery {
     public static void saveSearch(SearchQuery query, String searchString) {
         int pageNumber = query.getPagination()[0];
         int pageSize = query.getPagination()[1];
-        Map<Integer, String[]> queryRanges = query.getRange();
+        Map<Integer, Double[]> queryRangesDouble = query.getRangeDouble();
+        Map<Integer, Long[]> queryRangesLong = query.getRangeLong();
+        Map<Integer, Instant[]> queryRangesInstant = query.getRangeInstant();
+
+        ArrayList<Map> queryRanges = new ArrayList<>() {
+            {
+                add(queryRangesDouble);
+                add(queryRangesLong);
+                add(queryRangesInstant);
+            }
+        };
+
         List<Integer> queryCategories = query.getCategory();
         int queryScoring = query.getScoring();
         String queryString = searchString;
@@ -26,12 +39,12 @@ public class SaveSearchQuery {
         try (
             Connection connection = DBConnection.getPooledConnection();
         ) {
-            // Disable auto commit to prevent error prone quries to be inserted
+            // Disable auto commit to prevent error prone queries to be inserted
             connection.setAutoCommit(false);
 
             // Main query
             PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO sorting_queries (text, page, page_size, scoring) VALUES (?, ?, ?, ?)", 
+                "INSERT INTO sorting_queries (text, page, page_size, scoring) VALUES (?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             );
             stmt.setString(1, searchString);
@@ -49,19 +62,48 @@ public class SaveSearchQuery {
             stmt.close();
 
             // Range query
-            for (HashMap.Entry<Integer, String[]> range : queryRanges.entrySet()) {
+            for (HashMap.Entry<Integer, Double[]> range : queryRangesDouble.entrySet()) {
                 stmt = connection.prepareStatement(
-                    "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)" 
+                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)"
                 );
 
                 stmt.setInt(1, mainQueryId);
                 stmt.setInt(2, range.getKey());
-                stmt.setString(3, range.getValue()[0]);
-                stmt.setString(4, range.getValue()[1]);
+                stmt.setString(3, String.valueOf(range.getValue()[0]));
+                stmt.setString(4, String.valueOf(range.getValue()[1]));
                 stmt.execute();
                 stmt.close();
             }
-            
+
+            for (HashMap.Entry<Integer, Long[]> range : queryRangesLong.entrySet()) {
+                stmt = connection.prepareStatement(
+                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)"
+                );
+
+                stmt.setInt(1, mainQueryId);
+                stmt.setInt(2, range.getKey());
+                stmt.setString(3, String.valueOf(range.getValue()[0]));
+                stmt.setString(4, String.valueOf(range.getValue()[1]));
+                stmt.execute();
+                stmt.close();
+            }
+
+            for (HashMap.Entry<Integer, Instant[]> range : queryRangesInstant.entrySet()) {
+                stmt = connection.prepareStatement(
+                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)"
+                );
+
+                stmt.setInt(1, mainQueryId);
+                stmt.setInt(2, range.getKey());
+                stmt.setString(3, String.valueOf(range.getValue()[0]));
+                stmt.setString(4, String.valueOf(range.getValue()[1]));
+                stmt.execute();
+                stmt.close();
+            }
+
+
+
+
             // category query
             for (Integer category : queryCategories) {
                 stmt = connection.prepareStatement(

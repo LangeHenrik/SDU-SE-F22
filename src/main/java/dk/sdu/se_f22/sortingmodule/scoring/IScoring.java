@@ -9,10 +9,10 @@ import java.util.List;
 public interface IScoring {
 
     /**
-     <p> Returns a list of products that is sorted by the give type </p>
+     <p> Returns a list of products that is sorted by the given type </p>
      * @param input
      */
-    SearchHits scoreSort(SearchHits input, String type);
+    SearchHits scoreSort(SearchHits input, ScoreSortType type);
 
     /**
      <p> Returns a list of products that is sorted by price, reviews, stock and date. </p>

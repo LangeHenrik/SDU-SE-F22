@@ -42,12 +42,6 @@ class TimeFilterTest {
         assertEquals(FilterTypes.TIME, timeFilter.getType());
     }
 
-    @Test
-    @Disabled("test not yet written")
-    void testEquals() {
-        fail("test not yet written");
-    }
-
     @Nested
     @DisplayName("Use filter method")
     class useFilterMethod {

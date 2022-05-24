@@ -1,5 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -102,7 +103,7 @@ class RangeFilterClassTest {
             @ParameterizedTest(name = "Different user min: {0},{1},{2},{3},{4},{5}")
             @DisplayName("Double filters with different UserMin values")
             @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void doubleFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, double min, double max) {
+            void doubleFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, double min, double max) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
                 DoubleFilter doubleFilterWithDifferentUserMin = new DoubleFilter(id, name, description, productAttribute, min, max);
                 doubleFilterWithDifferentUserMin.setUserMin(12345.67890);
@@ -112,7 +113,7 @@ class RangeFilterClassTest {
             @ParameterizedTest(name = "Different user max: {0},{1},{2},{3},{4},{5} ")
             @DisplayName("Double filters with different UserMax values")
             @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-            void doubleFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, double min, double max) {
+            void doubleFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, double min, double max) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
                 DoubleFilter doubleFilterWithDifferentUserMax = new DoubleFilter(id, name, description, productAttribute, min, max);
                 doubleFilterWithDifferentUserMax.setUserMax(12345.67890);
@@ -207,7 +208,7 @@ class RangeFilterClassTest {
             @ParameterizedTest(name = "Different user min: {0},{1},{2},{3},{4},{5}")
             @DisplayName("Long filters with different UserMin values")
             @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-            void longFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, long min, long max) {
+            void longFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, long min, long max) throws IllegalMinMaxException {
                 LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
                 LongFilter longFilterWithDifferentUserMin = new LongFilter(id, name, description, productAttribute, min, max);
                 longFilterWithDifferentUserMin.setUserMin(1234567890);
@@ -217,7 +218,7 @@ class RangeFilterClassTest {
             @ParameterizedTest(name = "Different user max: {0},{1},{2},{3},{4},{5} ")
             @DisplayName("Long filters with different UserMax values")
             @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-            void longFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, long min, long max) {
+            void longFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, long min, long max) throws IllegalMinMaxException {
                 LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
                 LongFilter longFilterWithDifferentUserMax = new LongFilter(id, name, description, productAttribute, min, max);
                 longFilterWithDifferentUserMax.setUserMax(1234567890);
@@ -314,7 +315,7 @@ class RangeFilterClassTest {
             @ParameterizedTest(name = "Different user min: {0},{1},{2},{3},{4},{5}")
             @DisplayName("Time filters with different UserMin values")
             @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-            void timeFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            void timeFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, Instant min, Instant max) throws IllegalMinMaxException {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 TimeFilter timeFilterWithDifferentUserMin = new TimeFilter(id, name, description, productAttribute, min, max);
                 timeFilterWithDifferentUserMin.setUserMin(Instant.MIN);
@@ -324,7 +325,7 @@ class RangeFilterClassTest {
             @ParameterizedTest(name = "Different user max: {0},{1},{2},{3},{4},{5} ")
             @DisplayName("Time filters with different UserMax values")
             @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-            void timeFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+            void timeFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, Instant min, Instant max) throws IllegalMinMaxException {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 TimeFilter timeFilterWithDifferentUserMax = new TimeFilter(id, name, description, productAttribute, min, max);
                 timeFilterWithDifferentUserMax.setUserMax(Instant.MAX);

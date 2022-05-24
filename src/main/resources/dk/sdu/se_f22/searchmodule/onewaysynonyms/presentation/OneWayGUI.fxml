@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="GUIAnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="473.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.onewaysynonyms.presentation.OneWayController">
+    <children>
+        <TabPane fx:id="GUITabPane" prefHeight="473.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+            <Tab text="Module Function">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="MFInput" layoutX="102.0" layoutY="60.0" prefHeight="25.0" prefWidth="290.0" />
+                        <Button layoutX="414.0" layoutY="60.0" mnemonicParsing="false" onAction="#MFfilter" text="Filter" />
+                        <ListView fx:id="MFList" layoutX="102.0" layoutY="118.0" prefHeight="251.0" prefWidth="364.0" />
+                        <Label layoutX="103.0" layoutY="20.0" text="Item to filter after:" />
+                        <Label layoutX="103.0" layoutY="98.0" text="List of synonyms:" />
+                        <Label layoutX="103.0" layoutY="38.0" text="Add multiple tokens by seperating them with ," />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+                <Tab fx:id="SearchTab" text="Search Database" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+                    <content>
+                        <AnchorPane fx:id="SearchTabAnchorPane" minHeight="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Button fx:id="SearchButton" layoutX="377.0" layoutY="94.0" mnemonicParsing="false" onAction="#SearchTab" text="Search" />
+                                <Text fx:id="SearchTextField" layoutX="101.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What do you want to search for?" wrappingWidth="133.81292724609375" />
+                                <TextField fx:id="SearchBar" layoutX="101.0" layoutY="94.0" />
+                                <VBox fx:id="SearchTabGUIVBox" layoutX="101.0" layoutY="181.0" prefHeight="239.0" prefWidth="328.0">
+                                    <children>
+                                        <HBox fx:id="SearchTabHBox" prefHeight="18.0" prefWidth="328.0">
+                                            <children>
+                                                <Label fx:id="IDLabel" prefHeight="18.0" prefWidth="109.0" text="ID" />
+                                                <Label fx:id="ItemNameLabel" prefHeight="18.0" prefWidth="110.0" text="Item name" />
+                                                <Label fx:id="SuperIDLabel" prefHeight="18.0" prefWidth="87.0" text="SuperID" />
+                                            </children>
+                                        </HBox>
+                                        <HBox fx:id="SearchTabHBoxListViews" prefHeight="220.0" prefWidth="328.0">
+                                            <children>
+                                                <ListView fx:id="IDListView" prefHeight="177.0" prefWidth="105.0" />
+                                                <ListView fx:id="ItemNameListView" prefHeight="100.0" prefWidth="111.0" />
+                                                <ListView fx:id="SuperIDListView" prefHeight="100.0" prefWidth="111.0" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <Label fx:id="ST_status" layoutX="377.0" layoutY="58.0" prefHeight="17.0" prefWidth="151.0" />
+                                <Button fx:id="clearButton" layoutX="377.0" layoutY="135.0" mnemonicParsing="false" onAction="#SearchTab" text="Clear" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Database manipulation">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Button fx:id="generateImageButton" layoutX="442.0" layoutY="14.0" mnemonicParsing="false" onAction="#GenerateImage" text="Generate Image" />
+                                <TextField fx:id="GI_Item" layoutX="338.0" layoutY="14.0" prefHeight="25.0" prefWidth="93.0" />
+                                <ImageView fx:id="image" fitHeight="312.0" fitWidth="568.0" layoutX="15.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+                                <Label layoutX="21.0" layoutY="16.0" prefHeight="21.0" prefWidth="314.0" text="Generate an Image of the database based on an item:">
+                                    <font>
+                                        <Font size="13.0" />
+                                    </font>
+                                </Label>
+                                <TabPane fx:id="TP_images" layoutY="355.0" prefHeight="90.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+                                    <tabs>
+                                        <Tab text="Change Name">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="348.0">
+                                                    <children>
+                                                        <Label layoutX="9.0" layoutY="7.0" prefHeight="43.0" prefWidth="102.0" text="Old item reference by ID or name:" wrapText="true" />
+                                                        <Label layoutX="219.0" layoutY="20.0" text="New name:" />
+                                                        <TextField fx:id="CN_oldName" layoutX="116.0" layoutY="17.0" prefHeight="25.0" prefWidth="91.0" />
+                                                        <TextField fx:id="CN_newName" layoutX="292.0" layoutY="17.0" prefHeight="25.0" prefWidth="79.0" />
+                                                        <Button fx:id="CN_enter" layoutX="380.0" layoutY="17.0" mnemonicParsing="false" onAction="#changeName" text="Update" />
+                                                        <Label fx:id="CN_status" layoutX="450.0" layoutY="11.0" prefHeight="36.0" prefWidth="136.0" wrapText="true" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Add Item">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label layoutX="25.0" layoutY="5.0" text="New Item Name" />
+                                                        <Label disable="true" layoutX="31.0" layoutY="2.0" text="ID" visible="false" />
+                                                        <TextField fx:id="AI_Name" layoutX="13.0" layoutY="25.0" prefHeight="25.0" prefWidth="110.0" />
+                                                        <TextField fx:id="AI_ID" disable="true" layoutX="14.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" visible="false" />
+                                                        <Button fx:id="AI_Enter" layoutX="418.0" layoutY="23.0" mnemonicParsing="false" onAction="#addItem" text="Add" />
+                                                        <Label layoutX="293.0" layoutY="6.0" text="Super Item Referance" />
+                                                        <TextField fx:id="AI_SuperREF" layoutX="302.0" layoutY="25.0" prefHeight="25.0" prefWidth="97.0" />
+                                                        <Label fx:id="AI_status" layoutX="485.0" layoutY="3.0" prefHeight="55.0" prefWidth="113.0" wrapText="true" />
+                                                        <Label layoutX="140.0" layoutY="14.0" prefHeight="34.0" prefWidth="139.0" text="Coresponding super item reference by ID or name:" wrapText="true" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Move Item/Branch">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <TextField fx:id="MIB_Name" layoutX="91.0" layoutY="18.0" prefHeight="25.0" prefWidth="89.0" />
+                                                        <Label layoutX="199.0" layoutY="3.0" prefHeight="53.0" prefWidth="90.0" text="New super item reference by ID or name:" wrapText="true" />
+                                                        <TextField fx:id="MIB_SuperID" layoutX="297.0" layoutY="18.0" prefHeight="25.0" prefWidth="84.0" />
+                                                        <Button layoutX="392.0" layoutY="18.0" mnemonicParsing="false" onAction="#moveItemButtonHandler" text="Update" />
+                                                        <Label fx:id="MIB_Status" layoutX="458.0" layoutY="4.0" prefHeight="52.0" prefWidth="136.0" wrapText="true" />
+                                                        <Label layoutX="8.0" layoutY="3.0" prefHeight="54.0" prefWidth="76.0" text="Item to move  reference by ID or name:" wrapText="true" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab text="Delete Item">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label layoutX="9.0" layoutY="11.0" prefHeight="39.0" prefWidth="132.0" text="Item to delete reference by ID or name:" wrapText="true" />
+                                                        <Label fx:id="DIStatus" layoutX="336.0" layoutY="9.0" prefHeight="41.0" prefWidth="251.0" />
+                                                        <TextField fx:id="DIInput" layoutX="149.0" layoutY="23.0" prefHeight="25.0" prefWidth="98.0" />
+                                                        <Button layoutX="262.0" layoutY="17.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="25.0" prefWidth="65.0" text="Enter" />
+                                          <Label layoutX="155.0" layoutY="5.0" prefHeight="19.0" prefWidth="87.0" text="Item reference" wrapText="true" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>

@@ -12,7 +12,7 @@ import java.time.Instant;
 //@Execution(ExecutionMode.CONCURRENT)
 class RangeFilterClassTest {
     @Nested
-    @DisplayName("Non-matching tests")
+    @DisplayName("Non-matching equals tests")
     class NonMatchingTests {
 
         @Nested
@@ -337,7 +337,7 @@ class RangeFilterClassTest {
 
 
     @Nested
-    @DisplayName("Matching tests")
+    @DisplayName("Matching equals tests")
     class MatchingTests {
 
         @ParameterizedTest

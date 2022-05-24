@@ -1,0 +1,44 @@
+@startuml
+title Class diagram of Range module (SOM-4)
+skinparam classAttributeIconSize 0
+hide empty methods
+hide empty fields
+
+package validators {
+    class Validator
+}
+
+package rangepublic {
+    interface DatabaseInterface
+    class Database
+    class DoubleFilter
+    enum FilterTypes {
+        LONG
+        DOUBLE
+        TIME
+    }
+    class LongFilter
+    abstract class RangeFilterClass
+    interface RangeFilterCRUDInterface
+    class RangeFilterCRUD
+    abstract class RangeFilterFilterResults
+    interface RangeFilter
+    class TimeFilter
+
+
+}
+
+package exceptions {
+    class RangeFilterException
+
+    class EmptyDatabaseException
+    class IdNotFoundException
+    class IllegalImplementationException
+    class IllegalMinMaxException
+    class InvalidAttributeException
+    class InvalidFilterException
+    class InvalidFilterTypeException
+    class UnknownFilterTypeException
+}
+
+@enduml

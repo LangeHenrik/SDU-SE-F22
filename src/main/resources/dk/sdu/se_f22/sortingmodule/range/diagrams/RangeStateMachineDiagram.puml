@@ -1,0 +1,16 @@
+@startuml
+title State machine diagram, modelling\n the module state of Range module (SOM-4)
+hide empty description
+
+state "Empty Database" as empty
+state "Filled Database and idle" as filled
+state filtering as "Filtering"
+
+[*] --> empty
+empty --> filled : Filters are created in Database
+filled --> filtering : A user initiates a search
+filtering --> filled : The system has filtered the list
+
+' perhaps the state machine could also be made on the state of an individual filter retrieved from the database
+
+@enduml

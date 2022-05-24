@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class RangeFilterFilterResults {
+public abstract class RangeFilterFilterResults {
     /**
      * This is the method that filters the products in the searchHits based on the filters given.
      * <p>

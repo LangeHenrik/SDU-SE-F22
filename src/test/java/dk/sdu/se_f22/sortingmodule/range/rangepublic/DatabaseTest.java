@@ -488,7 +488,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("test delete of invalid filterId")
         @ValueSource(ints = {-1, -100, 1000, Integer.MIN_VALUE, Integer.MAX_VALUE})
-        void testdeleteOfInvalidFilterId ( int inputId) {
+        void testDeleteOfInvalidFilterId(int inputId) {
             //opret filter med invalid id, forsøg at slette og få exception som expected
             Assertions.assertThrows(IdNotFoundException.class, () -> database.delete(inputId));
         }

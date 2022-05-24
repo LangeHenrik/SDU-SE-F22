@@ -279,8 +279,6 @@ class LongFilterTest {
                             () -> filter.setUserMax(newMax));
                 }
             }
-
-
         }
 
         static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {

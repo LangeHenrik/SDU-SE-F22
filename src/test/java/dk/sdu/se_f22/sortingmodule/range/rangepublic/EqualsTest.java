@@ -108,7 +108,7 @@ public class EqualsTest {
             void doubleFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, double min, double max) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
                 DoubleFilter doubleFilterWithDifferentUserMin = new DoubleFilter(id, name, description, productAttribute, min, max);
-                doubleFilterWithDifferentUserMin.setUserMin(12345.67890);
+                doubleFilterWithDifferentUserMin.setUserMin(min+0.1);
                 assertNotEquals(doubleFilter,doubleFilterWithDifferentUserMin);
             }
 
@@ -118,7 +118,7 @@ public class EqualsTest {
             void doubleFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, double min, double max) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(id, name, description, productAttribute, min, max);
                 DoubleFilter doubleFilterWithDifferentUserMax = new DoubleFilter(id, name, description, productAttribute, min, max);
-                doubleFilterWithDifferentUserMax.setUserMax(12345.67890);
+                doubleFilterWithDifferentUserMax.setUserMax(max-0.1);
                 assertNotEquals(doubleFilter,doubleFilterWithDifferentUserMax);
             }
         }
@@ -213,7 +213,7 @@ public class EqualsTest {
             void longFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, long min, long max) throws IllegalMinMaxException {
                 LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
                 LongFilter longFilterWithDifferentUserMin = new LongFilter(id, name, description, productAttribute, min, max);
-                longFilterWithDifferentUserMin.setUserMin(1234567890);
+                longFilterWithDifferentUserMin.setUserMin(min+1);
                 assertNotEquals(longFilter,longFilterWithDifferentUserMin);
             }
 
@@ -223,7 +223,7 @@ public class EqualsTest {
             void longFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, long min, long max) throws IllegalMinMaxException {
                 LongFilter longFilter = new LongFilter(id, name, description, productAttribute, min, max);
                 LongFilter longFilterWithDifferentUserMax = new LongFilter(id, name, description, productAttribute, min, max);
-                longFilterWithDifferentUserMax.setUserMax(1234567890);
+                longFilterWithDifferentUserMax.setUserMax(max-1);
                 assertNotEquals(longFilter,longFilterWithDifferentUserMax);
             }
         }
@@ -317,7 +317,7 @@ public class EqualsTest {
             void timeFiltersWithDifferentUserMinValues(int id, String name, String description, String productAttribute, Instant min, Instant max) throws IllegalMinMaxException {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 TimeFilter timeFilterWithDifferentUserMin = new TimeFilter(id, name, description, productAttribute, min, max);
-                timeFilterWithDifferentUserMin.setUserMin(Instant.MIN);
+                timeFilterWithDifferentUserMin.setUserMin(min);
                 assertNotEquals(timeFilter,timeFilterWithDifferentUserMin);
             }
 
@@ -327,7 +327,7 @@ public class EqualsTest {
             void timeFiltersWithDifferentUserMaxValues(int id, String name, String description, String productAttribute, Instant min, Instant max) throws IllegalMinMaxException {
                 TimeFilter timeFilter = new TimeFilter(id, name, description, productAttribute, min, max);
                 TimeFilter timeFilterWithDifferentUserMax = new TimeFilter(id, name, description, productAttribute, min, max);
-                timeFilterWithDifferentUserMax.setUserMax(Instant.MAX);
+                timeFilterWithDifferentUserMax.setUserMax(max);
                 assertNotEquals(timeFilter,timeFilterWithDifferentUserMax);
             }
         }

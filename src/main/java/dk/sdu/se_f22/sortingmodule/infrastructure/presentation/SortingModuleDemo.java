@@ -5,9 +5,10 @@ import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModuleImpl;
 
 public class SortingModuleDemo {
 
-    private static boolean useMockDataBrands = true;
-    private static boolean useMockDataContent = true;
-    private static boolean useMockDataProducts = true;
+    // To use mockdata, mark those below to true.
+    private static boolean useMockDataBrands = false;
+    private static boolean useMockDataContent = false;
+    private static boolean useMockDataProducts = false;
 
     public static void main (String[] args) {
         SortingModuleImpl module = new SortingModuleImpl();

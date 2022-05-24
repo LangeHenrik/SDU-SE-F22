@@ -183,3 +183,5 @@ Temporary Items
 .env
 *.properties
 *.properties.example
+*.properties.old
+*.report

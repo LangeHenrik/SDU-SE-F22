@@ -278,9 +278,27 @@ class LongFilterTest {
                     Assertions.assertThrows(IllegalMinMaxException.class,
                             () -> filter.setUserMax(newMax));
                 }
+
+                @ParameterizedTest(name = "{0}")
+                @DisplayName("Set userMin with incorrect type")
+                @MethodSource("provideLongFilters")
+                void setUserMinWithIncorrectType (LongFilter filter) {
+                    double newValue = 100.0;
+                    Assertions.assertThrows(IllegalMinMaxException.class,
+                            () -> filter.setUserMin(newValue)
+                    );
+                }
+
+                @ParameterizedTest(name = "{0}")
+                @DisplayName("Set userMax with incorrect type")
+                @MethodSource("provideLongFilters")
+                void setUserMaxWithIncorrectType (LongFilter filter) {
+                    double newValue = 100.0;
+                    Assertions.assertThrows(IllegalMinMaxException.class,
+                            () -> filter.setUserMax(newValue)
+                    );
+                }
             }
-
-
         }
 
         static Stream<Arguments> filteringAnEmptyListOfResultsArgument() {

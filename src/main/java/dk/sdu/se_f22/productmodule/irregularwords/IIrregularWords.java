@@ -5,17 +5,17 @@ public interface IIrregularWords {
 
         boolean createIRWord(int ID, String Word);
 
+        boolean createIRWord(String tableWord, String insertionWord);
+
         boolean deleteIRWord(String theWord);
 
-        boolean updateIRWord();
+        boolean updateIRWord(String originalWord, String updatedWord);
 
-        void readIRWord();
+        Boolean readIRWord();
 
-        void getIRWord(String word);
+        ArrayList<String> getIRWord(String word);
 
-        boolean createIRColumn(String Cname, String dataType, String constraints);
-
-        boolean deleteColumnIR(String CName);
+        int getIndex(String word);
 
         boolean createBackup();
 

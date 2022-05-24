@@ -1,8 +1,11 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 
 /**
  * Search product, brand and content with range- and category filtering and scoring as well as pagination
@@ -41,7 +44,9 @@ public interface SortingModule {
      * @param startRange The start of the range - Formattet as a string, but should align with the data type the range require
      * @param endRange   The start of the range - Formattet as a string, but should align with the data type the range require
      */
-    public void addRange(int rangeId, double startRange, double endRange);
+    public void addRange(int rangeId, Double startRange, Double endRange);
+    public void addRange(int rangeId, long startRange, long endRange);
+    public void addRange(int rangeId, Instant startRange, Instant endRange);
 
     /**
      * Remove all range filters from the search
@@ -64,7 +69,24 @@ public interface SortingModule {
     public void setScoring(int scoring);
 
     /**
-     * Run search, and get the hits the search creates.
+     * Return available range filters
+     */
+    public List<RangeFilter> getAvailableRangeFilters();
+
+    /**
+     * Return modified SearchHits with pagination
+     */
+    public SearchHits paginateHits(SearchHits searchHits);
+  
+     /**
+     * Get all category filters
+     *
+     * @return List with all category filters
+     */
+    public List getAllCategories();
+
+    /**
+     * Run search, and get the hits the search creates, that is filtered and paginated
      */
     public SearchHits search();
 }

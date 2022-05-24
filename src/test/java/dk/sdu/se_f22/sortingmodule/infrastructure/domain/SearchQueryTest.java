@@ -2,8 +2,9 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.Instant;
+import java.util.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +16,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(7);
         s.setCategory(a);
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -24,7 +25,7 @@ class SearchQueryTest {
         ArrayList<Integer> a = new ArrayList<>();
         a.add(2);
         s.addCategory(2);
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
@@ -34,35 +35,71 @@ class SearchQueryTest {
         s.addCategory(1);
         s.addCategory(2);
         s.clearCategory();
-        assertEquals(a, s.category);
+        assertEquals(a, s.getCategory());
     }
 
     @Test
     void addRangeTest() {
         SearchQuery s = new SearchQuery();
-        ArrayList<Integer> a = new ArrayList<>();
 
-        fail();
+        HashMap<Integer, Long[]> hLong = new HashMap<>();
+        hLong.put(1, new Long[]{3L, 8L});
+        hLong.put(2, new Long[]{7L, 52L});
+        s.addRange(1, 3, 8);
+        s.addRange(2, 7, 52);
 
-        s.addRange(1, 2, 3);
-        s.addRange(2,4,1);
-        s.clearRange();
+        HashMap<Integer, Double[]> hDouble = new HashMap<>();
+        hDouble.put(1, new Double[]{8.3, 14.9});
+        hDouble.put(2, new Double[]{2.7, 73.2});
+        s.addRange(1, 8.3, 14.9);
+        s.addRange(2, 2.7, 73.2);
 
-        // TODO: Add ranges to a, for testing that a and s is the same
+        HashMap<Integer, Instant[]> hInstant = new HashMap<>();
+        hInstant.put(1, new Instant[]{Instant.ofEpochSecond(1), Instant.ofEpochSecond(7)});
+        hInstant.put(2, new Instant[]{Instant.ofEpochSecond(2), Instant.ofEpochSecond(16)});
+        s.addRange(1, Instant.ofEpochSecond(1), Instant.ofEpochSecond(7));
+        s.addRange(2, Instant.ofEpochSecond(2), Instant.ofEpochSecond(16));
 
-        assertEquals(a, s.range);
+        Iterator<Map.Entry<Integer, Long[]>> iteratorHLong = hLong.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Double[]>> iteratorHDouble = hDouble.entrySet().iterator();
+        Iterator<Map.Entry<Integer, Instant[]>> iteratorHInstant = hInstant.entrySet().iterator();
+
+
+        s.getRangeDouble().forEach((Integer id, Double[] boundaries) -> {
+            Map.Entry<Integer, Double[]> nextDouble = iteratorHDouble.next();
+           if (!nextDouble.getKey().equals(id) &&
+                !Arrays.equals(nextDouble.getValue(), boundaries)) {
+               fail("addRangeTest Double failure.");
+           }
+        });
+
+        s.getRangeLong().forEach((Integer id, Long[] boundaries) -> {
+            Map.Entry<Integer, Long[]> nextLong = iteratorHLong.next();
+            if (!nextLong.getKey().equals(id) &&
+                    !Arrays.equals(nextLong.getValue(), boundaries)) {
+                fail("addRangeTest Long failure.");
+            }
+        });
+
+        s.getRangeInstant().forEach((Integer id, Instant[] boundaries) -> {
+            Map.Entry<Integer, Instant[]> nextInstant = iteratorHInstant.next();
+            if (!nextInstant.getKey().equals(id) &&
+                    !Arrays.equals(nextInstant.getValue(), boundaries)) {
+                fail("addRangeTest Instant failure.");
+            }
+        });
     }
 
     @Test
     void clearRangeTest() {
         SearchQuery s = new SearchQuery();
-        ArrayList<Integer> a = new ArrayList<>();
+        HashMap<Integer, Long[]> h = new HashMap<>();
 
-        s.addRange(1, 2, 3);
-        s.addRange(2,4,1);
-        s.clearRange();
+        s.addRange(1, 3.9, 8.1);
+        s.addRange(2, 19.4, 52.7);
+        s.clearRangeDouble();
 
-        assertEquals(a, s.range);
+        assertEquals(h, s.getRangeDouble());
     }
 
     @Test
@@ -70,23 +107,23 @@ class SearchQueryTest {
         SearchQuery s = new SearchQuery();
         int[] values = {1,2};
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
 
         values[0] = 654;
         values[1] = 68469826;
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
 
         values[0] = -48;
         values[1] = 867;
         s.setPagination(values[0], values[1]);
-        assertArrayEquals(values, s.pagination);
+        assertArrayEquals(values, s.getPagination());
     }
 
     @Test
     void setScoringTest() {
         SearchQuery s = new SearchQuery();
         s.setScoring(5);
-        assertEquals(5, s.scoring);
+        assertEquals(5, s.getScoring());
     }
 }

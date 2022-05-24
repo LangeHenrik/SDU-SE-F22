@@ -90,4 +90,9 @@ public interface SortingModule {
      * Run search, and get the hits the search creates, that is filtered and paginated
      */
     public SearchHits search();
+
+    /**
+     * Following  method, is used to enable mock data
+     */
+    public void useMockData(boolean b, boolean c, boolean p);
 }

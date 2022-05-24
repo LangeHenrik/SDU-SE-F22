@@ -200,9 +200,7 @@ public class SortingModuleImpl implements SortingModule {
         SaveSearchQuery.saveSearch(this.query, this.searchString);
     }
 
-    /**
-     * Following  method, is used to enable mock data
-     */
+    @Override
     public void useMockData(boolean b, boolean c, boolean p) {
         this.useMockDataBrand = b;
         this.useMockDataContent = c;

@@ -24,6 +24,7 @@ public class SortingModuleDemo {
         module.addCategory(5);
         module.addRange(4, 2.46854, 3.89);
         module.setPagination(0, 5);
+        module.setScoring(ScoreSortType.ALL);
         SearchHits data = module.search();
 
         // Data received

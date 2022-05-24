@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.data;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SearchQuery;
 import dk.sdu.se_f22.sharedlibrary.utils.Color;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public class SaveSearchQuery {
         };
 
         List<Integer> queryCategories = query.getCategory();
-        int queryScoring = query.getScoring();
+        ScoreSortType queryScoring = query.getScoring();
         String queryString = searchString;
 
         // Save the information
@@ -50,7 +51,7 @@ public class SaveSearchQuery {
             stmt.setString(1, searchString);
             stmt.setInt(2, pageNumber);
             stmt.setInt(3, pageSize);
-            stmt.setInt(4, queryScoring);
+            stmt.setString(4, queryScoring.toString());
             stmt.execute();
 
             // Get the id for the main query

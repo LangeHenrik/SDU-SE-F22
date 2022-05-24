@@ -193,11 +193,11 @@ class TimeFilter extends RangeFilterClass {
         }
 
         if (userMin.isAfter(userMax) && userMax != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMinEpoch' can not be greater than 'userMax' UserMin: " + userMin + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
+            throw new IllegalMinMaxException("'userMin' can not be after 'userMax' UserMin: " + userMin + " UserMax: " + userMax);
         }
 
         if (userMin.isBefore(DB_MIN) || userMin.isAfter(DB_MAX)) {
-            throw new IllegalMinMaxException("'userMin' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMin: " + userMin + " dbMin: " + DB_MIN + " dbMax: " + DB_MAX);
+            throw new IllegalMinMaxException("'userMin' can not be before 'DB_MIN' or after 'DB_MAX'. UserMin: " + userMin + " dbMin: " + DB_MIN + " dbMax: " + DB_MAX);
         }
 
         this.userMin = userMin;
@@ -211,11 +211,11 @@ class TimeFilter extends RangeFilterClass {
         }
 
         if (userMax.isBefore(userMin) && userMin != USER_NOT_SET_VALUE) {
-            throw new IllegalMinMaxException("'userMax' can not be less than or equal to 'userMin'. UserMin : " + userMin + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
+            throw new IllegalMinMaxException("'userMax' can not be before 'userMin'. UserMin : " + userMin + " userMax: " + userMax);
         }
 
         if (userMax.isBefore(DB_MIN) || userMax.isAfter(DB_MAX)) {
-            throw new IllegalMinMaxException("'userMax' can not be less than 'DB_MIN' or greater than 'DB_MAX'. UserMax : " + userMax + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
+            throw new IllegalMinMaxException("'userMax' can not be before 'DB_MIN' or after 'DB_MAX'. UserMax : " + userMax + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
         }
         this.userMax = userMax;
         return this.userMax;

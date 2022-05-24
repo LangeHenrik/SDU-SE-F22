@@ -43,10 +43,10 @@ public class OneWayController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initializeTable();
         TP_images.setDisable(true);
         TP_images.setVisible(false);
         itemCatalog = new ItemCatalog(readEntireDB());
-        initializeTable();
     }
 
     public void GenerateImage() {

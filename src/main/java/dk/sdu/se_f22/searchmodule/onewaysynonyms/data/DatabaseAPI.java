@@ -27,13 +27,10 @@ public class DatabaseAPI {
                     "superid integer)");
             preparedStatement.execute();
             if (searchBasedOnName("root")==-1){
-                preparedStatement = connection.prepareStatement("INSERT INTO onewaysynonyms (name, superid) values (?,?)");
-                preparedStatement.setString(1,"root");
-                preparedStatement.setInt(2,0);
-                preparedStatement.execute();
-                preparedStatement = connection.prepareStatement("UPDATE onewaysynonyms SET id=? WHERE name=?");
+                preparedStatement = connection.prepareStatement("INSERT INTO onewaysynonyms (id, name, superid) values (?,?,?)");
                 preparedStatement.setInt(1,0);
                 preparedStatement.setString(2,"root");
+                preparedStatement.setInt(3,0);
                 preparedStatement.execute();
             }
             preparedStatement.close();

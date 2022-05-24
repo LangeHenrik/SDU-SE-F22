@@ -4,6 +4,7 @@ package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 import dk.sdu.se_f22.contentmodule.infrastructure.data.DatabaseQueries;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -22,17 +23,13 @@ public class Tokenizer {
 
 
 
-        //TODO: Laves om sådan at parametre bliver hentet fra DB og ikke hard coded
+        char chararray[] = database.getParameters().toCharArray();
         for (int i = 0; i < convertedsite.length(); i++) {
-            switch (convertedsite.charAt(i)) {
-                case '-' -> database.logParameters(pageid, database.getParameterID('-'));
-                case ',' -> database.logParameters(pageid, database.getParameterID(','));
-                case '_' -> database.logParameters(pageid, database.getParameterID('_'));
-                case ':' -> database.logParameters(pageid, database.getParameterID(':'));
-                case '.' -> database.logParameters(pageid, database.getParameterID('.'));
-                case ';' -> database.logParameters(pageid, database.getParameterID(';'));
-                case ' ' -> database.logParameters(pageid, database.getParameterID(' '));
-                default -> { System.out.println("Duplicate parameter or not valid"); }
+            for (int j = 0; j < database.getParameters().length(); j++) {
+                char c = Array.getChar(chararray, j);
+                if (convertedsite.charAt(i) == c) {
+                    database.logParameters(pageid, database.getParameterID(c));
+                }
             }
         }
 

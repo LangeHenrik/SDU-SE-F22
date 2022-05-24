@@ -10,9 +10,9 @@ public interface IContentInfrastructre {
 
     void deleteHTMLSite(int htmlId);
 
-    //TODO: implement setDelimtier (adds new delimiter char to table)
+    void addDelimiter(char character);
 
-//    void setDelimiter();
+    void deleteDelimiter(char character);
 
 }
 

@@ -90,4 +90,36 @@ public class ContentInfrastructure implements IContentInfrastructre{
 
 
     }
+
+    @Override
+    public void addDelimiter(char character) {
+
+        try (Connection connection = DBConnection.getPooledConnection()) {
+
+            //Adds delimiter to the token parameters table
+            PreparedStatement s1 = connection.prepareStatement("INSERT INTO cms_tokenparameters (limitedchar) VALUES ('"+character+"')");
+            s1.execute();
+            s1.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteDelimiter(char character) {
+
+        try (Connection connection = DBConnection.getPooledConnection()) {
+
+            //Deletes delimiter from token parameters table
+            PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_tokenparameters WHERE VALUES ('"+character+"')");
+            s1.execute();
+            s1.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

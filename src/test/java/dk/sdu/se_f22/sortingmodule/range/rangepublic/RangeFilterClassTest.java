@@ -30,7 +30,7 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentIds);
         }
 
-        @ParameterizedTest(name = "{0},{1}" + "diff" + ",{2},{3}")
+        @ParameterizedTest(name = "{0},{1}=" + "diff" + ",{2},{3}")
         @DisplayName("Dummy filters with different names")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentNames(int id, String name, String description, String productAttribute) {
@@ -39,7 +39,7 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentNames);
         }
 
-        @ParameterizedTest(name = "{0},{1},{2}" + "diff" + ",{3}")
+        @ParameterizedTest(name = "{0}, {1}, {2}, " + "diff" + ", {3}")
         @DisplayName("Dummy filters with different names")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentDescriptions(int id, String name, String description, String productAttribute) {
@@ -48,7 +48,7 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentDescriptions);
         }
 
-        @ParameterizedTest(name = "{0},{1},{2},{3}" + "diff")
+        @ParameterizedTest(name = "{0}, {1}, {2}, {3}" + " diff")
         @DisplayName("Dummy filters with different names")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentProductAttributes(int id, String name, String description, String productAttribute) {
@@ -61,7 +61,7 @@ class RangeFilterClassTest {
     @Nested
     @DisplayName("Matching dummy filter equals tests")
     class matchingEqualsTests {
-        @ParameterizedTest(name = "{0},{1},{2},{3}")
+        @ParameterizedTest(name = "{0}, {1}, {2}, {3}")
         @DisplayName("Matching dummy filters test")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersThatMatch(int id, String name, String description, String productAttribute) {

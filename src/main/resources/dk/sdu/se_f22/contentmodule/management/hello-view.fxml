@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.HTMLEditor?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="847.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.contentmodule.management.UI.HelloController">
+    <tabs>
+        <Tab text="HTML Editor">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="459.0" prefWidth="847.0">
+                    <children>
+                        <HTMLEditor fx:id="editor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="23.0" layoutY="21.0" prefHeight="396.0" prefWidth="639.0" />
+                        <Button fx:id="publish_button" layoutX="23.0" layoutY="435.0" mnemonicParsing="false" onAction="#ButtonActionHandler" text="Publish" />
+                        <Button fx:id="open_file_button" layoutX="191.0" layoutY="473.0" mnemonicParsing="false" onAction="#ButtonActionHandler" text="Open file" />
+                        <Text layoutX="676.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Save interval:" />
+                        <Text fill="RED" layoutX="689.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* Interval in minutes">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Text>
+                        <Button fx:id="interval_button" layoutX="745.0" layoutY="65.0" mnemonicParsing="false" onAction="#ButtonActionHandler" text="Index interval" />
+                        <TextArea fx:id="pagePath" layoutX="191.0" layoutY="435.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="194.0" />
+                        <Text layoutX="191.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current html page:" />
+                        <Button fx:id="edit_file_button" layoutX="262.0" layoutY="473.0" mnemonicParsing="false" onAction="#ButtonActionHandler" text="Edit file" />
+                        <Spinner fx:id="interval_counter" layoutX="676.0" layoutY="65.0" prefHeight="25.0" prefWidth="58.0" />
+                    </children></AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Tables">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <TableView layoutX="299.0" layoutY="298.0" prefHeight="200.0" prefWidth="200.0">
+                            <columns>
+                                <TableColumn prefWidth="75.0" text="C1" />
+                                <TableColumn prefWidth="75.0" text="C2" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="contains_table" layoutX="299.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0">
+                            <columns>
+                                <TableColumn prefWidth="75.0" text="C1" />
+                                <TableColumn prefWidth="75.0" text="C2" />
+                            </columns>
+                        </TableView>
+                        <TableView layoutX="540.0" layoutY="151.0" prefHeight="200.0" prefWidth="200.0">
+                            <columns>
+                                <TableColumn prefWidth="75.0" text="C1" />
+                                <TableColumn prefWidth="75.0" text="C2" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="employees_table" layoutX="33.0" layoutY="298.0" prefHeight="200.0" prefWidth="200.0">
+                            <columns>
+                                <TableColumn prefWidth="75.0" text="C1" />
+                                <TableColumn prefWidth="75.0" text="C2" />
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="pages_table" layoutX="33.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0">
+                            <columns>
+                                <TableColumn prefWidth="75.0" text="C1" />
+                                <TableColumn prefWidth="75.0" text="C2" />
+                            </columns>
+                        </TableView>
+                        <Text fx:id="log_table" layoutX="631.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="log" />
+                        <Text fx:id="edits_table" layoutX="388.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="edits" />
+                        <Text layoutX="107.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="employee" />
+                        <Text layoutX="117.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pages" />
+                        <Text layoutX="388.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="contains" />
+                    </children></AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

@@ -91,7 +91,7 @@ public class OneWayController implements Initializable {
         TP_images.setVisible(true);
     }
 
-    public void MFfilter(ActionEvent actionEvent) {
+    public void MFFilter() {
         OneWayImplementation owi = new OneWayImplementation();
         ArrayList<String> tokens = null;
         MFList.getItems().clear();

@@ -15,6 +15,8 @@ public class Stemmer implements IStemmer {
     }
 
     public String stem(String word) {
+        // If the exception exists in the database, ignore it and return the word
+        if (exceptionExists(word)) return word;
         if (word.length() < 3) return word;
         Word stemmingWord = new Word(word);
         stemmingWord = StemmingUtilities.step1a(stemmingWord);

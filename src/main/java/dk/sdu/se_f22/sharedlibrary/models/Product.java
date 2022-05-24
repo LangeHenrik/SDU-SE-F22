@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.ProductAttribute;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -30,7 +30,7 @@ public class Product {
     Instant publishedDate;
     Instant expirationDate;
     List<String> inStock;
-
+    
     /** The constructor for setting all attributes at once including those that are optional
      */
     public Product(UUID uuid, double averageUserReview, List<String> inStock, long ean, double price, Instant publishedDate, Instant expirationDate, String category, String name, String description, String size, double clockspeed, double weight) {
@@ -72,7 +72,7 @@ public class Product {
     public Product(BaseProduct baseProduct) throws DateTimeParseException, NumberFormatException  {
         String stringId = baseProduct.get(ProductAttribute.UUID);
         this.uuid = UUID.fromString(stringId);
-
+        
         this.averageUserReview = Double.parseDouble(baseProduct.get(ProductAttribute.AVERAGE_USER_REVIEW));
         this.inStock = baseProduct.getLocations();
         this.ean = Long.parseLong(baseProduct.get(ProductAttribute.EAN));
@@ -82,73 +82,73 @@ public class Product {
         this.category = baseProduct.get(ProductAttribute.CATEGORY);
         this.name = baseProduct.get(ProductAttribute.NAME);
         this.description = baseProduct.get(ProductAttribute.DESCRIPTION);
-
-        if (!baseProduct.get(ProductAttribute.SIZE).equals("unavailable")){
+        
+        if (baseProduct.get(ProductAttribute.SIZE) != null) {
             this.size = baseProduct.get(ProductAttribute.SIZE);
         }
-
-        if (!baseProduct.get(ProductAttribute.CLOCKSPEED).equals("unavailable")){
+        
+        if (baseProduct.get(ProductAttribute.CLOCKSPEED) != null) {
             this.clockspeed = Double.parseDouble(baseProduct.get(ProductAttribute.CLOCKSPEED));
         }
-
-        if (!baseProduct.get(ProductAttribute.WEIGHT).equals("unavailable")){
+        
+        if (baseProduct.get(ProductAttribute.WEIGHT) != null) {
             this.weight = Double.parseDouble(baseProduct.get(ProductAttribute.WEIGHT));
         }
     }
 
-
+    
     public UUID getUuid() {
         return uuid;
     }
-
+    
     public double getAverageUserReview() {
         return averageUserReview;
     }
-
+    
     public List<String> getInStock() {
         return inStock;
     }
-
+    
     public long getEan() {
         return ean;
     }
-
+    
     public double getPrice() {
         return price;
     }
-
+    
     public Instant getPublishedDate() {
         return publishedDate;
     }
-
+    
     public Instant getExpirationDate() {
         return expirationDate;
     }
-
+    
     public String getCategory() {
         return category;
     }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public String getDescription() {
         return description;
     }
-
+    
     public String getSize() {
         return size;
     }
-
+    
     public double getClockspeed() {
         return clockspeed;
     }
-
+    
     public double getWeight() {
         return weight;
     }
-
+    
     @Override
     public String toString() {
         return "Product{" +

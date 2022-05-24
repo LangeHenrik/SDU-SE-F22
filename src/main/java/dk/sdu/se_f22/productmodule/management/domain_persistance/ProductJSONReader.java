@@ -1,8 +1,9 @@
-package dk.sdu.se_f22.productmodule.management;
+package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductJSONReader {
     
@@ -18,20 +19,42 @@ public class ProductJSONReader {
         return read(filepath);
     }
     
-    public ArrayList<BaseProduct> read(String filepath2) throws IOException{
+    public boolean validate(String filepath){
+        boolean valid = true;
+        List<BaseProduct> result = null;
+        
+        String filetype = filepath.substring(filepath.lastIndexOf('.'));
+        if(!filetype.equalsIgnoreCase(".json")){
+            return false;
+        }
+        
+        try{
+            result = read(filepath);
+        }catch (Exception e){
+            valid = false;
+        }
+        
+        if(result != null){
+            valid = !result.isEmpty();
+        }
+        
+        return valid;
+    }
+    
+    public ArrayList<BaseProduct> read(String filepath2) throws IOException, StringIndexOutOfBoundsException{
         ArrayList<BaseProduct> output = new ArrayList<>();
         currentLineNumber = 1;
         int amountOfProducts = 1;
         
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(filepath2));
-            
-            readLines(output, amountOfProducts, br);
-            
-        }catch (StringIndexOutOfBoundsException e){
-            System.out.println("String index out of bounds at line " + currentLineNumber);
-            e.printStackTrace();
-        }
+        //try{
+        BufferedReader br = new BufferedReader(new FileReader(filepath2));
+        
+        readLines(output, amountOfProducts, br);
+        
+        //}catch (StringIndexOutOfBoundsException e){
+        //    System.out.println("String index out of bounds at line " + currentLineNumber);
+        //    e.printStackTrace();
+        //}
         return output;
     }
     
@@ -61,7 +84,6 @@ public class ProductJSONReader {
                 
             }else if(newProduct){
                 
-                currentBaseProduct.set(ProductAttribute.ID, String.valueOf(amountOfProducts));
                 output.add(currentBaseProduct);
                 currentBaseProduct = new BaseProduct();
                 amountOfProducts++;
@@ -103,10 +125,11 @@ public class ProductJSONReader {
         int valueStart = countOccurences(line, '"') < 4 ? line.indexOf(":") - 1 : line.indexOf(":");
         
         String result = line.substring(valueStart + 3, valueEnd - 1);
-        if (result.isEmpty())
-            return null;
-        else
-            return result;
+        if(result.endsWith("\"")){
+            result = result.substring(0, result.length() - 1); //?
+        }
+        
+        return result;
     }
     
     private void setProductAttribute(String line, BaseProduct p){
@@ -116,7 +139,7 @@ public class ProductJSONReader {
         
     }
     
-    public boolean write(ArrayList<BaseProduct> list, String filepath){
+    public boolean write(List<BaseProduct> list, String filepath){
         
         if(list == null || list.isEmpty()){
             throw new NullPointerException("Invalid List to write to file");
@@ -208,13 +231,14 @@ public class ProductJSONReader {
         builder.append("\n\t]").append(lineEnd);    //Finally closing the array using
     }
     
-    public boolean write(ArrayList<BaseProduct> list) throws IOException{
+    public boolean write(List<BaseProduct> list) throws IOException{
         return write(list, filepath);
     }
     
     private int findLastOccurence(String whatToFind, String line){
         int index = line.length();
         boolean foundIt = false;
+        //System.out.println("Searching: " + line + "\t\t" +  " of length " + index +" for; \"" + whatToFind + "\"");
         
         for(int i = index; i > 0; i--){
             if(line.substring(i - 1,i).contains(whatToFind)){
@@ -224,6 +248,7 @@ public class ProductJSONReader {
             index--;
         }
         if(!foundIt) {
+            //System.out.println("No occourence found returning line length");
             index = line.length() + 1;
         }
         
@@ -241,6 +266,7 @@ public class ProductJSONReader {
             }
         }
         
+        //System.out.println("Found " + occurences + " occurences of: " + whatToCount + " at line: " + currentLineNumber);
         return occurences;
     }
     

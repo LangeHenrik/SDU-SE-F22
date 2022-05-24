@@ -178,7 +178,7 @@ public class SortingModuleImpl implements SortingModule {
 
 
         try {
-            RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
+            searchHits = RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
         } catch (IllegalImplementationException e) {
             e.printStackTrace();
         }
@@ -186,7 +186,7 @@ public class SortingModuleImpl implements SortingModule {
         // Scoring
 
         // Pagination
-        paginateHits(searchHits);
+        searchHits = paginateHits(searchHits);
 
         // Return paginated SearchHits
         return searchHits;

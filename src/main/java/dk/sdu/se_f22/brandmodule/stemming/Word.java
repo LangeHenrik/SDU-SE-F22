@@ -12,7 +12,7 @@ public class Word {
         int mCounter = 0;
         for (int i = 0; i < characters.length; i++) {
             if (i > 0) {
-                if (isCons(i) && isVowel(i-1)){
+                if (isCons(i) && isVowel(i - 1)) {
                     mCounter++;
                 }
             }
@@ -21,15 +21,9 @@ public class Word {
     }
 
     public Word getBase(String end) {
-        Word base = this.subWord(0, this.length() - end.length());
-        return base;
+        return this.subWord(0, this.length() - end.length());
     }
 
-    /**
-     *
-     * @param idx
-     * @return
-     */
     public boolean isVowel(int idx) {
         // If the character isn't a consonant, it's a vowel.
         return !isCons(idx);
@@ -39,44 +33,36 @@ public class Word {
         char character = word.toCharArray()[idx];
         switch (character) {
             // If the character is a normal vowel, it obviously isn't a consonant.
-            case 'a', 'e', 'i', 'o', 'u', 'æ', 'ø', 'å': return false;
+            case 'a', 'e', 'i', 'o', 'u', 'æ', 'ø', 'å':
+                return false;
             // If the character is a y, we need to check for the character's index minus one and return the reverse.
             case 'y': {
                 if (idx == 0) return true;
                 return !isCons(idx - 1);
             }
 
-            default: return true;
+            default:
+                return true;
         }
     }
 
-    public Word replaceIfEnds(String match, String replace) {
-        if (word.endsWith(match)) {
-            word = word.replace(match, replace);
-        }
-        return this;
-    }
-
-    public Word replaceM0(Word word, String end, String replace){
+    public void replaceM0(Word word, String end, String replace) {
         if (endsWith(end)) {
             Word base = word.subWord(0, word.length() - end.length());
-            if (base.getMeasure() > 0){
+            if (base.getMeasure() > 0) {
                 this.word = base.append(replace).getWordString();
             }
         }
-        return word;
     }
 
-    public Word replaceM1(Word word, String end, String replace){
+    public void replaceM1(Word word, String end, String replace) {
         if (endsWith(end)) {
             Word base = word.subWord(0, word.length() - end.length());
-            if (base.getMeasure() > 1){
+            if (base.getMeasure() > 1) {
                 this.word = base.append(replace).getWordString();
             }
         }
-        return word;
     }
-
 
     public boolean endsWith(String string) {
         return word.endsWith(string);
@@ -122,8 +108,10 @@ public class Word {
 
         if (isCons(word.length() - 1) && isVowel(this.getWordString().length() - 2) && isCons(this.getWordString().length() - 3)) {
             switch (this.getWordString().charAt(this.getWordString().length() - 1)) {
-                case 'w', 'x', 'y': return false;
-                default: return true;
+                case 'w', 'x', 'y':
+                    return false;
+                default:
+                    return true;
             }
         }
 

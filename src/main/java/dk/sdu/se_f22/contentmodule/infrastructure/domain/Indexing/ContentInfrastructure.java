@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 
-import dk.sdu.se_f22.contentmodule.infrastructure.data.Database;
+
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.io.IOException;
@@ -16,10 +16,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
 
     @Override
     public void createHTMLSite(int htmlId, String htmlCode) throws IOException {
-        
 
-
-        //Guidelines
         HTMLSite newSite = new HTMLSite(htmlId, htmlCode);
         
         try (Connection connection = DBConnection.getPooledConnection()) {
@@ -28,11 +25,11 @@ public class ContentInfrastructure implements IContentInfrastructre{
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            // TODO: Handle exception   
+            e.printStackTrace();
         }
 
         parser.parseHTML(newSite);
-//        tokenizer.tokenizeHTMLBodyText(newSite);
+        tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
         //CMSIndexModule.index(newSite.getFilteredTokensArray(), newSite.getId());
@@ -46,16 +43,19 @@ public class ContentInfrastructure implements IContentInfrastructre{
 
         try (Connection connection = DBConnection.getPooledConnection()) {
 
-            //Statement som tømmer en side
-//            PreparedStatement s1 = connection.prepareStatement("Something");
-//            s1.execute();
-//            s1.close();
-//
-//            //Statement som opdaterer den tomme side med nyt info
-//            PreparedStatement s2 = connection.prepareStatement("Something");
-//            s2.execute();
-//
-//            s2.close();
+            //Empties the specific row
+            PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_htmlpages WHERE VALUES (?)");
+            s1.setInt(1,htmlId);
+
+            s1.execute();
+            s1.close();
+
+            //Adds a value to the now empty row
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_htmlpages (html_id) VALUES (?)");
+            stmt.setInt(1, htmlId);
+            stmt.execute();
+            stmt.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,22 +77,49 @@ public class ContentInfrastructure implements IContentInfrastructre{
 
         try (Connection connection = DBConnection.getPooledConnection()) {
 
+            //Removes site from database
+            PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_htmlpages WHERE VALUES (?)");
+            s1.setInt(1,htmlId);
+            s1.execute();
+            s1.close();
 
-            //Remove site from database
-//            PreparedStatement stmt = connection.prepareStatement("Something");
-//            stmt.setInt(1, htmlId);
-//            stmt.execute();
-//            stmt.close();
+
         } catch (SQLException e) {
-            // TODO: Handle exception
+            e.printStackTrace();
         }
 
 
+    }
+
+    @Override
+    public void addDelimiter(char character) {
+
+        try (Connection connection = DBConnection.getPooledConnection()) {
+
+            //Adds delimiter to the token parameters table
+            PreparedStatement s1 = connection.prepareStatement("INSERT INTO cms_tokenparameters (limitedchar) VALUES ('"+character+"')");
+            s1.execute();
+            s1.close();
 
 
-//        database.setupDatabase();
-//        database.executeQuery("DELETE FROM cms_htmlpages WHERE html_id = ("+htmlId+")");
-//        //CMSIndexModule.deleteSingular(htmlId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void deleteDelimiter(char character) {
+
+        try (Connection connection = DBConnection.getPooledConnection()) {
+
+            //Deletes delimiter from token parameters table
+            PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_tokenparameters WHERE VALUES ('"+character+"')");
+            s1.execute();
+            s1.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

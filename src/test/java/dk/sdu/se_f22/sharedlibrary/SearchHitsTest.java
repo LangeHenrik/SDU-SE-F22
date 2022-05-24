@@ -163,9 +163,9 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Content> contentsHits = hits.getContents();
 
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
+            contentsHits.add(new Content(1, "HTML!", "Finding the right laptop for school", "Current timestamp!"));
+            contentsHits.add(new Content(2, "HTML!", "Finding the right laptop for school", "Current timestamp!"));
+            contentsHits.add(new Content(3, "HTML!", "Finding the right laptop for school", "Current timestamp!"));
 
             assertNotEquals(contentsHits, new SearchHits().getContents());
         }
@@ -245,9 +245,9 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Content> contentsHits = new ArrayList<>();
 
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
-            contentsHits.add(new Content());
+            contentsHits.add(new Content(1, "HTML!", "Finding the right laptop for school", "Current timestamp!"));
+            contentsHits.add(new Content(2, "HTML!", "Finding the right laptop for school", "Current timestamp!"));
+            contentsHits.add(new Content(3, "HTML!", "Finding the right laptop for school", "Current timestamp!"));
 
             hits.setContents(contentsHits);
 
@@ -334,13 +334,13 @@ class SearchHitsTest {
             SearchHits hits = new SearchHits();
             Collection<Content> contentsHits = new ArrayList<>();
 
-            Content content1 = new Content();
+            Content content1 = new Content(1, "HTML!", "Finding the right laptop for school", "Current timestamp!");
             contentsHits.add(content1);
             hits.addContent(content1);
-            Content content2 = new Content();
+            Content content2 = new Content(2, "HTML!", "Finding the right laptop for school", "Current timestamp!");
             contentsHits.add(content2);
             hits.addContent(content2);
-            Content content3 = new Content();
+            Content content3 = new Content(3, "HTML!", "Finding the right laptop for school", "Current timestamp!");
             contentsHits.add(content3);
             hits.addContent(content3);
 

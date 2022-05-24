@@ -15,7 +15,9 @@ public class OneWayImplementation implements OneWayInterface {
 
     public OneWayImplementation() {
         this.itemCatalog = new ItemCatalog(getDatabaseItems());
+        DatabaseAPI.initializeTable();
     }
+
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) throws NullPointerException {
         int length = tokens.size();
@@ -41,13 +43,6 @@ public class OneWayImplementation implements OneWayInterface {
         }
         System.out.println("The read was a succes");
         return arr;
-    }
-
-    @Override
-    public void initializeTable() {
-        if (DatabaseAPI.initializeTable()) {
-            System.out.println("A new table has been created");
-        } else System.out.println("Table already exists");
     }
 
 
@@ -107,6 +102,19 @@ public class OneWayImplementation implements OneWayInterface {
         changeItemName(id, newName);
     }
 
+    public void changeItemName(int oldItemId, String newName) {
+        if (validateID(oldItemId)) {
+            if (oldItemId > 0 && !newName.equalsIgnoreCase("root") && !isNumber(newName)) {
+                if (DatabaseAPI.updateName(oldItemId, newName)) {
+                    System.out.println("Transaction was a succes");
+                    System.out.println("Successfully updated item name");
+                    return;
+                }
+            }
+        }
+        System.out.println("Unable to update item name");
+    }
+
     @Override
     public void deleteItem(String name) {
         deleteItem(validateName(name));
@@ -138,19 +146,6 @@ public class OneWayImplementation implements OneWayInterface {
         System.out.println("Unable to delete item");
     }
 
-    public void changeItemName(int oldItemId, String newName) {
-        if (validateID(oldItemId)) {
-            if (oldItemId > 0 && !newName.equalsIgnoreCase("root") && !isNumber(newName)) {
-                if (DatabaseAPI.updateName(oldItemId, newName)) {
-                    System.out.println("Transaction was a succes");
-                    System.out.println("Successfully updated item name");
-                    return;
-                }
-            }
-        }
-        System.out.println("Unable to update item name");
-    }
-
     @Override
     public void printCatalog() {
         Item[] content = DatabaseAPI.readEntireDB();
@@ -159,16 +154,6 @@ public class OneWayImplementation implements OneWayInterface {
                 System.out.println(item);
             }
         }
-    }
-
-
-    public static void main(String[] args) {
-        OneWayImplementation oneWayImplementation = new OneWayImplementation();
-        ArrayList<String> items = null;
-        for (String token : oneWayImplementation.filter(items)){
-            System.out.println(token);
-        }
-
     }
 
     private boolean isNumber(String input) {

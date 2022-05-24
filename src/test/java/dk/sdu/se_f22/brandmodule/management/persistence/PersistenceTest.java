@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.brandmodule.management.persistence;
 
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +48,7 @@ public class PersistenceTest {
         var brandsToInsert = new ArrayList<Brand>();
         brandsToInsert.add(brandToInsert);
         p.addOrUpdateBrands(brandsToInsert);
-
+        var fetchedBrand2 = p.getBrand("TestProduct");
         // Delete brand
         p.deleteBrand(p.getBrand("TestProduct"));
 
@@ -98,7 +97,7 @@ public class PersistenceTest {
     @Test
     void databaseIndexer() {
         // Assert: methods returns true if the database is indexed
-        assertTrue(p.databaseIndexer());
+        assertTrue(p.indexDatabase());
     }
 
     @Test

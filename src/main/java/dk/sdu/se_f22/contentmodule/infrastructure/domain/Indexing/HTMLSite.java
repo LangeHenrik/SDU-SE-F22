@@ -21,7 +21,8 @@ public class HTMLSite  {
         this.documentText = documentText;
 
         try (Connection connection = DBConnection.getPooledConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_htmlpages (html_id) VALUES ("+id+")");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_htmlpages (html_id) VALUES (?)");
+            stmt.setInt(1, id);
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {

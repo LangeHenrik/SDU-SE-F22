@@ -185,7 +185,7 @@ public class SortingModuleImpl implements SortingModule {
         // Scoring
 
         // Pagination
-        paginateHits(searchHits);
+        searchHits = paginateHits(searchHits);
 
         // Return paginated SearchHits
         return searchHits;

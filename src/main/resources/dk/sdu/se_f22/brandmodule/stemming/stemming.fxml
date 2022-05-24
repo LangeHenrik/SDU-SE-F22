@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.brandmodule.stemming.GUIController">
+   <children>
+      <TabPane prefHeight="393.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Stemming">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="inputTextArea" layoutX="16.0" layoutY="23.0" prefHeight="104.0" prefWidth="569.0" />
+                        <TextArea fx:id="outputTextArea" editable="false" layoutX="16.0" layoutY="246.0" prefHeight="104.0" prefWidth="569.0" />
+                        <Label layoutX="16.0" layoutY="6.0" text="Input" />
+                        <Label layoutX="16.0" layoutY="229.0" text="Output" />
+                        <Button fx:id="stemButton" layoutX="183.0" layoutY="138.0" mnemonicParsing="false" onAction="#handleStemming" prefHeight="89.0" prefWidth="235.0" text="Stem" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Exceptions">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Create Exception" />
+                        <TextField fx:id="exceptionField" layoutX="14.0" layoutY="31.0" prefHeight="25.0" prefWidth="221.0" />
+                        <Button fx:id="createExceptionButton" layoutX="235.0" layoutY="31.0" mnemonicParsing="false" text="Create" />
+                        <ListView fx:id="exceptionList" layoutX="294.0" layoutY="31.0" prefHeight="290.0" prefWidth="292.0" />
+                        <Button fx:id="removeButton" layoutX="294.0" layoutY="325.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="292.0" text="Remove Selected" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

@@ -13,6 +13,7 @@ public class Stemmer implements IStemmer {
         }
         return returnList;
     }
+
     public String stem(String word) {
         if (word.length() < 3) return word;
         Word stemmingWord = new Word(word);
@@ -26,6 +27,7 @@ public class Stemmer implements IStemmer {
         stemmingWord = StemmingUtilities.step5b(stemmingWord);
         return stemmingWord.getWordString();
     }
+
     public void addException(String exception) {
         exception = exception.toLowerCase();
         try {
@@ -35,6 +37,7 @@ public class Stemmer implements IStemmer {
             e.printStackTrace();
         }
     }
+
     public List<Collection<String>> getExceptions() {
         try {
             return List.of(ExceptionUtilities.getExceptions().values());
@@ -43,6 +46,7 @@ public class Stemmer implements IStemmer {
         }
         return List.of();
     }
+
     public void updateException(String exception, String newException) {
         exception = exception.toLowerCase();
         newException = newException.toLowerCase();
@@ -52,6 +56,7 @@ public class Stemmer implements IStemmer {
             e.printStackTrace();
         }
     }
+
     public void removeException(String exception) {
         exception = exception.toLowerCase();
         try {
@@ -61,6 +66,7 @@ public class Stemmer implements IStemmer {
             e.printStackTrace();
         }
     }
+
     public boolean exceptionExists(String exception) {
         exception = exception.toLowerCase();
         try {

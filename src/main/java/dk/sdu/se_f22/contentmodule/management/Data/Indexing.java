@@ -28,4 +28,8 @@ public class Indexing {
             e.printStackTrace();
         }
     }
+
+    public static long getInterval() {
+        return interval;
+    }
 }

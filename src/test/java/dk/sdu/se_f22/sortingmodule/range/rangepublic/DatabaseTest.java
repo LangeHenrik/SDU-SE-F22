@@ -335,46 +335,29 @@ class DatabaseTest {
             @DisplayName("Update existing time filter")
             @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
             void updateExistingTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
-                                          Instant uMin, Instant uMax) {
+                                          Instant uMin, Instant uMax) throws UnknownFilterTypeException, SQLException, InvalidFilterTypeException {
                 TimeFilter filter = null;
                 TimeFilter updatedFilter = null;
                 TimeFilter readFilter = null;
-                try {
-                    filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
-                } catch (SQLException | InvalidFilterTypeException e) {
-                    fail("Creating filter failed " + e);
-                }
+                filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
 
                 if (filter == null) {
                    fail("Created filter is null");
                 }
 
-                try{
-                    updatedFilter = (TimeFilter) database.update(
-                            new TimeFilter(
-                                    filter.getId(),
-                                    filter.getName(),
-                                    filter.getDescription(),
-                                    filter.getProductAttribute(),
-                                    uMin,
-                                    uMax
-                                    )
-                            );
-                 } catch (Exception e ){
-                    fail("Filter update failed " + e);
-                }
+                updatedFilter = (TimeFilter) database.update(
+                        new TimeFilter(
+                                filter.getId(),
+                                filter.getName(),
+                                filter.getDescription(),
+                                filter.getProductAttribute(),
+                                uMin,
+                                uMax
+                                )
+                        );
 
-                try {
-                    readFilter = (TimeFilter) database.read(filter.getId());
-                } catch (UnknownFilterTypeException e) {
-                    fail("Read filter failed");
-                }
+                readFilter = (TimeFilter) database.read(filter.getId());
 
-                // TODO add test for update return correctly
-                // Since this test, is responsible for testing whether the data returned match the data actually saved
-                // There should be a test to ensure the update method returns the updated info
-                // (this test will pass even if no update is performed in the db,
-                // as long as the update method returns the same filter it received)
                 Assertions.assertEquals(updatedFilter, readFilter);
             }
         }

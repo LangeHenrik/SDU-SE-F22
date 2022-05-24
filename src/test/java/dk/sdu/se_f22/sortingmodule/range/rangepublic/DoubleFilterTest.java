@@ -36,6 +36,11 @@ class DoubleFilterTest {
         assertEquals(FilterTypes.DOUBLE, doubleFilter.getType());
     }
 
+    @Test
+    @Disabled("test not yet written")
+    void testEquals() {
+    }
+
     @Nested
     @DisplayName("Use filter method")
     class useFilterMethod {
@@ -213,6 +218,7 @@ class DoubleFilterTest {
 
             return out.stream();
         }
+
 
         @Nested
         @DisplayName("Set userMin and userMax")

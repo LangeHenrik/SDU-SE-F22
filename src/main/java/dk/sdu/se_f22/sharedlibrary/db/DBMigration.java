@@ -26,7 +26,7 @@ public class DBMigration {
     private int batch;
     private boolean printText;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MigrationException{
         DBMigration migrator = new DBMigration();
         migrator.migrate();
     }
@@ -45,13 +45,12 @@ public class DBMigration {
     public DBMigration (boolean printText) {
         this.batch = 0;
         this.printText = printText;
-
     }
 
     /**
      * Migrate the current databse to the newest version
      */
-    public void migrate() {
+    public void migrate() throws MigrationException {
         String migrationsPath = "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/";
 
         // Run default SeedDatabase
@@ -97,7 +96,7 @@ public class DBMigration {
                     }
                 } else {
                     this.println("Migration failed!", Color.RED_BOLD_BRIGHT);
-                    return;
+                    throw new MigrationException("Migration failed!");
                 }
             }
 
@@ -106,13 +105,15 @@ public class DBMigration {
             this.println(error, error.getStackTrace());
 
             this.println("Migration failed!", Color.RED_BOLD_BRIGHT);
+            throw new MigrationException(error.getMessage());
         }
     }
 
     /**
      * migrate the database to a fresh (new) state - THIS WILL DELETE ALL DATA
+     * @throws MigrationException If migration fails
      */
-    public void migrateFresh() {
+    public void migrateFresh() throws MigrationException {
         this.println("Flushing database", Color.YELLOW);
 
         try (
@@ -130,6 +131,7 @@ public class DBMigration {
             stmt.close();
         } catch (SQLException error) {
             this.println(error, error.getStackTrace());
+            throw new MigrationException(error.getMessage());
         }
 
         this.println("Database flushed", Color.GREEN);

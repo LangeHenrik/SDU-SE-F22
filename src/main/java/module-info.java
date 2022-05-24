@@ -17,5 +17,8 @@ open module dk.sdu.se_f22 {
     requires org.apache.commons.pool2;
     requires org.jetbrains.annotations;
     requires org.jsoup;
+
     exports dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 }
+
+

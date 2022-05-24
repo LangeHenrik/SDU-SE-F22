@@ -342,6 +342,36 @@ class DoubleFilterTest {
                     );
                 }
             }
+
+            @Test
+            @DisplayName("Set userMin with incorrect type")
+            void setUserMinWithIncorrectType () {
+                long newValue = 100;
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> doubleFilter.setUserMin(newValue)
+                );
+            }
+
+            @Test
+            @DisplayName("Set userMax with incorrect type")
+            void setUserMaxWithIncorrectType () {
+                long newValue = 100;
+                DoubleFilter doubleFilter = new DoubleFilter(
+                        "Test Name",
+                        "Test Discription",
+                        "Test product Attribute",
+                        1, 1000);
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> doubleFilter.setUserMax(newValue)
+                );
+            }
         }
     }
 }

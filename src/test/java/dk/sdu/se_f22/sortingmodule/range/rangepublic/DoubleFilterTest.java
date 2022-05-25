@@ -398,7 +398,7 @@ class DoubleFilterTest {
             }
 
             @ParameterizedTest
-            @DisplayName("Set userMin with incorrect type")
+            @DisplayName("Setting userMin with incorrect type throws exception")
             @MethodSource("doubleFilterProvider")
             void setUserMinWithIncorrectType(DoubleFilter filter) {
                 long newValue = 100;
@@ -409,7 +409,7 @@ class DoubleFilterTest {
             }
 
             @ParameterizedTest
-            @DisplayName("Set userMax with incorrect type")
+            @DisplayName("Setting userMax with incorrect type throws exception")
             @MethodSource("doubleFilterProvider")
             void setUserMaxWithIncorrectType(DoubleFilter filter) {
                 long newValue = 100;

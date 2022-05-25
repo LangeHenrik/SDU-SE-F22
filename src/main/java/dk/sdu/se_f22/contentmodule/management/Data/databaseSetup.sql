@@ -1,6 +1,7 @@
 CREATE TABLE Content_Log {
     id SERIAL PRIMARY KEY,
     html VARCHAR NOT NULL,
+    content_id VARCHAR NOT NULL,
     modified TIMESTAMP NOT NULL
     };
 

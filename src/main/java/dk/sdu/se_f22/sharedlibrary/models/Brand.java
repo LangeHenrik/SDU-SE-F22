@@ -105,4 +105,14 @@ public class Brand {
                 ", products=" + products +
                 '}';
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        Brand o = (Brand) obj;
+        if (this.id == o.id)
+            return true;
+        else
+            return false;
+    }
 }

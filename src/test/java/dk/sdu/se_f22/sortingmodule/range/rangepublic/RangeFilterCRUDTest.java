@@ -393,7 +393,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Delete double filter twice")
+        @DisplayName("Deleting double filter twice throws exception")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
         void deleteDoubleFilterTwice(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
@@ -451,7 +451,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
-        @DisplayName("Read valid double filter")
+        @DisplayName("Reading valid double filter returns the read filter")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
         void testReadFromRangeFilterDatabase(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
@@ -464,7 +464,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
-        @DisplayName("Read valid long filter")
+        @DisplayName("Reading valid long filter returns the read filter")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
         void testReadLongFromRangeFilterDatabase(int id, String name, String description, String productAttribute, long min, long max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
@@ -477,7 +477,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
-        @DisplayName("Read valid time filter")
+        @DisplayName("Reading valid time filter returns the read filter")
         @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
         void testReadTimeFromRangeFilterDatabase(int id, String name, String description, String productAttribute, Instant min, Instant max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
@@ -490,7 +490,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Read filter that does not exist")
+        @DisplayName("Reading filter that does not exist throws an exception")
         @ValueSource(ints = {Integer.MIN_VALUE, -10, -Integer.MAX_VALUE, Integer.MAX_VALUE, 0})
         void readFilterThatDoesNotExist(int input) {
             Assertions.assertThrows(IdNotFoundException.class,

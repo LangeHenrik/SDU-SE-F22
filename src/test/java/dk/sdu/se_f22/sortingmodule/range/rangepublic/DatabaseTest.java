@@ -8,6 +8,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.postgresql.util.PSQLException;
 
@@ -39,16 +40,16 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a double filter")
         @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreateDoubleFilter(String name, String description, String productAttribute, double min, double max){
+        void testCreateDoubleFilter(String name, String description, String productAttribute, double min, double max) {
             try {
                 try {
                     RangeFilter createdFilter = database.create(
-                        new DoubleFilter(
-                            name,
-                            description,
-                            productAttribute,
-                            min,
-                            max)
+                            new DoubleFilter(
+                                    name,
+                                    description,
+                                    productAttribute,
+                                    min,
+                                    max)
                     );
                     System.out.println("Created filter id is " + createdFilter.getId());
                     RangeFilter readFilter = database.read(createdFilter.getId());
@@ -66,7 +67,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a time filter")
         @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreateTimeFilter(String name, String description, String productAttribute, String min, String max){
+        void testCreateTimeFilter(String name, String description, String productAttribute, String min, String max) {
             try {
                 try {
                     RangeFilter createdFilter = database.create(
@@ -94,7 +95,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Test creating a long filter")
         @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
-        void testCreateLongFilter(String name, String description, String productAttribute, long min, long max){
+        void testCreateLongFilter(String name, String description, String productAttribute, long min, long max) {
             RangeFilter createdFilter;
             try {
                 try {
@@ -105,7 +106,7 @@ class DatabaseTest {
                             min,
                             max);
                     createdFilter = database.create(longFilter);
-                    System.out.println("Created filter has ID "+ createdFilter.getId());
+                    System.out.println("Created filter has ID " + createdFilter.getId());
 
                     RangeFilter readFilter = database.read(createdFilter.getId());
                     Assertions.assertEquals(createdFilter, readFilter);
@@ -122,14 +123,14 @@ class DatabaseTest {
         @DisplayName("Double filters created twice allows beforeAll")
         class doubleFiltersCreatedTwiceAllowsBeforeAll {
             @BeforeAll
-            static void setup(){
+            static void setup() {
                 resetDB();
             }
 
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName("Test creating two filters with the same name")
             @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-            void testCreatingTwoFiltersWithTheSameName(String name, String description, String productAttribute, double min, double max){
+            void testCreatingTwoFiltersWithTheSameName(String name, String description, String productAttribute, double min, double max) {
                 try {
                     RangeFilter createdFilter =
                             new DoubleFilter(
@@ -142,7 +143,7 @@ class DatabaseTest {
                     try {
                         database.create(createdFilter);
                         fail("Should throw duplicate key exception");
-                    } catch (PSQLException e){
+                    } catch (PSQLException e) {
                         Assertions.assertTrue(e.getMessage().contains("ERROR: duplicate key value violates unique constraint \"sortingrangefilters_name_key\""));
                     }
                 } catch (InvalidFilterTypeException | SQLException e) {
@@ -156,7 +157,7 @@ class DatabaseTest {
     @DisplayName("read")
     class read {
         @BeforeAll
-        public static void setup(){
+        public static void setup() {
             resetDB();
         }
 
@@ -255,7 +256,7 @@ class DatabaseTest {
 
         @Nested
         @DisplayName("Update existing filter")
-        class UpdateExistingFilter{
+        class UpdateExistingFilter {
 
             @ParameterizedTest
             @DisplayName("Update existing double filter")
@@ -265,7 +266,7 @@ class DatabaseTest {
 
                 DoubleFilter doubleFilter = (DoubleFilter) database.create(new DoubleFilter(name, description, productAttribute, min, max));
 
-                Assertions.assertDoesNotThrow( () -> database.update(new DoubleFilter(
+                Assertions.assertDoesNotThrow(() -> database.update(new DoubleFilter(
                         doubleFilter.getId(),
                         doubleFilter.getName(),
                         doubleFilter.getDescription(),
@@ -279,7 +280,7 @@ class DatabaseTest {
             @DisplayName("Confirm update of existing double filter")
             @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
             void confirmUpdateOfExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max,
-                                            double uMin, double uMax) throws RangeFilterException, SQLException {
+                                                     double uMin, double uMax) throws RangeFilterException, SQLException {
                 DoubleFilter doubleFilter = (DoubleFilter) database.create(new DoubleFilter(name + "confirm", description + "confirm", productAttribute, min, max));
 
                 DoubleFilter updatedFilter = (DoubleFilter) database.update(new DoubleFilter(
@@ -301,7 +302,7 @@ class DatabaseTest {
                                           long uMin, long uMax) throws SQLException, RangeFilterException {
                 LongFilter longFilter = (LongFilter) database.create(new LongFilter(name, description, productAttribute, min, max));
 
-                Assertions.assertDoesNotThrow( () -> database.update(new LongFilter(
+                Assertions.assertDoesNotThrow(() -> database.update(new LongFilter(
                         longFilter.getId(),
                         longFilter.getName(),
                         longFilter.getDescription(),
@@ -315,7 +316,7 @@ class DatabaseTest {
             @DisplayName("Confirm update of existing long filter")
             @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
             void confirmUpdateOfExistingLongFilter(int id, String name, String description, String productAttribute, long min, long max,
-                                                     long uMin, long uMax) throws RangeFilterException, SQLException {
+                                                   long uMin, long uMax) throws RangeFilterException, SQLException {
                 LongFilter longFilter = (LongFilter) database.create(new LongFilter(name + "confirm", description + "confirm", productAttribute, min, max));
 
                 LongFilter updatedFilter = (LongFilter) database.update(new LongFilter(
@@ -338,7 +339,7 @@ class DatabaseTest {
 
                 TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
 
-                Assertions.assertDoesNotThrow( () -> database.update(
+                Assertions.assertDoesNotThrow(() -> database.update(
                         new TimeFilter(
                                 filter.getId(),
                                 filter.getName(),
@@ -353,22 +354,42 @@ class DatabaseTest {
             @DisplayName("Confirm update of existing time filter")
             @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
             void confirmUpdateOfExistingTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
-                                                   Instant uMin, Instant uMax) throws RangeFilterException, SQLException {
+                                                   Instant newDBMin, Instant newDBMax) throws RangeFilterException, SQLException {
                 TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name + "confirm", description + "confirm", productAttribute, min, max));
-                TimeFilter updatedFilter = (TimeFilter) database.update(
-                        new TimeFilter(
-                                filter.getId(),
-                                filter.getName(),
-                                filter.getDescription(),
-                                filter.getProductAttribute(),
-                                uMin,
-                                uMax
-                        )
+                TimeFilter modifiedFilter = new TimeFilter(
+                        filter.getId(),
+                        filter.getName(),
+                        filter.getDescription(),
+                        filter.getProductAttribute(),
+                        newDBMin,
+                        newDBMax
                 );
+
+                database.update(modifiedFilter);
 
                 TimeFilter readFilter = (TimeFilter) database.read(filter.getId());
 
-                Assertions.assertEquals(updatedFilter, readFilter);
+                Assertions.assertEquals(modifiedFilter, readFilter);
+            }
+
+            @ParameterizedTest(name = "{0} : {1}")
+            @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
+            @DisplayName("database.update returns the updated filter")
+            void databaseUpdateReturnsTheUpdatedFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
+                                                       Instant newDBMin, Instant newDBMax) throws RangeFilterException, SQLException {
+                TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name + "confirm", description + "confirm", productAttribute, min, max));
+                TimeFilter modifiedFilter = new TimeFilter(
+                        filter.getId(),
+                        filter.getName(),
+                        filter.getDescription(),
+                        filter.getProductAttribute(),
+                        newDBMin,
+                        newDBMax
+                );
+
+                TimeFilter returnedFilter = (TimeFilter) database.update(modifiedFilter);
+
+                Assertions.assertEquals(modifiedFilter, returnedFilter);
             }
         }
 
@@ -442,12 +463,12 @@ class DatabaseTest {
             }
         }
     }
-    
+
 
     @Nested
     class Delete {
         @BeforeAll
-        public static void setup(){
+        public static void setup() {
             resetDB();
         }
 
@@ -467,12 +488,13 @@ class DatabaseTest {
                 @ParameterizedTest(name = "{0} : {1}")
                 @DisplayName("test read of deleted filter")
                 @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-                void testReadOfDeletedFilter(String name , String description, String productAttribute, double min, double max) throws UnknownFilterTypeException, SQLException, InvalidFilterTypeException, IdNotFoundException {
+                void testReadOfDeletedFilter(String name, String description, String productAttribute, double min, double max) throws UnknownFilterTypeException, SQLException, InvalidFilterTypeException, IdNotFoundException {
                     RangeFilter doubleFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
                     database.delete(doubleFilterFromDB.getId());
                     Assertions.assertNull(database.read(doubleFilterFromDB.getId()));
                 }
             }
+
             @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
             @DisplayName(" test delete Existing Timefilter")//  læs data fra databasen, slet, læs og c
             @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
@@ -510,7 +532,7 @@ class DatabaseTest {
                 min, double max) throws SQLException, InvalidFilterTypeException {
             RangeFilter doubleFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
             //skal ikke kaste exception da filteret findes
-            assertDoesNotThrow( () -> database.delete(doubleFilterFromDB.getId()));
+            assertDoesNotThrow(() -> database.delete(doubleFilterFromDB.getId()));
             // skal kaste da filteret ikke findes længere
             Assertions.assertThrows(IdNotFoundException.class,
                     () -> database.delete(doubleFilterFromDB.getId()));
@@ -525,7 +547,7 @@ class DatabaseTest {
             RangeFilter TimeFilterFromDB = database.create(new TimeFilter(name, description, productAttribute, min, max));
 
             //skal ikke kaste exception da filteret findes
-            assertDoesNotThrow( () -> database.delete(TimeFilterFromDB.getId()));
+            assertDoesNotThrow(() -> database.delete(TimeFilterFromDB.getId()));
 
             // skal kaste da filteret ikke findes længere
             Assertions.assertThrows(IdNotFoundException.class,
@@ -541,7 +563,7 @@ class DatabaseTest {
             RangeFilter LongFilterFromDB = database.create(new DoubleFilter(name, description, productAttribute, min, max));
 
             //skal ikke kaste exception da filteret findes
-            assertDoesNotThrow( () -> database.delete(LongFilterFromDB.getId()));
+            assertDoesNotThrow(() -> database.delete(LongFilterFromDB.getId()));
 
             // skal kaste da filteret ikke findes længere
             Assertions.assertThrows(IdNotFoundException.class,

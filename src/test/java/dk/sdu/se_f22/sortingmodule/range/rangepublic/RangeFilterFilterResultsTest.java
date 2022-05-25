@@ -7,8 +7,6 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -19,11 +17,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Execution(ExecutionMode.CONCURRENT)
-// Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterFilterResultsTest {
-    // Test that an exception is thrown if an illegal implementation is used
-    // Use the list of filters and add one more that is illegally implemented
+    // Tests that an exception is thrown if an illegal implementation is used
+    // Uses the list of filters and adds one more that is illegally implemented when testing illegal implementations
 
     /**
      * @return A list containing 3 filters. <br>

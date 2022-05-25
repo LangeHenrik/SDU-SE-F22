@@ -709,6 +709,7 @@ public class RangeFilterCRUDTest {
 
                     RangeFilter modifiedFilter = rangeFilterCRUD.read(rangefilter.getId());
 
+                    // We check that the name has been changed, but no other value has been changed along with the name
                     assertAll(
                             () -> assertEquals(newName, modifiedFilter.getName()),
 

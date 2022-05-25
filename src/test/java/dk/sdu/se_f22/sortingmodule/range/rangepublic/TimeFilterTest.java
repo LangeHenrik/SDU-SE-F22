@@ -243,7 +243,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set valid TimeFilter userMin")
+            @DisplayName("Setting valid TimeFilter userMin does not throw an exception")
             @MethodSource("provideTimeFilters")
             void setValidTimeFilterUserMin (TimeFilter filter) {
                 String newDate = "2022-05-10T18:35:24.00Z";
@@ -262,7 +262,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set valid TimeFilter userMax")
+            @DisplayName("Setting valid TimeFilter userMax does not throw an exception")
             @MethodSource("provideTimeFilters")
             void setValidTimeFilterUserMax (TimeFilter filter) {
                 Instant newUserMax = filter.getDbMaxInstant().minusSeconds(1);
@@ -281,7 +281,7 @@ class TimeFilterTest {
         }
 
         @Nested
-        @DisplayName("Set invalid userMin and userMax")
+        @DisplayName("Setting invalid userMin and userMax")
         class SetInvalidUserMinAndUserMax {
 
             static Stream<TimeFilter> provideTimeFilters(){
@@ -289,7 +289,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid TimeFilter userMin less than dbMin")
+            @DisplayName("Setting invalid TimeFilter userMin less than dbMin throws an exception")
             @MethodSource("provideTimeFilters")
             void setInvalidTimeFilterUserMin (TimeFilter filter) {
                 Instant newUserMin = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
@@ -299,7 +299,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid TimeFilter userMax less than dbMin")
+            @DisplayName("Setting invalid TimeFilter userMax less than dbMin throws an exception")
             @MethodSource("provideTimeFilters")
             void setInvalidTimeFilterUserMax (TimeFilter filter) {
                 Instant newUserMax = Instant.ofEpochMilli(filter.getDbMinInstant().toEpochMilli()- 10);
@@ -309,7 +309,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid TimeFilter userMin higher than dbMin")
+            @DisplayName("Setting invalid TimeFilter userMin higher than dbMin throws an exception")
             @MethodSource("provideTimeFilters")
             void setInvalidTimeFilterUserMinHigherThanDBMin (TimeFilter filter) {
                 Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
@@ -319,7 +319,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid TimeFilter userMax higher than dbMin")
+            @DisplayName("Setting invalid TimeFilter userMax higher than dbMin throws an exception")
             @MethodSource("provideTimeFilters")
             void setInvalidTimeFilterUserMaxHigherThanDBMin (TimeFilter filter) {
                 Instant newUserMax = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli() + 10);
@@ -329,7 +329,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid TimeFilter userMax less than userMin")
+            @DisplayName("Setting invalid TimeFilter userMax less than userMin throws an exception")
             @MethodSource("provideTimeFilters")
             void setInvalidLessThanUserMaxLessThanUserMin (TimeFilter filter) throws IllegalMinMaxException {
                 Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);
@@ -344,7 +344,7 @@ class TimeFilterTest {
 
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid TimeFilter userMin higher than userMax")
+            @DisplayName("Setting invalid TimeFilter userMin higher than userMax throws an exception")
             @MethodSource("provideTimeFilters")
             void setInvalidUserMinHigherThanUserMax (TimeFilter filter) throws IllegalMinMaxException {
                 Instant newUserMin = Instant.ofEpochMilli(filter.getDbMaxInstant().toEpochMilli()- 10);

@@ -6,6 +6,7 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HTMLSite  {

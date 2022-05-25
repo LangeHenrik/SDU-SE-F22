@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 
 
+import dk.sdu.se_f22.contentmodule.infrastructure.domain.Mock.InterfaceOutgoing;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ContentInfrastructure implements IContentInfrastructre{
-    //ClassCallOutgoing CMSIndexModule = new ClassCallOutgoing;
+    InterfaceOutgoing CMSIndexModule = new InterfaceOutgoing();
     HTMLParser parser = new HTMLParser();
     Tokenizer tokenizer = new Tokenizer();
     FilteredTokens filterTokens = new FilteredTokens();
@@ -32,7 +33,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
         tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
-        //CMSIndexModule.index(newSite.getFilteredTokensArray(), newSite.getId());
+        CMSIndexModule.index(newSite.getFilteredTokens(), newSite.getId());
     }
 
     //When an htmlpage is updated
@@ -61,15 +62,11 @@ public class ContentInfrastructure implements IContentInfrastructre{
             e.printStackTrace();
         }
 
-
-
-
-
         parser.parseHTML(newSite);
 //      tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
-        //CMSIndexModule.updateSingular(newSite.getFilteredTokens(), newSite.getId());
+        CMSIndexModule.updateSingular(newSite.getFilteredTokens(), newSite.getId());
     }
 
     @Override
@@ -88,7 +85,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
             e.printStackTrace();
         }
 
-
+        CMSIndexModule.delete(htmlId);
     }
 
     @Override

@@ -191,7 +191,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set valid DoubleFilter userMin")
+            @DisplayName("Setting valid LongFilter userMin does not throw an exception")
             @MethodSource("provideLongFilters")
             void setValidLongFilterUserMin (LongFilter filter) {
                 Assertions.assertDoesNotThrow(
@@ -199,7 +199,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set valid LongFilter userMax")
+            @DisplayName("Setting valid LongFilter userMax does not throw an exception")
             @MethodSource("provideLongFilters")
             void setValidLongFilterUserMax (LongFilter filter) {
                 long newUserMax = filter.getDbMaxLong() - 1;
@@ -226,7 +226,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set valid userMin and then userMax")
+            @DisplayName("Setting valid userMin and then userMax does not throw an exception")
             @MethodSource("provideLongFilters")
             void setUserMinAndThenUserMax (LongFilter filter) throws IllegalMinMaxException {
                 long newMax = filter.getDbMaxLong() - 1;
@@ -238,7 +238,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set valid userMax and then userMin")
+            @DisplayName("Setting valid userMax and then userMin does not throw an exception")
             @MethodSource("provideLongFilters")
             void setUserMaxAndThenUserMin (LongFilter filter) throws IllegalMinMaxException {
                 long newMax = filter.getDbMaxLong() - 1;
@@ -251,7 +251,7 @@ class LongFilterTest {
         }
 
         @Nested
-        @DisplayName("Set invalid userMin and userMax")
+        @DisplayName("Setting invalid userMin and userMax")
         class SetInvalidUserMinAndUserMax {
 
             static Stream<LongFilter> provideLongFilters(){
@@ -259,7 +259,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid LongFilter userMin less than dbMin")
+            @DisplayName("Setting invalid LongFilter userMin less than dbMin throws an exception")
             @MethodSource("provideLongFilters")
             void setInvalidLongFilterUserMin (LongFilter filter) {
                 long newValue = filter.getDbMinLong() - 1;
@@ -268,7 +268,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid LongFilter userMax less than dbMin")
+            @DisplayName("Setting invalid LongFilter userMax less than dbMin throws an exception")
             @MethodSource("provideLongFilters")
             void setInvalidLongFilterUserMax (LongFilter filter) {
                 long newValue = filter.getDbMinLong() - 1;
@@ -278,7 +278,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid LongFilter userMin higher than dbMax")
+            @DisplayName("Setting invalid LongFilter userMin higher than dbMax throws an exception")
             @MethodSource("provideLongFilters")
             void setInvalid (LongFilter filter) {
                 long newValue = filter.getDbMaxLong() + 1;
@@ -287,7 +287,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid LongFilter userMax higher than dbMax")
+            @DisplayName("Setting invalid LongFilter userMax higher than dbMax throws an exception")
             @MethodSource("provideLongFilters")
             void setInvalidLongFilterUserMaxHigherThanDBMax (LongFilter filter) {
                 long newValue = filter.getDbMaxLong() + 1;
@@ -298,7 +298,7 @@ class LongFilterTest {
 
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid LongFilter userMax less than userMin")
+            @DisplayName("Setting invalid LongFilter userMax less than userMin throws an exception")
             @MethodSource("provideLongFilters")
             void setInvalidLessThanUserMaxLessThanUserMin (LongFilter filter) throws IllegalMinMaxException {
                 long newMin = filter.getDbMaxLong() - 10;
@@ -310,7 +310,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid LongFilter userMin higher than userMax")
+            @DisplayName("Setting invalid LongFilter userMin higher than userMax throws an exception")
             @MethodSource("provideLongFilters")
             void setInvalidUserMinHigherThanUserMax (LongFilter filter) throws IllegalMinMaxException {
                 long newMax = filter.getDbMaxLong() - 20;
@@ -322,7 +322,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set userMin with incorrect type")
+            @DisplayName("Setting userMin with incorrect type throws an exception")
             @MethodSource("provideLongFilters")
             void setUserMinWithIncorrectType (LongFilter filter) {
                 double newValue = 100.0;
@@ -332,7 +332,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set userMax with incorrect type")
+            @DisplayName("Setting userMax with incorrect type throws an exception")
             @MethodSource("provideLongFilters")
             void setUserMaxWithIncorrectType (LongFilter filter) {
                 double newValue = 100.0;
@@ -342,7 +342,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid userMin and then userMax")
+            @DisplayName("Setting invalid userMin and then userMax throws an exception")
             @MethodSource("provideLongFilters")
             void setUserMinAndThenUserMax (LongFilter filter) throws IllegalMinMaxException {
                 long newMax = filter.getDbMinLong() + 1;
@@ -354,7 +354,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set invalid userMax and then userMin")
+            @DisplayName("Setting invalid userMax and then userMin throws an exception")
             @MethodSource("provideLongFilters")
             void setUserMaxAndThenUserMin (LongFilter filter) throws IllegalMinMaxException {
                 long newMax = filter.getDbMinLong() + 1;
@@ -374,7 +374,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest
-            @DisplayName("Set userMin with incorrect type")
+            @DisplayName("Setting userMin with incorrect type throws an exception")
             @MethodSource("longFilterProvider")
             void setUserMinWithIncorrectType(LongFilter filter) {
                 double newValue = 100f;
@@ -385,7 +385,7 @@ class LongFilterTest {
             }
 
             @ParameterizedTest
-            @DisplayName("Set userMax with incorrect type")
+            @DisplayName("Setting userMax with incorrect type throws an exception")
             @MethodSource("longFilterProvider")
             void setUserMaxWithIncorrectType(LongFilter filter) {
                 double newValue = 100f;

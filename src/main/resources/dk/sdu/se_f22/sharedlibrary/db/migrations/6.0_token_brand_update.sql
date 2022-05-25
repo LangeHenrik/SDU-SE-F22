@@ -1,6 +1,3 @@
-DROP TABLE IF EXISTS BrandProductTypeJunction;
-DROP TABLE IF EXISTS ProductType;
-
 DROP TABLE IF EXISTS TokenBrandMap;
 
 CREATE TABLE TokenBrandMap (

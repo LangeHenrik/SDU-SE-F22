@@ -3,6 +3,7 @@ package dk.sdu.se_f22.brandmodule.index;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -116,51 +117,67 @@ public class BrandIndex implements IndexInterface {
 
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {
-        try(Connection connection = DBConnection.getPooledConnection()) {
-            PreparedStatement mapInsert = connection.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?)");
-            PreparedStatement tokenInsert = connection.prepareStatement("INSERT INTO tokens(token) VALUES (?)");
-            PreparedStatement queryToken = connection.prepareStatement("SELECT token FROM tokens");
+      
+        try (Connection DBConn = DBConnection.getPooledConnection()) {
+            PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?) ON CONFLICT DO NOTHING");
+            PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?) ON CONFLICT DO NOTHING");
+            PreparedStatement queryToken = DBConn.prepareStatement("SELECT token FROM tokens");
+            PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
 
             ResultSet rs = queryToken.executeQuery();
+            ResultSet rsTokenId = null;
 
             ArrayList<String> newTokens = new ArrayList<>(tokens);
 
-            String dbColumnToken = "token"; //
+            // Testing if token column in tokens table is empty and if it is then inserts the first token given in tokens List into
+            // tokens table and tokenBrandMap + removes the added token from the newTokens ArrayList.
+             if (!rs.next() && newTokens.get(0) != null) {
+                 tokenInsert.setString(1, newTokens.get(0));
+                 tokenInsert.execute();
+                 rs = queryToken.executeQuery();
+                 mapInsert.setInt(1, brand.getId());
+                 mapInsert.setInt(2, 1);
+                 mapInsert.execute();
+                 newTokens.remove(0);
+             }
 
-            PreparedStatement queryTokenId = null;
-            ResultSet rsTokenId = null;
-
-
-            for (int i = 0; i < tokens.size(); i++) {
-                while (rs.next()) {
-                    if (rs.getString(dbColumnToken) != newTokens.get(i)) {
-                        tokenInsert.setString(1, newTokens.get(i));
+            // Goes through given newTokens ArrayList and check the token column in tokens table. If the token already exists,
+            // then it removes it from the newTokens ArrayList.
+            while (rs.next()) {
+                for (int i = 0; i < newTokens.size(); i++) {
+                    if (rs.getString("token").equals(newTokens.get(i))) {
+                        newTokens.remove(i);
                     }
                 }
-                tokenInsert.execute();
-                queryTokenId = connection.prepareStatement("SELECT id FROM tokens where token = ?");
-                queryTokenId.setString(1, newTokens.get(i));
-                rsTokenId = queryTokenId.executeQuery();
-                while (rsTokenId.next()) {
-                    mapInsert.setInt(1, brand.getId());
-                    mapInsert.setInt(2, rsTokenId.getInt(1));
-                    mapInsert.execute();
+            }
+
+            // Inserts into tokenBrandMap, making sure each token points to its specific brand and inserts all tokens to tokens table
+            if (newTokens.size() > 0) {
+                for (int i = 0; i < newTokens.size(); i++) {
+                    tokenInsert.setString(1, newTokens.get(i));
+                    tokenInsert.execute();
+                    queryTokenId.setString(1, newTokens.get(i));
+                    rsTokenId = queryTokenId.executeQuery();
+                    while (rsTokenId.next()) {
+                        mapInsert.setInt(1, brand.getId());
+                        mapInsert.setInt(2, rsTokenId.getInt(1));
+                        mapInsert.execute(); }
                 }
             }
-            //preparedStatements
+
+            // Closing preparedStatements
             mapInsert.close();
             tokenInsert.close();
             queryToken.close();
             queryTokenId.close();
 
-            //resultSets
+            // Closing resultSets
             rs.close();
-            rsTokenId.close();
+            if (rsTokenId != null) { rsTokenId.close(); }
 
         }
-        catch (SQLException e) {
-            e.printStackTrace();
+        catch(SQLException e){
+                e.printStackTrace();
         }
     }
 }
-

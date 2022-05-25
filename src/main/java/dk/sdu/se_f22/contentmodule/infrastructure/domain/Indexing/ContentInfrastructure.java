@@ -98,6 +98,10 @@ public class ContentInfrastructure implements IContentInfrastructre{
             s1.execute();
             s1.close();
 
+            PreparedStatement s2 = connection.prepareStatement("INSERT INTO cms_parameterslist (parameter) VALUES ('"+character+"')");
+            s2.execute();
+            s2.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,6 +116,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
             //Deletes delimiter from token parameters table
             PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_tokenparameters WHERE VALUES ('"+character+"')");
             s1.execute();
+
             s1.close();
 
 

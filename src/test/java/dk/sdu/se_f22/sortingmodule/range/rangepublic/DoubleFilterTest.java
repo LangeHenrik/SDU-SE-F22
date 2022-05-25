@@ -233,7 +233,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
-            @DisplayName("Set DoubleFilter userMin does not throw")
+            @DisplayName("Setting DoubleFilter userMin does not throw an exception")
             void setValidDoubleFilterUserMin(DoubleFilter filter) {
                 double newValue = filter.getUserMinDouble() + 1;
                 Assertions.assertDoesNotThrow(() -> filter.setUserMin(newValue));
@@ -241,7 +241,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
-            @DisplayName("Set DoubleFilter userMax does not throw")
+            @DisplayName("Setting DoubleFilter userMax does not throw an exception")
             void setValidDoubleFilterUserMax(DoubleFilter filter) {
                 double newValue = filter.getDbMaxDouble() - 1;
                 Assertions.assertDoesNotThrow(() -> filter.setUserMax(newValue));
@@ -249,7 +249,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
-            @DisplayName("Set DoubleFilter userMax and then userMin does not throw")
+            @DisplayName("Setting DoubleFilter userMax and then userMin does not throw an exception")
             void setValidDoubleFilterUserMaxAndThenUserMin(DoubleFilter filter) {
                 double inputMin = filter.getDbMinDouble() + 1;
                 double inputMax = filter.getDbMaxDouble() - 1;
@@ -264,7 +264,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
-            @DisplayName("Set DoubleFilter userMin and then userMax does not throw")
+            @DisplayName("Setting DoubleFilter userMin and then userMax does not throw an exception")
             void setValidDoubleFilterUserMinAndThenUserMax(DoubleFilter filter) {
                 double inputMin = filter.getDbMinDouble() + 1;
                 double inputMax = filter.getDbMaxDouble() - 1;
@@ -318,7 +318,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @ValueSource(doubles = {Double.MIN_VALUE, -1.0, 0.0})
-            @DisplayName("Set invalid DoubleFilter userMin")
+            @DisplayName("Setting invalid DoubleFilter userMin throws an exception")
             void setValidDoubleFilterUserMin(double input) {
                 DoubleFilter doubleFilter = new DoubleFilter(
                         "Test Name",
@@ -333,7 +333,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @ValueSource(doubles = {1000.1, 10000, Double.MAX_VALUE})
-            @DisplayName("Set invalid DoubleFilter userMax")
+            @DisplayName("Setting invalid DoubleFilter userMax throws an exception")
             void setValidDoubleFilterUserMax(double input) {
                 DoubleFilter doubleFilter = new DoubleFilter(
                         "Test Name",
@@ -348,7 +348,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @MethodSource("provideParameters")
-            @DisplayName("Set invalid DoubleFilter userMin and then userMax")
+            @DisplayName("Setting invalid DoubleFilter userMin and then userMax throws an exception")
             void setValidDoubleFilterUserMinAndThenUserMax(double inputMin, double inputMax) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(
                         "Test Name",
@@ -365,7 +365,7 @@ class DoubleFilterTest {
 
             @ParameterizedTest
             @MethodSource("provideParameters")
-            @DisplayName("Set invalid DoubleFilter userMax and then userMin")
+            @DisplayName("Setting invalid DoubleFilter userMax and then userMin throws an exception")
             void setValidDoubleFilterUserMaxAndThenUserMin(double inputMin, double inputMax) throws IllegalMinMaxException {
                 DoubleFilter doubleFilter = new DoubleFilter(
                         "Test Name",

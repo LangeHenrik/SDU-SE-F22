@@ -46,6 +46,7 @@ public class DatabaseQueries  {
 
 
 
+
    public int getPageID(int html_id) {
         int pageId = 0;
 
@@ -59,12 +60,15 @@ public class DatabaseQueries  {
            stmt.close();
        } catch (SQLException e) {
            System.out.println(e);
+           System.out.println(3);
        }
        return pageId;
 
 
 }
-//
+
+
+    //TODO: Correct SQL syntax, because of errors
 
     public int getParameterID(char parameter) {
         int parameterId = 0;
@@ -79,10 +83,11 @@ public class DatabaseQueries  {
             stmt.close();
         } catch (SQLException e) {
             System.out.println(e);
+            System.out.println(4);
 
         }
         return parameterId;
 
     }
 }
-//
+

@@ -119,6 +119,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
             //Deletes delimiter from token parameters table
             PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_tokenparameters WHERE VALUES ('"+character+"')");
             s1.execute();
+
             s1.close();
 
 

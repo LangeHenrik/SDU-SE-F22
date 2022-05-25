@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 public class DatabaseQueries  {
 
+    //Logs paramitization
     public void logParameters(int pageId, int parameterId) throws IOException {
         try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_usedparameters (page_id, parameter_id) VALUES (?,?)");
@@ -23,11 +24,9 @@ public class DatabaseQueries  {
         }
     }
 
-
-
+    //Returns a string containing all parameters
     public String getParameters(){
         String chars = "";
-
         try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_tokenparameters");
             ResultSet queryResultSet = stmt.executeQuery();
@@ -45,7 +44,7 @@ public class DatabaseQueries  {
     }
 
 
-//Now works
+    //Searches pageID from html ID
    public int getPageID(int html_id) {
         int pageId = 0;
 
@@ -53,27 +52,21 @@ public class DatabaseQueries  {
            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_htmlpages WHERE html_id = ?");
            stmt.setInt(1, html_id);
            ResultSet queryResultSet = stmt.executeQuery();
-
            while (queryResultSet.next()) {
                pageId = queryResultSet.getInt("page_id");
            }
-
            stmt.close();
            queryResultSet.close();
-
-
        } catch (SQLException e) {
           e.printStackTrace();
            System.out.println(3);
 
        }
        return pageId;
-
-
 }
 
 
-
+//Searches parameterID from a given parameter
     public int getParameterID(char parameter) {
         int parameterId = 0;
         String holder = "";
@@ -99,13 +92,6 @@ public class DatabaseQueries  {
 
         }
         return parameterId;
-
-    }
-
-    public static void main(String[] args) {
-        char c = '-';
-        DatabaseQueries dq = new DatabaseQueries();
-        System.out.println(dq.getParameterID(c));
 
     }
 }

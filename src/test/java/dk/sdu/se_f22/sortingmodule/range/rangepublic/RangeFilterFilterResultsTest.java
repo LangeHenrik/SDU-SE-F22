@@ -74,7 +74,10 @@ class RangeFilterFilterResultsTest {
         // The content class has not been created by the corresponding group.
         // Thus we cannot make good copies, and such we have to simply use the same variable contentList.
         // This lowers the value of the test, but there is nothing we can do about that
-        List<Content> contentList = List.of(new Content(), new Content(), new Content());
+        List<Content> contentList = List.of(new Content(1, "Something", "big title","sometime"),
+                new Content(2, "Something", "big title 2","sometime later"),
+                new Content(2, "Something", "big title 3","sometime shortly after")
+        );
 
         emptyHits.setContents(contentList);
 

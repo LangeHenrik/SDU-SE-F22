@@ -1,0 +1,4 @@
+Id, Name, Description, ParentId, value, Fieldname
+3, Components, This category contains components, 0, components, category
+7, Processors, This category contains processors, 3, processors, category
+9, SSDs, This category contains SSDs, 6, ssds, category

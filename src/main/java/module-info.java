@@ -1,4 +1,4 @@
-module dk.sdu.se_f22 {
+open module dk.sdu.se_f22 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -13,8 +13,17 @@ module dk.sdu.se_f22 {
     requires org.controlsfx.controls;
     requires org.postgresql.jdbc;
     requires validatorfx;
+	requires java.desktop;
     requires com.google.gson;
+    requires org.apache.commons.pool2;
     requires org.jetbrains.annotations;
-    opens dk.sdu.se_f22 to javafx.fxml;
+    requires org.jsoup;
     exports dk.sdu.se_f22;
+	exports dk.sdu.se_f22.searchmodule.onewaysynonyms;
+    exports dk.sdu.se_f22.searchmodule.onewaysynonyms.data;
+    exports dk.sdu.se_f22.searchmodule.onewaysynonyms.domain;
+    exports dk.sdu.se_f22.searchmodule.onewaysynonyms.presentation;
+    exports dk.sdu.se_f22.searchmodule.infrastructure.GUI;
 }
+
+

@@ -64,6 +64,7 @@ class BrandIndexTest {
         //tokens ----------
         List<String> firstTokens = List.of("Quality", "Phones", "Computers", "Watches");
         List<String> duplicateTokens = List.of("Phones", "Tv-Controller", "Computers");
+        List<String> finalTokens = List.of("Quality", "Phones", "Computers", "Watches","Tv-Controller");
 
         //creating instance of BrandIndex class -----------------
         BrandIndex index = new BrandIndex();
@@ -84,34 +85,33 @@ class BrandIndexTest {
 
         //Calling indexBrandInformation with brand and tokens --------
         index.indexBrandInformation(brand, firstTokens);
-
-        //Querying DB and checking if the tokens in the DB is equal to the firstTokens list -----------
-        try {
-            PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens");
-            ResultSet queryRs = query.executeQuery();
-            for (int i = 0; i < query.getFetchSize(); i++){
-                while (queryRs.next()){
-                    assertEquals(firstTokens.get(i), queryRs.getString(1));
-                    System.out.println("Checking if "+firstTokens.get(i)+" and "+queryRs.getString(1));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
         index.indexBrandInformation(brand, duplicateTokens);
 
         //Checking if the code doesn't add duplicates and adds non-duplicate tokens -----------
         try {
             PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens");
             ResultSet queryRs = query.executeQuery();
-            for (int i = 0; i < query.getFetchSize(); i++){
-                while (queryRs.next()){
-                    assertEquals(duplicateTokens.get(i), queryRs.getString(1));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            queryRs.next();
+            assertEquals(finalTokens.get(0), queryRs.getString(1));
+            queryRs.next();
+            assertEquals(finalTokens.get(1), queryRs.getString(1));
+            queryRs.next();
+            assertEquals(finalTokens.get(2), queryRs.getString(1));
+            queryRs.next();
+            assertEquals(finalTokens.get(3), queryRs.getString(1));
+            queryRs.next();
+            assertEquals(finalTokens.get(4), queryRs.getString(1));
+
+            query.close();
+            queryRs.close();
         }
+         catch (SQLException e){
+                e.printStackTrace();
+        }
+    }
+
+    @Test
+    void IndexBrandFirstToken() {
+
     }
 }

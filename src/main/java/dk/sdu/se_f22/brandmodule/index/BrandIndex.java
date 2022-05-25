@@ -84,6 +84,9 @@ public class BrandIndex implements IndexInterface {
                  tokenInsert.execute();
                  rs = queryToken.executeQuery();
                  System.out.println(newTokens.get(0)+" has been added.");
+                 mapInsert.setInt(1, brand.getId());
+                 mapInsert.setInt(2, 1);
+                 mapInsert.execute();
                  newTokens.remove(0);
              }
 

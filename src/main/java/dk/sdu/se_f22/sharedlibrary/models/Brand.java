@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sharedlibrary.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Brand {
     private Integer id;
@@ -8,9 +9,9 @@ public class Brand {
     private String description;
     private String founded;
     private String headquarters;
-    private ArrayList<String> products;
+    private List<String> products;
 
-    public Brand(Integer id, String name, String description, String founded, String headquarters, ArrayList<String> products) {
+    public Brand(Integer id, String name, String description, String founded, String headquarters, List<String> products) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -26,7 +27,7 @@ public class Brand {
         this.headquarters = headquarters;
         this.products = new ArrayList<>();
     }
-    public Brand(String name, String description, String founded, String headquarters, ArrayList<String> products) {
+    public Brand(String name, String description, String founded, String headquarters, List<String> products) {
         this.name = name;
         this.description = description;
         this.founded = founded;
@@ -85,11 +86,11 @@ public class Brand {
         this.headquarters = headquarters;
     }
 
-    public ArrayList<String> getProducts() {
+    public List<String> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<String> products) {
+    public void setProducts(List<String> products) {
         this.products = products;
     }
 

@@ -3,7 +3,7 @@ package dk.sdu.se_f22.searchmodule.infrastructure;
 import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearchImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.IndexingModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.searchmodule.infrastructure.logger.SearchLogger;

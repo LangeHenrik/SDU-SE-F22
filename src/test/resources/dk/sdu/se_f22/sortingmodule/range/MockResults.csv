@@ -1,7 +1,8 @@
-price,height,stock
-1000.0,100.0,2
-2000.0,200.0,3
-3000.0,10.0,4
-100.0,100.0,5
-200.0,200.0,6
-300.0,300.0,7
+id,average user review,ean,price,published date,expiration date,category,name,description,size,clockspeed,weight
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.3,12345678,1000,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,pc,testPc,very testy,,,
+2c8ee936-cabc-11ec-9d64-0242ac120002,3.4,12345679,100,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,ssd,testSSD,testy boi,,,
+2c8ee936-cabc-11ec-9d64-0242ac120002,1.2,12345671,500,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,laptop,testLaptop,test tabolous,,,
+2c8ee936-cabc-11ec-9d64-0242ac120002,3.8,12345672,2000,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,pc,testPCUltra,ultra testy,,,
+2c8ee936-cabc-11ec-9d64-0242ac120002,4.8,12345673,10,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,monitor,testMonitor,test monitoring,,,
+2c8ee936-cabc-11ec-9d64-0242ac120002,3.9,12345674,999,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,hdd,testHDD,test capacity boi,,,
+2c8ee936-cabc-11ec-9d64-0242ac120002,2.9,12345675,1001,2018-11-30T15:35:24.00,2025-11-30T15:35:24.00,sshd,testSSHD,test capacity boi 2.0,,,

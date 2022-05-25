@@ -75,38 +75,32 @@ public class BrandIndex implements IndexInterface {
 
             ArrayList<String> newTokens = new ArrayList<>(tokens);
 
-            System.out.println("\nBEFORE ANY CODE");
-            System.out.println("newTokens length "+newTokens.size());
-            System.out.println("tokens length "+tokens.size()+"\n");
 
+            // Testing if token column in tokens table is empty and if it is then inserts the first token given in tokens List into
+            // tokens table and tokenBrandMap + removes the added token from the newTokens ArrayList.
              if (!rs.next() && newTokens.get(0) != null) {
                  tokenInsert.setString(1, newTokens.get(0));
                  tokenInsert.execute();
                  rs = queryToken.executeQuery();
-                 System.out.println(newTokens.get(0)+" has been added.");
                  mapInsert.setInt(1, brand.getId());
                  mapInsert.setInt(2, 1);
                  mapInsert.execute();
                  newTokens.remove(0);
              }
 
-            System.out.println(newTokens.size()+" is newTokens.size before while rs.next() loop.");
+            // Goes through given newTokens ArrayList and check the token column in tokens table. If the token already exists,
+            // then it removes it from the newTokens ArrayList.
             while (rs.next()) {
                 for (int i = 0; i < newTokens.size(); i++) {
-                    System.out.println(rs.getString("token") + " is rs.getString. "+newTokens.get(i)+" is newTokens.get(i)");
-                    System.out.println(rs.getString("token").equals(newTokens.get(i)));
                     if (rs.getString("token").equals(newTokens.get(i))) {
-                        System.out.println(newTokens.get(i)+" has been removed and newTokens length is now "+(newTokens.size()-1));
                         newTokens.remove(i);
                     }
                 }
             }
-            System.out.println("\nnewTokens size is: "+newTokens.size()+"\n");
-            System.out.println(newTokens);
+            // Inserts into tokenBrandMap, making sure each token points to its specific brand and inserts all tokens to tokens table
             for (int i = 0; i < newTokens.size(); i++) {
                 tokenInsert.setString(1, newTokens.get(i));
                 tokenInsert.execute();
-                System.out.println(newTokens.get(i) + " has been added.");
                 queryTokenId.setString(1, newTokens.get(i));
                 rsTokenId = queryTokenId.executeQuery();
                 while (rsTokenId.next()) {
@@ -116,18 +110,16 @@ public class BrandIndex implements IndexInterface {
                 }
             }
 
-            //preparedStatements
+            // Closing preparedStatements
             mapInsert.close();
             tokenInsert.close();
             queryToken.close();
             queryTokenId.close();
 
-            //resultSets
+            // Closing resultSets
             rs.close();
             rsTokenId.close();
 
-            //indexing done
-            System.out.println("\nIndexing done");
         }
         catch(SQLException e){
                 e.printStackTrace();

@@ -50,7 +50,7 @@ class BrandIndexTest {
 
     @Test
     void indexBrandInformation() {
-        //creating brand object -----------
+        // Creating the brand object for the indexBrandInformation method
         Brand brand = new Brand(1, null, null, null, null , null);
         brand.setName("Apple");
         brand.setDescription("Apple Inc (Apple) designs, manufactures, and markets smartphones, tablets, personal computers (PCs), portable and wearable devices. The company also offers software and related services, accessories, networking solutions, and third-party digital content and applications.");
@@ -61,15 +61,15 @@ class BrandIndexTest {
         tempList.addAll(List.of(Products));
         brand.setProducts(tempList);
 
-        //tokens ----------
+        // Creating the different List<String> with the tokens for the indexBrandInformation method
         List<String> firstTokens = List.of("Quality", "Phones", "Computers", "Watches");
         List<String> duplicateTokens = List.of("Phones", "Tv-Controller", "Computers");
         List<String> finalTokens = List.of("Quality", "Phones", "Computers", "Watches","Tv-Controller");
 
-        //creating instance of BrandIndex class -----------------
+        // Creating instance of BrandIndex class
         BrandIndex index = new BrandIndex();
 
-        //Inserting brand into DB ----------------
+        // Inserting brand into DB
         try {
             PreparedStatement ps1 = DBConn.prepareStatement("INSERT INTO brand(name,description,founded,headquarters) VALUES (?,?,?,?)");
             ps1.setString(1, brand.getName());
@@ -83,25 +83,22 @@ class BrandIndexTest {
             e.printStackTrace();
         }
 
-        //Calling indexBrandInformation with brand and tokens --------
+        // Calling indexBrandInformation with brand and tokens
         index.indexBrandInformation(brand, firstTokens);
         index.indexBrandInformation(brand, duplicateTokens);
 
-        //Checking if the code doesn't add duplicates and adds non-duplicate tokens -----------
+        // Checking if the code has correctly added the tokens in the ArrayLists above, which means adding new tokens
+        // and not adding any duplicates.
         try {
-            PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens");
-            ResultSet queryRs = query.executeQuery();
-            queryRs.next();
-            assertEquals(finalTokens.get(0), queryRs.getString(1));
-            queryRs.next();
-            assertEquals(finalTokens.get(1), queryRs.getString(1));
-            queryRs.next();
-            assertEquals(finalTokens.get(2), queryRs.getString(1));
-            queryRs.next();
-            assertEquals(finalTokens.get(3), queryRs.getString(1));
-            queryRs.next();
-            assertEquals(finalTokens.get(4), queryRs.getString(1));
-
+            PreparedStatement query = DBConn.prepareStatement("SELECT token FROM tokens WHERE id=?");
+            ResultSet queryRs = null;
+            for (int i = 0; i < finalTokens.size(); i++){
+                query.setInt(1, i + 1);
+                queryRs = query.executeQuery();
+                if (queryRs.next()) {
+                    assertEquals(finalTokens.get(i), queryRs.getString(1));
+                }
+            }
             query.close();
             queryRs.close();
         }
@@ -111,7 +108,23 @@ class BrandIndexTest {
     }
 
     @Test
-    void IndexBrandFirstToken() {
+    void tokenBrandMapInsert() {
+        try {
+            // Checking if the tokens are inserted properly into the tokenBrandMap and associated with the right brand.
+            PreparedStatement query = DBConn.prepareStatement("SELECT tokenid FROM tokenbrandmap WHERE brandid=1 AND id=?");
+            ResultSet queryRs = null;
+            for (int i = 0; i < 5; i++){
+                query.setInt(1, i);
+                queryRs = query.executeQuery();
+                if (queryRs.next()){
+                    assertEquals(i, queryRs.getInt(1));
+                }
+            }
+            query.close();
+            queryRs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }

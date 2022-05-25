@@ -43,6 +43,7 @@ class TimeFilterTest {
     @Nested
     @DisplayName("Use filter method")
     class useFilterMethod {
+        //It must also be able to take an empty list, along with a null list
 
         @ParameterizedTest
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
@@ -75,7 +76,6 @@ class TimeFilterTest {
 
             Assertions.assertEquals(expectedResults,filteredResults);
         }
-
 
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
@@ -167,8 +167,6 @@ class TimeFilterTest {
 
             return out.stream();
         }
-
-        //It must also be able to take an empty list, along with a null list
 
         @DisplayName("Filtering an empty list of results")
         @ParameterizedTest(name = "{0} - setUserMinAndMax={1} - inputList={2}")
@@ -361,7 +359,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set userMin with incorrect type")
+            @DisplayName("Setting userMin with incorrect type should throw exception")
             @MethodSource("provideTimeFilters")
             void setUserMinWithIncorrectType (TimeFilter filter) {
                 double newValue = 100.0;
@@ -371,7 +369,7 @@ class TimeFilterTest {
             }
 
             @ParameterizedTest(name = "{0}")
-            @DisplayName("Set userMax with incorrect type")
+            @DisplayName("Setting userMax with incorrect type should throw exception")
             @MethodSource("provideTimeFilters")
             void setUserMaxWithIncorrectType (TimeFilter filter) {
                 double newValue = 100.0;

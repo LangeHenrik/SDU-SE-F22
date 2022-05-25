@@ -84,19 +84,11 @@ class DoubleFilterTest {
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")
         void useFilter(DoubleFilter internalFilter) {
-            // The reason for the test fail is known, go to the comment starting with HERE
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
             // the last 3 attributes of the product (size, clockspeed and weight) should be set to "unavailable" if they are not applicable
 
             //crude check that the mockresults are what we expect, and have not been changed
             assertEquals(7, mockResults.size());
-
-            // HERE:
-            // Expected results could be read from a csv file,
-            // instead of being put in like this.
-
-            // If it is to avoid accidental bricking of the test, then the other settings (max, and min)
-            // could also be saved in a (separate) csv file
 
             List<Product> copy = List.copyOf(mockResults);
             ArrayList<Product> expectedResults = new ArrayList<>(copy);

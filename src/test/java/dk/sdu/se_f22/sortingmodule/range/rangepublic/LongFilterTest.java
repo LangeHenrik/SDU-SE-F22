@@ -139,7 +139,7 @@ class LongFilterTest {
             }
 
             // preparing the expected result
-            // Note: we create a new variable that doesn't reference inputlist since it might be modified during the action
+            // Note: we create a new variable that doesn't reference inputlist, since inputlist might be modified during the action
             Collection<Product> expectedResult;
 
             if(inputList == null){

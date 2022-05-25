@@ -160,6 +160,7 @@ public class SortingInfrastructureController {
                     queryInformation.setText("");
 
                     queryInformation.appendText("Id: " + currentLog.id + "\n");
+                    queryInformation.appendText("Text: " + currentLog.text + "\n");
                     queryInformation.appendText("Page: " + currentLog.page + "\n");
                     queryInformation.appendText("Page size: " + currentLog.pageSize + "\n");
                     queryInformation.appendText("Scoring: " + currentLog.scoring + "\n");

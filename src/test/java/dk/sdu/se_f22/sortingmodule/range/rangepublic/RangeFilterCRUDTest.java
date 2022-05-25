@@ -297,7 +297,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Delete valid doubleFilter")
+        @DisplayName("Deleting valid doubleFilter returns deleted filter")
         @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
         void deleteValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
@@ -326,7 +326,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Delete valid timeFilter")
+        @DisplayName("Deleting valid timeFilter returns deleted filter")
         @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
         void deleteValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
@@ -355,7 +355,7 @@ public class RangeFilterCRUDTest {
         }
 
         @ParameterizedTest
-        @DisplayName("Delete valid longFilter")
+        @DisplayName("Deleting valid longFilter returns deleted filter")
         @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
         void deleteValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;

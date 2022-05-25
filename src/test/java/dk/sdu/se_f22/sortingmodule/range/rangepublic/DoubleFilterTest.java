@@ -309,7 +309,7 @@ class DoubleFilterTest {
         }
 
         @Nested
-        @DisplayName("Set invalid userMin and userMax")
+        @DisplayName("Set invalid userMin and userMax throws IllegalMinMaxException")
         class SetInvalidUserMinAndUserMax {
 
             static Stream<DoubleFilter> doubleFilterProvider() {

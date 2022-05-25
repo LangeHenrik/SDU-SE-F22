@@ -455,7 +455,7 @@ public class RangeFilterCRUDTest {
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
         void testReadFromRangeFilterDatabase(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
-            // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
+            // So each Csv file of filters should contain 3 files.
             RangeFilter actual = rangeFilterCRUD.read(id);
             RangeFilter expected = new DoubleFilter(id, name, description, productAttribute, min, max);
             assertEquals(expected, actual);
@@ -468,7 +468,7 @@ public class RangeFilterCRUDTest {
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
         void testReadLongFromRangeFilterDatabase(int id, String name, String description, String productAttribute, long min, long max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
-            // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
+            // So each Csv file of filters should contain 3 files.
             RangeFilter actual = rangeFilterCRUD.read(id);
             RangeFilter expected = new LongFilter(id, name, description, productAttribute, min, max);
             assertEquals(expected, actual);
@@ -481,7 +481,7 @@ public class RangeFilterCRUDTest {
         @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
         void testReadTimeFromRangeFilterDatabase(int id, String name, String description, String productAttribute, Instant min, Instant max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
-            // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
+            // So each Csv file of filters should contain 3 files.
             RangeFilter actual = rangeFilterCRUD.read(id);
             RangeFilter expected = new TimeFilter(id, name, description, productAttribute, min, max);
             assertEquals(expected, actual);

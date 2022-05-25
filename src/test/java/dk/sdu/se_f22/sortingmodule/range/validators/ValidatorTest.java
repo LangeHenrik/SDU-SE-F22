@@ -13,9 +13,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 class ValidatorTest {
 
     @ParameterizedTest(name = "{0}")
-    // the 0 and 0 is for the index in the csv input,
-    // if using three or more values in one row add more brackets
-    @DisplayName("Testing the NoNegativeValue")
+    @DisplayName("Testing that NoNegativeValue throws exception when the value is negative")
     @ValueSource(doubles = {-1, -2, -3, -Double.MIN_VALUE, -Double.MAX_VALUE})
     void TestingNoNegativeNumber(double input) {
         assertThrows(InvalidFilterException.class,
@@ -24,13 +22,9 @@ class ValidatorTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    // the 0 and 0 is for the index in the csv input,
-    // if using three or more values in one row add more brackets
-    @DisplayName("No special characters argument")
+    @DisplayName("No special characters validator should throw exception with special characters")
     @CsvFileSource(resources = "emptyStrings.csv")
     void noSpecialCharactersArgument(String input) {
-        // Remember to parse the string inputs to the types you expect them to be
-        // If you added more fields per line of CSV remember to add them as params to the method
         assertThrows(InvalidFilterException.class,
                 () -> Validator.NoSpecialCharacters(input)
         );
@@ -45,14 +39,9 @@ class ValidatorTest {
     }
 
     @ParameterizedTest(name = "Min {0} Max {1}")
-    // the 0 and 0 is for the index in the csv input, 
-    // if using three or more values in one row add more brackets
-    @DisplayName("Max less than min throws exception")
+    @DisplayName("Max less than min throws exception when max is less than min")
     @MethodSource("doublesProvider") // References the stream of doubles below
-        // e.g. "1:2", "2:4" where ':' is the delimiter
     void maxLessThanMin(double min, double max) {
-        // Remember to parse the string inputs to the types you expect them to be
-        // If you added more fields per line of CSV remember to add them as params to the method
         assertThrows(InvalidFilterException.class,
                 () -> Validator.MaxLessThanMin(min, max)
         );

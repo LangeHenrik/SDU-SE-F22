@@ -73,40 +73,46 @@ public class BrandIndex implements IndexInterface {
 
             ArrayList<String> newTokens = new ArrayList<>(tokens);
 
-            String dbColumnToken = "token"; //
+            System.out.println("BEFORE ANY CODE\n");
+            System.out.println("newTokens length "+newTokens.size());
+            System.out.println("tokens length "+tokens.size()+"\n");
 
-            System.out.println(!rs.next() && newTokens.get(0) != null);
              if (!rs.next() && newTokens.get(0) != null) {
                  tokenInsert.setString(1, newTokens.get(0));
                  tokenInsert.execute();
                  rs = queryToken.executeQuery();
                  System.out.println(newTokens.get(0)+" has been added.");
+                 newTokens.remove(0);
              }
 
-            System.out.println(tokens.size()+" is tokens.size.");
-            System.out.println(rs.first());
+            System.out.println(newTokens.size()+" is newTokens.size before while rs.next() loop.");
             while (rs.next()) {
-                for (int i = 0; i < tokens.size(); i++) {
-                    System.out.println(rs.getString("token") + " is rs.getString. POG POG "+newTokens.get(i)+" is newTokens.get(i)");
-                    if (!(rs.getString("token").equals(newTokens.get(i)))) {
-                        tokenInsert.setString(1, newTokens.get(i));
-                        tokenInsert.execute();
-                        System.out.println(newTokens.get(i) + " has been added. INSIDE IF");
+                for (int i = 0; i < newTokens.size(); i++) {
+                    System.out.println("We're now inside the for loop in rs.next\n");
+                    System.out.println(rs.getString("token") + " is rs.getString. "+newTokens.get(i)+" is newTokens.get(i)");
+                    System.out.println(rs.getString("token").equals(newTokens.get(i)));
+                    if (rs.getString("token").equals(newTokens.get(i))) {
+                        System.out.println(newTokens.get(i)+" has been removed and newTokens length is now "+newTokens.size());
+                        newTokens.remove(i);
                     }
-                    else { continue; }
-
-                    PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
-                    queryTokenId.setString(1, newTokens.get(i));
-                    ResultSet rsTokenId = queryTokenId.executeQuery();
-                    while (rsTokenId.next()) {
-                        mapInsert.setInt(1, brand.getId());
-                        mapInsert.setInt(2, rsTokenId.getInt(1));
-                        mapInsert.execute();
-                    }
-                    rsTokenId.close();
-                    queryTokenId.close();
                 }
-                rs = queryToken.executeQuery();
+            }
+            System.out.println("\nnewTokens size is: "+newTokens.size()+"\n");
+            System.out.println(newTokens);
+            for (int i = 0; i < newTokens.size(); i++) {
+                tokenInsert.setString(1, newTokens.get(i));
+                tokenInsert.execute();
+                System.out.println(newTokens.get(i) + " has been added.");
+                PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
+                queryTokenId.setString(1, newTokens.get(i));
+                ResultSet rsTokenId = queryTokenId.executeQuery();
+                while (rsTokenId.next()) {
+                    mapInsert.setInt(1, brand.getId());
+                    mapInsert.setInt(2, rsTokenId.getInt(1));
+                    mapInsert.execute();
+                }
+                rsTokenId.close();
+                queryTokenId.close();
             }
 
             //preparedStatements
@@ -116,10 +122,12 @@ public class BrandIndex implements IndexInterface {
 
             //resultSets
             rs.close();
+
+            //indexing done
+            System.out.println("\nIndexing done\n");
         }
-        catch (SQLException e) {
-            e.printStackTrace();
+        catch(SQLException e){
+                e.printStackTrace();
         }
     }
 }
-

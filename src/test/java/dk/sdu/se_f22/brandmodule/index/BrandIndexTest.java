@@ -63,7 +63,6 @@ class BrandIndexTest {
 
         //tokens ----------
         List<String> firstTokens = List.of("Quality", "Phones", "Computers", "Watches");
-        List<String> testTokens = List.of("Phones", "Tv-Controller", "Computers");
 
         //creating instance of BrandIndex class -----------------
         BrandIndex index = new BrandIndex();
@@ -92,11 +91,29 @@ class BrandIndexTest {
             for (int i = 0; i < query.getFetchSize(); i++){
                 while (queryRs.next()){
                     assertEquals(firstTokens.get(i), queryRs.getString(1));
+                    System.out.println("Checking if "+firstTokens.get(i)+" and "+queryRs.getString(1));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void duplicateTest() {
+        //creating brand object -----------
+        Brand brand = new Brand(1, null, null, null, null , null);
+        brand.setName("Apple");
+        brand.setDescription("Apple Inc (Apple) designs, manufactures, and markets smartphones, tablets, personal computers (PCs), portable and wearable devices. The company also offers software and related services, accessories, networking solutions, and third-party digital content and applications.");
+        brand.setFounded("April 1, 1976");
+        brand.setHeadquarters("Cupertino, California, USA");
+        String[] Products = {"Personal computers", "Smartphones", "Smartwatches", "Earbuds", "Headphones"};
+        ArrayList<String> tempList = new ArrayList<>();
+        tempList.addAll(List.of(Products));
+        brand.setProducts(tempList);
+
+        BrandIndex index = new BrandIndex();
+        List<String> testTokens = List.of("Phones", "Tv-Controller", "Computers");
 
         //Calling indexBrandInformation with brand and new tokens to test if it adds the new tokens and not duplicates ----------
         index.indexBrandInformation(brand, testTokens);
@@ -113,7 +130,5 @@ class BrandIndexTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        //drop all newly added in db ------------
     }
 }

@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.RangeFilterException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -255,97 +256,89 @@ class DatabaseTest {
         @Nested
         @DisplayName("Update existing filter")
         class UpdateExistingFilter{
+
             @ParameterizedTest
             @DisplayName("Update existing double filter")
             @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
             void updateExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max,
-                                            double uMin, double uMax) {
-                DoubleFilter doubleFilter = null;
-                try {
-                    doubleFilter = (DoubleFilter) database.create(new DoubleFilter(name, description, productAttribute, min, max));
-                } catch (InvalidFilterTypeException e) {
-                    e.printStackTrace();
-                    fail("Filter type was invalid, see 'create' under 'RangeFilterCRUD'");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    fail("An error occurred in the database during creation of the filter used in the test");
-                }
+                                            double uMin, double uMax) throws RangeFilterException, SQLException {
 
-                if (doubleFilter == null) {
-                    fail("Filter was 'null'");
-                }
+                DoubleFilter doubleFilter = (DoubleFilter) database.create(new DoubleFilter(name, description, productAttribute, min, max));
 
-                try {
-                    DoubleFilter updatedFilter = (DoubleFilter) database.update(new DoubleFilter(
-                            doubleFilter.getId(),
-                            doubleFilter.getName(),
-                            doubleFilter.getDescription(),
-                            doubleFilter.getProductAttribute(),
-                            uMin,
-                            uMax
-                    ));
-                    Assertions.assertEquals(updatedFilter, database.read(doubleFilter.getId()));
-                } catch (UnknownFilterTypeException | SQLException | InvalidFilterTypeException e) {
-                    e.printStackTrace();
-                    fail("An exception from 'read' was thrown, see 'read' under 'RangeFilterCURD' or check if the filter " +
-                            "exists in the database.");
-                }
+                Assertions.assertDoesNotThrow( () -> database.update(new DoubleFilter(
+                        doubleFilter.getId(),
+                        doubleFilter.getName(),
+                        doubleFilter.getDescription(),
+                        doubleFilter.getProductAttribute(),
+                        uMin,
+                        uMax
+                )));
+            }
+
+            @ParameterizedTest
+            @DisplayName("Confirm update of existing double filter")
+            @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+            void confirmUpdateOfExistingDoubleFilter(int id, String name, String description, String productAttribute, double min, double max,
+                                            double uMin, double uMax) throws RangeFilterException, SQLException {
+                DoubleFilter doubleFilter = (DoubleFilter) database.create(new DoubleFilter(name + "confirm", description + "confirm", productAttribute, min, max));
+
+                DoubleFilter updatedFilter = (DoubleFilter) database.update(new DoubleFilter(
+                        doubleFilter.getId(),
+                        doubleFilter.getName(),
+                        doubleFilter.getDescription(),
+                        doubleFilter.getProductAttribute(),
+                        uMin,
+                        uMax
+                ));
+
+                Assertions.assertEquals(updatedFilter, database.read(doubleFilter.getId()));
             }
 
             @ParameterizedTest
             @DisplayName("Update existing long filter")
             @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
             void updateExistingLongFilter(int id, String name, String description, String productAttribute, long min, long max,
-                                          long uMin, long uMax) {
-                LongFilter longFilter = null;
-                try {
-                    longFilter = (LongFilter) database.create(new LongFilter(name, description, productAttribute, min, max));
-                } catch (InvalidFilterTypeException e) {
-                    e.printStackTrace();
-                    fail("Filter type was invalid, see 'create' under 'RangeFilterCRUD'");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    fail("An error occurred in the database during creation of the filter used in the test");
-                }
+                                          long uMin, long uMax) throws SQLException, RangeFilterException {
+                LongFilter longFilter = (LongFilter) database.create(new LongFilter(name, description, productAttribute, min, max));
 
-                if (longFilter == null) {
-                    fail("Filter was 'null'");
-                }
+                Assertions.assertDoesNotThrow( () -> database.update(new LongFilter(
+                        longFilter.getId(),
+                        longFilter.getName(),
+                        longFilter.getDescription(),
+                        longFilter.getProductAttribute(),
+                        uMin,
+                        uMax
+                )));
+            }
 
-                try {
-                    LongFilter updatedFilter = (LongFilter) database.update(
-                                new LongFilter(
-                                        longFilter.getId(),
-                                        longFilter.getName(),
-                                        longFilter.getDescription(),
-                                        longFilter.getProductAttribute(),
-                                        uMin,
-                                        uMax
-                                )
-                            );
-                    Assertions.assertEquals(updatedFilter, database.read(longFilter.getId()));
-                } catch (UnknownFilterTypeException | SQLException | InvalidFilterTypeException e) {
-                    e.printStackTrace();
-                    fail("An exception from 'read' was thrown, see 'read' under 'RangeFilterCURD' or check if the filter " +
-                        "exists in the database.");
-                }
+            @ParameterizedTest
+            @DisplayName("Confirm update of existing long filter")
+            @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
+            void confirmUpdateOfExistingLongFilter(int id, String name, String description, String productAttribute, long min, long max,
+                                                     long uMin, long uMax) throws RangeFilterException, SQLException {
+                LongFilter longFilter = (LongFilter) database.create(new LongFilter(name + "confirm", description + "confirm", productAttribute, min, max));
+
+                LongFilter updatedFilter = (LongFilter) database.update(new LongFilter(
+                        longFilter.getId(),
+                        longFilter.getName(),
+                        longFilter.getDescription(),
+                        longFilter.getProductAttribute(),
+                        uMin,
+                        uMax
+                ));
+
+                Assertions.assertEquals(updatedFilter, database.read(longFilter.getId()));
             }
 
             @ParameterizedTest
             @DisplayName("Update existing time filter")
             @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
             void updateExistingTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
-                                          Instant uMin, Instant uMax) throws UnknownFilterTypeException, SQLException, InvalidFilterTypeException {
-                TimeFilter filter = null;
-                TimeFilter updatedFilter = null;
-                TimeFilter readFilter = null;
-                filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
+                                          Instant uMin, Instant uMax) throws SQLException, RangeFilterException {
 
-                if (filter == null) {
-                   fail("Created filter is null");
-                }
+                TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name, description, productAttribute, min, max));
 
-                updatedFilter = (TimeFilter) database.update(
+                Assertions.assertDoesNotThrow( () -> database.update(
                         new TimeFilter(
                                 filter.getId(),
                                 filter.getName(),
@@ -353,10 +346,27 @@ class DatabaseTest {
                                 filter.getProductAttribute(),
                                 uMin,
                                 uMax
-                                )
-                        );
+                        )));
+            }
 
-                readFilter = (TimeFilter) database.read(filter.getId());
+            @ParameterizedTest
+            @DisplayName("Confirm update of existing time filter")
+            @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
+            void confirmUpdateOfExistingTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
+                                                   Instant uMin, Instant uMax) throws RangeFilterException, SQLException {
+                TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name + "confirm", description + "confirm", productAttribute, min, max));
+                TimeFilter updatedFilter = (TimeFilter) database.update(
+                        new TimeFilter(
+                                filter.getId(),
+                                filter.getName(),
+                                filter.getDescription(),
+                                filter.getProductAttribute(),
+                                uMin,
+                                uMax
+                        )
+                );
+
+                TimeFilter readFilter = (TimeFilter) database.read(filter.getId());
 
                 Assertions.assertEquals(updatedFilter, readFilter);
             }
@@ -366,7 +376,7 @@ class DatabaseTest {
         @DisplayName("Update nonexisting filter")
         class UpdateNonexistingFilter {
             @ParameterizedTest
-            @DisplayName("Update nonexisting double filter")
+            @DisplayName("Update nonexisting double filter throws exception")
             @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
             void updateNonexistingDoubleFilter(int id, String name, String description, String productAttribute,
                                                double min, double max, double uMin, double uMax) {
@@ -376,7 +386,7 @@ class DatabaseTest {
             }
 
             @ParameterizedTest
-            @DisplayName("Update nonexisting long filter")
+            @DisplayName("Update nonexisting long filter throws exception")
             @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
             void updateNonexistingLongFilter(int id, String name, String description, String productAttribute,
                                              long min, long max, long uMin, long uMax) {
@@ -387,7 +397,7 @@ class DatabaseTest {
             }
 
             @ParameterizedTest
-            @DisplayName("Update nonexisting time filter")
+            @DisplayName("Update nonexisting time filter throws exception")
             @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
             void updateNonexistingTimeFilter(int id, String name, String description, String productAttribute,
                                              Instant min, Instant max, Instant uMin, Instant uMax) {

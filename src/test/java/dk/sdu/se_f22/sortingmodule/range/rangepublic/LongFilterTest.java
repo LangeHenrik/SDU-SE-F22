@@ -28,6 +28,7 @@ class LongFilterTest {
     }
 
     @Test
+    @DisplayName("getType returns FilterTypes.LONG")
     void getType() {
         LongFilter longFilter = getTestFilter();
         assertEquals(FilterTypes.LONG, longFilter.getType());
@@ -51,7 +52,7 @@ class LongFilterTest {
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")
         void useFilter(LongFilter internalFilter) {
-            // Not necessary, but should be tested in a separate test.
+            // Note: Helpers.readMockProductResultsFromFile is expected to be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
@@ -85,9 +86,6 @@ class LongFilterTest {
         }
 
         static Stream<Arguments> useFilterArguments() throws RangeFilterException {
-            // Could be refactored to simply return DoubleFilters.
-            // However it is like this such that the test can easily be refactored to take more arguments if needed.
-
             // The values chosen ensure that if something is off, and a value is used when filtering, when it is not supposed to
             // then the test will fail
             List<Arguments> out = new ArrayList<>();

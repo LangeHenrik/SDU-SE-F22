@@ -195,18 +195,6 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         // Validate new values
         validateFilterUpdate(modified);
 
-        // Commented because an attempt has been made to clean up try-catch
-//        RangeFilter updated = database.update(modified);
-//
-//        try {
-//            updated.setUserMax(filter.getUserMaxLong());
-//            updated.setUserMin(filter.getUserMinLong());
-//        } catch (InvalidFilterTypeException e) {
-//            e.printStackTrace();
-//        }
-        // The try-catch has been removed since the exception is thrown by the method, anyway
-        // thus it wont change the way other modules interact with the method
-        // But it does simplify this code, and increases code coverage
         RangeFilter updated = database.update(modified);
 
         updated.setUserMax(filter.getUserMaxLong());
@@ -263,12 +251,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         Validator.NoSpecialCharacters(filter.getDescription());
         if (filter instanceof DoubleFilter) {
             Validator.NoNegativeValue(filter.getDbMinDouble());
-            Validator.NoNegativeValue(filter.getDbMaxDouble()); // not applicable
+            // Since max cannot be less than min, and min is positive, we do not need to perform the check for max
             Validator.MaxLessThanMin(filter.getDbMinDouble(),filter.getDbMaxDouble());
         }
         if (filter instanceof LongFilter) {
             Validator.NoNegativeValue(filter.getDbMinLong());
-            Validator.NoNegativeValue(filter.getDbMaxLong()); // not applicable
+            // Since max cannot be less than min, and min is positive, we do not need to perform the check for max
             Validator.MaxLessThanMin(filter.getDbMinLong(),filter.getDbMaxLong());
         }
         if (filter instanceof TimeFilter) {

@@ -13,7 +13,7 @@ public class GetterTests {
     @DisplayName("Getters on DoubleFilters")
     class gettersOnDoubleFilters {
         @Test
-        @DisplayName("Get as long")
+        @DisplayName("Get as long throws InvalidFilterTypeException")
         void getAsLong() {
             DoubleFilter doubleFilter = DoubleFilterTest.getTestFilter("price");
 
@@ -26,7 +26,7 @@ public class GetterTests {
         }
 
         @Test
-        @DisplayName("Get as Time")
+        @DisplayName("Get as Time throws InvalidFilterTypeException")
         void getAsTime() {
             DoubleFilter doubleFilter = DoubleFilterTest.getTestFilter("price");
 
@@ -43,7 +43,7 @@ public class GetterTests {
     @DisplayName("Getters on LongFilters")
     class gettersOnLongFilters {
         @Test
-        @DisplayName("get As Time")
+        @DisplayName("get As Time throws InvalidFilterTypeException")
         void getAsTime() {
             LongFilter longFilter = getTestFilter();
 
@@ -56,7 +56,7 @@ public class GetterTests {
         }
 
         @Test
-        @DisplayName("get as Double")
+        @DisplayName("get as Double throws InvalidFilterTypeException")
         void getAsDouble() {
             LongFilter longFilter = getTestFilter();
 
@@ -75,7 +75,7 @@ public class GetterTests {
     class gettersOnTimeFilters {
 
         @Test
-        @DisplayName("Get as Long")
+        @DisplayName("Get as Long throws InvalidFilterTypeException")
         void getAsLong() {
             TimeFilter timeFilter = TimeFilterTest.getTestFilter("publishedDate");
 
@@ -88,7 +88,7 @@ public class GetterTests {
         }
 
         @Test
-        @DisplayName("get as Double")
+        @DisplayName("get as Double throws InvalidFilterTypeException")
         void getAsDouble() {
             TimeFilter timeFilter = TimeFilterTest.getTestFilter("publishedDate");
 

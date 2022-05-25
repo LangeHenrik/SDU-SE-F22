@@ -18,14 +18,15 @@ public class Validator {
 
 
     public static void NoSpecialCharacters(String s) throws InvalidFilterException{
-        String[] characters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
+        String[] specialCharacters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
         if(s == null || s.isEmpty()) {
             throw new InvalidFilterException("String was empty.");
         }
 
-        for (String c : characters){
-            if (s.substring(0,1).equals(c)) {
-                throw new InvalidFilterException("String contained only a special character.");
+        String sub = s.substring(0,1);
+        for (String c : specialCharacters){
+            if (sub.equals(c)) {
+                throw new InvalidFilterException("String started with a special character.");
             }
         }
     }

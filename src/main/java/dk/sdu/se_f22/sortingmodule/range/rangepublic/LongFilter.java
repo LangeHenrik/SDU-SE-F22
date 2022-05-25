@@ -125,8 +125,6 @@ class LongFilter extends RangeFilterClass{
      * @return true if the value is outside the range specified by the filter
      */
     private boolean checkValue(long value) {
-        // NOTE: The last check may not be necessary.
-        // Since they are both set, then they must be different
         if (isSet(this.userMax) && isSet(this.userMin) && this.userMin != this.userMax) {
             return value < this.userMin || value > this.userMax;
         }

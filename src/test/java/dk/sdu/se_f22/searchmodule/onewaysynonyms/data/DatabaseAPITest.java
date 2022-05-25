@@ -47,7 +47,7 @@ class DatabaseAPITest {
 
     @Test
     void searchBasedOnName() {
-        assertEquals(DatabaseAPI.searchBasedOnName("root"),0);
-        assertEquals(DatabaseAPI.searchBasedOnName("1"),-1);
+        assertEquals(0,DatabaseAPI.searchBasedOnName("root"));
+        assertEquals(-1,DatabaseAPI.searchBasedOnName("1"));
     }
 }

@@ -44,16 +44,20 @@ public class OneWayImplementation implements OneWayInterface {
     }
 
     public static void main(String[] args) {
-        OneWayImplementation owi = new OneWayImplementation();
-        ArrayList<String> list = null;
-        ArrayList<String> list2 = new ArrayList<>();
+        String name = "root";
+        String superItem = "root";
+        OneWayImplementation oneWayImplementation = new OneWayImplementation();
+        oneWayImplementation.addItem(name, superItem);
 
-        try{
-            owi.filter(null);
-            owi.filter(list2);
-        }catch (NullPointerException ex){
-            System.out.println(ex);
-        }
+        name = "1";
+        oneWayImplementation.addItem(name, superItem);
+
+        name = "TEST";
+        superItem = "ÆØÅ";
+        oneWayImplementation.addItem(name, superItem);
+
+        superItem = "root";
+        oneWayImplementation.addItem(name, superItem);
     }
 
     private Item[] getDatabaseItems() {

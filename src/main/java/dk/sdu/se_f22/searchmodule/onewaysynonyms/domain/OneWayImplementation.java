@@ -18,16 +18,21 @@ public class OneWayImplementation implements OneWayInterface {
         DatabaseAPI.initializeTable();
     }
 
+
+
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) throws NullPointerException {
-        int length = tokens.size();
+
+        if (tokens==null || tokens.isEmpty())throw new NullPointerException("No tokens have been give");
+        int length= tokens.size();
+
         LinkedList<Item> items;
         for (int i = 0; i < length; i++) {
             try {
                 items = (this.itemCatalog.oneWaySynonymStrings(tokens.get(i)));
 
                 for (Item item : items) {
-                    if (!tokens.contains(item.getName())){
+                    if (!tokens.contains(item.getName())) {
                         tokens.add(item.getName());
                     }
                 }
@@ -38,7 +43,20 @@ public class OneWayImplementation implements OneWayInterface {
         return tokens;
     }
 
-    public Item[] getDatabaseItems() {
+    public static void main(String[] args) {
+        OneWayImplementation owi = new OneWayImplementation();
+        ArrayList<String> list = null;
+        ArrayList<String> list2 = new ArrayList<>();
+
+        try{
+            owi.filter(null);
+            owi.filter(list2);
+        }catch (NullPointerException ex){
+            System.out.println(ex);
+        }
+    }
+
+    private Item[] getDatabaseItems() {
         Item[] arr = DatabaseAPI.readEntireDB();
         if (arr == null) {
             System.out.println("Could not read from the database");

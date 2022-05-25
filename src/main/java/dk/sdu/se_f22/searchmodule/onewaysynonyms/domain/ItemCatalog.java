@@ -31,10 +31,14 @@ public class ItemCatalog{
     }
 
     public LinkedList<Item> oneWaySynonymStrings(String string) throws notFoundException {
+        LinkedList<Item> subItems = new LinkedList<>();
         for(Item item : catalog) {
             if(item.getName().equalsIgnoreCase(string)){
-                return item.getSubItems();
+                subItems.addAll(item.getSubItems());
             }
+        }
+        if (subItems.size()!=0){
+            return subItems;
         }
         throw new notFoundException("Item not found in database.");
     }

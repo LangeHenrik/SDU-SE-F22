@@ -101,6 +101,10 @@ public class ContentInfrastructure implements IContentInfrastructre{
             s1.execute();
             s1.close();
 
+            PreparedStatement s2 = connection.prepareStatement("INSERT INTO cms_parameterslist (parameter) VALUES ('"+character+"')");
+            s2.execute();
+            s2.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();

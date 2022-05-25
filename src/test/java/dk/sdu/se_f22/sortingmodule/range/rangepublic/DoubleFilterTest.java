@@ -30,6 +30,7 @@ class DoubleFilterTest {
     }
 
     @Test
+    @DisplayName("getType returns FilterTypes.Double")
     void getType() {
         DoubleFilter doubleFilter = getTestFilter("price");
         assertEquals(FilterTypes.DOUBLE, doubleFilter.getType());
@@ -57,6 +58,7 @@ class DoubleFilterTest {
 
 
             //Preparing input list
+            // Note: Helpers.readMockProductResultsFromFile is expected to be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("rangepublic/ProductsForDoubleFilterTest.csv", true);
 
             // preparing the expected result list
@@ -84,6 +86,7 @@ class DoubleFilterTest {
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")
         void useFilter(DoubleFilter internalFilter) {
+            // Note: Helpers.readMockProductResultsFromFile is expected to be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
             // the last 3 attributes of the product (size, clockspeed and weight) should be set to "unavailable" if they are not applicable
 

@@ -263,12 +263,12 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
         Validator.NoSpecialCharacters(filter.getDescription());
         if (filter instanceof DoubleFilter) {
             Validator.NoNegativeValue(filter.getDbMinDouble());
-            Validator.NoNegativeValue(filter.getDbMaxDouble()); // not applicable
+            // Since max cannot be less than min, and min is positive, we do not need to perform the check for max
             Validator.MaxLessThanMin(filter.getDbMinDouble(),filter.getDbMaxDouble());
         }
         if (filter instanceof LongFilter) {
             Validator.NoNegativeValue(filter.getDbMinLong());
-            Validator.NoNegativeValue(filter.getDbMaxLong()); // not applicable
+            // Since max cannot be less than min, and min is positive, we do not need to perform the check for max
             Validator.MaxLessThanMin(filter.getDbMinLong(),filter.getDbMaxLong());
         }
         if (filter instanceof TimeFilter) {

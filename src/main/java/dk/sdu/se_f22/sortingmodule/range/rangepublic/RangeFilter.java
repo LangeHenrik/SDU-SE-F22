@@ -33,9 +33,9 @@ public interface RangeFilter {
     /**
      * Set the userMin for the filter. 
      * Only if the userMin value is bigger than the DBMin value and the userMin is less than the DBMax and userMax if it is set.
-     * @param userMin Double value for userMin.
+     * @param userMin double value for userMin.
      * @return Return the new value for userMin. 
-     * @throws IllegalMinMaxException
+     * @throws IllegalMinMaxException if userMin is either below DBMin or above either DBMax or userMax
      */
     double setUserMin(double userMin) throws IllegalMinMaxException;
 
@@ -44,16 +44,16 @@ public interface RangeFilter {
      * Only if the userMin value is bigger than the DBMin value and the userMin is less than the DBMax and userMax if it is set.
      * @param userMin Instant value for userMin.
      * @return Return the new value for userMin.
-     * @throws IllegalMinMaxException
+     * @throws IllegalMinMaxException if userMin is either below DBMin or above either DBMax or userMax
      */
     Instant setUserMin(Instant userMin) throws IllegalMinMaxException;
 
     /**
      * Set the userMin for the filter.
      * Only if the userMin value is bigger than the DBMin value and the userMin is less than the DBMax and userMax if it is set.
-     * @param userMin Long value for userMin.
+     * @param userMin long value for userMin.
      * @return Return the new value for the userMin.
-     * @throws IllegalMinMaxException
+     * @throws IllegalMinMaxException if userMin is either below DBMin or above either DBMax or userMax
      */
     long setUserMin(long userMin) throws IllegalMinMaxException;
 
@@ -61,9 +61,9 @@ public interface RangeFilter {
      * Set the userMax for the filter.
      * Only if the userMax is less than the DBMAx and higher than the DBMin.
      * The userMax has to be higher than the userMin if it is set.
-     * @param userMax Double value for the user max.
+     * @param userMax double value for the user max.
      * @return Return the new value for the userMax.
-     * @throws IllegalMinMaxException
+     * @throws IllegalMinMaxException if userMax is either above DBMax or below either userMax or DbMax
      */
     double setUserMax(double userMax) throws IllegalMinMaxException;
 
@@ -71,9 +71,9 @@ public interface RangeFilter {
      * Set the userMax for the filter.
      * Only if the userMax is less than the DBMAx and higher than the DBMin.
      * The userMax has to be higher than the userMin if it is set.
-     * @param userMax Long value for the userMax.
+     * @param userMax Instant value for the userMax.
      * @return Return the new value for the userMax.
-     * @throws IllegalMinMaxException
+     * @throws IllegalMinMaxException if userMax is either above DBMax or below either userMax or DbMax
      */
     Instant setUserMax(Instant userMax) throws IllegalMinMaxException;
 
@@ -81,9 +81,9 @@ public interface RangeFilter {
      * Set the userMax for the filter.
      * Only if the userMax is less than the DBMAx and higher than the DBMin.
      * The userMax has to be higher than the userMin if it is set.
-     * @param userMax Instant value for the userMax
+     * @param userMax long value for the userMax
      * @return Return the new value for the userMax.
-     * @throws IllegalMinMaxException
+     * @throws IllegalMinMaxException if userMax is either above DBMax or below either userMax or DbMax
      */
     long setUserMax(long userMax) throws IllegalMinMaxException;
 }

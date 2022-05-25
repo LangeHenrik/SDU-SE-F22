@@ -35,6 +35,7 @@ class TimeFilterTest {
 
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"publishedDate", "expirationDate"})
+    @DisplayName("getType returns FilterTypes.Time")
     void getType(String productAttribute) {
         TimeFilter timeFilter = getTestFilter(productAttribute);
         assertEquals(FilterTypes.TIME, timeFilter.getType());
@@ -183,7 +184,7 @@ class TimeFilterTest {
             }
 
             // preparing the expected result
-            // Note: we create a new variable that doesn't reference inputlist since it might be modified during the action
+            // Note: we create a new variable that doesn't reference inputlist since inputlist might be modified during the action
             Collection<Product> expectedResult;
 
             if(inputList == null){
@@ -197,8 +198,6 @@ class TimeFilterTest {
 
             // Verifying the result
             assertEquals(expectedResult, filteredResults);
-            // Currently fails if our method returns null.
-            // When the desired behaviour of the method has been decided correct the test as needed
         }
 
 

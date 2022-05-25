@@ -377,7 +377,7 @@ class DatabaseTest {
             @DisplayName("database.update returns the updated filter")
             void databaseUpdateReturnsTheUpdatedFilter(int id, String name, String description, String productAttribute, Instant min, Instant max,
                                                        Instant newDBMin, Instant newDBMax) throws RangeFilterException, SQLException {
-                TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name + "confirm", description + "confirm", productAttribute, min, max));
+                TimeFilter filter = (TimeFilter) database.create(new TimeFilter(name + "confirm2", description + "confirm2", productAttribute, min, max));
                 TimeFilter modifiedFilter = new TimeFilter(
                         filter.getId(),
                         filter.getName(),

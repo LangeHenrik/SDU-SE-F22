@@ -22,7 +22,7 @@ public class RangeFilterCRUD implements RangeFilterCRUDInterface {
 
         try {
             return database.create(new DoubleFilter(name, description, productAttribute, dbMinToSave, dbMaxToSave));
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

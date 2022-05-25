@@ -43,13 +43,12 @@ class TimeFilterTest {
     @Nested
     @DisplayName("Use filter method")
     class useFilterMethod {
-        // Make a test that ensures that changing productAttribute actually changes the attribute being filtered
 
         @ParameterizedTest
         @DisplayName("Changing product attribute actually changes attribute used for filtering")
         @ValueSource(strings = {"publishedDate", "expirationDate"})
         void changingProductAttributeActuallyChangesBeingFiltered(String productAttribute) throws IllegalMinMaxException {
-            // Creating filter with productattribute publishDate or experationDate
+            // Creating filter with productattribute publishDate or expirationDate
             TimeFilter filter = getTestFilter(productAttribute);
             Instant userMin = Instant.parse("2019-11-30T15:35:24.00Z");
             Instant userMax = Instant.parse("2021-11-30T15:35:24.00Z");
@@ -81,13 +80,15 @@ class TimeFilterTest {
         @DisplayName("filter a list of actual products")
         @ParameterizedTest(name = "{0}")
         @MethodSource("useFilterArguments")
-    void useFilter(TimeFilter internalFilter) {
+    void useFilter(TimeFilter internalFilter) throws Exception {
             // preparing the input list
-            // Note: Helpers.readMockProductResultsFromFile Should be tested in a separate test.
+            // Note: Helpers.readMockProductResultsFromFile is expected to be tested in a separate test.
             List<Product> mockResults = Helpers.readMockProductResultsFromFile("MockResults.csv", true);
 
             //crude check that the mockresults are what we expect, and have not been changed
-            assertEquals(7, mockResults.size());
+            if (mockResults.size() != 7) {
+                throw new Exception("Input data is incorrect!");
+            }
 
             // preparing the expected result list
             List<Product> copy = List.copyOf(mockResults);

@@ -161,13 +161,12 @@ class BrandIndexTest {
 
         // Inserting brand into DB
         try {
-            PreparedStatement ps1 = DBConn.prepareStatement("INSERT INTO brand(name,description,founded,headquarters) VALUES (?,?,?,?)");
+            PreparedStatement ps1 = DBConn.prepareStatement("INSERT INTO brand(name,description,founded,headquarters) VALUES (?,?,?,?) ON CONFLICT DO NOTHING");
             ps1.setString(1, brand.getName());
             ps1.setString(2, brand.getDescription());
             ps1.setString(3, brand.getFounded());
             ps1.setString(4, brand.getHeadquarters());
             ps1.execute();
-
         }
         catch (SQLException e) {
             e.printStackTrace();

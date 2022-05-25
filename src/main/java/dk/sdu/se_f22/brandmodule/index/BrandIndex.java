@@ -117,11 +117,10 @@ public class BrandIndex implements IndexInterface {
 
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {
-        private Connection DBConn = DBConnection.getConnection();
       
-        try {
-            PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?)");
-            PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?)");
+        try (Connection DBConn = DBConnection.getPooledConnection()) {
+            PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?) ON CONFLICT DO NOTHING");
+            PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?) ON CONFLICT DO NOTHING");
             PreparedStatement queryToken = DBConn.prepareStatement("SELECT token FROM tokens");
             PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
 
@@ -151,16 +150,18 @@ public class BrandIndex implements IndexInterface {
                     }
                 }
             }
+
             // Inserts into tokenBrandMap, making sure each token points to its specific brand and inserts all tokens to tokens table
-            for (int i = 0; i < newTokens.size(); i++) {
-                tokenInsert.setString(1, newTokens.get(i));
-                tokenInsert.execute();
-                queryTokenId.setString(1, newTokens.get(i));
-                rsTokenId = queryTokenId.executeQuery();
-                while (rsTokenId.next()) {
-                    mapInsert.setInt(1, brand.getId());
-                    mapInsert.setInt(2, rsTokenId.getInt(1));
-                    mapInsert.execute();
+            if (newTokens.size() > 0) {
+                for (int i = 0; i < newTokens.size(); i++) {
+                    tokenInsert.setString(1, newTokens.get(i));
+                    tokenInsert.execute();
+                    queryTokenId.setString(1, newTokens.get(i));
+                    rsTokenId = queryTokenId.executeQuery();
+                    while (rsTokenId.next()) {
+                        mapInsert.setInt(1, brand.getId());
+                        mapInsert.setInt(2, rsTokenId.getInt(1));
+                        mapInsert.execute(); }
                 }
             }
 
@@ -172,7 +173,7 @@ public class BrandIndex implements IndexInterface {
 
             // Closing resultSets
             rs.close();
-            rsTokenId.close();
+            if (rsTokenId != null) { rsTokenId.close(); }
 
         }
         catch(SQLException e){

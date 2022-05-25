@@ -302,86 +302,88 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest
         @DisplayName("Delete valid doubleFilter")
         @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
-        void deleteValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) {
+        void deleteValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            } catch (InvalidFilterTypeException e) {
-                fail(e);
-            }
-
+            rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
-            try {
-                Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilterFromDataBase,
-                        "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
-                                "or check the filter id's");
-                Assertions.assertThrows(IdNotFoundException.class,
-                        () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e){
-                fail("Fail because filter type does not exist");
-            }
+            Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilterFromDataBase,
+                    "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
+                            "or check the filter id's");
+        }
+
+        @ParameterizedTest
+        @DisplayName("Confirm deletion of valid double filter")
+        @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+        void confirmDeletionOfValidDoubleFilter(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
+            RangeFilter rangeFilterFromDataBase = null;
+            rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
+
+            RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            rangeFilterCRUD.delete(rangeFilterFromDataBase.getId());
+
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
         }
 
         @ParameterizedTest
         @DisplayName("Delete valid timeFilter")
         @CsvFileSource(resources = "TimeFilterToUpdate.csv", numLinesToSkip = 1)
-        void deleteValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+        void deleteValidTimeFilter(int id, String name, String description, String productAttribute, Instant min, Instant max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            } catch (InvalidFilterTypeException e) {
-                fail(e);
-            }
+            rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
-            try {
-                Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilter,
-                        "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
-                                "or check the filter id's");
-                Assertions.assertThrows(IdNotFoundException.class,
-                        () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e){
-                fail("Fail because filter type does not exist");
-            }
+            Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilterFromDataBase,
+                    "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
+                            "or check the filter id's");
+        }
+
+        @ParameterizedTest
+        @DisplayName("Confirm deletion of valid Time filter")
+        @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+        void confirmDeletionOfValidTimeFilter(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
+            RangeFilter rangeFilterFromDataBase = null;
+            rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
+
+            RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            rangeFilterCRUD.delete(rangeFilterFromDataBase.getId());
+
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
         }
 
         @ParameterizedTest
         @DisplayName("Delete valid longFilter")
         @CsvFileSource(resources = "LongFilterToUpdate.csv", numLinesToSkip = 1)
-        void deleteValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) {
+        void deleteValidLongFilter(int id, String name, String description, String productAttribute, long min, long max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            } catch (InvalidFilterTypeException e) {
-                fail(e);
-            }
+            rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
-            try {
-                Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilter,
-                        "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
-                                "or check the filter id's");
-                Assertions.assertThrows(IdNotFoundException.class,
-                        () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e) {
-                fail("Fail because filter type does not exist");
-            }
+            Assertions.assertEquals(rangeFilterCRUD.delete(rangeFilterFromDataBase.getId()), rangeFilter,
+                    "The deleted filter was not the target filter, see 'equals' under 'RangeFilterCRUD' " +
+                            "or check the filter id's");
+        }
+
+        @ParameterizedTest
+        @DisplayName("Confirm deletion of valid Time filter")
+        @CsvFileSource(resources = "DoubleFilterToUpdate.csv", numLinesToSkip = 1)
+        void confirmDeletionOfValidLongFilter(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
+            RangeFilter rangeFilterFromDataBase = null;
+            rangeFilterFromDataBase = rangeFilterCRUD.create(name, description, productAttribute, min, max);
+
+            RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
+
+            rangeFilterCRUD.delete(rangeFilterFromDataBase.getId());
+
+            Assertions.assertThrows(IdNotFoundException.class,
+                    () -> rangeFilterCRUD.read(rangeFilter.getId()), "Filter was not actually deleted");
         }
 
         @ParameterizedTest
@@ -396,20 +398,13 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest
         @DisplayName("Delete double filter twice")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-        void deleteDoubleFilterTwice(int id, String name, String description, String productAttribute, double min, double max) {
+        void deleteDoubleFilterTwice(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD'");
-            } catch (InvalidFilterTypeException e) {
-                fail(e);
-            }
+            rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
 
             RangeFilter rangeFilter = new DoubleFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
-            // This deletes the RangeFilter from the database, and make sure it does not throw an exception
-            assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));
+            rangeFilterCRUD.delete(rangeFilter.getId());
 
             // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
             Assertions.assertThrows(IdNotFoundException.class,
@@ -419,20 +414,13 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest
         @DisplayName("Delete time filter twice")
         @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-        void deleteTimeFilterTwice(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+        void deleteTimeFilterTwice(int id, String name, String description, String productAttribute, Instant min, Instant max) throws RangeFilterException {
             RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
-            } catch (InvalidFilterTypeException e) {
-                fail(e);
-            }
+            rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
 
             RangeFilter rangeFilter = new TimeFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
-            // This deletes the RangeFilter from the database, and make sure it does not throw an exception
-            assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));
+            rangeFilterCRUD.delete(rangeFilter.getId());
 
             // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
             Assertions.assertThrows(IdNotFoundException.class,
@@ -442,22 +430,13 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest
         @DisplayName("Delete long filter twice")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-        void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) {
-            //expected fail until database.delete has been implemented
+        void deleteLongFilterTwice(int id, String name, String description, String productAttribute, long min, long max) throws RangeFilterException {
 
-            RangeFilter rangeFilterFromDataBase = null;
-            try {
-                rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
-            } catch (InvalidFilterException e) {
-                fail("The creation of the filter failed. See 'create' under 'rangeFilterCRUD' " + e);
-            } catch (InvalidFilterTypeException e) {
-                fail(e);
-            }
+            RangeFilter rangeFilterFromDataBase = rangeFilterCRUD.create(description, name, productAttribute, min, max);
 
             RangeFilter rangeFilter = new LongFilter(rangeFilterFromDataBase.getId(), name, description, productAttribute, min, max);
 
-            // This deletes the RangeFilter from the database, and make sure it does not throw an exception
-            assertDoesNotThrow(() -> rangeFilterCRUD.delete(rangeFilter.getId()));
+            rangeFilterCRUD.delete(rangeFilter.getId());
 
             // This deletes the same RangeFilter a second time and should throw the IdNotFoundException
             Assertions.assertThrows(IdNotFoundException.class,
@@ -477,18 +456,12 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid double filter")
         @CsvFileSource(resources = "DoubleFilter.csv", numLinesToSkip = 1)
-        void testReadFromRangeFilterDatabase(int id, String name, String description, String productAttribute, double min, double max) {
+        void testReadFromRangeFilterDatabase(int id, String name, String description, String productAttribute, double min, double max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
             // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
-            try {
-                RangeFilter actual = rangeFilterCRUD.read(id);
-                RangeFilter expected = new DoubleFilter(id, name, description, productAttribute, min, max);
-                assertEquals(expected, actual);
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e) {
-                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-            }
+            RangeFilter actual = rangeFilterCRUD.read(id);
+            RangeFilter expected = new DoubleFilter(id, name, description, productAttribute, min, max);
+            assertEquals(expected, actual);
 
             // we deliberately choose not to test if the product attributes read correspond to valid productAttributes
         }
@@ -496,18 +469,12 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid long filter")
         @CsvFileSource(resources = "LongFilter.csv", numLinesToSkip = 1)
-        void testReadLongFromRangeFilterDatabase(int id, String name, String description, String productAttribute, long min, long max) {
+        void testReadLongFromRangeFilterDatabase(int id, String name, String description, String productAttribute, long min, long max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
             // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
-            try {
-                RangeFilter actual = rangeFilterCRUD.read(id);
-                RangeFilter expected = new LongFilter(id, name, description, productAttribute, min, max);
-                assertEquals(expected, actual);
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e) {
-                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-            }
+            RangeFilter actual = rangeFilterCRUD.read(id);
+            RangeFilter expected = new LongFilter(id, name, description, productAttribute, min, max);
+            assertEquals(expected, actual);
 
             // we deliberately choose not to test if the product attributes read correspond to valid productAttributes
         }
@@ -515,18 +482,12 @@ public class RangeFilterCRUDTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Read valid time filter")
         @CsvFileSource(resources = "TimeFilter.csv", numLinesToSkip = 1)
-        void testReadTimeFromRangeFilterDatabase(int id, String name, String description, String productAttribute, Instant min, Instant max) {
+        void testReadTimeFromRangeFilterDatabase(int id, String name, String description, String productAttribute, Instant min, Instant max) throws RangeFilterException {
             // Shooting for 3 filters of each type should be fine
             // So each Csv file of filters should contain 3 files. Remember to add these in the sql file.
-            try {
-                RangeFilter actual = rangeFilterCRUD.read(id);
-                RangeFilter expected = new TimeFilter(id, name, description, productAttribute, min, max);
-                assertEquals(expected, actual);
-            } catch (IdNotFoundException e) {
-                fail("Fail because id did not exist");
-            } catch (UnknownFilterTypeException e) {
-                fail("The filter type retrieved from the database, does not match implemented types. Make sure not to make your own implementation of the interface");
-            }
+            RangeFilter actual = rangeFilterCRUD.read(id);
+            RangeFilter expected = new TimeFilter(id, name, description, productAttribute, min, max);
+            assertEquals(expected, actual);
 
             // we deliberately choose not to test if the product attributes read correspond to valid productAttributes
         }

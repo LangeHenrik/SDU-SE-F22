@@ -22,7 +22,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TextField fx:id="MFInput" layoutX="102.0" layoutY="60.0" prefHeight="25.0" prefWidth="290.0" />
-                        <Button layoutX="414.0" layoutY="60.0" mnemonicParsing="false" onAction="#MFfilter" text="Filter" />
+                        <Button layoutX="414.0" layoutY="60.0" mnemonicParsing="false" onAction="#MFFilter" text="Filter" />
                         <ListView fx:id="MFList" layoutX="102.0" layoutY="118.0" prefHeight="251.0" prefWidth="364.0" />
                         <Label layoutX="103.0" layoutY="20.0" text="Item to filter after:" />
                         <Label layoutX="103.0" layoutY="98.0" text="List of synonyms:" />

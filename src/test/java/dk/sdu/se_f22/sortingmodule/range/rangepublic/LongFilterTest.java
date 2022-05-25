@@ -367,5 +367,34 @@ class LongFilterTest {
                         () -> filter.setUserMin(newMin));
             }
         }
+        @Nested
+        @DisplayName("Testing set userMin and userMax with incorrect types")
+        class testUserValuesWithIncorrectTypes {
+
+            static Stream<LongFilter> longFilterProvider() {
+                return provideLongFiltersProvider();
+            }
+
+            @ParameterizedTest
+            @DisplayName("Set userMin with incorrect type")
+            @MethodSource("longFilterProvider")
+            void setUserMinWithIncorrectType(LongFilter filter) {
+                double newValue = 100f;
+
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMin(newValue)
+                );
+            }
+
+            @ParameterizedTest
+            @DisplayName("Set userMax with incorrect type")
+            @MethodSource("longFilterProvider")
+            void setUserMaxWithIncorrectType(LongFilter filter) {
+                double newValue = 100f;
+                Assertions.assertThrows(IllegalMinMaxException.class,
+                        () -> filter.setUserMax(newValue)
+                );
+            }
+        }
     }
 }

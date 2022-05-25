@@ -263,53 +263,18 @@ public class Database implements DatabaseInterface {
 
         PreparedStatement statement = null;
         try (Connection connection = DBConnection.getPooledConnection()) {
+            String selectedView = "sortingrangedoubleview";
             switch (dbRangeFilter.getType()) {
-                // IDEA: Refactor so that the switch determines the name of the view to delete from.
-                // That can then be put into SQL string below.
-                // It seems stupid to do, but is okay since we have full control of the variable,
-                // such that this below is not inherently dangerous to injection:
-//                String selectedView = "";
-                // perform switch setting selectedView
-//                "DELETE FROM " + selectedView + " WHERE filterId = ?;"
-                // of course wrapped in the prepare statement such that:
-//                statement = connection
-//                        .prepareStatement(
-//                                "DELETE FROM " + selectedView + " WHERE filterId = ?;",
-//                                queryAttributes
-//                        );
-                // This approach is less error prone since it ensures that the sql statement is written once.
-                // Additionally, it becomes more readable (and a tiny bit shorter).
-                // - Thor
-                // (p.s. if you have read this but disagree, do not let the comment stick around, it looks ugly in Pull Requests)
-                case DOUBLE -> statement = connection
-                        .prepareStatement(
-                                "DELETE FROM sortingrangedoubleview WHERE filterId = ?;",
-                                queryAttributes
-                        );
-                case LONG -> statement = connection
-                        .prepareStatement(
-                                "DELETE FROM sortingrangelongview WHERE filterId = ?;",
-                                queryAttributes
-                        );
-                case TIME -> statement = connection
-                        .prepareStatement(
-                                "DELETE FROM sortingrangetimeview WHERE filterId = ?;",
-                                queryAttributes
-                        );
+                // Doubleview has been chosen as default above because it makes intelliJ happy when creating the sql delete statement below
+                case DOUBLE -> selectedView = "sortingrangedoubleview";
+                case LONG -> selectedView = "sortingrangelongview";
+                case TIME -> selectedView = "sortingrangetimeview";
+                default -> selectedView = "";
             }
 
-            // proposed improvement bu Thor:
-//            String selectedView = "sortingrangedoubleview";
-//            // Doubleview has been chosen as default because it makes intelliJ happy when creating the delete statement below
-//            switch (dbRangeFilter.getType()) {
-//                case DOUBLE -> selectedView = "sortingrangedoubleview";
-//                case LONG -> selectedView = "sortingrangelongview";
-//                case TIME -> selectedView = "sortingrangetimeview";
-//                default -> selectedView = "";
-//            }
-//
-//            String query = "DELETE FROM " + selectedView + " WHERE filterId = ?;";
-//            statement = connection.prepareStatement(query, queryAttributes);
+            String query = "DELETE FROM " + selectedView + " WHERE filterId = ?;";
+            statement = connection.prepareStatement(query, queryAttributes);
+
 
             statement.setInt(1, id);
             int result_count = statement.executeUpdate();

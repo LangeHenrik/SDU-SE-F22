@@ -1,6 +1,5 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.RangeFilterException;
@@ -8,7 +7,6 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.postgresql.util.PSQLException;
 
@@ -21,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
     private Database database;
-    private static final DBMigration dbMigration = new DBMigration();
-
 
     @BeforeEach
     void setup() {
@@ -40,7 +36,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Creating a DoubleFilter does not throw an exception")
         @CsvFileSource(resources = "DoubleFilterToCreate.csv", numLinesToSkip = 1)
-        void createDoubleFilter(String name, String description, String productAttribute, double min, double max) throws RangeFilterException, SQLException {
+        void createDoubleFilter(String name, String description, String productAttribute, double min, double max) {
 
             Assertions.assertDoesNotThrow( () -> database.create(
                     new DoubleFilter(
@@ -73,7 +69,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Creating a TimeFilter does not throw an exception")
         @CsvFileSource(resources = "TimeFilterToCreate.csv", numLinesToSkip = 1)
-        void createTimeFilter(String name, String description, String productAttribute, String min, String max) throws SQLException, RangeFilterException {
+        void createTimeFilter(String name, String description, String productAttribute, String min, String max) {
 
             Assertions.assertDoesNotThrow( () -> database.create(
                     new TimeFilter(
@@ -107,7 +103,7 @@ class DatabaseTest {
         @ParameterizedTest(name = "{0} : {1} min:{4} max:{5}")
         @DisplayName("Creating a TimeFilter does not throw an exception")
         @CsvFileSource(resources = "LongFilterToCreate.csv", numLinesToSkip = 1)
-        void createLongFilter(String name, String description, String productAttribute, long min, long max) throws RangeFilterException, SQLException {
+        void createLongFilter(String name, String description, String productAttribute, long min, long max) {
 
             Assertions.assertDoesNotThrow( () -> database.create(new LongFilter(
                     name,
@@ -174,7 +170,7 @@ class DatabaseTest {
 
     @Nested
     @DisplayName("read")
-    class read {
+    class readNest {
         @BeforeAll
         public static void setup() {
             resetDB();

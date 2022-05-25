@@ -47,6 +47,19 @@ CREATE TABLE ProductSpecs(
     productID VARCHAR references Product(productID)
 );
 
+CREATE TABLE IndexProducts(
+    id SERIAL PRIMARY KEY,
+    sortedIds VARCHAR REFERENCES Product(productID)
+);
+
+CREATE OR REPLACE FUNCTION deleteIndex()
+    RETURNS VOID AS $$
+BEGIN
+    DELETE FROM IndexProducts;
+
+end;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION insertproductstorage(id VARCHAR,newsize VARCHAR) returns void AS $$
 BEGIN
 	INSERT INTO storage

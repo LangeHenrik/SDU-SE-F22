@@ -58,10 +58,19 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     }
     // Method for indexing products depending on amount of search hits
-    public List<Product> indexProducts(List<Product> products){
+    public void indexProducts(List<Product> products){
         Collections.sort(products);
-        return products;
-        // Instead of returning it should save products in the database and gets retrieved
+
+        try (Connection connection = DBConnection.getPooledConnection();
+             CallableStatement cs = connection.prepareCall("CALL deleteIndex()");
+        PreparedStatement insertProducts = connection.prepareStatement("INSERT INTO IndexProducts(sortedIds) VALUES (?)");) {
+            for (Product p : products) {
+                insertProducts.setString(1, String.valueOf(p.getUuid()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

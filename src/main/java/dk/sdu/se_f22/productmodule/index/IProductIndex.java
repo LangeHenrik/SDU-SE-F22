@@ -6,7 +6,7 @@ import dk.sdu.se_f22.sharedlibrary.models.Product;
 public interface IProductIndex {
 
     List<Product> searchProducts(List<Product> products, List<String> token);
-    List<Product> indexProducts(List<Product> products);
+    void indexProducts(List<Product> products);
     int findHits(String[] info, String token);
 
 }

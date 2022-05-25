@@ -16,18 +16,6 @@ public class ItemCatalog{
     }
 
     //Methods
-    public void addITem(Item item){
-        catalog.add(item);
-    }
-
-    public boolean removeItem(Item item){
-        return catalog.remove(item);
-    }
-
-    public LinkedList<Item> getCatalog() {
-        return catalog;
-    }
-
     public int containsItem(String s){
         int count =0;
         for (Item item:catalog) {

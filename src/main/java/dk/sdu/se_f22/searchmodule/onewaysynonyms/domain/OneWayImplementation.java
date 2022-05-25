@@ -25,8 +25,11 @@ public class OneWayImplementation implements OneWayInterface {
         for (int i = 0; i < length; i++) {
             try {
                 items = (this.itemCatalog.oneWaySynonymStrings(tokens.get(i)));
+
                 for (Item item : items) {
-                    tokens.add(item.getName());
+                    if (!tokens.contains(item.getName())){
+                        tokens.add(item.getName());
+                    }
                 }
             } catch (notFoundException e) {
                 System.out.println(e.getMessage());

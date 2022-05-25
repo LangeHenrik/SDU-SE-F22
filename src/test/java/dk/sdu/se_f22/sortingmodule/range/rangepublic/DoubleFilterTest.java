@@ -1,18 +1,16 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import com.sun.source.tree.AssertTree;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.RangeFilterException;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class DoubleFilterTest {
@@ -241,7 +239,7 @@ class DoubleFilterTest {
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
             @DisplayName("Set DoubleFilter userMin does not throw")
-            void setValidDoubleFilterUserMin(DoubleFilter filter) throws RangeFilterException {
+            void setValidDoubleFilterUserMin(DoubleFilter filter) {
                 double newValue = filter.getUserMinDouble() + 1;
                 Assertions.assertDoesNotThrow(() -> filter.setUserMin(newValue));
             }
@@ -249,7 +247,7 @@ class DoubleFilterTest {
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
             @DisplayName("Set DoubleFilter userMax does not throw")
-            void setValidDoubleFilterUserMax(DoubleFilter filter) throws IllegalMinMaxException {
+            void setValidDoubleFilterUserMax(DoubleFilter filter) {
                 double newValue = filter.getDbMaxDouble() - 1;
                 Assertions.assertDoesNotThrow(() -> filter.setUserMax(newValue));
             }
@@ -257,7 +255,7 @@ class DoubleFilterTest {
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
             @DisplayName("Set DoubleFilter userMax and then userMin does not throw")
-            void setValidDoubleFilterUserMaxAndThenUserMin(DoubleFilter filter) throws IllegalMinMaxException {
+            void setValidDoubleFilterUserMaxAndThenUserMin(DoubleFilter filter) {
                 double inputMin = filter.getDbMinDouble() + 1;
                 double inputMax = filter.getDbMaxDouble() - 1;
 
@@ -272,7 +270,7 @@ class DoubleFilterTest {
             @ParameterizedTest
             @MethodSource("doubleFilterProvider")
             @DisplayName("Set DoubleFilter userMin and then userMax does not throw")
-            void setValidDoubleFilterUserMinAndThenUserMax(DoubleFilter filter) throws IllegalMinMaxException {
+            void setValidDoubleFilterUserMinAndThenUserMax(DoubleFilter filter) {
                 double inputMin = filter.getDbMinDouble() + 1;
                 double inputMax = filter.getDbMaxDouble() - 1;
                 Assertions.assertDoesNotThrow(

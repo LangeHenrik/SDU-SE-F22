@@ -3,7 +3,6 @@ package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import dk.sdu.se_f22.sortingmodule.range.Helpers;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
-import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class TimeFilterTest {
@@ -117,7 +115,7 @@ class TimeFilterTest {
             });
         }
 
-        static Stream<Arguments> useFilterArguments() throws RangeFilterException, IllegalMinMaxException {
+        static Stream<Arguments> useFilterArguments() throws RangeFilterException {
             // Could be refactored to simply return TimeFilters.
             // However it is like this such that the test can easily be refactored to take more arguments if needed.
 
@@ -174,7 +172,7 @@ class TimeFilterTest {
         @DisplayName("Filtering an empty list of results")
         @ParameterizedTest(name = "{0} - setUserMinAndMax={1} - inputList={2}")
         @MethodSource("filteringAnEmptyListOfResultsArgument")
-        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) throws RangeFilterException, IllegalMinMaxException {
+        void filteringAnEmptyListOfResults(String productAttribute, boolean setUserMinAndMax, Collection<Product> inputList) throws RangeFilterException {
             // preparing the filter
             TimeFilter internalFilter = getTestFilter(productAttribute);
             if (setUserMinAndMax) {

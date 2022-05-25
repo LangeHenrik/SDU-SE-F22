@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RangeFilterClassTest {
     @Nested
-    @DisplayName("Non-matching dummy filter equals test")
+    @DisplayName("Non-matching dummy filters should not be equal")
     class nonMatchingEqualsTests {
 
         @ParameterizedTest
-        @DisplayName("Dummy filter and ordinary object")
+        @DisplayName("Dummy filter and ordinary object should not be equal")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFilterAndObject(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
@@ -21,8 +21,8 @@ class RangeFilterClassTest {
             assertNotEquals(rangeFilterClassDummyFilter, o);
         }
 
-        @ParameterizedTest(name = "{0}" + "+1" + ",{1},{2},{3}")
-        @DisplayName("Dummy filters with different ids")
+        @ParameterizedTest(name = "{0}" + "+1" + ", {1}, {2}, {3}")
+        @DisplayName("Dummy filters with different ids should not be equal")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentIds(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
@@ -31,7 +31,7 @@ class RangeFilterClassTest {
         }
 
         @ParameterizedTest(name = "{0}, {1}=" + "diff" + ", {2}, {3}")
-        @DisplayName("Dummy filters with different names")
+        @DisplayName("Dummy filters with different names should not be equal")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentNames(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
@@ -40,7 +40,7 @@ class RangeFilterClassTest {
         }
 
         @ParameterizedTest(name = "{0}, {1}, {2}=" + "diff" + ", {3}")
-        @DisplayName("Dummy filters with different descriptions")
+        @DisplayName("Dummy filters with different descriptions should not be equal")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentDescriptions(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
@@ -49,7 +49,7 @@ class RangeFilterClassTest {
         }
 
         @ParameterizedTest(name = "{0}, {1}, {2}, {3}=" + " diff")
-        @DisplayName("Dummy filters with different product attributes")
+        @DisplayName("Dummy filters with different product attributes should not be equal")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersWithDifferentProductAttributes(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
@@ -59,10 +59,10 @@ class RangeFilterClassTest {
     }
 
     @Nested
-    @DisplayName("Matching dummy filter equals tests")
+    @DisplayName("Matching dummy filters should be equal")
     class matchingEqualsTests {
         @ParameterizedTest(name = "{0}, {1}, {2}, {3}")
-        @DisplayName("Matching dummy filters test")
+        @DisplayName("Matching dummy filters should be equal")
         @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
         void dummyFiltersThatMatch(int id, String name, String description, String productAttribute) {
             RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);

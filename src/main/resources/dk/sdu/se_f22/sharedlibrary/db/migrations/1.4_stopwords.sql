@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS stopwords(
    word varchar(128)
 );
 
-INSERT INTO stopwords VALUES
+INSERT INTO stopwords (word) VALUES
     ('able'),
     ('about'),
     ('above'),
@@ -854,4 +854,4 @@ INSERT INTO stopwords VALUES
     ('words'),
     ('world'),
     ('youd'),
-    ('youre')
+    ('youre');

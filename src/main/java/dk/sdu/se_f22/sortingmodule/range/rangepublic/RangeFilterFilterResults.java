@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class RangeFilterFilterResults {
+public abstract class RangeFilterFilterResults {
     /**
      * This is the method that filters the products in the searchHits based on the filters given.
      * <p>
@@ -16,8 +16,8 @@ public class RangeFilterFilterResults {
      *
      * @param rangeFilters The rangefilters to use for filtering the search hits, they must be in accordance with the filters stored in our DB.
      *                     See {@link RangeFilterCRUDInterface} for details on getting active/valid filters.
-     * @return The {@link SearchHits} object that was given as input, but where the products Colloction have been filtered
-     * using the filters specified in rangeFilters param.
+     * @return The {@link SearchHits} object that was given as input, but where the products Collection have been filtered
+     * using the filters specified in rangeFilters param. If the products collection was null, then it will still be null after this filtering.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     //Warnings suppressed until 4.1 have decided what the types of the collections should be

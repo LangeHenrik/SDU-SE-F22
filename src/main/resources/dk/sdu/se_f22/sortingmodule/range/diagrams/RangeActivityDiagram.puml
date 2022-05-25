@@ -1,0 +1,30 @@
+@startuml
+start
+':The user opens the webpage;
+'- The filters are requested
+- Infrastructure requests all filters from RangeModule
+- The filters are retrieved from the database
+
+Repeat : The user starts a search
+
+if (Some filters should not be used?) is (yes) then
+  - The filters are removed \nfrom the list of active filters
+else (no)
+  - The list is unchanged
+endif
+
+if (The user modifies the filters?) is (yes) then
+' e.g. custom values, usermin and usermax
+  :The setter methods of the filters are called;
+else (no)
+  - The filters are not modified
+endif
+
+- The list of filters is used alongside a list\n of products to filter, the list of products
+- The filtered list is returned
+
+repeat while (User wants to initiate a new search) is (yes) not (no)
+
+stop
+
+@enduml

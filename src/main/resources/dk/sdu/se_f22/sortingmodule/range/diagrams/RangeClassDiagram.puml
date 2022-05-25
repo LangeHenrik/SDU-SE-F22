@@ -1,0 +1,339 @@
+@startuml
+title Class diagram of Range module (SOM-4)
+skinparam classAttributeIconSize 0
+hide empty methods
+hide empty fields
+
+package sharedLibrary{
+    class Product{
+        ~ uuid UUID
+        ~ averageUserReview double
+        ~ price double
+        ~ clockspeed double
+        ~ weight double
+        ~ ean long
+        ~ size String
+        ~ category String
+        ~ name String
+        ~ description String
+        ~ publishedDate Instant
+        ~ expirationDate Instant
+        ~ inStock List<String>
+
+        -- Getters on all types--
+    }
+
+    class DBConnection{
+        - {static} LOGGER Logger
+        - {static} instance DBConnection
+        - CONNECTION_POOL BasicDataSource
+        - url String
+        - user String
+        - password String
+        - dbConnection Connection
+
+        + {static} getInstance() DBConnection
+        + {static} getConnection() Connection
+        + {static} getPooledConnection() Connection
+        - loadConfig() void
+    }
+
+}
+
+'package exceptions {
+'    class RangeFilterException
+'
+'    class EmptyDatabaseException
+'    class IdNotFoundException
+'    class IllegalImplementationException
+'    class IllegalMinMaxException
+'    class InvalidAttributeException
+'    class InvalidFilterException
+'    class InvalidFilterTypeException
+'    class UnknownFilterTypeException
+'
+'    RangeFilterException <|-- EmptyDatabaseException : < Extends
+'    RangeFilterException <|-- IdNotFoundException : < Extends
+'    RangeFilterException <|-- IllegalImplementationException : < Extends
+'    RangeFilterException <|-- IllegalMinMaxException : < Extends
+'    RangeFilterException <|-- InvalidAttributeException : < Extends
+'    RangeFilterException <|-- InvalidFilterException : < Extends
+'    RangeFilterException <|-- InvalidFilterTypeException : < Extends
+'    RangeFilterException <|-- UnknownFilterTypeException : < Extends
+'}
+
+package validators {
+    class Validator{
+        + {static} NoNegativeValue(v double) void
+        + {static} NoNegativeValue(v long) void
+        + {static} NoSpecialCharacters(s String) void
+        + {static} MaxLessThanMin(min double, max double) void
+        + {static} MaxLessThanMin(min long, max long) void
+        + {static} MaxLessThanMin(min Instant, max Instant) void
+    }
+
+'    Validator ..> InvalidFilterException : <<use>>
+}
+
+package rangepublic {
+    interface DatabaseInterface {
+        + create(filterToSaveInDB RangeFilter) RangeFilter
+        + read(id int) RangeFilter
+        + delete(id int) RangeFilter
+        + update(updatedFilter RangeFilter) RangeFilter
+        + readAllFilters(id int) List<RangeFilter>
+    }
+    class Database{
+        - queryAttributes
+        --
+        ~ createFilterWithID(filter RangeFilter, id int) RangeFilter
+        - getSpecificFilter(conn Connection, sqlFunction String, id int)
+        - createLongFilterFromResultset(filterResultSet ResultSet) LongFilter
+        - createTimeFilterFromResultset(filterResultSet ResultSet) TimeFilter
+        - createDoubleFilterFromResultset(filterResultSet ResultSet) DoubleFilter
+        == Implemented methods ==
+        + create(filterToSaveInDB RangeFilter) RangeFilter
+        + read(id int) RangeFilter
+        + delete(id int) RangeFilter
+        + update(updatedFilter RangeFilter) RangeFilter
+        + readAllFilters(id int) List<RangeFilter>
+    }
+    interface RangeFilter {
+        + getId() int
+        + getName() String
+        + getDescription() String
+        + getProductAttribute() String
+
+        + getType() FilterTypes
+
+        + getDbMinDouble() double
+        + getDbMinInstant() Instant
+        + getDbMinLong() long
+
+        + getDbMaxDouble() double
+        + getDbMaxInstant() Instant
+        + getDbMaxLong() long
+
+        + getUserMinDouble() double
+        + getUserMinInstant() Instant
+        + getUserMinLong() long
+
+        + getUserMaxDouble() double
+        + getUserMaxInstant() Instant
+        + getUserMaxLong() long
+
+        + setUserMin(userMin double) double
+        + setUserMin(userMin Instant) Instant
+        + setUserMin(userMin long) long
+
+        + setUserMax(userMin double) double
+        + setUserMax(userMin Instant) Instant
+        + setUserMax(userMin long) long
+    }
+    abstract class RangeFilterClass {
+        + {static} DEFAULT_ID int
+        - ID int
+        - NAME String
+        - DESCRIPTION String
+        - PRODUCT_ATTRIBUTE String
+        - NAME String
+        - VALID_ATTRIBUTES List<String>
+
+        + useFilter(inputs Collection<Product>) Collection<Product>
+        + useFilter(inputs Collection<Product>, strict boolean) Collection<Product>
+        ~ {abstract} filterList(inputs Collection<Product>) Collection<Product>
+
+       == Override from Object ==
+        + equals(other Object) boolean
+        + toString() String
+        == Implemented methods ==
+        + getId() int
+        + getName() String
+        + getDescription() String
+        + getProductAttribute() String
+
+        + getType() FilterTypes
+
+        + getDbMinDouble() double
+        + getDbMinInstant() Instant
+        + getDbMinLong() long
+
+        + getDbMaxDouble() double
+        + getDbMaxInstant() Instant
+        + getDbMaxLong() long
+
+        + getUserMinDouble() double
+        + getUserMinInstant() Instant
+        + getUserMinLong() long
+
+        + getUserMaxDouble() double
+        + getUserMaxInstant() Instant
+        + getUserMaxLong() long
+
+        + setUserMin(userMin double) double
+        + setUserMin(userMin Instant) Instant
+        + setUserMin(userMin long) long
+
+        + setUserMax(userMin double) double
+        + setUserMax(userMin Instant) Instant
+        + setUserMax(userMin long) long
+    }
+    class LongFilter {
+        - DB_MIN long
+        - DB_MAX long
+        - USER_NOT_SET_VALUE long
+        - userMin long
+        - userMax long
+        --
+        - isSet(inputUserValue long) boolean
+        - checkValue(value long) boolean
+        - checkValueOptional(value long) boolean
+        + getDbMinLong() long
+        + getDbMaxLong() long
+        + getUserMinLong() long
+        + getUserMaxLong() long
+        + setUserMin(userMin long) long
+        + setUserMax(userMin long) long
+        + getUserValueDefault() long
+        == Implemented methods ==
+        + getType() FilterTypes
+        ~ filterList(inputs Collection<Product>) Collection<Product>
+        == Override from Object ==
+        + equals(other Object) boolean
+        + toString() String
+
+    }
+    class DoubleFilter{
+        - DB_MIN double
+        - DB_MAX double
+        - USER_NOT_SET_VALUE double
+        - userMin double
+        - userMax double
+        --
+        - isSet(inputUserValue double) boolean
+        - checkValue(value double) boolean
+        - checkValueOptional(value double) boolean
+        + getDbMinDouble() double
+        + getDbMaxDouble() double
+        + getUserMinDouble() double
+        + getUserMaxDouble() double
+        + setUserMin(userMin double) double
+        + setUserMax(userMin double) double
+        + getUserValueDefault() double
+        == Implemented methods ==
+        + getType() FilterTypes
+        ~ filterList(inputs Collection<Product>) Collection<Product>
+        == Override from Object ==
+        + equals(other Object) boolean
+        + toString() String
+
+    }
+    class TimeFilter{
+        - DB_MIN Instant
+        - DB_MAX Instant
+        - USER_NOT_SET_VALUE Instant
+        - userMin Instant
+        - userMax Instant
+        --
+        - isSet(inputUserValue Instant) boolean
+        - checkValue(value Instant) boolean
+        - checkValueOptional(value Instant) boolean
+        + getDbMinInstant() Instant
+        + getDbMaxInstant() Instant
+        + getUserMinInstant() Instant
+        + getUserMaxInstant() Instant
+        + setUserMin(userMin Instant) Instant
+        + setUserMax(userMin Instant) Instant
+        + getUserValueDefault() Instant
+        == Implemented methods ==
+        + getType() FilterTypes
+        ~ filterList(inputs Collection<Product>) Collection<Product>
+        == Override from Object ==
+        + equals(other Object) boolean
+        + toString() String
+
+    }
+    enum FilterTypes {
+        LONG
+        DOUBLE
+        TIME
+    }
+    interface RangeFilterCRUDInterface {
+        + create(name String, description String, productAttribute String, dbMinToSave double, dbMaxToSave double) RangeFilter
+        + create(name String, description String, productAttribute String, dbMinToSave long, dbMaxToSave long) RangeFilter
+        + create(name String, description String, productAttribute String, dbMinToSave Instant, dbMaxToSave Instant) RangeFilter
+        + read(id int) RangeFilter
+        + delete(id int) RangeFilter
+        + update(filter RangeFilter, newName String) RangeFilter
+        + update(filter RangeFilter, newName String, newDescription String) RangeFilter
+        + update(filter RangeFilter, dbMinToSave double, dbMaxToSave double) RangeFilter
+        + update(filter RangeFilter, dbMinToSave long, dbMaxToSave long) RangeFilter
+        + update(filter RangeFilter, dbMinToSave Instant, dbMaxToSave Instant) RangeFilter
+        + readAll() List<RangeFilter>
+    }
+    class RangeFilterCRUD{
+        - validateFilterImplementation(filter RangeFilter) void
+        - validateFilterUpdate(filter RangeFilter) void
+
+        == Implemented methods ==
+        + create(name String, description String, productAttribute String, dbMinToSave double, dbMaxToSave double) RangeFilter
+        + create(name String, description String, productAttribute String, dbMinToSave long, dbMaxToSave long) RangeFilter
+        + create(name String, description String, productAttribute String, dbMinToSave Instant, dbMaxToSave Instant) RangeFilter
+        + read(id int) RangeFilter
+        + delete(id int) RangeFilter
+        + update(filter RangeFilter, newName String) RangeFilter
+        + update(filter RangeFilter, newName String, newDescription String) RangeFilter
+        + update(filter RangeFilter, dbMinToSave double, dbMaxToSave double) RangeFilter
+        + update(filter RangeFilter, dbMinToSave long, dbMaxToSave long) RangeFilter
+        + update(filter RangeFilter, dbMinToSave Instant, dbMaxToSave Instant) RangeFilter
+        + readAll() List<RangeFilter>
+    }
+    abstract class RangeFilterFilterResults{
+        + {static} filterResults(searchHits SearchHits, rangeFilters List<RangeFilter>) SearchHits
+    }
+
+
+    DatabaseInterface <|.. Database
+
+    RangeFilter <|.. RangeFilterClass
+    RangeFilterClass <|-- DoubleFilter
+    RangeFilterClass <|-- LongFilter
+    RangeFilterClass <|-- TimeFilter
+
+    RangeFilterCRUDInterface <|.. RangeFilterCRUD
+
+    RangeFilter ..> FilterTypes : <<use>>
+    RangeFilterClass ..> FilterTypes : <<use>>
+    DoubleFilter ..> FilterTypes : <<use>>
+    LongFilter ..> FilterTypes : <<use>>
+    TimeFilter ..> FilterTypes : <<use>>
+
+    RangeFilterFilterResults ..> RangeFilter : <<use>>
+    RangeFilterFilterResults ..> RangeFilterClass : <<use>>
+
+    RangeFilterCRUDInterface ..> RangeFilter : <<use>>
+
+    RangeFilterCRUD ..> RangeFilterClass : <<use>>
+    RangeFilterCRUD ..> DatabaseInterface : <<use>>
+    RangeFilterCRUD ..> Database : <<use>>
+    RangeFilterCRUD ..> Validator : <<use>>
+    RangeFilterCRUD ..> DoubleFilter : <<use>>
+    RangeFilterCRUD ..> LongFilter : <<use>>
+    RangeFilterCRUD ..> TimeFilter : <<use>>
+
+    DatabaseInterface ..> RangeFilter : <<use>>
+    Database ..> DoubleFilter : <<use>>
+    Database ..> LongFilter : <<use>>
+    Database ..> TimeFilter : <<use>>
+    Database ..> FilterTypes : <<use>>
+    Database ..> DBConnection : <<use>>
+
+    RangeFilterFilterResults ..> Product : <<use>>
+    RangeFilterClass ..> Product : <<use>>
+
+
+
+}
+
+
+@enduml

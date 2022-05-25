@@ -1,3 +1,8 @@
+/*
+ Group 4.4 be aware that the file for resetting database content during the unit tests are located in
+ "src/test/resources/dk/sdu/se_f22/sortingmodule/range/sql_sqripts"
+ */
+
 DROP FUNCTION IF EXISTS get_type_of_filter;
 DROP function if exists get_long_filter;
 DROP function if exists get_time_filter;
@@ -101,7 +106,7 @@ from SortingRangeFilters
          inner join SortingRangeLongFilters using (FilterId)
          inner join SortingRangeFilterTypes using (filterTypeId);
 
-
+-- Manual tests of functionality
 select *
 from SortingRangeDoubleView;
 
@@ -164,7 +169,7 @@ create trigger trg_double_view_insert_trigger
 EXECUTE procedure double_filter_view_insert();
 
 
--- For double filter view
+-- For long filter view
 create or replace function long_filter_view_insert()
     RETURNS trigger
 AS
@@ -173,9 +178,6 @@ DECLARE
     filter_id_var integer;
 BEGIN
     INSERT INTO SortingRangeFilters (description, name, productAttribute, filterTypeId)
-        -- The 2 in this line could be handled differently
-        -- We could create a trigger on inserts into each table containing different filter types instead
-        -- I prefer this, since it does not need an extra trigger, and also allows fo not null constraint on filterTypeId
     VALUES (NEW.description, NEW.name, NEW.productAttribute, 2)
     RETURNING filterId into filter_id_var;
 
@@ -194,8 +196,7 @@ create trigger trg_long_view_insert_trigger
     FOR EACH ROW
 EXECUTE procedure long_filter_view_insert();
 
-
-
+-- Allowing delete on views
 create or replace function time_filter_view_delete()
     RETURNS trigger
 AS
@@ -261,23 +262,7 @@ CREATE TRIGGER  trg_long_view_delete_trigger
     ON SortingRangeLongView
     FOR EACH ROW
 EXECUTE PROCEDURE long_filter_view_delete();
--- the below insert is necessary to have as the first inserts in order to pass our unit-tests
-/*
-INSERT INTO SortingRangeFilters (description, name, productAttribute)
-VALUES ('test description', 'test name double', 'price');
-INSERT INTO SortingRangeDoubleFilters (filterId, min, max)
-VALUES (1, 0, 10);
 
-
-INSERT INTO SortingRangeFilters (description, name, productAttribute)
-VALUES ('test description', 'test name ean', 'ean');
-INSERT INTO SortingRangeLongFilters (filterId, min, max)
-VALUES (2, 2, 100);
-
-INSERT INTO SortingRangeFilters (description, name, productAttribute)
-VALUES ('test description', 'test name time', 'expirationDate');
--- INSERT INTO SortingRangeTimeFilters (filterId, min, max) VALUES (3, 0, 10);
-*/
 
 select *
 from SortingRangeDoubleView;
@@ -285,7 +270,7 @@ from SortingRangeDoubleView;
 select *
 from SortingRangeLongView;
 
-
+-- Get filter type
 create or replace function get_type_of_filter(filter_id_input integer)
     returns varchar
 as
@@ -302,8 +287,7 @@ end;
 $$
     language plpgsql;
 
-
-
+-- Get filters directly
 create or replace function get_double_filter(filter_id_input integer)
     returns SortingRangeDoubleView
 as
@@ -317,7 +301,6 @@ BEGIN
 end;
 $$
     language plpgsql;
-
 
 
 create or replace function get_long_filter(filter_id_input integer)
@@ -350,6 +333,8 @@ $$
     language plpgsql;
 
 -- Inserting directly to the views
+-- Despite the fact that this file should not be modified in order to comply with the migrations system,
+-- The warning below still stands (although the filters should now be found in the folder specified at the top of this file)
 -- DO not under any circumstance change the order or the content of these inserts below.
 -- Doing so will break a lot of unit tests
 INSERT INTO SortingRangeDoubleView (name, description, productAttribute, min, max)
@@ -386,19 +371,18 @@ VALUES ('test double ix', 'test description nine', 'weight', 2, 100);
 INSERT INTO SortingRangeDoubleView (name, description,productAttribute,min,max)
 VALUES ('test delete double','test description','price',3,100);
 
+-- Manual testing of functionality
 SELECT get_type_of_filter(2);
 SELECT get_type_of_filter(1);
 SELECT *
 FROM get_double_filter(1);
 
-
 DELETE FROM SortingRangeDoubleView WHERE filterId = 2;
-
 
 SELECT * FROM sortingrangetimeview;
 
 
-
+-- allow updates on views
 create or replace function time_filter_view_update()
     RETURNS trigger
 AS
@@ -435,9 +419,6 @@ DECLARE
 BEGIN
     UPDATE SortingRangeFilters SET description=NEW.description, name=NEW.name, productAttribute=NEW.productAttribute, filterTypeId=2
     WHERE (filterId = NEW.filterId)
-        -- The 2 in this line could be handled differently
-        -- We could create a trigger on inserts into each table containing different filter types instead
-        -- I prefer this, since it does not need an extra trigger, and also allows fo not null constraint on filterTypeId
     RETURNING filterId into filter_id_var;
 
     UPDATE SortingRangeLongFilters SET min=NEW.min, max=NEW.max WHERE (filterId = filter_id_var);

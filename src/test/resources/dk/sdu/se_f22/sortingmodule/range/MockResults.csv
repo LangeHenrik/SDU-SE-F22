@@ -6,3 +6,4 @@ id,average user review,ean,price,published date,expiration date,category,name,de
 2c8ee936-cabc-11ec-9d64-0242ac120002,4.8,12345673,10,2022-11-30T15:35:23.00,2022-11-30T15:35:23.00,monitor,testMonitor,test monitoring,unavailable,unavailable,10
 2c8ee936-cabc-11ec-9d64-0242ac120002,3.9,12345674,999,2022-11-30T15:35:24.00,2022-11-30T15:35:24.00,hdd,testHDD,test capacity boi,unavailable,unavailable,999
 2c8ee936-cabc-11ec-9d64-0242ac120002,2.9,12345675,1001,2022-11-30T15:35:25.00,2022-11-30T15:35:25.00,sshd,testSSHD,test capacity boi 2.0,unavailable,unavailable,1001
+

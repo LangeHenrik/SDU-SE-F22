@@ -1,7 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range;
 
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.ProductAttribute;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.DBMigration;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
@@ -59,12 +59,12 @@ public class Helpers {
         List<Product> mockResults = new ArrayList<>();
 
         for (String productString : products) {
-            String[] attributes = productString.split(",");
+            String[] attributes = productString.split(",", -1);
 
             // We choose to create the product this way,
             // since we can utilize the parser already written in the Product() class
             BaseProduct baseProduct = new BaseProduct();
-            baseProduct.set(ProductAttribute.ID, attributes[0]);
+            baseProduct.set(ProductAttribute.UUID, attributes[0]);
             baseProduct.set(ProductAttribute.AVERAGE_USER_REVIEW, attributes[1]);
             baseProduct.set(ProductAttribute.EAN, attributes[2]);
             baseProduct.set(ProductAttribute.PRICE, attributes[3]);

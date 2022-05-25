@@ -68,12 +68,14 @@ public class BrandIndex implements IndexInterface {
             PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?)");
             PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?)");
             PreparedStatement queryToken = DBConn.prepareStatement("SELECT token FROM tokens");
+            PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
 
             ResultSet rs = queryToken.executeQuery();
+            ResultSet rsTokenId = null;
 
             ArrayList<String> newTokens = new ArrayList<>(tokens);
 
-            System.out.println("BEFORE ANY CODE\n");
+            System.out.println("\nBEFORE ANY CODE");
             System.out.println("newTokens length "+newTokens.size());
             System.out.println("tokens length "+tokens.size()+"\n");
 
@@ -88,11 +90,10 @@ public class BrandIndex implements IndexInterface {
             System.out.println(newTokens.size()+" is newTokens.size before while rs.next() loop.");
             while (rs.next()) {
                 for (int i = 0; i < newTokens.size(); i++) {
-                    System.out.println("We're now inside the for loop in rs.next\n");
                     System.out.println(rs.getString("token") + " is rs.getString. "+newTokens.get(i)+" is newTokens.get(i)");
                     System.out.println(rs.getString("token").equals(newTokens.get(i)));
                     if (rs.getString("token").equals(newTokens.get(i))) {
-                        System.out.println(newTokens.get(i)+" has been removed and newTokens length is now "+newTokens.size());
+                        System.out.println(newTokens.get(i)+" has been removed and newTokens length is now "+(newTokens.size()-1));
                         newTokens.remove(i);
                     }
                 }
@@ -103,28 +104,27 @@ public class BrandIndex implements IndexInterface {
                 tokenInsert.setString(1, newTokens.get(i));
                 tokenInsert.execute();
                 System.out.println(newTokens.get(i) + " has been added.");
-                PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
                 queryTokenId.setString(1, newTokens.get(i));
-                ResultSet rsTokenId = queryTokenId.executeQuery();
+                rsTokenId = queryTokenId.executeQuery();
                 while (rsTokenId.next()) {
                     mapInsert.setInt(1, brand.getId());
                     mapInsert.setInt(2, rsTokenId.getInt(1));
                     mapInsert.execute();
                 }
-                rsTokenId.close();
-                queryTokenId.close();
             }
 
             //preparedStatements
             mapInsert.close();
             tokenInsert.close();
             queryToken.close();
+            queryTokenId.close();
 
             //resultSets
             rs.close();
+            rsTokenId.close();
 
             //indexing done
-            System.out.println("\nIndexing done\n");
+            System.out.println("\nIndexing done");
         }
         catch(SQLException e){
                 e.printStackTrace();

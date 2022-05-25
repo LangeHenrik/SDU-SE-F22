@@ -1,7 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.range.validators;
 
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterException;
-import dk.sdu.se_f22.sortingmodule.range.validators.Validator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;

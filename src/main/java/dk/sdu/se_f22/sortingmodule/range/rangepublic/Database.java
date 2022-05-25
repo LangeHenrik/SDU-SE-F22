@@ -22,11 +22,8 @@ public class Database implements DatabaseInterface {
      */
     @Override
     public RangeFilter create(RangeFilter filter) throws InvalidFilterTypeException, SQLException {
-        ResultSet queryResult = null;
-        ResultSet keys = null;
         PreparedStatement statement;
         int results = 0;
-        int ID = 0;
 
         // By using try-with-ressources we do not have to manually handle closing the connection
         // Thanks AutoCloseable
@@ -70,7 +67,6 @@ public class Database implements DatabaseInterface {
             }
 
             results = statement.executeUpdate();
-            keys = statement.getGeneratedKeys();
 
             if (results == 0) {
                 throw new SQLException("No ID to return.");

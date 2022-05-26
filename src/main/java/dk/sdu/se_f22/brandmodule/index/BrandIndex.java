@@ -3,7 +3,6 @@ package dk.sdu.se_f22.brandmodule.index;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,26 +18,24 @@ public class BrandIndex implements IndexInterface {
     @Override
     public List<Brand> searchBrandIndex(List<String> tokens) {
         List<Brand> brandList = new ArrayList<>();
-        if (tokens.size() == 0){
+        if (tokens.size() == 0)
             return brandList;
-        }
-        List<Integer> productIDList = getTokenIDS(tokens);
-        String finalQuery = createFinalQueryForIndex(productIDList);
+
+        List<Integer> tokenIDList = getTokenIDs(tokens);
+        String finalQuery = createFinalQueryForIndex(tokenIDList);
 
         try(Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement queryStatement = connection.prepareStatement(finalQuery);
 
-            for (int i = 0; i < productIDList.size(); i++) {
-                queryStatement.setInt(i + 1, productIDList.get(i));
+            for (int i = 0; i < tokenIDList.size(); i++) {
+                queryStatement.setInt(i + 1, tokenIDList.get(i));
             }
 
-            queryStatement.setInt(productIDList.size() + 1, productIDList.size());
+            queryStatement.setInt(tokenIDList.size() + 1, tokenIDList.size());
 
             ResultSet queryResultSet = queryStatement.executeQuery();
             while (queryResultSet.next()) {
-
-                brandList.add(getBrandFromId(queryResultSet.getInt("brandId")));
-
+                brandList.add(getBrandFromID(queryResultSet.getInt("brandId")));
             }
             queryResultSet.close();
             queryStatement.close();
@@ -52,7 +49,8 @@ public class BrandIndex implements IndexInterface {
 
     //public List<Brand> getBrandsFromIndex
 
-    public Brand getBrandFromId(int id){
+    public Brand getBrandFromID(int id){
+        // Queries the database using a brand ID to get the whole brand
         Brand resultingBrand = null;
         try(Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement queryStatement = connection.prepareStatement("SELECT * From brand WHERE id = ?");
@@ -79,6 +77,7 @@ public class BrandIndex implements IndexInterface {
     }
 
     public String createFinalQueryForIndex(List<Integer> productIDS){
+        // Creates the final query statement based on the amount of tokens
         String part1FinalQuery = "SELECT brandId FROM TokenBrandMap WHERE tokenId = ?";
         String part2FinalQuery = "GROUP BY brandId HAVING COUNT (brandId) = ?";
 
@@ -89,7 +88,7 @@ public class BrandIndex implements IndexInterface {
         return part1FinalQuery + part2FinalQuery;
     }
 
-    public List<Integer> getTokenIDS(List<String> tokens){
+    public List<Integer> getTokenIDs(List<String> tokens){
         List<Integer> tempList = new ArrayList<>();
 
         try(Connection connection = DBConnection.getPooledConnection()) {
@@ -97,11 +96,8 @@ public class BrandIndex implements IndexInterface {
             ResultSet queryResultSet = null;
             for (int i = 0; i < tokens.size(); i++) {
                 queryStatement = connection.prepareStatement("SELECT id FROM tokens WHERE token = ?");
-
                 queryStatement.setString(1, tokens.get(i));
-
                 queryResultSet = queryStatement.executeQuery();
-
                 while(queryResultSet.next()) {
                     tempList.add(queryResultSet.getInt("id"));
                 }
@@ -117,67 +113,48 @@ public class BrandIndex implements IndexInterface {
 
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {
-      
+        if (tokens.size() == 0 || brand == null || brand.getName() == null)
+            return;
+
+        tokens = new ArrayList<>(tokens);
+        insertTokens(tokens);
+
+        List<Integer> tokenIDs = getTokenIDs(tokens);
+        mapTokenBrandRelations(brand.getId(), tokenIDs);
+    }
+
+    public void mapTokenBrandRelations(int brandID, List<Integer> tokenIDs){
         try (Connection DBConn = DBConnection.getPooledConnection()) {
             PreparedStatement mapInsert = DBConn.prepareStatement("INSERT INTO tokenbrandmap(brandid, tokenid) VALUES (?,?) ON CONFLICT DO NOTHING");
-            PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?) ON CONFLICT DO NOTHING");
-            PreparedStatement queryToken = DBConn.prepareStatement("SELECT token FROM tokens");
-            PreparedStatement queryTokenId = DBConn.prepareStatement("SELECT id FROM tokens where token = ?");
-
-            ResultSet rs = queryToken.executeQuery();
-            ResultSet rsTokenId = null;
-
-            ArrayList<String> newTokens = new ArrayList<>(tokens);
-
-            // Testing if token column in tokens table is empty and if it is then inserts the first token given in tokens List into
-            // tokens table and tokenBrandMap + removes the added token from the newTokens ArrayList.
-             if (!rs.next() && newTokens.get(0) != null) {
-                 tokenInsert.setString(1, newTokens.get(0));
-                 tokenInsert.execute();
-                 rs = queryToken.executeQuery();
-                 mapInsert.setInt(1, brand.getId());
-                 mapInsert.setInt(2, 1);
-                 mapInsert.execute();
-                 newTokens.remove(0);
-             }
-
-            // Goes through given newTokens ArrayList and check the token column in tokens table. If the token already exists,
-            // then it removes it from the newTokens ArrayList.
-            while (rs.next()) {
-                for (int i = 0; i < newTokens.size(); i++) {
-                    if (rs.getString("token").equals(newTokens.get(i))) {
-                        newTokens.remove(i);
-                    }
-                }
-            }
 
             // Inserts into tokenBrandMap, making sure each token points to its specific brand and inserts all tokens to tokens table
-            if (newTokens.size() > 0) {
-                for (int i = 0; i < newTokens.size(); i++) {
-                    tokenInsert.setString(1, newTokens.get(i));
-                    tokenInsert.execute();
-                    queryTokenId.setString(1, newTokens.get(i));
-                    rsTokenId = queryTokenId.executeQuery();
-                    while (rsTokenId.next()) {
-                        mapInsert.setInt(1, brand.getId());
-                        mapInsert.setInt(2, rsTokenId.getInt(1));
-                        mapInsert.execute(); }
-                }
+            for (int i = 0; i < tokenIDs.size(); i++) {
+                mapInsert.setInt(1, brandID);
+                mapInsert.setInt(2, tokenIDs.get(i));
+                mapInsert.execute();
             }
-
             // Closing preparedStatements
             mapInsert.close();
-            tokenInsert.close();
-            queryToken.close();
-            queryTokenId.close();
-
-            // Closing resultSets
-            rs.close();
-            if (rsTokenId != null) { rsTokenId.close(); }
-
         }
         catch(SQLException e){
-                e.printStackTrace();
+            e.printStackTrace();
+        }
+    }
+
+    public void insertTokens(List<String> tokens){
+        try (Connection DBConn = DBConnection.getPooledConnection()) {
+            PreparedStatement tokenInsert = DBConn.prepareStatement("INSERT INTO tokens(token) VALUES (?) ON CONFLICT DO NOTHING");
+
+            // Inserts into tokenBrandMap
+            for (int i = 0; i < tokens.size(); i++) {
+                tokenInsert.setString(1, tokens.get(i));
+                tokenInsert.execute();
+            }
+            // Closing preparedStatements
+            tokenInsert.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
         }
     }
 }

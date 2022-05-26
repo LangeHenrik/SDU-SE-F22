@@ -1,0 +1,2 @@
+ALTER TABLE sorting_queries
+ALTER COLUMN scoring TYPE VARCHAR(255);

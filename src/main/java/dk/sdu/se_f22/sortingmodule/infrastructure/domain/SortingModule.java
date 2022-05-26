@@ -6,6 +6,7 @@ import java.util.List;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 /**
  * Search product, brand and content with range- and category filtering and scoring as well as pagination
@@ -66,12 +67,19 @@ public interface SortingModule {
      * 
      * @param scoring Scoring method
      */
-    public void setScoring(int scoring);
+    public void setScoring(ScoreSortType scoring);
+
+    public SearchQuery getQuery();
 
     /**
      * Return available range filters
      */
     public List<RangeFilter> getAvailableRangeFilters();
+
+    /**
+     * Print available range filters
+     */
+    public void printAvailableRangeFilters();
 
     /**
      * Return modified SearchHits with pagination
@@ -89,4 +97,9 @@ public interface SortingModule {
      * Run search, and get the hits the search creates, that is filtered and paginated
      */
     public SearchHits search();
+
+    /**
+     * Following  method, is used to enable mock data
+     */
+    public void useMockData(boolean b, boolean c, boolean p);
 }

@@ -136,11 +136,11 @@ class OneWayImplementationTest {
     void printCatalog() {
         oneWayImplementation.printCatalog();
 
-        String expected="";
+        StringBuilder expected= new StringBuilder();
         for (Item item :DatabaseAPI.readEntireDB()){
-            expected += item.toString();
+            expected.append(item.toString());
         }
 
-        assertEquals(expected,outContent.toString().replaceAll("\n","").replaceAll("\r",""));
+        assertEquals(expected.toString(),outContent.toString().replaceAll("\n","").replaceAll("\r",""));
     }
 }

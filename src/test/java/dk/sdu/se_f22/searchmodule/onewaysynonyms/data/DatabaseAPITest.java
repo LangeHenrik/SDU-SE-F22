@@ -12,7 +12,6 @@ class DatabaseAPITest {
     @BeforeAll
     static void setUp(){
         DatabaseAPI.initializeTable();
-        DatabaseAPI.addItem("Vehicle",0);
     }
 
     @Test
@@ -22,17 +21,17 @@ class DatabaseAPITest {
 
     @Test
     void addItem() {
-        assertTrue(DatabaseAPI.addItem("Object",0));
+        assertFalse(DatabaseAPI.addItem("root",0));
     }
 
     @Test
     void updateSuperId() {
-        assertTrue(DatabaseAPI.updateSuperId(2,0));
+        assertFalse(DatabaseAPI.updateSuperId(0,0));
     }
 
     @Test
     void updateName() {
-        assertTrue(DatabaseAPI.updateName(2,"Cars"));
+        assertFalse(DatabaseAPI.updateName(0,"Cars"));
     }
 
     @Test
@@ -42,7 +41,7 @@ class DatabaseAPITest {
 
     @Test
     void deleteItems() {
-        assertTrue(DatabaseAPI.deleteItems(1));
+        assertFalse(DatabaseAPI.deleteItems(0));
     }
 
     @Test

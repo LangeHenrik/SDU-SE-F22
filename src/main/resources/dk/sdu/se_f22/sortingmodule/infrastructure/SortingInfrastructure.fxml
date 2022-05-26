@@ -97,7 +97,7 @@
                                     <TableColumn fx:id="queryTableTime" prefWidth="75.0" text="Time" />
                                 </columns>
                               </TableView>
-                              <Label layoutX="86.0" layoutY="52.0" text="Quries" />
+                              <Label layoutX="86.0" layoutY="52.0" text="Queries" />
                               <Label layoutX="86.0" layoutY="308.0" text="Query information" />
                               <TextArea fx:id="queryInformation" layoutX="62.0" layoutY="336.0" prefHeight="250.0" prefWidth="477.0" />
                            </children>

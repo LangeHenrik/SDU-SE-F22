@@ -41,10 +41,11 @@ class OneWayGUITest {
 
     private Tab getTabs(){
         Node moduelFunctionTab = scene.getRoot().lookup("Module Function");
+        return null;
     }
 
     private TextField getMFInput(){
-
+        return null;
     }
 
 

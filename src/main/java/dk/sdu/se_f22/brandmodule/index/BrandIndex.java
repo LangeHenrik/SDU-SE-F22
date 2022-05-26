@@ -14,7 +14,6 @@ public class BrandIndex implements IndexInterface {
 
     public BrandIndex(){}
 
-
     @Override
     public List<Brand> searchBrandIndex(List<String> tokens) {
         List<Brand> brandList = new ArrayList<>();
@@ -47,8 +46,6 @@ public class BrandIndex implements IndexInterface {
         return brandList;
     }
 
-    //public List<Brand> getBrandsFromIndex
-
     public Brand getBrandFromID(int id){
         // Queries the database using a brand ID to get the whole brand
         Brand resultingBrand = null;
@@ -78,14 +75,14 @@ public class BrandIndex implements IndexInterface {
 
     public String createFinalQueryForIndex(List<Integer> productIDS){
         // Creates the final query statement based on the amount of tokens
-        String part1FinalQuery = "SELECT brandId FROM TokenBrandMap WHERE tokenId = ?";
-        String part2FinalQuery = "GROUP BY brandId HAVING COUNT (brandId) = ?";
+        String finalQueryPart1 = "SELECT brandId FROM TokenBrandMap WHERE tokenId = ?";
+        String finalQueryPart2 = "GROUP BY brandId HAVING COUNT (brandId) = ?";
 
         for (int i = 1; i < productIDS.size(); i++) {
-            part1FinalQuery += " OR tokenId = ? ";
+            finalQueryPart1 += " OR tokenId = ? ";
         }
 
-        return part1FinalQuery + part2FinalQuery;
+        return finalQueryPart1 + finalQueryPart2;
     }
 
     public List<Integer> getTokenIDs(List<String> tokens){
@@ -109,7 +106,6 @@ public class BrandIndex implements IndexInterface {
         }
         return tempList;
     }
-
 
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {

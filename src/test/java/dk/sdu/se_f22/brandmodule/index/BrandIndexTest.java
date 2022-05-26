@@ -22,8 +22,7 @@ class BrandIndexTest {
     void searchBrandIndex() throws SQLException {
         Brand knownBrand = new Brand(null, null, null, null, null, null);
         knownBrand.setName("HP");
-        knownBrand.setDescription(
-                "HP Inc. is an American multinational information technology company headquartered in Palo Alto, California, that develops personal computers (PCs), printers and related supplies, as well as 3D printing solutions.");
+        knownBrand.setDescription("HP Inc. is an American multinational information technology company headquartered in Palo Alto, California, that develops personal computers (PCs), printers and related supplies, as well as 3D printing solutions.");
         knownBrand.setFounded("January 1, 1939");
         knownBrand.setHeadquarters("Palo Alto, California, United States");
         knownBrand.setProducts(new ArrayList<>());
@@ -41,13 +40,13 @@ class BrandIndexTest {
             brandInsert.setString(4, knownBrand.getHeadquarters());
             brandInsert.execute();
 
-            PreparedStatement ps2 = connection.prepareStatement("SELECT id FROM Brand WHERE name = ?");
-            ps2.setString(1, knownBrand.getName());
-            ResultSet queryResultSet = ps2.executeQuery();
+            PreparedStatement queryBrandId = connection.prepareStatement("SELECT id FROM Brand WHERE name = ?");
+            queryBrandId.setString(1, knownBrand.getName());
+            ResultSet queryResultSet = queryBrandId.executeQuery();
             queryResultSet.next();
             knownBrand.setId(queryResultSet.getInt(1));
-            ps2.execute();
-            ps2.close();
+            queryBrandId.execute();
+            queryBrandId.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +73,6 @@ class BrandIndexTest {
                         mapInsert.execute(); }
                 }
             }
-
             // Closing preparedStatements
             mapInsert.close();
             tokenInsert.close();
@@ -104,12 +102,9 @@ class BrandIndexTest {
     @Test
     void indexBrandInformation() {
         // Creating the brand object for the indexBrandInformation method
-
         Brand brand = new Brand(null, null, null, null, null , null);
-
         brand.setName("Apple");
-        brand.setDescription(
-                "Apple Inc (Apple) designs, manufactures, and markets smartphones, tablets, personal computers (PCs), portable and wearable devices. The company also offers software and related services, accessories, networking solutions, and third-party digital content and applications.");
+        brand.setDescription("Apple Inc (Apple) designs, manufactures, and markets smartphones, tablets, personal computers (PCs), portable and wearable devices. The company also offers software and related services, accessories, networking solutions, and third-party digital content and applications.");
         brand.setFounded("April 1, 1976");
         brand.setHeadquarters("Cupertino, California, USA");
         brand.setProducts(new ArrayList<>());
@@ -118,20 +113,19 @@ class BrandIndexTest {
         List<String> tokens = List.of("Quality", "Phones", "Computers", "Watches");
         List<Integer> tokenIds = new ArrayList<>();
 
-
         // Creating instance of BrandIndex class
         BrandIndex index = new BrandIndex();
 
         // Inserting brand into DB
         try (Connection connection = DBConnection.getPooledConnection()){
-            PreparedStatement ps1 = connection.prepareStatement("INSERT INTO brand(name,description,founded,headquarters) VALUES (?,?,?,?) ON CONFLICT DO NOTHING");
-            ps1.setString(1, brand.getName());
-            ps1.setString(2, brand.getDescription());
-            ps1.setString(3, brand.getFounded());
-            ps1.setString(4, brand.getHeadquarters());
-            ps1.execute();
+            PreparedStatement brandInsert = connection.prepareStatement("INSERT INTO brand(name,description,founded,headquarters) VALUES (?,?,?,?) ON CONFLICT DO NOTHING");
+            brandInsert.setString(1, brand.getName());
+            brandInsert.setString(2, brand.getDescription());
+            brandInsert.setString(3, brand.getFounded());
+            brandInsert.setString(4, brand.getHeadquarters());
+            brandInsert.execute();
 
-            ps1.close();
+            brandInsert.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -139,13 +133,13 @@ class BrandIndexTest {
 
         // Extracting and setting brand ID
         try (Connection connection = DBConnection.getPooledConnection()){
-            PreparedStatement ps2 = connection.prepareStatement("SELECT id FROM Brand WHERE name = ?");
-            ps2.setString(1, brand.getName());
-            ResultSet queryResultSet = ps2.executeQuery();
+            PreparedStatement queryBrandId = connection.prepareStatement("SELECT id FROM Brand WHERE name = ?");
+            queryBrandId.setString(1, brand.getName());
+            ResultSet queryResultSet = queryBrandId.executeQuery();
             queryResultSet.next();
             brand.setId(queryResultSet.getInt(1));
-            ps2.execute();
-            ps2.close();
+            queryBrandId.execute();
+            queryBrandId.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -157,37 +151,35 @@ class BrandIndexTest {
         // Checking if the code has correctly added the tokens in the ArrayLists above, which means adding new tokens
         try (Connection connection = DBConnection.getPooledConnection()){
             PreparedStatement query = connection.prepareStatement("SELECT * FROM tokens WHERE token=?");
-            ResultSet queryRs = null;
+            ResultSet queryResultSet = null;
             for (int i = 0; i < tokens.size(); i++){
                 query.setString(1, tokens.get(i));
-
-                queryRs = query.executeQuery();
-                if (queryRs.next()) {
-                    assertEquals(tokens.get(i), queryRs.getString(2));
-                    tokenIds.add(queryRs.getInt(1));
+                queryResultSet = query.executeQuery();
+                if (queryResultSet.next()) {
+                    assertEquals(tokens.get(i), queryResultSet.getString(2));
+                    tokenIds.add(queryResultSet.getInt(1));
                 }
             }
             query.close();
-            queryRs.close();
+            queryResultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         try (Connection connection = DBConnection.getPooledConnection()){
             // Checking if the tokens are inserted properly into the tokenBrandMap and associated with the right brand.
             PreparedStatement query = connection.prepareStatement("SELECT tokenid FROM TokenBrandMap WHERE brandid=(SELECT id FROM Brand WHERE name=?) AND tokenid=(SELECT id FROM tokens WHERE token=?)");
             query.setString(1, brand.getName());
-            ResultSet queryRs = null;
+            ResultSet queryResultSet = null;
             for (int i = 0; i < tokens.size(); i++){
                 query.setString(2, tokens.get(i));
-                queryRs = query.executeQuery();
-                if (queryRs.next()){
-                    assertEquals(tokenIds.get(i), queryRs.getInt(1));
+                queryResultSet = query.executeQuery();
+                if (queryResultSet.next()){
+                    assertEquals(tokenIds.get(i), queryResultSet.getInt(1));
                 }
             }
             query.close();
-            queryRs.close();
+            queryResultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

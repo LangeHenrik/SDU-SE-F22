@@ -13,11 +13,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -382,9 +384,9 @@ class DoubleFilterTest {
 
             private static Stream<Arguments> provideParameters() {
                 return Stream.of(
-                        Arguments.of(2.0, 1.0),
-                        Arguments.of(5.5, 3.5),
-                        Arguments.of(1000.0, 999.0)
+                        Arguments.of(1.0, 1.0),
+                        Arguments.of(3.5 + 0.1, 3.5),
+                        Arguments.of(999.0 + 0.1, 999.0)
                 );
             }
         }
@@ -401,10 +403,16 @@ class DoubleFilterTest {
             @DisplayName("Setting userMin with incorrect type throws exception")
             @MethodSource("doubleFilterProvider")
             void setUserMinWithIncorrectType(DoubleFilter filter) {
-                long newValue = 100;
+                long newLongValue = 100;
+                Instant newInstantValue = Instant.MAX;
 
-                Assertions.assertThrows(IllegalMinMaxException.class,
-                        () -> filter.setUserMin(newValue)
+                assertAll(
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMin(newLongValue)
+                        ),
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMin(newInstantValue)
+                        )
                 );
             }
 
@@ -412,9 +420,16 @@ class DoubleFilterTest {
             @DisplayName("Setting userMax with incorrect type throws exception")
             @MethodSource("doubleFilterProvider")
             void setUserMaxWithIncorrectType(DoubleFilter filter) {
-                long newValue = 100;
-                Assertions.assertThrows(IllegalMinMaxException.class,
-                        () -> filter.setUserMax(newValue)
+                long newLongValue = 100;
+                Instant newInstantValue = Instant.MAX;
+
+                assertAll(
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMax(newLongValue)
+                        ),
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMax(newInstantValue)
+                        )
                 );
             }
         }

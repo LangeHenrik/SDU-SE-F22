@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 import java.time.Instant;
 import java.util.*;
@@ -31,14 +32,13 @@ public class SearchQuery {
     /**
      * Scoring method id
      */
-    private int scoring = 0;
+    private ScoreSortType scoring = ScoreSortType.ALL;
 
     public SearchQuery() {
         this.rangeDouble = new HashMap<>();
         this.rangeLong = new HashMap<>();
         this.rangeInstant = new HashMap<>();
         this.category = new ArrayList<>();
-        this.scoring = 0;
     }
 
     /**
@@ -150,7 +150,7 @@ public class SearchQuery {
      * 
      * @param scoring The id of the scoring method
      */
-    public void setScoring(int scoring) {
+    public void setScoring(ScoreSortType scoring) {
         this.scoring = scoring;
     }
 
@@ -180,7 +180,7 @@ public class SearchQuery {
         return mapList;
     }
 
-    public int getScoring() {
+    public ScoreSortType getScoring() {
         return this.scoring;
     }
 

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -245,9 +246,10 @@ public class SortingInfrastructureController {
                             sortingModule.addRange(rangeSelector.range.getId(), startRangeLong, endRangeLong);
                             break;
                         case TIME:
-                            Instant startRangeTime = Instant
-                                    .ofEpochSecond(rangeSelector.startTime.getValue().toEpochDay());
-                            Instant endRangeTime = Instant.ofEpochSecond(rangeSelector.endTime.getValue().toEpochDay());
+                            Instant startRangeTime = rangeSelector.startTime.getValue()
+                                    .atStartOfDay(ZoneId.systemDefault()).toInstant();
+                            Instant endRangeTime = rangeSelector.endTime.getValue().atStartOfDay(ZoneId.systemDefault())
+                                    .toInstant();
                             sortingModule.addRange(rangeSelector.range.getId(), startRangeTime, endRangeTime);
                             break;
                     }

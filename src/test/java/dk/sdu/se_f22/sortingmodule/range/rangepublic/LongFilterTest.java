@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -377,10 +378,16 @@ class LongFilterTest {
             @DisplayName("Setting userMin with incorrect type throws an exception")
             @MethodSource("longFilterProvider")
             void setUserMinWithIncorrectType(LongFilter filter) {
-                double newValue = 100f;
+                double newDoubleValue = 100.0;
+                Instant newInstantValue = Instant.MAX;
 
-                Assertions.assertThrows(IllegalMinMaxException.class,
-                        () -> filter.setUserMin(newValue)
+                assertAll(
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMin(newDoubleValue)
+                        ),
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMin(newInstantValue)
+                        )
                 );
             }
 
@@ -388,9 +395,16 @@ class LongFilterTest {
             @DisplayName("Setting userMax with incorrect type throws an exception")
             @MethodSource("longFilterProvider")
             void setUserMaxWithIncorrectType(LongFilter filter) {
-                double newValue = 100f;
-                Assertions.assertThrows(IllegalMinMaxException.class,
-                        () -> filter.setUserMax(newValue)
+                double newDoubleValue = 100.0;
+                Instant newInstantValue = Instant.MAX;
+
+                assertAll(
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMax(newDoubleValue)
+                        ),
+                        () -> Assertions.assertThrows(IllegalMinMaxException.class,
+                                () -> filter.setUserMax(newInstantValue)
+                        )
                 );
             }
         }

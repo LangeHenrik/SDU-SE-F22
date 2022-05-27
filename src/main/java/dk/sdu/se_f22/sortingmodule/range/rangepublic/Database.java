@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-public class Database implements DatabaseInterface {
+class Database implements DatabaseInterface {
     private final String[] queryAttributes = {"filterid", "name", "description", "productattribute", "min", "max"};
 
     /**

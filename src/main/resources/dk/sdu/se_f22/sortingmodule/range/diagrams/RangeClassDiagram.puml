@@ -83,7 +83,7 @@ package rangepublic {
         + update(updatedFilter RangeFilter) RangeFilter
         + readAllFilters(id int) List<RangeFilter>
     }
-    class Database{
+    class "~ Database" as Database{
         - queryAttributes
         --
         ~ createFilterWithID(filter RangeFilter, id int) RangeFilter
@@ -130,7 +130,7 @@ package rangepublic {
         + setUserMax(userMin Instant) Instant
         + setUserMax(userMin long) long
     }
-    abstract class RangeFilterClass {
+    abstract class RangeFilterClass as "~ RangeFilterClass" {
         + {static} DEFAULT_ID int
         - ID int
         - NAME String
@@ -178,7 +178,7 @@ package rangepublic {
         + setUserMax(userMin Instant) Instant
         + setUserMax(userMin long) long
     }
-    class LongFilter {
+    class "~ LongFilter" as LongFilter {
         - DB_MIN long
         - DB_MAX long
         - USER_NOT_SET_VALUE long
@@ -203,7 +203,7 @@ package rangepublic {
         + toString() String
 
     }
-    class DoubleFilter{
+    class DoubleFilter as "~ DoubleFilter"{
         - DB_MIN double
         - DB_MAX double
         - USER_NOT_SET_VALUE double
@@ -228,7 +228,7 @@ package rangepublic {
         + toString() String
 
     }
-    class TimeFilter{
+    class TimeFilter as "~ TimeFilter"{
         - DB_MIN Instant
         - DB_MAX Instant
         - USER_NOT_SET_VALUE Instant

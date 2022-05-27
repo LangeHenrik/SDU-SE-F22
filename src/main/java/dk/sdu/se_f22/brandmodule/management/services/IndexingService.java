@@ -9,16 +9,10 @@ import java.util.TimerTask;
 
 public class IndexingService implements IIndexingService {
 
-    private final IJsonService service;
     private final Persistence persistence;
 
     public IndexingService() {
-        service = new JsonService();
         persistence = new Persistence();
-    }
-
-    public List<Brand> getBrandIndex() {
-        return service.deserializeBrand();
     }
 
     public void StartIndexInterval() {

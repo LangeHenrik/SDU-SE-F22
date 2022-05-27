@@ -76,8 +76,5 @@ public class Bim implements IBim {
         indexingService.StartIndexInterval();
     }
 
-    @Override
-    public void getBrandIndex() {
-        indexingService.getBrandIndex();
-    }
+
 }

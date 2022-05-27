@@ -33,5 +33,5 @@ public interface IBim {
 
     void startIndexInterval();
 
-    void getBrandIndex();
+
 }

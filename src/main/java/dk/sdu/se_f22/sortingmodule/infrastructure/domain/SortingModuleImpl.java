@@ -161,10 +161,10 @@ public class SortingModuleImpl implements SortingModule {
 
         this.query.getRangeDouble().forEach((Integer id, Double[] boundaries) -> {
             try {
-                selectedFilters.add(filterCRUD.read(id));
-                if (selectedFilters.get(selectedFilters.size() - 1).getType() == FilterTypes.DOUBLE) {
-                    selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
-                    selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                if (filterCRUD.read(id).getType() == FilterTypes.DOUBLE) {
+                    selectedFilters.add(filterCRUD.read(id));
+                    filterCRUD.read(id).setUserMin(boundaries[0]);
+                    filterCRUD.read(id).setUserMax(boundaries[1]);
                 }
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();
@@ -173,10 +173,10 @@ public class SortingModuleImpl implements SortingModule {
 
         this.query.getRangeLong().forEach((Integer id, Long[] boundaries) -> {
             try {
-                selectedFilters.add(filterCRUD.read(id));
-                if (selectedFilters.get(selectedFilters.size() - 1).getType() == FilterTypes.LONG) {
-                    selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
-                    selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                if (filterCRUD.read(id).getType() == FilterTypes.LONG) {
+                    selectedFilters.add(filterCRUD.read(id));
+                    filterCRUD.read(id).setUserMin(boundaries[0]);
+                    filterCRUD.read(id).setUserMax(boundaries[1]);
                 }
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();
@@ -185,10 +185,10 @@ public class SortingModuleImpl implements SortingModule {
 
         this.query.getRangeInstant().forEach((Integer id, Instant[] boundaries) -> {
             try {
-                selectedFilters.add(filterCRUD.read(id));
-                if (selectedFilters.get(selectedFilters.size() - 1).getType() == FilterTypes.TIME) {
-                    selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
-                    selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
+                if (filterCRUD.read(id).getType() == FilterTypes.TIME) {
+                    selectedFilters.add(filterCRUD.read(id));
+                    filterCRUD.read(id).setUserMin(boundaries[0]);
+                    filterCRUD.read(id).setUserMax(boundaries[1]);
                 }
             } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
                 e.printStackTrace();

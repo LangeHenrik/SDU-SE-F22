@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.data;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SearchQuery;
 import dk.sdu.se_f22.sharedlibrary.utils.Color;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,25 +33,23 @@ public class SaveSearchQuery {
         };
 
         List<Integer> queryCategories = query.getCategory();
-        int queryScoring = query.getScoring();
+        ScoreSortType queryScoring = query.getScoring();
         String queryString = searchString;
 
         // Save the information
         try (
-            Connection connection = DBConnection.getPooledConnection();
-        ) {
+                Connection connection = DBConnection.getPooledConnection();) {
             // Disable auto commit to prevent error prone queries to be inserted
             connection.setAutoCommit(false);
 
             // Main query
             PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO sorting_queries (text, page, page_size, scoring) VALUES (?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS
-            );
+                    "INSERT INTO sorting_queries (text, page, page_size, scoring) VALUES (?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, searchString);
             stmt.setInt(2, pageNumber);
             stmt.setInt(3, pageSize);
-            stmt.setInt(4, queryScoring);
+            stmt.setString(4, queryScoring.toString());
             stmt.execute();
 
             // Get the id for the main query
@@ -64,8 +63,7 @@ public class SaveSearchQuery {
             // Range query
             for (HashMap.Entry<Integer, Double[]> range : queryRangesDouble.entrySet()) {
                 stmt = connection.prepareStatement(
-                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)"
-                );
+                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)");
 
                 stmt.setInt(1, mainQueryId);
                 stmt.setInt(2, range.getKey());
@@ -77,8 +75,7 @@ public class SaveSearchQuery {
 
             for (HashMap.Entry<Integer, Long[]> range : queryRangesLong.entrySet()) {
                 stmt = connection.prepareStatement(
-                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)"
-                );
+                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)");
 
                 stmt.setInt(1, mainQueryId);
                 stmt.setInt(2, range.getKey());
@@ -90,8 +87,7 @@ public class SaveSearchQuery {
 
             for (HashMap.Entry<Integer, Instant[]> range : queryRangesInstant.entrySet()) {
                 stmt = connection.prepareStatement(
-                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)"
-                );
+                        "INSERT INTO sorting_query_ranges (query_id, range_id, start_value, end_value) VALUES (?, ?, ?, ?)");
 
                 stmt.setInt(1, mainQueryId);
                 stmt.setInt(2, range.getKey());
@@ -101,27 +97,24 @@ public class SaveSearchQuery {
                 stmt.close();
             }
 
-
-
-
             // category query
             for (Integer category : queryCategories) {
                 stmt = connection.prepareStatement(
-                    "INSERT INTO sorting_query_categories (query_id, catergory_id) VALUES (?, ?)"
-                );
+                        "INSERT INTO sorting_query_categories (query_id, category_id) VALUES (?, ?)");
                 stmt.setInt(1, mainQueryId);
                 stmt.setInt(2, category);
                 stmt.execute();
                 stmt.close();
             }
-            
+
             connection.setAutoCommit(true);
 
         } catch (SQLException error) {
             System.out.println(Color.YELLOW + "An error occured when logging query data to the database:" + Color.RED);
             System.out.println(error.getMessage());
             error.printStackTrace();
-            System.out.println(Color.YELLOW_BOLD_BRIGHT + "This is not a crash, the program will move on!" + Color.RESET);
+            System.out
+                    .println(Color.YELLOW_BOLD_BRIGHT + "This is not a crash, the program will move on!" + Color.RESET);
         }
     }
 }

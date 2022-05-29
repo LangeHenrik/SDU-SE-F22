@@ -163,4 +163,8 @@ public class SEM1InfrastructureAdministrativeGUIController implements Initializa
             textArea.appendText(charString.toString());
         }
     }
+
+    public void setSearchModule(SearchModuleImpl searchModule) {
+        this.searchModule = searchModule;
+    }
 }

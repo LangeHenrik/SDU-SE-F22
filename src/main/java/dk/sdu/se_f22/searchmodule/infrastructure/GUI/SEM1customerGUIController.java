@@ -19,46 +19,54 @@ public class SEM1customerGUIController {
     @FXML
     private Label productHitsCounter;
 
-    private SearchModuleImpl searchModule = new SearchModuleImpl();
+    private SearchModuleImpl searchModule;
 
     @FXML
     public void initialize() {
-        searchModule = new SearchModuleImpl();
     }
 
     @FXML
     public void onSem1SearchButton() {
-        boolean foundResult = false;
-            SearchHits searchResults = searchModule.search(SEM1customerSearchBar.getText());
-            if (!searchResults.getContents().isEmpty()) {
-                foundResult = true;
-                for (var content : searchResults.getContents()) {
-                    SEM1customerText.appendText(content.toString() + "\n");
-                }
-            }
-            if (!searchResults.getBrands().isEmpty()) {
-                foundResult = true;
-                for (var brand : searchResults.getBrands()) {
-                    SEM1customerText.appendText(brand.toString() + "\n");
-                }
-            }
-            if (!searchResults.getProducts().isEmpty()) {
-                foundResult = true;
-                for (var product : searchResults.getProducts()) {
-                    SEM1customerText.appendText(product.toString() + "\n");
-                }
-            }
-            brandHitsCounter.setText(String.valueOf(searchResults.getBrands().size()));
-            productHitsCounter.setText(String.valueOf(searchResults.getProducts().size()));
+        if (searchModule == null) {
+            SEM1customerText.appendText("No searchmodule set\n");
+            return;
+        }
 
-            if(!foundResult) {
-                System.out.println("No elements found");
-                SEM1customerText.appendText("No elements found" + "\n");
+        boolean foundResult = false;
+        SearchHits searchResults = searchModule.search(SEM1customerSearchBar.getText());
+        if (!searchResults.getContents().isEmpty()) {
+            foundResult = true;
+            for (var content : searchResults.getContents()) {
+                SEM1customerText.appendText(content.toString() + "\n");
             }
+        }
+        if (!searchResults.getBrands().isEmpty()) {
+            foundResult = true;
+            for (var brand : searchResults.getBrands()) {
+                SEM1customerText.appendText(brand.toString() + "\n");
+            }
+        }
+        if (!searchResults.getProducts().isEmpty()) {
+            foundResult = true;
+            for (var product : searchResults.getProducts()) {
+                SEM1customerText.appendText(product.toString() + "\n");
+            }
+        }
+        brandHitsCounter.setText(String.valueOf(searchResults.getBrands().size()));
+        productHitsCounter.setText(String.valueOf(searchResults.getProducts().size()));
+
+        if (!foundResult) {
+            System.out.println("No elements found");
+            SEM1customerText.appendText("No elements found" + "\n");
+        }
     }
 
     public SearchModuleImpl getSearchModule() {
         return searchModule;
+    }
+
+    public void setSearchModule(SearchModuleImpl searchModule) {
+        this.searchModule = searchModule;
     }
 
     public Label getBrandHitsCounter() {

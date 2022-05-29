@@ -13,8 +13,16 @@ public class RegexUtils {
     }
 
     private static void addDelimiterToStringBuilder(StringBuilder sb, int i, List<String> stringList) {
+        if(stringList.get(i).isEmpty()) {
+            return;
+        }
+
         if (i != stringList.size() - 1) {
-            sb.append("\\").append(stringList.get(i)).append("|");
+            if (!stringList.get(i).matches("[a-zA-Z]+")) {
+                sb.append("\\");
+            }
+            sb.append(stringList.get(i));
+            sb.append("|");
         } else {
             sb.append("\\").append(stringList.get(i));
         }

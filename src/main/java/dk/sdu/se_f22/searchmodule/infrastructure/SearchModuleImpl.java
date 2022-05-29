@@ -1,6 +1,11 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
+import dk.sdu.se_f22.brandmodule.management.Bim;
+import dk.sdu.se_f22.brandmodule.management.IBim;
 import dk.sdu.se_f22.productmodule.infrastructure.domain.ProductInfSearchImpl;
 import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.Filterable;
 import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
@@ -16,7 +21,10 @@ import dk.sdu.se_f22.sharedlibrary.models.Brand;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 
@@ -26,23 +34,60 @@ public class SearchModuleImpl implements SearchModule {
     private final Map<Class<?>, IndexingModule<?>> indexingModules;
     private final DelimiterSettings delimiterSettings = new DelimiterSettings();
 
-    public SearchModuleImpl() {
+    public SearchModuleImpl(Set<Filterable> filteringModules, Set<IndexingModule<?>> indexingModules) {
         this.indexingModules = new HashMap<>();
         this.filteringModules = new HashSet<>();
 
-        // Add modules
-        addIndexingModule(new BrandInfrastructure());
-        addIndexingModule(new ProductInfSearchImpl());
-
-        addFilteringModule(TwoWaySynonym.getInstance());
+        filteringModules.forEach(this::addFilteringModule);
+        indexingModules.forEach(this::addIndexingModule);
 
         delimiterSettings.addDelimiter(" ");
     }
 
+    public SearchModuleImpl() {
+        this(Set.of(), Set.of());
+    }
+
+    /**
+     * This creates the search module prefilled with data
+     * This could be extracted into a factory, since it isn't relevant to the search module
+     */
+    public static SearchModule createDefaultSearchModule() {
+        /* Brand infrastructure */
+        var brandInfra = new BrandInfrastructure();
+        String reg = "[,\\.]";
+        String del = "[\\ | \\-]";
+        brandInfra.setTokenizationParameters(del,reg);
+        Gson gson = new Gson();
+        var filereader = new BufferedReader(new InputStreamReader(SearchModuleImpl.class.getClassLoader().getResourceAsStream("dk/sdu/se_f22/searchmodule/infrastructure/GUI/brands.json")));
+        JsonReader reader = new JsonReader(filereader);
+        Type empMapType = new TypeToken<Map<String, Brand>>() {}.getType();
+        Map<String, Brand> data = gson.fromJson(reader, empMapType);
+        List<Brand> dataList = new ArrayList<>();
+        int id = 0;
+        for(var entry : data.entrySet()) {
+            entry.getValue().setId(id);
+            entry.getValue().setName(entry.getKey());
+            id++;
+            dataList.add(entry.getValue());
+        }
+
+        IBim bim = new Bim();
+        dataList.forEach(bim::createBrand);
+        brandInfra.indexBrands(dataList);
+
+        /* Product infrastructure */
+
+
+        return new SearchModuleImpl(
+                Set.of(TwoWaySynonym.getInstance()),
+                Set.of(brandInfra, new ProductInfSearchImpl())
+        );
+    }
 
     /**
      * Get parameterized type i.e. the thing between the angle brackets
-     * Example, here the found class would be Foo:
+     * Example, here the found class would be "Foo":
      *         class SomeIndexingModule implements IndexingModule<Foo>
      * This is achieved through a recursive depth-first-search of the inheritance tree
      */
@@ -54,7 +99,8 @@ public class SearchModuleImpl implements SearchModule {
             } else {
                 var paramType = (ParameterizedType) i;
                 if(paramType.getRawType().equals(IndexingModule.class)) {
-                    return Arrays.stream(paramType.getActualTypeArguments()).map(Arrays::asList)
+                    return Arrays.stream(paramType.getActualTypeArguments())
+                            .map(Arrays::asList)
                             .flatMap(List::stream)
                             .map(Class.class::cast)
                             .findFirst()
@@ -67,7 +113,6 @@ public class SearchModuleImpl implements SearchModule {
 
     public <T extends IndexingModule<?>> void addIndexingModule(T index) {
         Class<?> indexDataType = getParameterizedTypeOfIndexingModule(index.getClass());
-
         indexingModules.put(indexDataType, index);
     }
 

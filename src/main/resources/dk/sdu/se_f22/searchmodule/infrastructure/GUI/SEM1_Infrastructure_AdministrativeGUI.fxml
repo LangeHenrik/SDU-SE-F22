@@ -3,32 +3,82 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.infrastructure.GUI.SEM1InfrastructureAdministrativeGUIController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.searchmodule.infrastructure.GUI.SEM1InfrastructureAdministrativeGUIController">
    <children>
-      <Label layoutX="206.0" layoutY="41.0" text="Search Settings">
-         <font>
-            <Font name="System Bold" size="26.0" />
-         </font>
-      </Label>
-      <RadioButton fx:id="delimiterRB" layoutX="171.0" layoutY="89.0" mnemonicParsing="false" selected="true" text="Delimiters">
-         <toggleGroup>
-            <ToggleGroup fx:id="SearchSettingsToggle" />
-         </toggleGroup>
-      </RadioButton>
-      <RadioButton fx:id="forbiddenCharsRB" layoutX="300.0" layoutY="89.0" mnemonicParsing="false" text="Forbidden Characters" toggleGroup="$SearchSettingsToggle" />
-      <Button fx:id="addBtn" layoutX="91.0" layoutY="125.0" mnemonicParsing="false" onAction="#addBtn" prefHeight="25.0" prefWidth="59.0" text="Add" />
-      <Button fx:id="removeBtn" layoutX="90.0" layoutY="168.0" mnemonicParsing="false" onAction="#removeBtn" text="Remove" />
-      <TextField fx:id="addTextField" layoutX="162.0" layoutY="125.0" prefHeight="25.0" prefWidth="279.0" />
-      <TextField fx:id="removeTextField" layoutX="162.0" layoutY="168.0" prefHeight="25.0" prefWidth="279.0" />
-      <TextArea fx:id="delimitersTextArea" editable="false" layoutX="130.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />
-      <TextArea fx:id="forbiddenCharsTextArea" editable="false" layoutX="318.0" layoutY="250.0" prefHeight="135.0" prefWidth="151.0" />
-      <Label fx:id="delimitersCount" layoutX="130.0" layoutY="233.0" text="Delimiters: 0" />
-      <Label fx:id="forbiddenCharsCount" layoutX="318.0" layoutY="233.0" text="Forbidden Characters: 0" />
+      <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Settings">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Pane layoutX="111.0" layoutY="14.0">
+                           <children>
+                              <Label layoutX="116.0" text="Search Settings">
+                                 <font>
+                                    <Font name="System Bold" size="26.0" />
+                                 </font>
+                              </Label>
+                              <RadioButton fx:id="delimiterRB" layoutX="81.0" layoutY="48.0" mnemonicParsing="false" selected="true" text="Delimiters">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="SearchSettingsToggle" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="forbiddenCharsRB" layoutX="210.0" layoutY="48.0" mnemonicParsing="false" text="Forbidden Characters" toggleGroup="$SearchSettingsToggle" />
+                              <Button fx:id="addBtn" layoutX="126.0" layoutY="115.0" mnemonicParsing="false" onAction="#addBtn" prefHeight="25.0" prefWidth="59.0" text="Add" />
+                              <Button fx:id="removeBtn" layoutX="228.0" layoutY="115.0" mnemonicParsing="false" onAction="#removeBtn" text="Remove" />
+                              <TextField fx:id="addTextField" layoutX="72.0" layoutY="84.0" prefHeight="25.0" prefWidth="279.0" />
+                              <TextArea fx:id="delimitersTextArea" editable="false" layoutX="40.0" layoutY="209.0" prefHeight="135.0" prefWidth="151.0" />
+                              <TextArea fx:id="forbiddenCharsTextArea" editable="false" layoutX="228.0" layoutY="209.0" prefHeight="135.0" prefWidth="151.0" />
+                              <Label fx:id="delimitersCount" layoutX="40.0" layoutY="192.0" text="Delimiters: 0" />
+                              <Label fx:id="forbiddenCharsCount" layoutX="228.0" layoutY="192.0" text="Forbidden Characters: 0" />
+                           </children>
+                        </Pane>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Test">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="adminSearchTestButton" layoutX="17.0" layoutY="49.0" mnemonicParsing="false" onAction="#adminSearchTestHandler" prefHeight="25.0" prefWidth="54.0" text="Test" />
+                        <Label layoutX="17.0" layoutY="140.0" text="Raw tokens:" />
+                        <TextField fx:id="adminTokenTestEntry" layoutX="81.0" layoutY="49.0" prefHeight="25.0" prefWidth="242.0" />
+                        <TextArea fx:id="adminRawTokensFeild" layoutX="14.0" layoutY="157.0" prefHeight="200.0" prefWidth="150.0" />
+                        <Label fx:id="adminRawTokensLabel" layoutX="82.0" layoutY="141.0" text="0" />
+                        <TextArea fx:id="adminFilteredTokensFeild" layoutX="176.0" layoutY="157.0" prefHeight="200.0" prefWidth="150.0" />
+                        <Label layoutX="176.0" layoutY="140.0" text="Filtered tokens:" />
+                        <Label fx:id="adminFilteredTokensLabel" layoutX="257.0" layoutY="141.0" text="0" />
+                        <Label layoutX="17.0" layoutY="85.0" text="Search string post removal of elligal chars:" />
+                        <TextArea fx:id="adminTestRemovalCharText" layoutX="17.0" layoutY="102.0" prefHeight="38.0" prefWidth="311.0" />
+                        <TextArea fx:id="adminSearchResults" layoutX="335.0" layoutY="102.0" prefHeight="254.0" prefWidth="258.0" />
+                        <Label layoutX="335.0" layoutY="85.0" text="Search results:" />
+                        <Label layoutX="17.0" layoutY="3.0" text="Admin search test GUI">
+                           <font>
+                              <Font size="31.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="335.0" layoutY="8.0" text="Warning:">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="335.0" layoutY="31.0" text="This site is ment for admin setup" />
+                        <Label layoutX="335.0" layoutY="47.0" text="and testing only. For costumer use" />
+                        <Label layoutX="335.0" layoutY="66.0" text="the dedicated search GUI is recommended" />
+                        <Label fx:id="adminSearchresultCount" layoutX="413.0" layoutY="85.0" text="0" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

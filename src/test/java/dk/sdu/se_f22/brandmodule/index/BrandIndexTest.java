@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BrandIndexTest {
 
     @Test
-    void searchBrandIndex() throws SQLException {
+    void searchBrandIndex() {
         Brand knownBrand = new Brand(null, null, null, null, null, null);
         knownBrand.setName("HP");
         knownBrand.setDescription("HP Inc. is an American multinational information technology company headquartered in Palo Alto, California, that develops personal computers (PCs), printers and related supplies, as well as 3D printing solutions.");

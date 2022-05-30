@@ -109,7 +109,7 @@ public class BrandIndex implements IndexInterface {
 
     @Override
     public void indexBrandInformation(Brand brand, List<String> tokens) {
-        if (tokens.size() == 0 || brand == null || brand.getName() == null)
+        if (tokens.size() == 0 || brand == null || brand.getId() == null)
             return;
 
         tokens = new ArrayList<>(tokens);
@@ -117,6 +117,7 @@ public class BrandIndex implements IndexInterface {
 
         List<Integer> tokenIDs = getTokenIDs(tokens);
         mapTokenBrandRelations(brand.getId(), tokenIDs);
+
     }
 
     public void mapTokenBrandRelations(int brandID, List<Integer> tokenIDs){

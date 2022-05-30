@@ -3,6 +3,7 @@ package dk.sdu.se_f22.sortingmodule.scoring;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 
 import java.sql.*;
 import java.time.Instant;
@@ -217,10 +218,7 @@ public class Scoring implements IScoring {
                 case "type" -> statement = connection.prepareStatement("Update scores SET type = ? WHERE id = ?");
                 case "bracket" -> statement = connection.prepareStatement("Update scores SET bracket = ? WHERE id = ?");
                 case "weight" -> statement = connection.prepareStatement("Update scores SET weight = ? WHERE id = ?");
-                default -> {
-                    System.out.println("Column name doesn't exist");
-                    return;
-                }
+                default -> {System.out.print("Column name doesn't exist");return;}
             }
             if (column.equals("bracket")) {
                 statement.setDouble(1,Double.parseDouble((String) newValue));

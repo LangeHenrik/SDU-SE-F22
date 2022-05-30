@@ -37,13 +37,13 @@ public class test {
 
         IScoring scoring = new Scoring();
         //System.out.println(scoring.scoreSort(products));
-        //System.out.println(scoring.readTable());
+        System.out.println(scoring.readTable());
        // scoring.updateRow(16,"1500","bracket");
         //scoring.deleteRow(28);
         //scoring.createRow("price",2000,2);
         //System.out.println(scoring.readTable());
         //System.out.println(scoring.scoreSortPrice(products));
-        products = (List<Product>) scoring.scoreSortPrice(products);
+        //products = (List<Product>) scoring.scoreSortPrice(products);
         //System.out.println(scoring.scoreSortPrice(products));
 
         for (Product product : products) {

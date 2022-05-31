@@ -1,16 +1,25 @@
 package dk.sdu.se_f22.brandmodule.management;
+
 import dk.sdu.se_f22.brandmodule.management.persistence.IPersistence;
 import dk.sdu.se_f22.brandmodule.management.persistence.Persistence;
+import dk.sdu.se_f22.brandmodule.management.services.IIndexingService;
+import dk.sdu.se_f22.brandmodule.management.services.IndexingService;
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bim implements IBim {
-    IPersistence persistence = new Persistence();
+    IPersistence persistence;
+    IIndexingService indexingService;
+
+    public Bim() {
+        persistence = new Persistence();
+        indexingService = new IndexingService();
+    }
 
     @Override
-    public void createBrand(List<Brand>brands){
+    public void createBrand(List<Brand> brands) {
         persistence.addOrUpdateBrands(brands);
     }
 
@@ -32,7 +41,7 @@ public class Bim implements IBim {
     }
 
     @Override
-    public List<Brand> getAllBrands(){
+    public List<Brand> getAllBrands() {
         return persistence.getAllBrands();
     }
 
@@ -51,8 +60,21 @@ public class Bim implements IBim {
     public void setIndexInterval(int indexInterval) {
         persistence.setIndexingInterval(indexInterval);
     }
+
     @Override
-    public int getIndexingInterval(){
+    public int getIndexingInterval() {
         return persistence.getIndexingInterval();
-     }
+    }
+
+    @Override
+    public void seedDatabase() {
+        persistence.seedDatabase();
+    }
+
+    @Override
+    public void startIndexInterval() {
+        indexingService.StartIndexInterval();
+    }
+
+
 }

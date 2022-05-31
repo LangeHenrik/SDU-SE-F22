@@ -4,8 +4,8 @@ import dk.sdu.se_f22.brandmodule.stemming.Stemmer;
 import dk.sdu.se_f22.productmodule.infrastructure.ProductIndexInfrastructure;
 import dk.sdu.se_f22.productmodule.infrastructure.data.TokenParameter;
 import dk.sdu.se_f22.productmodule.irregularwords.IrregularWords;
-import dk.sdu.se_f22.productmodule.management.ProductAttribute;
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.ProductAttribute;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ProductInfIndexImpl implements ProductInfIndex{
         List<String> productData = new ArrayList<>();
         for (ProductAttribute attr : ProductAttribute.values()) {
             String data = baseProduct.get(attr);
-            if (!data.equalsIgnoreCase("unavailable")) {
+            if (data != null) {
                 productData.addAll(List.of(baseProduct.get(attr).split(delimiter)));
             }
         }

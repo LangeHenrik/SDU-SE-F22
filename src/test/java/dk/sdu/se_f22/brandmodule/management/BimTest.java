@@ -70,10 +70,6 @@ class BimTest {
         if (allBrands.size() > 0) {
             assertTrue(allBrands.get(0) instanceof Brand);
         }
-        else {
-            // List can possibly be empty, so we can't test it
-            assertTrue(true);
-        }
     }
 
     @Test

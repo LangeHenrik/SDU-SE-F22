@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.searchmodule.infrastructure;
 
-import dk.sdu.se_f22.productmodule.management.BaseProduct;
+import dk.sdu.se_f22.productmodule.management.domain_persistance.BaseProduct;
 import dk.sdu.se_f22.searchmodule.infrastructure.logger.SearchLogger;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;

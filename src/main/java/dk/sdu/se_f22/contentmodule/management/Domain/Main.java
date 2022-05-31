@@ -14,13 +14,13 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        try {
+        /*try {
 
             Management.Create(001, parsedHTML, 1);
             Management.updateIndexInterval(1000);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 }

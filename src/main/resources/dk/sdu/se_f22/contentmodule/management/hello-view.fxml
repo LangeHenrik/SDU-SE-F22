@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.HTMLEditor?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="847.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.contentmodule.management.UI.HelloController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="847.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.sdu.se_f22.contentmodule.management.UI.HelloController">
     <tabs>
         <Tab text="HTML Editor">
             <content>
@@ -39,41 +39,18 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TableView layoutX="299.0" layoutY="298.0" prefHeight="200.0" prefWidth="200.0">
+                        <TableView fx:id="contentTable" layoutX="25.0" layoutY="45.0" prefHeight="423.0" prefWidth="711.0">
                             <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
+                                <TableColumn fx:id="content_table_id" prefWidth="51.19997978210449" text="Id" />
+                                <TableColumn fx:id="content_table_html" prefWidth="487.99991607666016" text="HTML Dump" />
+                                <TableColumn fx:id="content_table_time" minWidth="4.79998779296875" prefWidth="72.00006103515625" text="Time edited" />
+                                <TableColumn fx:id="content_table_article_number" minWidth="8.0" prefWidth="99.59991455078125" text="Article Number" />
                             </columns>
                         </TableView>
-                        <TableView fx:id="contains_table" layoutX="299.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0">
-                            <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
-                            </columns>
-                        </TableView>
-                        <TableView layoutX="540.0" layoutY="151.0" prefHeight="200.0" prefWidth="200.0">
-                            <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="employees_table" layoutX="33.0" layoutY="298.0" prefHeight="200.0" prefWidth="200.0">
-                            <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="pages_table" layoutX="33.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0">
-                            <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
-                            </columns>
-                        </TableView>
-                        <Text fx:id="log_table" layoutX="631.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="log" />
-                        <Text fx:id="edits_table" layoutX="388.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="edits" />
-                        <Text layoutX="107.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="employee" />
-                        <Text layoutX="117.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pages" />
-                        <Text layoutX="388.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="contains" />
+                        <Text fx:id="edits_table" layoutX="25.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Content table" wrappingWidth="110.60626220703125">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Text>
                     </children></AnchorPane>
             </content>
         </Tab>

@@ -66,6 +66,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
         PreparedStatement insertProducts = connection.prepareStatement("INSERT INTO IndexProducts(sortedIds) VALUES (?)");) {
             for (Product p : products) {
                 insertProducts.setString(1, String.valueOf(p.getUuid()));
+                insertProducts.execute();
             }
         } catch (SQLException e) {
             e.printStackTrace();

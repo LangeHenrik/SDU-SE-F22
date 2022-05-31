@@ -110,16 +110,21 @@ public class HelloController implements Initializable {
     private void insertPrevData() {
         var r = Management.getAllEntries();
         try {
-            while (true){
-                r.next();
-                list.add(new Edit(r.getInt(1), r.getString(2), r.getString(4), r.getInt(3)));
-                if (r.isLast()) {
-                    break;
-                }
+            r.next();
+            if (!r.isLast()) {
+                while (true) {
 
+                    list.add(new Edit(r.getInt(1), r.getString(2), r.getString(4), r.getInt(3)));
+                    if (r.isLast()) {
+                        break;
+                    }
+                    r.next();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+
         }
         System.out.println(list.size());
         contentTable.setItems(list);

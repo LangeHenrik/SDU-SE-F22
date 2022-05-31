@@ -94,7 +94,7 @@ public class HelloController implements Initializable {
     }
 
     private void updateTable(){
-        list.add(new Edit(1,"html","timestamt", "article"));
+        list.add(new Edit(1,"html","timestamp", "article"));
         contentTable.setItems(list);
     }
 

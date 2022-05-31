@@ -18,19 +18,23 @@ import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class Management {
 
-    public static int Create(int contentId, String html, int employeeId) throws SQLException {
-        Scanner s;
-
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("CALL addPage(?, ?, ?)")) {
-            ps.setInt(1, contentId);
-            ps.setString(2, html);
+    public static int Create(int articleNr, String html, int employeeId)  {
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("INSERT INTO content_log (html, article_nr, modified) VALUES (?, ?, NOW()) RETURNING id;" +
+                "INSERT INTO change_log (employee_id) VALUES (?);")) {
+            ps.setInt(2, articleNr);
+            ps.setString(1, html);
             ps.setInt(3, employeeId);
             var res = ps.executeQuery();
             return res.getInt(1);
         } catch (Exception e) {
+
             DBMigration dbm = new DBMigration();
-            dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
-       }
+            try {
+                dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
 
         return 0;
     }
@@ -55,16 +59,7 @@ public class Management {
         }
 
         String placeHolders =  builder.deleteCharAt( builder.length() -1 ).toString();
-        String st = "SELECT html FROM pages WHERE id = (\n" +
-                "    SELECT pages_id\n" +
-                "    FROM contains\n" +
-                "    WHERE log_id = (\n" +
-                "        SELECT log.id\n" +
-                "        FROM log\n" +
-                "        WHERE id IN (" + placeHolders +")\n" +
-                "        ORDER BY timestamp LIMIT ?\n" +
-                "    )\n" +
-                ");";
+        String st = "SELECT html FROM content_log WHERE id IN (?);";
         try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(st)) {
             for (int i = 0; i < ids.length; i++) {
                 ps.setInt(i+1, ids[i]);
@@ -96,16 +91,7 @@ public class Management {
 
     private static ResultSet GetResultSetFromId(int id) {
         try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(
-                "SELECT html FROM pages WHERE id = (\n" +
-                "    SELECT pages_id\n" +
-                "    FROM contains\n" +
-                "    WHERE log_id = (\n" +
-                "        SELECT log.id \n" +
-                "        FROM log \n" +
-                "        WHERE id = ? \n" +
-                "        ORDER BY timestamp FETCH FIRST ROW ONLY\n" +
-                "        )\n" +
-                ");")) {
+                "SELECT html FROM content_log WHERE id = ? ORDER BY modified LIMIT 1")) {
             ps.setInt(1, id);
             return ps.executeQuery();
         }
@@ -113,15 +99,12 @@ public class Management {
         return null;
     }
 
-    public static void Update(int contentId, String html, int employeeId) {
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("CALL addPage(?, ?, ?)")) {
-            ps.setInt(1, contentId);
-            ps.setString(2, html);
-            ps.setInt(3, employeeId);
-            ps.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void Update(int articlenr, String html, int employeeId) {
+        Create(articlenr, html, employeeId);
+    }
+
+    public static void RealUpdate(int htmlid, String html, int employeeId) {
+        //maybe implement this?
     }
 
     public static void updateIndexInterval(long interval) {

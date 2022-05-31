@@ -1,8 +1,3 @@
-create table pages
-(
-    id        serial
-        constraint pages_pk
-            primary key,
-    html      text      not null,
-    timestamp timestamp not null
-);
+INSERT INTO change_log (content_id, employee_id) VALUES (" +
+                "SELECT id FROM content_log WHERE html = ? ORDER BY modified LIMIT 1, ?" +
+                ")"

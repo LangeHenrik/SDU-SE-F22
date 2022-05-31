@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidAttributeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 
@@ -18,19 +19,19 @@ abstract class RangeFilterClass implements RangeFilter{
     private final String DESCRIPTION;
     private final String PRODUCT_ATTRIBUTE;
 
-    public List<String> validAttributes;
+    private final List<String> VALID_ATTRIBUTES;
 
-    public RangeFilterClass(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> validAttributes) {
+    public RangeFilterClass(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> VALID_ATTRIBUTES) {
         this.ID = ID;
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.PRODUCT_ATTRIBUTE = PRODUCT_ATTRIBUTE;
 
-        this.validAttributes = validAttributes;
+        this.VALID_ATTRIBUTES = VALID_ATTRIBUTES;
     }
 
-    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> validAttributes) {
-        this(DEFAULT_ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE, validAttributes);
+    public RangeFilterClass(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, List<String> VALID_ATTRIBUTES) {
+        this(DEFAULT_ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE, VALID_ATTRIBUTES);
     }
 
     /**
@@ -51,9 +52,9 @@ abstract class RangeFilterClass implements RangeFilter{
     abstract Collection<Product> filterList(Collection<Product> inputs);
 
     public Collection<Product> useFilter(Collection<Product> inputs, boolean strict) throws InvalidAttributeException {
-        if (!(validAttributes.contains(this.getProductAttribute()))) {
+        if (!(VALID_ATTRIBUTES.contains(this.getProductAttribute()))) {
             if(strict){
-                throw new InvalidAttributeException(this.getProductAttribute(), validAttributes);
+                throw new InvalidAttributeException(this.getProductAttribute(), VALID_ATTRIBUTES);
             }
             return inputs;
         }
@@ -175,32 +176,32 @@ abstract class RangeFilterClass implements RangeFilter{
     }
 
     @Override
-    public double setUserMin(double userMin) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a double filter");
+    public double setUserMin(double userMin) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a double filter");
     }
 
     @Override
-    public Instant setUserMin(Instant userMin) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a time/Instant filter");
+    public Instant setUserMin(Instant userMin) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a time/Instant filter");
     }
 
     @Override
-    public long setUserMin(long userMin) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a long filter");
+    public long setUserMin(long userMin) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a long filter");
     }
 
     @Override
-    public double setUserMax(double userMax) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a double filter");
+    public double setUserMax(double userMax) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a double filter");
     }
 
     @Override
-    public Instant setUserMax(Instant userMax) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a time/Instant filter");
+    public Instant setUserMax(Instant userMax) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a time/Instant filter");
     }
 
     @Override
-    public long setUserMax(long userMax) throws InvalidFilterTypeException {
-        throw new InvalidFilterTypeException("Not a long filter");
+    public long setUserMax(long userMax) throws IllegalMinMaxException {
+        throw new IllegalMinMaxException("Not a long filter");
     }
 }

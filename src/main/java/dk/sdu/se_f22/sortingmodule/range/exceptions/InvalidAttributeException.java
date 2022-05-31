@@ -6,7 +6,7 @@ import java.util.List;
  * Is thrown when a filter is used to filter a list,
  * but the productAttribute of this filter is not valid.
  */
-public class InvalidAttributeException extends Exception{
+public class InvalidAttributeException extends RangeFilterException{
     /**
      * Will print:<br>
      * "The attribute: " + invalidAttribute + " was invalid. The valid attributes are: " + validAttributes.toString()

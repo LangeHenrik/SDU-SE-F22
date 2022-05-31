@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalMinMaxException;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,15 +11,14 @@ import java.util.List;
 class TimeFilter extends RangeFilterClass {
     private final Instant DB_MIN;
     private final Instant DB_MAX;
-    private Instant userMin;
-    private Instant userMax;
 
-    private static final List<String> validAttributes = List.of(new String[]{"publishedDate", "expirationDate"});
-
+    private final Instant USER_NOT_SET_VALUE = Instant.ofEpochMilli(-Long.MAX_VALUE);
+    private Instant userMin = USER_NOT_SET_VALUE;
+    private Instant userMax = USER_NOT_SET_VALUE;
 
     public TimeFilter(int ID, String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super(ID, NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
-                List.of(new String[]{"ean"}));
+                List.of(new String[]{"publishedDate", "expirationDate"}));
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }
@@ -26,7 +26,7 @@ class TimeFilter extends RangeFilterClass {
 
     public TimeFilter(String NAME, String DESCRIPTION, String PRODUCT_ATTRIBUTE, Instant dbMin, Instant dbMax) {
         super(NAME, DESCRIPTION, PRODUCT_ATTRIBUTE,
-                List.of(new String[]{"ean"}));
+                List.of(new String[]{"publishedDate", "expirationDate"}));
         DB_MIN = dbMin;
         DB_MAX = dbMax;
     }
@@ -95,8 +95,11 @@ class TimeFilter extends RangeFilterClass {
     Collection<Product> filterList(Collection<Product> inputs) {
         // Filter inputs based on min and max value.
         // Only filter and remove the input if it is below min or above max
-        List<Product> filteredResults = new ArrayList<>();
+        if(inputs == null){
+            return null;
+        }
 
+        List<Product> filteredResults = new ArrayList<>();
 
         // loop over all the products in the list and access the correct attribute:
         for (Product productHit : inputs) {
@@ -139,8 +142,10 @@ class TimeFilter extends RangeFilterClass {
      * @return - true if the value is outside the range specified by the filter
      */
     private boolean checkValue(Instant value) {
-        // Perhaps check for nullas well?
-        if (this.userMin != this.userMax) {
+        boolean userMinAndMaxDifferent = this.userMin != this.userMax;
+        boolean userMinAndMaxNotNull = this.userMax != null && this.userMin != null;
+        boolean userMinAndMaxNotDefault = this.userMin != USER_NOT_SET_VALUE && this.userMax != USER_NOT_SET_VALUE;
+        if (userMinAndMaxDifferent && userMinAndMaxNotNull && userMinAndMaxNotDefault ) {
             return value.isBefore(this.userMin) || value.isAfter(this.userMax);
         }
 
@@ -181,14 +186,41 @@ class TimeFilter extends RangeFilterClass {
     }
 
     @Override
-    public Instant setUserMin(Instant userMin) {
+    public Instant setUserMin(Instant userMin) throws IllegalMinMaxException {
+        if (userMin.equals(this.USER_NOT_SET_VALUE)){
+            return userMin;
+        }
+
+        if (userMin.isAfter(userMax) && userMax != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMin' can not be after 'userMax' UserMin: " + userMin + " UserMax: " + userMax);
+        }
+
+        if (userMin.isBefore(DB_MIN) || userMin.isAfter(DB_MAX)) {
+            throw new IllegalMinMaxException("'userMin' can not be before 'DB_MIN' or after 'DB_MAX'. UserMin: " + userMin + " dbMin: " + DB_MIN + " dbMax: " + DB_MAX);
+        }
+
         this.userMin = userMin;
         return this.userMin;
     }
 
     @Override
-    public Instant setUserMax(Instant userMax) {
+    public Instant setUserMax(Instant userMax) throws IllegalMinMaxException {
+        if (userMax.equals(USER_NOT_SET_VALUE)){
+            return USER_NOT_SET_VALUE;
+        }
+
+        if (userMax.isBefore(userMin) && userMin != USER_NOT_SET_VALUE) {
+            throw new IllegalMinMaxException("'userMax' can not be before 'userMin'. UserMin : " + userMin + " userMax: " + userMax);
+        }
+
+        if (userMax.isBefore(DB_MIN) || userMax.isAfter(DB_MAX)) {
+            throw new IllegalMinMaxException("'userMax' can not be before 'DB_MIN' or after 'DB_MAX'. UserMax : " + userMax + " dbMax: " + DB_MAX + " dbMin: " + DB_MIN);
+        }
         this.userMax = userMax;
         return this.userMax;
+    }
+
+    public Instant getUserValueDefault(){
+        return this.USER_NOT_SET_VALUE;
     }
 }

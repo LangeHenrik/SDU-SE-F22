@@ -37,6 +37,15 @@ public class Management {
         return 0;
     }
 
+    public static ResultSet getAllEntries() {
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(
+                "SELECT * FROM content_log")) {
+            return ps.executeQuery();
+        }
+        catch (SQLException e) { e.printStackTrace(); }
+        return null;
+    }
+
     public static String getPageString(int id) throws SQLException {
         var result = GetResultSetFromId(id);
         try {

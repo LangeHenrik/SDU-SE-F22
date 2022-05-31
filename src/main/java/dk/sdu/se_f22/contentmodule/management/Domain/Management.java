@@ -26,17 +26,25 @@ public class Management {
             var res = ps.executeQuery();
             return res.getInt(1);
         } catch (Exception e) {
+            /*
+            DBMigration dbm = new DBMigration();
+            try {
+                dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } */
         }
 
         return 0;
     }
+    static Connection cn;
 
     static Connection connect;
 
     public static ResultSet getAllEntries() {
         try {
-            connect = Database.getDatabase().connection;
-            PreparedStatement ps = connect.prepareStatement("SELECT * FROM content_log");
+            cn = Database.getDatabase().connection;
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM content_log");
              var res = ps.executeQuery();
             return res;
         }

@@ -16,7 +16,7 @@ import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
 import dk.sdu.se_f22.sortingmodule.scoring.IScoring;
-import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 import dk.sdu.se_f22.sortingmodule.scoring.Scoring;
 
 /**

@@ -3,7 +3,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilterCRUD;
-import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 
 import java.time.Instant;
 import java.util.*;

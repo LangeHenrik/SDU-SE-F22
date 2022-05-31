@@ -6,7 +6,7 @@ import java.util.List;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 
 /**
  * Search product, brand and content with range- and category filtering and scoring as well as pagination

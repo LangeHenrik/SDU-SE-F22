@@ -30,7 +30,7 @@ public class Main {
         ids.add(6);
         ids.add(7);
 
-        System.out.println("All products before filtering method:");
+        System.out.println("All products before filtering method (" + demoSearchHit.getProducts().size() + "):");
 
         for (Product foundProduct : demoSearchHit.getProducts()) {
             System.out.println(foundProduct.getCategory() + " - " + foundProduct.getName());
@@ -40,7 +40,7 @@ public class Main {
 
         SearchHits filteredSearchHit = categoryFilter.filterProductsByCategory(demoSearchHit, ids);
 
-        System.out.println("Products found with filtering method:");
+        System.out.println("Products found with filtering method (" + filteredSearchHit.getProducts().size() + "):");
 
         for (Product foundProduct : filteredSearchHit.getProducts()) {
             System.out.println(foundProduct.getCategory() + " - " + foundProduct.getName());

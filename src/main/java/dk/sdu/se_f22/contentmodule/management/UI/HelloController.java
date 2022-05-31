@@ -128,13 +128,13 @@ public class HelloController implements Initializable {
         pagePath.clear();
         pagePath.appendText(htmlFile.getPath());
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         content_table_id.setCellValueFactory(new PropertyValueFactory<Edit, Integer>("id"));
-        content_table_html.setCellValueFactory(new PropertyValueFactory<Edit, String>("string"));
-        content_table_time.setCellValueFactory(new PropertyValueFactory<Edit, String>("string1"));
-        content_table_article_number.setCellValueFactory(new PropertyValueFactory<Edit, String>("string2"));
+        content_table_html.setCellValueFactory(new PropertyValueFactory<Edit, String>("html"));
+        content_table_time.setCellValueFactory(new PropertyValueFactory<Edit, String>("timestamp"));
+        content_table_article_number.setCellValueFactory(new PropertyValueFactory<Edit, String>("articleNr"));
 
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1440);
         valueFactory.setValue((int) Indexing.getInterval());

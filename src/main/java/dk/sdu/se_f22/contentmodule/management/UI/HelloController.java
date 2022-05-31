@@ -61,8 +61,7 @@ public class HelloController implements Initializable {
         Button current_button = (Button) actionEvent.getSource();
         switch (current_button.getText()) {
             case "Publish" -> {
-                updateTable();
-                //saveEdits();
+                saveEdits();
                 break;
             }
             case "Open file" -> {
@@ -82,7 +81,6 @@ public class HelloController implements Initializable {
 
     private void saveEdits() {
         htmlText = editor.getHtmlText();
-        System.out.println(htmlText);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(htmlFile));
             writer.write(htmlText);
@@ -91,10 +89,11 @@ public class HelloController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        updateTable();
     }
 
-    private void updateTable(){
-        list.add(new Edit(1,"html","timestamp", "article"));
+    private void updateTable() {
+        list.add(new Edit(1, "html", "timestamp", "article"));
         contentTable.setItems(list);
     }
 

@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.contentmodule.management.UI;
 
-import dk.sdu.se_f22.contentmodule.management.Data.Indexing;
+import dk.sdu.se_f22.contentmodule.management.Domain.Indexing;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

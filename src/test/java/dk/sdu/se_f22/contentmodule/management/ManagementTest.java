@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.contentmodule.management;
 
-import dk.sdu.se_f22.contentmodule.management.Data.*;
+import dk.sdu.se_f22.contentmodule.management.Domain.*;
 import org.junit.jupiter.api.Test;
 import org.postgresql.util.PSQLException;
 

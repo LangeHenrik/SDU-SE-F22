@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.contentmodule.management.Data;
+package dk.sdu.se_f22.contentmodule.management.Domain;
 
 import java.io.FileWriter;
 import java.io.IOException;

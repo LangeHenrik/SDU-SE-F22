@@ -51,6 +51,7 @@ public class DatabaseAPI {
             insertStatement.setString(1, itemName);
             insertStatement.setInt(2, superId);
             insertStatement.execute();
+            insertStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,6 +72,7 @@ public class DatabaseAPI {
             updateStatement.setInt(1, superId);
             updateStatement.setInt(2, id);
             updateStatement.execute();
+            updateStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,6 +90,7 @@ public class DatabaseAPI {
             updateStatement.setString(1, name);
             updateStatement.setInt(2, id);
             updateStatement.execute();
+            updateStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,7 +118,8 @@ public class DatabaseAPI {
                     }
                 }
             }
-
+            quarryStatement.close();
+            quarryResultSet.close();
             return items.toArray(new Item[items.size()]);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,6 +134,7 @@ public class DatabaseAPI {
             deleteStatement = connection.prepareStatement("DELETE FROM onewaysynonyms WHERE id=?");
             deleteStatement.setInt(1, id);
             deleteStatement.execute();
+            deleteStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -151,10 +156,11 @@ public class DatabaseAPI {
             while (result.next()) {
                 id = result.getInt(1);
             }
+            statement.close();
+            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return id;
     }
 }

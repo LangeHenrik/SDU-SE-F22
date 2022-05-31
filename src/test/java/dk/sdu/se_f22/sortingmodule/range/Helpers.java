@@ -16,7 +16,9 @@ public class Helpers {
     public static void resetDB(){
         try(Connection connection = DBConnection.getPooledConnection()) {
             System.out.println("Resetting range database");
-            new DBMigration().runSQLFromFile(connection, "src/main/resources/dk/sdu/se_f22/sharedlibrary/db/migrations/3.3_modifiedRangeFilters.sql");
+            DBMigration runner = new DBMigration();
+            runner.runSQLFromFile(connection, "src/test/resources/dk/sdu/se_f22/sortingmodule/range/sql_sqripts/5.3_range_clear_table_data.sql");
+            runner.runSQLFromFile(connection, "src/test/resources/dk/sdu/se_f22/sortingmodule/range/sql_sqripts/5.4_range_insert_table_default_data.sql");
         } catch (SQLException e) {
             System.out.println("error when resetting database state, pooled connection threw sql exception:");
             e.printStackTrace();
@@ -57,6 +59,9 @@ public class Helpers {
         List<Product> mockResults = new ArrayList<>();
 
         for (String productString : products) {
+            if(productString.isEmpty()){
+                continue;
+            }
             String[] attributes = productString.split(",", -1);
 
             // We choose to create the product this way,
@@ -72,7 +77,17 @@ public class Helpers {
             baseProduct.set(ProductAttribute.NAME, attributes[7]);
             baseProduct.set(ProductAttribute.DESCRIPTION, attributes[8]);
             // optional attributes
+            if(attributes[9].equals("unavailable")){
+                attributes[9] = null;
+            }
+            if(attributes[10].equals("unavailable")){
+                attributes[10] = null;
+            }
+            if(attributes[11].equals("unavailable")){
+                attributes[11] = null;
+            }
             baseProduct.set(ProductAttribute.SIZE, attributes[9]);
+
             baseProduct.set(ProductAttribute.CLOCKSPEED, attributes[10]);
             baseProduct.set(ProductAttribute.WEIGHT, attributes[11]);
 

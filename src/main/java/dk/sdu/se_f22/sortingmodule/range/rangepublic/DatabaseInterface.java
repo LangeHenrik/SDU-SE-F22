@@ -11,7 +11,7 @@ import java.util.List;
  * <br>
  * It defines the methods, that our database class must implement to allow for performing CRUD operations.
  */
-public interface DatabaseInterface {
+interface DatabaseInterface {
     RangeFilter create(RangeFilter filterToSaveInDB) throws InvalidFilterTypeException, SQLException;
 
     RangeFilter read(int id) throws UnknownFilterTypeException;

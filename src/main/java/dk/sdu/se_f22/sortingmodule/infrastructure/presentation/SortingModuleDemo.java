@@ -1,9 +1,9 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.presentation;
 
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModule;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModuleImpl;
-import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 
 public class SortingModuleDemo {
 

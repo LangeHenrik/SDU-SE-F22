@@ -19,7 +19,7 @@ import dk.sdu.se_f22.sortingmodule.category.Category;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModule;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SortingModuleImpl;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.RangeFilter;
-import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

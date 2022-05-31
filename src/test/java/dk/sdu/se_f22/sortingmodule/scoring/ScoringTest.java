@@ -3,32 +3,43 @@ package dk.sdu.se_f22.sortingmodule.scoring;
 import dk.sdu.se_f22.sharedlibrary.SearchHits;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.models.Product;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Stream;
 
-import static dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType.ALL;
+import static dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ScoringTest {
-    Scoring scoring = new Scoring();
-    ArrayList<Product> products;
-    Product product1 = new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-08-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product2 = new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-07-29T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product3 = new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-11T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product4 = new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product5 = new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product6 = new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product7 = new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product8 = new Product(new UUID(63,31),1.2,new ArrayList<>(),0,3050,Instant.parse("2018-01-09T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product9 = new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-31T10:15:30.00Z"),null, null, null, null,null,0,0);
-    Product product10 = new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Scoring scoring;
+    private final ArrayList<Product> products;
+    private final Product product1 = new Product(new UUID(63,31),3.9,new ArrayList<>(Arrays.asList(new String[10])),0,1500, Instant.parse("2018-08-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product2 = new Product(new UUID(63,31),3.5,new ArrayList<>(Arrays.asList(new String[29])),0,2000,Instant.parse("2021-07-29T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product3 = new Product(new UUID(63,31),2.2,new ArrayList<>(Arrays.asList(new String[1])),0,3000,Instant.parse("2020-04-11T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product4 = new Product(new UUID(63,31),4.2,new ArrayList<>(Arrays.asList(new String[7])),0,2500,Instant.parse("2019-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product5 = new Product(new UUID(63,31),2.7,new ArrayList<>(Arrays.asList(new String[17])),0,4500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product6 = new Product(new UUID(63,31),2.9,new ArrayList<>(Arrays.asList(new String[2])),0,16500, Instant.parse("2018-07-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product7 = new Product(new UUID(63,31),2.5,new ArrayList<>(Arrays.asList(new String[19])),0,2340,Instant.parse("2021-03-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product8 = new Product(new UUID(63,31),1.2,new ArrayList<>(),0,3050,Instant.parse("2018-01-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product9 = new Product(new UUID(63,31),3.2,new ArrayList<>(Arrays.asList(new String[7])),0,2576,Instant.parse("2019-12-31T10:15:30.00Z"),null, null, null, null,null,0,0);
+    private final Product product10 = new Product(new UUID(63,31),4.7,new ArrayList<>(Arrays.asList(new String[100])),0,5500,Instant.parse("2023-04-09T10:15:30.00Z"),null, null, null, null,null,0,0);
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
 
     {
+        scoring = new Scoring();
         products = new ArrayList<>();
         products.add(product1);
         products.add(product2);
@@ -81,33 +92,33 @@ class ScoringTest {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        System.setOut(new PrintStream(outContent));
     }
-    //Temporary only here for main method in scoring package
+
     @AfterAll
     void tryAgain() {
         setup();
+        System.setOut(originalOut);
     }
 
-    @Test
     @Order(1)
-    void scoreSort() {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("generateData")
+    void scoreSort(ScoreSortType scoreSortType, List<Product> controlProducts) {
         SearchHits searchHits = new SearchHits();
         searchHits.setProducts(products);
-        scoring.scoreSort(searchHits, ALL);
+        scoring.scoreSort(searchHits, scoreSortType);
+        assertEquals(controlProducts,searchHits.getProducts());
+    }
 
-        List<Product> controlProducts = new ArrayList<>();
-        controlProducts.add(product2);
-        controlProducts.add(product10);
-        controlProducts.add(product5);
-        controlProducts.add(product7);
-        controlProducts.add(product9);
-        controlProducts.add(product1);
-        controlProducts.add(product3);
-        controlProducts.add(product4);
-        controlProducts.add(product6);
-        controlProducts.add(product8);
-
-        assertEquals(searchHits.getProducts(),controlProducts);
+    Stream<Arguments> generateData() {
+        return Stream.of(
+                Arguments.of(ALL, Arrays.asList(product2,product10,product5,product7,product9,product1,product3,product4,product6,product8)),
+                Arguments.of(PRICE, Arrays.asList(product1,product2,product3,product4,product7,product9,product8,product5,product6,product10)),
+                Arguments.of(REVIEW, Arrays.asList(product10,product4,product1,product2,product5,product6,product9,product3,product7,product8)),
+                Arguments.of(STOCK, Arrays.asList(product2,product10,product5,product7,product1,product4,product9,product3,product6,product8)),
+                Arguments.of(DATE, Arrays.asList(product2,product5,product10,product7,product3,product9,product1,product4,product6,product8))
+        );
     }
 
     @Test
@@ -291,12 +302,11 @@ class ScoringTest {
                 """);
     }
 
-    @Test
     @Order(10)
-    void updateRow() {
-        double newValue = 1700;
-        int id = 21;
-        scoring.updateRow(id,String.valueOf(newValue),"bracket");
+    @ParameterizedTest(name = "{2}: {0} {1}")
+    @MethodSource("generateDataUpdateRow")
+    void updateRow(int id, Object newValue, String column) {
+        scoring.updateRow(id, newValue, column);
 
         try (var connection = DBConnection.getPooledConnection()) {
             var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = ?");
@@ -304,13 +314,26 @@ class ScoringTest {
             var sqlReturnValues = statement.executeQuery();
 
             while (sqlReturnValues.next()) {
-                assertEquals(sqlReturnValues.getDouble(3),newValue);
+                switch (column) {
+                    case "bracket" -> assertEquals(sqlReturnValues.getDouble(3), Double.parseDouble((String) newValue));
+                    case "type" -> assertEquals(sqlReturnValues.getString(2), newValue);
+                    case "weight" -> assertEquals(sqlReturnValues.getInt(4), Integer.parseInt((String) newValue));
+                    default -> assertEquals("Column name doesn't exist", outContent.toString());}
             }
             statement.close();
             sqlReturnValues.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    Stream<Arguments> generateDataUpdateRow() {
+        return Stream.of(
+                Arguments.of(20,"1700.0","bracket"),
+                Arguments.of(20,"date","type"),
+                Arguments.of(20,"2","weight"),
+                Arguments.of(20,"2","weght")
+        );
     }
 }
 

@@ -3,7 +3,7 @@ package dk.sdu.se_f22.sortingmodule.infrastructure.data;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sortingmodule.infrastructure.domain.SearchQuery;
 import dk.sdu.se_f22.sharedlibrary.utils.Color;
-import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

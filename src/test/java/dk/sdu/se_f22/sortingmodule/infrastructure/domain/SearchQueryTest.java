@@ -1,6 +1,6 @@
 package dk.sdu.se_f22.sortingmodule.infrastructure.domain;
 
-import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sharedlibrary.utils.ScoreSortType;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

@@ -14,8 +14,8 @@ public class OneWayImplementation implements OneWayInterface {
     private ItemCatalog itemCatalog;
 
     public OneWayImplementation() {
-        this.itemCatalog = new ItemCatalog(getDatabaseItems());
         DatabaseAPI.initializeTable();
+        this.itemCatalog = new ItemCatalog(getDatabaseItems());
     }
 
 

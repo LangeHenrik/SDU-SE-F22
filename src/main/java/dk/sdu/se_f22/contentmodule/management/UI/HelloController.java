@@ -106,9 +106,8 @@ public class HelloController implements Initializable {
     private void editFile() {
         try {
             Scanner s = new Scanner(htmlFile);
-            while (s.hasNext()) {
+            while (s.hasNext())
                 htmlText += s.nextLine();
-            }
             editor.setHtmlText(htmlText);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -22,14 +22,19 @@ public class Main {
                         " 1280 x 800 pixels Lenovo ThinkPad T410. " +
                         "Display diagonal: 35.8 cm (14.1\"), Display resolution: 1280 x 800 pixels","12",52,
                 1);
-        p.createProduct(product);
-        List<Product> products = p.getProducts();
+        //p.createProduct(product);
+        List<Product> products = new ArrayList<>();
+        List<String> searchTokens = new ArrayList<>();
+        searchTokens.add("Lenovo");
+        products.add(product);
+        List<Product> indexedProducts = p.searchProducts(products, searchTokens);
         for (Product product1 :
-                products) {
+                indexedProducts) {
             System.out.println(product1);
+            System.out.println(product1.getHitNum());
         }
 
-        p.createSearchProduct(products);
+        //p.createSearchProduct(products);
 
     }
 }

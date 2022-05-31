@@ -38,12 +38,12 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
 
     // Method for finding amount of hits within a product by a token
     public List<Product> searchProducts(List<Product> products, List<String> tokens) {
-
+        List<Product> output = new ArrayList<>();
         for(Product p : products){
             String[] categoryWords = p.getCategory().toLowerCase().split("/");
             String[] nameWords = p.getName().toLowerCase().split(" ");
             String[] descriptionWords = p.getDescription().toLowerCase().split(" ");
-
+            p.setHitNum(0);
             int totalHits = 0;
 
             for(String s : tokens){
@@ -52,9 +52,9 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
             }
 
             p.setHitNum(totalHits);
-            searchedList.add(p);
+            output.add(p);
         }
-        return searchedList;
+        return output;
 
     }
     // Method for indexing products depending on amount of search hits
@@ -77,8 +77,8 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     public int findHits(String[] info, String token){
         int output = 0;
         for(String i : info){
-            if(i == token){
-                output++;
+            if(i.equals(token)){
+                output += 1;
             }
         }
         return output;

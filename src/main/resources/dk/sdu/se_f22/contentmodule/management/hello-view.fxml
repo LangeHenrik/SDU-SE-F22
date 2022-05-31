@@ -39,12 +39,12 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TableView fx:id="contentTable" layoutX="25.0" layoutY="45.0" prefHeight="423.0" prefWidth="711.0">
+                        <TableView fx:id="contentTable" layoutX="25.0" layoutY="45.0" prefHeight="423.0" prefWidth="800.0">
                             <columns>
                                 <TableColumn fx:id="content_table_id" prefWidth="51.19997978210449" text="Id" />
                                 <TableColumn fx:id="content_table_html" prefWidth="487.99991607666016" text="HTML Dump" />
-                                <TableColumn fx:id="content_table_time" minWidth="4.79998779296875" prefWidth="72.00006103515625" text="Time edited" />
                                 <TableColumn fx:id="content_table_article_number" minWidth="8.0" prefWidth="99.59991455078125" text="Article Number" />
+                                <TableColumn fx:id="content_table_time" minWidth="18.79998779296875" prefWidth="160.0" text="Time edited" />
                             </columns>
                         </TableView>
                         <Text fx:id="edits_table" layoutX="25.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Content table" wrappingWidth="110.60626220703125">

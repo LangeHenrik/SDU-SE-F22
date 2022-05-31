@@ -4,9 +4,9 @@ public class Edit {
     private int id;
     private String html;
     private String timestamp;
-    private String articleNr;
+    private int articleNr;
 
-    Edit(int id,String html, String timestamp, String articleNr){
+    Edit(int id, String html, String timestamp, int articleNr){
         this.id = id;
         this.html = html;
         this.timestamp = timestamp;
@@ -25,7 +25,7 @@ public class Edit {
         return timestamp;
     }
 
-    public String getArticleNr() {
+    public int getArticleNr() {
         return articleNr;
     }
 }

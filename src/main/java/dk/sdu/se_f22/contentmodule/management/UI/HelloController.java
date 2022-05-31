@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class HelloController implements Initializable {
     private TableView<Edit> contentTable;
 
     @FXML
-    private TableColumn<Edit, String> content_table_article_number;
+    private TableColumn<Edit, Integer> content_table_article_number;
 
     @FXML
     private TableColumn<Edit, String> content_table_html;
@@ -93,17 +94,35 @@ public class HelloController implements Initializable {
         sendToDatabase(htmlText);
         updateTable(htmlText);
     }
-    private void sendToDatabase(String htmlText){
-        Management.Create(11223344,htmlText,0);
+
+    private void sendToDatabase(String htmlText) {
+        Management.Create(11223344, htmlText, 0);
     }
 
     private void updateTable(String Html) {
-        list.add(new Edit(1, Html, "Timestamp", "article"));
-        contentTable.setItems(list);
-    }
 
-    private void insertPrevData(){
-        //
+        Management.Create(11223344, Html, 0);
+        var r = Management.getAllEntries();
+        list.clear();
+        insertPrevData();
+}
+
+    private void insertPrevData() {
+        var r = Management.getAllEntries();
+        try {
+            while (true){
+                r.next();
+                list.add(new Edit(r.getInt(1), r.getString(2), r.getString(4), r.getInt(3)));
+                if (r.isLast()) {
+                    break;
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(list.size());
+        contentTable.setItems(list);
     }
 
     private void indexInterval() {
@@ -134,12 +153,13 @@ public class HelloController implements Initializable {
         content_table_id.setCellValueFactory(new PropertyValueFactory<Edit, Integer>("id"));
         content_table_html.setCellValueFactory(new PropertyValueFactory<Edit, String>("html"));
         content_table_time.setCellValueFactory(new PropertyValueFactory<Edit, String>("timestamp"));
-        content_table_article_number.setCellValueFactory(new PropertyValueFactory<Edit, String>("articleNr"));
+        content_table_article_number.setCellValueFactory(new PropertyValueFactory<Edit, Integer>("articleNr"));
 
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1440);
         valueFactory.setValue((int) Indexing.getInterval());
         interval_counter.setValueFactory(valueFactory);
         interval = interval_counter.getValue() * 60 * 1000;
+        insertPrevData();
     }
 }
 

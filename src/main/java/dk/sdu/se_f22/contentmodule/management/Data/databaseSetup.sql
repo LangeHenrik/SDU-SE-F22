@@ -17,3 +17,5 @@ CREATE TABLE change_Log
     content_id  serial NOT NULL REFERENCES content_Log (id),
     employee_id integer NOT NULL REFERENCES employee_Table (id)
 );
+
+INSERT INTO employee_Table (ID, EMPLOYEE_NAME) VALUES (0, 'Holly')

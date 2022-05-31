@@ -1,7 +1,11 @@
 package dk.sdu.se_f22.contentmodule.management.Domain;
 
+import dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing.ContentInfrastructure;
+import dk.sdu.se_f22.contentmodule.management.UI.Edit;
+
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +27,20 @@ public class Indexing {
             String text = "New index update: "+ interval + " at: "+ new Date();
             myWriter.write(text);
             myWriter.close();
+            var r = Management.getAllEntries();
+            var cont = new ContentInfrastructure();
+            try {
+                while (true){
+                    r.next();
+                    cont.updateHTMLSite(r.getInt(1),r.getString(2));
+                    if (r.isLast()) {
+                        break;
+                    }
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

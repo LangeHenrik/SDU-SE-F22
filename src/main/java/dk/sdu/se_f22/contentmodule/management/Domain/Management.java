@@ -1,10 +1,12 @@
 package dk.sdu.se_f22.contentmodule.management.Domain;
 
+import dk.sdu.se_f22.contentmodule.management.Data.Database;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,22 +27,25 @@ public class Management {
             var res = ps.executeQuery();
             return res.getInt(1);
         } catch (Exception e) {
-
+            /*
             DBMigration dbm = new DBMigration();
             try {
                 dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
             } catch (SQLException ex) {
                 ex.printStackTrace();
-            }
+            } */
         }
 
         return 0;
     }
+    static Connection cn;
 
     public static ResultSet getAllEntries() {
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(
-                "SELECT * FROM content_log")) {
-            return ps.executeQuery();
+        try {
+            cn = Database.getDatabase().connection;
+            PreparedStatement ps = cn.prepareStatement("SELECT * FROM content_log");
+             var res = ps.executeQuery();
+            return res;
         }
         catch (SQLException e) { e.printStackTrace(); }
         return null;

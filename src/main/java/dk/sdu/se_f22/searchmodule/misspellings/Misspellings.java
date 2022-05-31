@@ -112,7 +112,7 @@ public class Misspellings implements DatabaseOperator {
         }
 
         if(oldMisspelling.isEmpty() || newMisspelling.isEmpty()){
-            System.out.println("The misspelling to delete must not be blank.");
+            System.out.println("The misspelling to update must not be blank.");
             return false;
         }
 

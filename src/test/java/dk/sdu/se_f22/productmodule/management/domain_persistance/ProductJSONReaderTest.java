@@ -1,4 +1,4 @@
-package dk.sdu.se_f22.productmodule.management;
+package dk.sdu.se_f22.productmodule.management.domain_persistance;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JSONReaderTest {
-    private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/products.json");
+class ProductJSONReaderTest {
+    private static ProductJSONReader reader = new ProductJSONReader("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/products.json");
     
     @Test
     void read() {
@@ -44,5 +44,14 @@ class JSONReaderTest {
     
     @Test
     void testWrite() {
+    }
+    
+    @Test
+    void validate() {
+        assertTrue(reader.validate("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/products.json"));
+        assertFalse(reader.validate("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/prodadsucts.json"));
+        assertFalse(reader.validate("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/empty.json"));
+        assertTrue(reader.validate("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/cheese.json"));
+        assertFalse(reader.validate("src/test/resources/dk/sdu/se_f22/productmodule/management/domain_persistance/config.txt"));
     }
 }

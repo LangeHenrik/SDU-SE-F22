@@ -1,0 +1,1 @@
+ALTER TABLE sorting_query_categories RENAME COLUMN catergory_id TO category_id

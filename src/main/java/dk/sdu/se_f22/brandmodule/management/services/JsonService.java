@@ -1,4 +1,5 @@
 package dk.sdu.se_f22.brandmodule.management.services;
+
 import dk.sdu.se_f22.sharedlibrary.models.Brand;
 
 import org.json.simple.JSONArray;
@@ -26,16 +27,16 @@ public class JsonService implements IJsonService {
             // List of brands that will be returned
             ArrayList<Brand> brands = new ArrayList<>();
 
-            while(keys.hasNext()) {
+            while (keys.hasNext()) {
                 var name = keys.next();
-                JSONObject properties =  (JSONObject) jo.get(name);
+                JSONObject properties = (JSONObject) jo.get(name);
 
                 // Build product array
                 JSONArray objs = (JSONArray) properties.get("products");
                 Iterator<String> iterator = objs.iterator();
 
                 ArrayList<String> products = new ArrayList<>();
-                iterator.forEachRemaining(p -> products.add(p.toString()));
+                iterator.forEachRemaining(p -> products.add(p));
 
                 Brand brand = new Brand(
                         null,
@@ -45,8 +46,6 @@ public class JsonService implements IJsonService {
                         properties.get("headquarters").toString(),
                         products
                 );
-
-
                 // Add brand to list of brands
                 brands.add(brand);
             }
@@ -58,7 +57,6 @@ public class JsonService implements IJsonService {
         } catch (ParseException e) {
             System.out.println("ParseException during JSON parsing.");
         }
-
         return null;
     }
 }

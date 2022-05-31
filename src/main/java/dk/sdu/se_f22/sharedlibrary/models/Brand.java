@@ -105,4 +105,11 @@ public class Brand {
                 ", products=" + products +
                 '}';
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        Brand o = (Brand) obj;
+        return this.name.equals(o.name);
+    }
 }

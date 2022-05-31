@@ -14,19 +14,27 @@ public class OneWayImplementation implements OneWayInterface {
     private ItemCatalog itemCatalog;
 
     public OneWayImplementation() {
-        this.itemCatalog = new ItemCatalog(getDatabaseItems());
         DatabaseAPI.initializeTable();
+        this.itemCatalog = new ItemCatalog(getDatabaseItems());
     }
+
+
 
     @Override
     public ArrayList<String> filter(ArrayList<String> tokens) throws NullPointerException {
-        int length = tokens.size();
+
+        if (tokens==null || tokens.isEmpty())throw new NullPointerException("No tokens have been give");
+        int length= tokens.size();
+
         LinkedList<Item> items;
         for (int i = 0; i < length; i++) {
             try {
                 items = (this.itemCatalog.oneWaySynonymStrings(tokens.get(i)));
+
                 for (Item item : items) {
-                    tokens.add(item.getName());
+                    if (!tokens.contains(item.getName())) {
+                        tokens.add(item.getName());
+                    }
                 }
             } catch (notFoundException e) {
                 System.out.println(e.getMessage());
@@ -35,7 +43,24 @@ public class OneWayImplementation implements OneWayInterface {
         return tokens;
     }
 
-    public Item[] getDatabaseItems() {
+    public static void main(String[] args) {
+        String name = "root";
+        String superItem = "root";
+        OneWayImplementation oneWayImplementation = new OneWayImplementation();
+        oneWayImplementation.addItem(name, superItem);
+
+        name = "1";
+        oneWayImplementation.addItem(name, superItem);
+
+        name = "TEST";
+        superItem = "ÆØÅ";
+        oneWayImplementation.addItem(name, superItem);
+
+        superItem = "root";
+        oneWayImplementation.addItem(name, superItem);
+    }
+
+    private Item[] getDatabaseItems() {
         Item[] arr = DatabaseAPI.readEntireDB();
         if (arr == null) {
             System.out.println("Could not read from the database");

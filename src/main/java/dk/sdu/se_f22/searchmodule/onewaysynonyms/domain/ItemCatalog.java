@@ -16,18 +16,6 @@ public class ItemCatalog{
     }
 
     //Methods
-    public void addITem(Item item){
-        catalog.add(item);
-    }
-
-    public boolean removeItem(Item item){
-        return catalog.remove(item);
-    }
-
-    public LinkedList<Item> getCatalog() {
-        return catalog;
-    }
-
     public int containsItem(String s){
         int count =0;
         for (Item item:catalog) {
@@ -43,10 +31,14 @@ public class ItemCatalog{
     }
 
     public LinkedList<Item> oneWaySynonymStrings(String string) throws notFoundException {
+        LinkedList<Item> subItems = new LinkedList<>();
         for(Item item : catalog) {
-            if(item.getName().equals(string)){
-                return item.getSubItems();
+            if(item.getName().equalsIgnoreCase(string)){
+                subItems.addAll(item.getSubItems());
             }
+        }
+        if (subItems.size()!=0){
+            return subItems;
         }
         throw new notFoundException("Item not found in database.");
     }

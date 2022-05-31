@@ -1,12 +1,10 @@
-package dk.sdu.se_f22.contentmodule.management.Data;
+package dk.sdu.se_f22.contentmodule.management.Domain;
 
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import dk.sdu.se_f22.sharedlibrary.db.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

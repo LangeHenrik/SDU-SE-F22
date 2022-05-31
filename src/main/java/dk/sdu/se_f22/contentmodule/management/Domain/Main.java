@@ -1,5 +1,4 @@
 package dk.sdu.se_f22.contentmodule.management.Domain;
-import dk.sdu.se_f22.contentmodule.management.Data.*;
 
 import java.io.IOException;
 import java.sql.SQLException;

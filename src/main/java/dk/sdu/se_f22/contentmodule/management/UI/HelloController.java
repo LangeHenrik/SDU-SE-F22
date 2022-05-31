@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.contentmodule.management.UI;
 
 import dk.sdu.se_f22.contentmodule.management.Domain.Indexing;
+import dk.sdu.se_f22.contentmodule.management.Domain.Management;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 
@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -89,17 +90,25 @@ public class HelloController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        updateTable();
+        sendToDatabase(htmlText);
+        updateTable(htmlText);
+    }
+    private void sendToDatabase(String htmlText){
+        Management.Create(11223344,htmlText,0);
     }
 
-    private void updateTable() {
-        list.add(new Edit(1, "html", "timestamp", "article"));
+    private void updateTable(String Html) {
+        list.add(new Edit(1, Html, "Timestamp", "article"));
         contentTable.setItems(list);
+    }
+
+    private void insertPrevData(){
+        //
     }
 
     private void indexInterval() {
         System.out.println(interval);
-        //Management.updateIndexInterval()
+        Management.updateIndexInterval(interval);
     }
 
     private void editFile() {
@@ -119,7 +128,7 @@ public class HelloController implements Initializable {
         pagePath.clear();
         pagePath.appendText(htmlFile.getPath());
     }
-
+    
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         content_table_id.setCellValueFactory(new PropertyValueFactory<Edit, Integer>("id"));

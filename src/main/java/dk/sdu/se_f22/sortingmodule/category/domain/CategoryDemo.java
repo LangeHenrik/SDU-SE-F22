@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Main {
+public class CategoryDemo {
 
     public static void main(String[] args) {
         CategoryCRUDInterface categoryCRUD = new CategoryCRUD();

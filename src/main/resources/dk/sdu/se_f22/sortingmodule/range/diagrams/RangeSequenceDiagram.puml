@@ -1,0 +1,50 @@
+@startuml
+title Sequence diagram of necessary steps to use a filter for searching
+skinparam actorStyle awesome
+
+Actor User as user
+activate user
+participant Infrastructure as infra
+box "RangeModule (SOM-4)" #b5b1b141
+participant RangeFilterCRUDInterface as crudi
+participant DatabaseInterface as dbi
+participant RangeFilter as rfi
+participant RangeFilterFilterResults as filterResults
+
+end box
+
+user -> infra : open page?
+activate infra
+infra -> crudi : readAll()
+activate crudi
+crudi -> dbi : readAllFilters()
+activate dbi
+create rfi
+dbi -> rfi : New
+activate rfi
+'note right of dbi: Creates instances of RangeFilter\n based on the filters retrieved from the DB
+dbi --> crudi:  List<RangeFilter> allFilters
+deactivate dbi
+crudi --> infra : List<RangeFilter> allFilters
+deactivate crudi
+infra --> user : Page with all filters
+' could be better ^
+
+group loop [While user is still on page]
+
+group alt [User wants to customize RangeFilter min or max from the list]
+    user -> infra : set user min/max of the selected RangeFilter from the list
+    infra -> rfi : setUserMin(value)
+    rfi --> infra : value
+'    infra -> user : New value used
+end group
+
+user -> infra : Search using filters
+infra -> filterResults : filterResults(SearchHits searchHits, List<RangeFilter> rangeFilters)
+activate filterResults
+
+return SearchHits searchHits
+infra --> user : filtered list of products
+
+end group
+@enduml

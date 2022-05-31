@@ -1,45 +1,75 @@
 package dk.sdu.se_f22.sortingmodule.range.rangepublic;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@Execution(ExecutionMode.CONCURRENT)
-// Remember to check whether concurrent has a detrimental impact on performance
 class RangeFilterClassTest {
-    @Test
-    @Disabled("not written yet")
-    void testEquals() {
-        // This test should be split up into many tests to test each step/level of the equals method
+    @Nested
+    @DisplayName("Non-matching dummy filters should not be equal")
+    class nonMatchingEqualsTests {
 
-        // Here follows an overview of the necessary tests:
+        @ParameterizedTest
+        @DisplayName("Dummy filter and ordinary object should not be equal")
+        @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
+        void dummyFilterAndObject(int id, String name, String description, String productAttribute) {
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            Object o = new Object();
+            assertNotEquals(rangeFilterClassDummyFilter, o);
+        }
 
-        // For non-matching tests, all other attributes should be equal
+        @ParameterizedTest(name = "{0}" + "+1" + ", {1}, {2}, {3}")
+        @DisplayName("Dummy filters with different ids should not be equal")
+        @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
+        void dummyFiltersWithDifferentIds(int id, String name, String description, String productAttribute) {
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            RangeFilterClass rangeFilterClassDummyFilterWithDifferentIds = new RangeFilterClassDummyFilter(id + 1, name, description, productAttribute);
+            assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentIds);
+        }
 
-        // Non-matching filters:
-        // A filter and an instance of an ordinary Object should not equal
-        // two filters with different ids, should not equal
-        // two filters with different names should not equal
-        // two filters with different descriptions should not equal
-        // two filters looking at different product attributes
+        @ParameterizedTest(name = "{0}, {1}=" + "diff" + ", {2}, {3}")
+        @DisplayName("Dummy filters with different names should not be equal")
+        @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
+        void dummyFiltersWithDifferentNames(int id, String name, String description, String productAttribute) {
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilterWithDifferentNames = new RangeFilterClassDummyFilter(id, name + "diff", description, productAttribute);
+            assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentNames);
+        }
 
-        // In specific classes:
-        // Different filter types with same attributes
-        // DBMin differs
-        // DBMax differs
-        // UserMin differs
-        // USerMax differs
+        @ParameterizedTest(name = "{0}, {1}, {2}=" + "diff" + ", {3}")
+        @DisplayName("Dummy filters with different descriptions should not be equal")
+        @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
+        void dummyFiltersWithDifferentDescriptions(int id, String name, String description, String productAttribute) {
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilterWithDifferentDescriptions = new RangeFilterClassDummyFilter(id, name, description + "diff", productAttribute);
+            assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentDescriptions);
+        }
 
+        @ParameterizedTest(name = "{0}, {1}, {2}, {3}=" + " diff")
+        @DisplayName("Dummy filters with different product attributes should not be equal")
+        @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
+        void dummyFiltersWithDifferentProductAttributes(int id, String name, String description, String productAttribute) {
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilterWithDifferentProductAttribute = new RangeFilterClassDummyFilter(id, name, description, productAttribute + "diff");
+            assertNotEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterWithDifferentProductAttribute);
+        }
+    }
 
-        // Matching filters:
-        // Maybe we should create an implementation,
-        // which inherits from RangeFilterClass to test if equals works,
-        // if the two filters match
-
-        // Specific filter classes
-        // Test each type for matching filters
+    @Nested
+    @DisplayName("Matching dummy filters should be equal")
+    class matchingEqualsTests {
+        @ParameterizedTest(name = "{0}, {1}, {2}, {3}")
+        @DisplayName("Matching dummy filters should be equal")
+        @CsvFileSource(resources = "DummyFilter.csv", numLinesToSkip = 1)
+        void dummyFiltersThatMatch(int id, String name, String description, String productAttribute) {
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilter = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            RangeFilterClassDummyFilter rangeFilterClassDummyFilterMatching = new RangeFilterClassDummyFilter(id, name, description, productAttribute);
+            assertEquals(rangeFilterClassDummyFilter, rangeFilterClassDummyFilterMatching);
+        }
     }
 }
+
+

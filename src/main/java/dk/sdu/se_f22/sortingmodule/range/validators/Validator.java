@@ -18,11 +18,15 @@ public class Validator {
 
 
     public static void NoSpecialCharacters(String s) throws InvalidFilterException{
-        String[] characters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
+        String[] specialCharacters = {"%", "/", "!", "#", "", "(", ")", "=", "{", "}", " ", "", ".", "-", "*"};
+        if(s == null || s.isEmpty()) {
+            throw new InvalidFilterException("String was empty.");
+        }
 
-        for (String c : characters){
-            if (s.equals(c)) {
-                throw new InvalidFilterException("Contained only a special character.");
+        String sub = s.substring(0,1);
+        for (String c : specialCharacters){
+            if (sub.equals(c)) {
+                throw new InvalidFilterException("String started with a special character.");
             }
         }
     }
@@ -32,7 +36,7 @@ public class Validator {
             throw new InvalidFilterException("min cannot be greater than max");
         }
     }
-    public static void MaxLessThanMin(Long min, Long max) throws InvalidFilterException{
+    public static void MaxLessThanMin(long min, long max) throws InvalidFilterException{
         if (min > max) {
             throw new InvalidFilterException("min cannot be greater than max");
         }

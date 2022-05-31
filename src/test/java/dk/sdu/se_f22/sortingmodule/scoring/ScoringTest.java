@@ -10,9 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Console;
 import java.io.PrintStream;
-import java.io.StringWriter;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
@@ -96,7 +94,7 @@ class ScoringTest {
         }
         System.setOut(new PrintStream(outContent));
     }
-    //Temporary only here for main method in scoring package
+
     @AfterAll
     void tryAgain() {
         setup();
@@ -108,7 +106,7 @@ class ScoringTest {
     @MethodSource("generateData")
     void scoreSort(ScoreSortType scoreSortType, List<Product> controlProducts) {
         SearchHits searchHits = new SearchHits();
-        searchHits.setProducts(controlProducts);
+        searchHits.setProducts(products);
         scoring.scoreSort(searchHits, scoreSortType);
         assertEquals(controlProducts,searchHits.getProducts());
     }
@@ -304,27 +302,7 @@ class ScoringTest {
                 """);
     }
 
-    @Test
     @Order(10)
-    void updateRow() {
-        Object newValue = 1700;
-        int id = 21;
-        scoring.updateRow(id,String.valueOf(newValue),"bracket");
-
-        try (var connection = DBConnection.getPooledConnection()) {
-            var statement = connection.prepareStatement("SELECT * FROM scores WHERE id = ?");
-            statement.setInt(1, id);
-            var sqlReturnValues = statement.executeQuery();
-
-            while (sqlReturnValues.next()) {
-                assertEquals(sqlReturnValues.getDouble(3),newValue);
-            }
-            statement.close();
-            sqlReturnValues.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     @ParameterizedTest(name = "{2}: {0} {1}")
     @MethodSource("generateDataUpdateRow")
     void updateRow(int id, Object newValue, String column) {
@@ -340,7 +318,7 @@ class ScoringTest {
                     case "bracket" -> assertEquals(sqlReturnValues.getDouble(3), Double.parseDouble((String) newValue));
                     case "type" -> assertEquals(sqlReturnValues.getString(2), newValue);
                     case "weight" -> assertEquals(sqlReturnValues.getInt(4), Integer.parseInt((String) newValue));
-                    default -> {assertEquals("Column name doesn't exist", outContent.toString());}}
+                    default -> assertEquals("Column name doesn't exist", outContent.toString());}
             }
             statement.close();
             sqlReturnValues.close();

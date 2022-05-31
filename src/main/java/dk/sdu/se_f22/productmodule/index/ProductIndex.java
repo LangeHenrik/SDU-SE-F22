@@ -188,8 +188,7 @@ public class ProductIndex implements IProductIndex, IProductIndexDataAccess {
     public List<Product> getProductSearched(){
         List<Product> productList = new ArrayList<>();
 
-        try
-                (Connection connection = DBConnection.getPooledConnection();)
+        try (Connection connection = DBConnection.getPooledConnection();)
         {
             // query all products
 

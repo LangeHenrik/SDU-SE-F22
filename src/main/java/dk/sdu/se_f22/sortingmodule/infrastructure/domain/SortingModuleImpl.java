@@ -10,11 +10,11 @@ import dk.sdu.se_f22.searchmodule.infrastructure.interfaces.SearchModule;
 import dk.sdu.se_f22.sortingmodule.category.CategoryFilter;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.MockData;
 import dk.sdu.se_f22.sortingmodule.infrastructure.data.SaveSearchQuery;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IdNotFoundException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.IllegalImplementationException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.InvalidFilterTypeException;
-import dk.sdu.se_f22.sortingmodule.range.exceptions.UnknownFilterTypeException;
+import dk.sdu.se_f22.sortingmodule.range.exceptions.*;
 import dk.sdu.se_f22.sortingmodule.range.rangepublic.*;
+import dk.sdu.se_f22.sortingmodule.scoring.IScoring;
+import dk.sdu.se_f22.sortingmodule.scoring.ScoreSortType;
+import dk.sdu.se_f22.sortingmodule.scoring.Scoring;
 
 /**
  * Implemented version of SortingModule
@@ -87,14 +87,31 @@ public class SortingModuleImpl implements SortingModule {
     }
 
     @Override
-    public void setScoring(int scoring) {
+    public void setScoring(ScoreSortType scoring) {
         this.query.setScoring(scoring);
+    }
 
+    @Override
+    public SearchQuery getQuery() {
+        return query;
     }
 
     @Override
     public List<RangeFilter> getAvailableRangeFilters() {
         return this.query.getAvailableRangeFilters();
+    }
+
+    @Override
+    public void printAvailableRangeFilters() {
+        System.out.println(this.getAvailableRangeFilters().toString()
+                .replaceAll("ID", "\n\tID")
+                .replaceAll("RangeFilterClass", "")
+                .replaceAll("[\\[\\]{}]", "")
+                .replaceAll("LongFilter", "\nLongFilter")
+                .replaceAll("DoubleFilter", "\nDoubleFilter")
+                .replaceAll("TimeFilter", "\nTimeFilter")
+                .replaceAll(", ", "\n\t")
+        );
     }
 
     @Override
@@ -146,7 +163,7 @@ public class SortingModuleImpl implements SortingModule {
                     selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
                     selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
                 }
-            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+            } catch (RangeFilterException e) {
                 e.printStackTrace();
             }
         });
@@ -158,7 +175,7 @@ public class SortingModuleImpl implements SortingModule {
                     selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
                     selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
                 }
-            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+            } catch (RangeFilterException e) {
                 e.printStackTrace();
             }
         });
@@ -170,22 +187,24 @@ public class SortingModuleImpl implements SortingModule {
                     selectedFilters.get(selectedFilters.size() - 1).setUserMin(boundaries[0]);
                     selectedFilters.get(selectedFilters.size() - 1).setUserMax(boundaries[1]);
                 }
-            } catch (IdNotFoundException | UnknownFilterTypeException | InvalidFilterTypeException e) {
+            } catch (RangeFilterException e) {
                 e.printStackTrace();
             }
         });
 
 
         try {
-            RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
+            searchHits = RangeFilterFilterResults.filterResults(searchHits, selectedFilters);
         } catch (IllegalImplementationException e) {
             e.printStackTrace();
         }
 
         // Scoring
+        IScoring scoring = new Scoring();
+        searchHits = scoring.scoreSort(searchHits, this.query.getScoring());
 
         // Pagination
-        paginateHits(searchHits);
+        searchHits = paginateHits(searchHits);
 
         // Return paginated SearchHits
         return searchHits;
@@ -195,9 +214,7 @@ public class SortingModuleImpl implements SortingModule {
         SaveSearchQuery.saveSearch(this.query, this.searchString);
     }
 
-    /**
-     * Following  method, is used to enable mock data
-     */
+    @Override
     public void useMockData(boolean b, boolean c, boolean p) {
         this.useMockDataBrand = b;
         this.useMockDataContent = c;

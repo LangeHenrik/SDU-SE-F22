@@ -110,9 +110,6 @@ public class Brand {
     @Override
     public boolean equals(Object obj) {
         Brand o = (Brand) obj;
-        if (this.id == o.id)
-            return true;
-        else
-            return false;
+        return this.name.equals(o.name);
     }
 }

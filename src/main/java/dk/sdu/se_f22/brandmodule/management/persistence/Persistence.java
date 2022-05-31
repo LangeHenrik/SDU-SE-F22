@@ -1,4 +1,5 @@
 package dk.sdu.se_f22.brandmodule.management.persistence;
+
 import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructure;
 import dk.sdu.se_f22.brandmodule.infrastructure.BrandInfrastructureInterface;
 import dk.sdu.se_f22.brandmodule.management.services.IJsonService;
@@ -13,9 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Persistence implements IPersistence {
-    private Connection c = null;
-    private IJsonService jsonService = null;
-    public BrandInfrastructureInterface BIM2 = null;
+    private final Connection c;
+    private final IJsonService jsonService;
+    public BrandInfrastructureInterface BIM2;
 
     public Persistence() {
         //Connect to database
@@ -29,7 +30,7 @@ public class Persistence implements IPersistence {
     }
 
     @Override
-    public Brand getBrand(int id)  {
+    public Brand getBrand(int id) {
         return brandGetter(null, id);
     }
 
@@ -37,7 +38,7 @@ public class Persistence implements IPersistence {
     public Brand getBrand(String name) {
         return brandGetter(name, null);
     }
-    
+
     @Override
     public List<Brand> getAllBrands() {
         List<Brand> brandList = new ArrayList<>();
@@ -48,18 +49,15 @@ public class Persistence implements IPersistence {
             PreparedStatement getBrandId = c.prepareStatement("SELECT id FROM brand");
             ResultSet r = getBrandId.executeQuery();
 
-            while(r.next()){
-                brandIdList.add(r.getInt(0));
+            while (r.next()) {
+                brandIdList.add(r.getInt(1));
             }
-
-            for (int i : brandIdList ){
+            for (int i : brandIdList) {
                 brandList.add(getBrand(i));
             }
-
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
-
         return brandList;
     }
 
@@ -72,27 +70,26 @@ public class Persistence implements IPersistence {
 
             ResultSet r;
             PreparedStatement getBrand;
-            if(name == null) {
+            if (name == null) {
                 getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.type from brandproducttypejunction as bpj " +
                         "right join brand on bpj.brandid = brand.id " +
                         "left join producttype on bpj.productid = producttype.id " +
                         "where brandid = ?;");
 
-                getBrand.setInt(1,id);
-                r = getBrand.executeQuery();
-            } else{
+                getBrand.setInt(1, id);
+            } else {
                 getBrand = c.prepareStatement("select brand.id, brand.name, brand.description, brand.founded, brand.headquarters, producttype.type from brandproducttypejunction as bpj " +
                         "right join brand on bpj.brandid = brand.id " +
                         "left join producttype on bpj.productid = producttype.id " +
                         "where brand.name = ?");
 
-                getBrand.setString(1,name);
-                r = getBrand.executeQuery();
+                getBrand.setString(1, name);
             }
+            r = getBrand.executeQuery();
 
             Set<String> productSet = new HashSet<>();
 
-            while (r.next()){
+            while (r.next()) {
                 brand = new Brand(
                         r.getInt("id"),
                         r.getString("name"),
@@ -113,7 +110,6 @@ public class Persistence implements IPersistence {
         } catch (SQLException e) {
             rollback();
         }
-
         return brand;
     }
 
@@ -131,10 +127,10 @@ public class Persistence implements IPersistence {
             PreparedStatement deleteBrandJunction = c.prepareStatement("DELETE FROM BrandProductTypeJunction where brandid = ?");
             PreparedStatement deleteBrand = c.prepareStatement(("DELETE FROM Brand where id = ?"));
 
-            deleteBrandJunction.setInt(1,id);
+            deleteBrandJunction.setInt(1, id);
             deleteBrandJunction.execute();
 
-            deleteBrand.setInt(1,id);
+            deleteBrand.setInt(1, id);
             deleteBrand.execute();
 
             c.commit();
@@ -172,52 +168,50 @@ public class Persistence implements IPersistence {
                 // If id is set, update the brand in the database
                 if (brand.getId() == null) {
                     insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?,?,?,?) ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
-                }
-                else {
+                } else {
                     insertAllBrands = c.prepareStatement("INSERT INTO brand (name, description, founded, headquarters) VALUES (?,?,?,?) WHERE id = ? ON CONFLICT(name) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, founded = EXCLUDED.founded, headquarters = EXCLUDED.headquarters;");
                     insertAllBrands.setString(5, String.valueOf(brand.getId()));
                 }
 
                 insertAllBrands.setString(1, brand.getName());
-                insertAllBrands.setString(2,brand.getDescription().replaceAll("'", "''"));
-                insertAllBrands.setString(3,brand.getFounded());
+                insertAllBrands.setString(2, brand.getDescription().replaceAll("'", "''"));
+                insertAllBrands.setString(3, brand.getFounded());
                 insertAllBrands.setString(4, brand.getHeadquarters());
 
                 insertAllBrands.execute();
             }
 
             /* ------ Insert into junction table ------ */
-            for (Brand brand : brands){
+            for (Brand brand : brands) {
                 int brandID = 0;
 
                 PreparedStatement selectBrandID = c.prepareStatement("SELECT id FROM brand WHERE name = ?");
-                selectBrandID.setString(1,brand.getName());
+                selectBrandID.setString(1, brand.getName());
                 ResultSet resultsBrand = selectBrandID.executeQuery();
 
                 if (resultsBrand.next()) {
                     brandID = resultsBrand.getInt("id");
                 }
 
-                for(String product : brand.getProducts()){
+                for (String product : brand.getProducts()) {
                     int productID = 0;
 
                     PreparedStatement selectProductID = c.prepareStatement("SELECT id FROM producttype WHERE name = ?");
-                    selectProductID.setString(1,product);
+                    selectProductID.setString(1, product);
                     ResultSet resultsProduct = selectProductID.executeQuery();
 
-                    if (resultsProduct.next()){
+                    if (resultsProduct.next()) {
                         productID = resultsProduct.getInt("id");
                     }
 
                     PreparedStatement insertIntoJunction = c.prepareStatement("INSERT INTO brandproducttypejunction(brandid,productid) VALUES(?,?);");
-                    insertIntoJunction.setInt(1,brandID);
-                    insertIntoJunction.setInt(2,productID);
+                    insertIntoJunction.setInt(1, brandID);
+                    insertIntoJunction.setInt(2, productID);
                     insertIntoJunction.execute();
                 }
             }
             c.commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             rollback();
             return false;
         }
@@ -225,18 +219,17 @@ public class Persistence implements IPersistence {
         //Ensure that brands are indexed when loaded or changed
         //Talk to BIM2 to make this work
         //BIM2.indexBrands(getAllBrands());
-
         return true;
     }
 
     @Override
-    public boolean databaseIndexer() {
+    public boolean indexDatabase() {
         setAutoCommit(false);
         try {
             PreparedStatement indexDatabase = c.prepareStatement("create index on producttype(type); " + "create index on brand(name); " + "create index on BrandProductTypeJunction(brandid, productid);");
             indexDatabase.execute();
             c.commit();
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             rollback();
             return false;
         }
@@ -249,14 +242,14 @@ public class Persistence implements IPersistence {
         // Get brands from file
         List<Brand> brands = jsonService.deserializeBrand();
         addOrUpdateBrands(brands);
-        databaseIndexer();
+        indexDatabase();
     }
 
     private void rollback() {
         try {
             c.rollback();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -264,29 +257,25 @@ public class Persistence implements IPersistence {
         try {
             c.setAutoCommit(set);
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
     }
 
 
-    public void setIndexingInterval(int indexingInterval)  {
-
-        ResultSet r = null;
-        PreparedStatement indexInterval = null;
+    public void setIndexingInterval(int indexingInterval) {
+        PreparedStatement indexInterval;
         try {
             indexInterval = c.prepareStatement("update config set brandindexinterval = ? ");
-            indexInterval.setInt(1,indexingInterval);
+            indexInterval.setInt(1, indexingInterval);
             indexInterval.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-
     }
-    public int getIndexingInterval(){
-        ResultSet r = null;
-        PreparedStatement indexInterval = null;
+
+    public int getIndexingInterval() {
+        ResultSet r;
+        PreparedStatement indexInterval;
         try {
             indexInterval = c.prepareStatement("select brandindexinterval from config where id = 60");
             r = indexInterval.executeQuery();
@@ -298,8 +287,4 @@ public class Persistence implements IPersistence {
         }
         return -1;
     }
-
-
-
-
 }

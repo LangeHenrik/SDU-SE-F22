@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  database-migration:
+    image: maven:3-openjdk-16 
+    container_name: SDU-SE-F22-migration 
+    volumes:
+      - ./:/usr/src/mymaven
+    working_dir: /usr/src/mymaven
+    command: bash -c "
+      cp config.properties config.properties.old && 
+      rm config.properties && touch config.properties && 
+      echo db_url=jdbc:postgresql://db:5432/admin >> config.properties && 
+      echo db_user=admin >> config.properties && 
+      echo db_password=admin >> config.properties && 
+      touch test-migration.report && rm test-migration.report && touch test-migration.report &&
+      mvn compile exec:java -Dexec.mainClass=\"dk.sdu.se_f22.sharedlibrary.db.DBMigrationFresh\" >> test-migration.report"
+  test-runner:
+    image: maven:3-openjdk-16 
+    container_name: SDU-SE-F22-test 
+    volumes:
+      - ./:/usr/src/mymaven
+    working_dir: /usr/src/mymaven
+    command: bash -c "
+      touch test.report && 
+      rm test.report && 
+      touch test.report &&
+      mvn --batch-mode --update-snapshots verify -Dtestfx.robot=glass -Dglass.platform=Monocle -Dmonocle.platform=Headless -Dprism.order=sw >> test.report; 
+      cp config.properties.old config.properties && 
+      rm config.properties.old"
+    depends_on:
+      - database-migration
+  db:
+    container_name: SDU-SE-F22-test-db
+    image: postgres
+    restart: always
+    depends_on:
+      - test-runner
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: admin

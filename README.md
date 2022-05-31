@@ -140,4 +140,9 @@ The checks are visible when creating a pull request on GitHub, just abode the me
 
 All of this, is beyond the current pensum for 2. semester.  
 The GitHub actions can be found in the `.github\workflows` folder.
- 
+
+## Launch GUI (Common launcher of FXML)
+A common GUI launcher has been made, and is located in [`src\main\java\dk\sdu\se_f22\Launcher.java`](src/main/java/dk/sdu/se_f22/Launcher.java).  
+To launch the launcher, just run the main method, that are located at the bottom of the class.  
+The launcher shows all fxml files in the project - Theses coresponds to different parts of the system, and the groups that has added a GUI interface for their module.  
+Select a fxml file, and launch that specific GUI.

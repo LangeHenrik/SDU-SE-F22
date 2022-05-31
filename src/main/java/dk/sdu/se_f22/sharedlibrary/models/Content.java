@@ -19,4 +19,25 @@ public class Content {
         this.pageId = pageId;
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return this.getTitle();
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public int getPageId() {
+        return pageId;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }

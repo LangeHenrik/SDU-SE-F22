@@ -2,7 +2,6 @@ package dk.sdu.se_f22.contentmodule.management.Domain;
 
 import dk.sdu.se_f22.contentmodule.management.Data.Database;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
-import dk.sdu.se_f22.sharedlibrary.db.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -12,14 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import dk.sdu.se_f22.sharedlibrary.models.*;
 
 public class Management {
 
     public static int Create(int articleNr, String html, int employeeId)  {
-        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement("INSERT INTO content_log (html, article_nr, modified) VALUES (?, ?, NOW()) RETURNING id;" +
+        try (PreparedStatement ps = DBConnection.getPooledConnection().prepareStatement(
+                "INSERT INTO content_log (html, article_nr, modified) VALUES (?, ?, NOW()) RETURNING id;" +
                 "INSERT INTO change_log (employee_id) VALUES (?);")) {
             ps.setInt(2, articleNr);
             ps.setString(1, html);
@@ -27,23 +26,17 @@ public class Management {
             var res = ps.executeQuery();
             return res.getInt(1);
         } catch (Exception e) {
-            /*
-            DBMigration dbm = new DBMigration();
-            try {
-                dbm.runSQLFromFile(DBConnection.getPooledConnection(), "src/main/resources/dk/sdu/se_f22/contentmodule/management/PostgresScript.txt");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            } */
         }
 
         return 0;
     }
-    static Connection cn;
+
+    static Connection connect;
 
     public static ResultSet getAllEntries() {
         try {
-            cn = Database.getDatabase().connection;
-            PreparedStatement ps = cn.prepareStatement("SELECT * FROM content_log");
+            connect = Database.getDatabase().connection;
+            PreparedStatement ps = connect.prepareStatement("SELECT * FROM content_log");
              var res = ps.executeQuery();
             return res;
         }

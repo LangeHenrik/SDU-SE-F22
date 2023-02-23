@@ -1,6 +1,7 @@
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
 
 
+import dk.sdu.se_f22.contentmodule.infrastructure.domain.Mock.InterfaceOutgoing;
 import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ContentInfrastructure implements IContentInfrastructre{
-    //ClassCallOutgoing CMSIndexModule = new ClassCallOutgoing;
+    InterfaceOutgoing CMSIndexModule = new InterfaceOutgoing();
     HTMLParser parser = new HTMLParser();
     Tokenizer tokenizer = new Tokenizer();
     FilteredTokens filterTokens = new FilteredTokens();
@@ -32,7 +33,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
         tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
-        //CMSIndexModule.index(newSite.getFilteredTokensArray(), newSite.getId());
+        CMSIndexModule.index(newSite.getFilteredTokens(), newSite.getId());
     }
 
     //When an htmlpage is updated
@@ -61,15 +62,11 @@ public class ContentInfrastructure implements IContentInfrastructre{
             e.printStackTrace();
         }
 
-
-
-
-
         parser.parseHTML(newSite);
 //      tokenizer.tokenizeHTMLBodyText(newSite);
         filterTokens.siteWithFilteredTokens(newSite);
 
-        //CMSIndexModule.updateSingular(newSite.getFilteredTokens(), newSite.getId());
+        CMSIndexModule.updateSingular(newSite.getFilteredTokens(), newSite.getId());
     }
 
     @Override
@@ -88,7 +85,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
             e.printStackTrace();
         }
 
-
+        CMSIndexModule.delete(htmlId);
     }
 
     @Override
@@ -100,6 +97,10 @@ public class ContentInfrastructure implements IContentInfrastructre{
             PreparedStatement s1 = connection.prepareStatement("INSERT INTO cms_tokenparameters (limitedchar) VALUES ('"+character+"')");
             s1.execute();
             s1.close();
+
+            PreparedStatement s2 = connection.prepareStatement("INSERT INTO cms_parameterslist (parameter) VALUES ('"+character+"')");
+            s2.execute();
+            s2.close();
 
 
         } catch (SQLException e) {
@@ -115,6 +116,7 @@ public class ContentInfrastructure implements IContentInfrastructre{
             //Deletes delimiter from token parameters table
             PreparedStatement s1 = connection.prepareStatement("DELETE FROM cms_tokenparameters WHERE VALUES ('"+character+"')");
             s1.execute();
+
             s1.close();
 
 

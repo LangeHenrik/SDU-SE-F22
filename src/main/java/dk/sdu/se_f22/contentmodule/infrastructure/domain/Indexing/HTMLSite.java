@@ -6,6 +6,7 @@ import dk.sdu.se_f22.sharedlibrary.db.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HTMLSite  {
@@ -21,7 +22,8 @@ public class HTMLSite  {
         this.documentText = documentText;
 
         try (Connection connection = DBConnection.getPooledConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_htmlpages (html_id) VALUES ("+id+")");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_htmlpages (html_id) VALUES (?)");
+            stmt.setInt(1, id);
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {

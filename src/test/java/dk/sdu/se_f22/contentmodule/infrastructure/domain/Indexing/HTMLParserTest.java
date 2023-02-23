@@ -1,13 +1,12 @@
-/*
 package dk.sdu.se_f22.contentmodule.infrastructure.domain.Indexing;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.swing.text.html.HTML;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class HTMLParserTest {
     HTMLSite site;
@@ -20,7 +19,7 @@ class HTMLParserTest {
                 "  <head>\n" +
                 "    <title>This is the title of the webpage!</title>\n" +
                 "  </head>\n" +
-                "  <body>");
+                "  <body><div>This is a page!</div></body></html>");
     }
 
     @AfterEach
@@ -28,7 +27,9 @@ class HTMLParserTest {
     }
 
     @Test
-    void parseHTML(HTMLSite site) {
-        assertNotNull(site.getDocumentText());
+    void parseHTML() {
+        HTMLParser htmlParser = new HTMLParser();
+        htmlParser.parseHTML(site);
+        assertEquals("This is a page!",  site.getDocumentText());
     }
-}*/
+}

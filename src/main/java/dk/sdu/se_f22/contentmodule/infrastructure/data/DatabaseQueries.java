@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 public class DatabaseQueries  {
 
+    //Logs paramitization
     public void logParameters(int pageId, int parameterId) throws IOException {
         try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO cms_usedparameters (page_id, parameter_id) VALUES (?,?)");
@@ -23,11 +24,9 @@ public class DatabaseQueries  {
         }
     }
 
-
-
+    //Returns a string containing all parameters
     public String getParameters(){
         String chars = "";
-
         try (Connection connection = DBConnection.getPooledConnection()) {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_tokenparameters");
             ResultSet queryResultSet = stmt.executeQuery();
@@ -35,6 +34,7 @@ public class DatabaseQueries  {
                 chars = chars + queryResultSet.getString("limitedchar");
             }
             stmt.close();
+            queryResultSet.close();
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -44,45 +44,55 @@ public class DatabaseQueries  {
     }
 
 
-
-
+    //Searches pageID from html ID
    public int getPageID(int html_id) {
         int pageId = 0;
 
        try (Connection connection = DBConnection.getPooledConnection()) {
-           PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_htmlpages WHERE VALUES (?)");
-           stmt.setInt(1,html_id);
+           PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_htmlpages WHERE html_id = ?");
+           stmt.setInt(1, html_id);
            ResultSet queryResultSet = stmt.executeQuery();
-
-           pageId = queryResultSet.getInt("page_id");
-
+           while (queryResultSet.next()) {
+               pageId = queryResultSet.getInt("page_id");
+           }
            stmt.close();
+           queryResultSet.close();
        } catch (SQLException e) {
-           System.out.println(e);
+          e.printStackTrace();
+           System.out.println(3);
+
        }
        return pageId;
-
-
 }
-//
 
+
+//Searches parameterID from a given parameter
     public int getParameterID(char parameter) {
         int parameterId = 0;
+        String holder = "";
 
         try (Connection connection = DBConnection.getPooledConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_parameterslist WHERE parameter = (?)");
-            stmt.setInt(1,parameter);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM cms_parameterslist WHERE parameter = ?");
+            holder+=parameter;
+            stmt.setString(1,holder);
             stmt.execute();
             ResultSet queryResultSet = stmt.executeQuery();
 
-            parameterId = queryResultSet.getInt("parameter_id");
+
+
+            while (queryResultSet.next()) {
+                parameterId = queryResultSet.getInt("parameter_id");
+            }
+
             stmt.close();
+            queryResultSet.close();
         } catch (SQLException e) {
             System.out.println(e);
+            System.out.println(4);
 
         }
         return parameterId;
 
     }
 }
-//
+
